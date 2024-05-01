@@ -1,0 +1,88 @@
+//
+//  ServiceListRowView.swift
+//  SocketCD
+//
+//  Created by Justin Risner on 4/20/24.
+//
+
+import SwiftUI
+
+struct ServiceListRowView: View {
+    @Binding var selectedService: Service?
+    @Binding var isAnimating: Bool
+    @ObservedObject var service: Service
+    let vehicle: Vehicle
+    
+    var body: some View {
+        NavigationLink {
+            ServiceDetailView(service: service, vehicle: vehicle)
+        } label: {
+            HStack {
+                serviceStatusIndicator
+                
+                serviceInfo
+            }
+        }
+        .padding(.vertical, 5)
+        .swipeActions(edge: .leading) {
+            Button {
+                selectedService = service
+            } label: {
+                Label("", systemImage: "plus.square.on.square")
+                    .accessibilityLabel("Add a Service Record")
+            }
+            .conditionalTint(Color.selectedColor(for: .maintenanceTheme))
+        }
+    }
+    
+    
+    // MARK: - Views
+    
+    // Vertical capsule shape that changes color and shape, to indicate service status
+    private var serviceStatusIndicator: some View {
+        Group {
+            if service.serviceStatus == .due || service.serviceStatus == .overDue {
+                VStack(spacing: 5) {
+                    Capsule()
+                        .frame(width: 5, height: 30)
+                    
+                    Circle()
+                        .frame(width: 5)
+                }
+            } else {
+                Capsule()
+                    .frame(width: 5, height: 40)
+            }
+        }
+        .foregroundStyle(service.indicatorColor)
+    }
+    
+    // Service name and relevant info
+    private var serviceInfo: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(service.name)
+                .font(.headline)
+            
+            if service.sortedServiceRecordsArray.isEmpty {
+                HStack(spacing: isAnimating ? 15 : 3) {
+                    Text("Swipe to add a service record")
+                    
+                    Image(systemName: "arrow.right")
+                        .flipsForRightToLeftLayoutDirection(true)
+                        .animation(isAnimating ? .easeInOut(duration: 1).repeatForever() : .default, value: isAnimating)
+                        .accessibilityHidden(true)
+                }
+                .font(.subheadline)
+                .foregroundStyle(Color.secondary)
+            } else {
+                Text(service.nextServiceDueDescription)
+                    .font(.subheadline)
+                    .foregroundStyle(Color.secondary)
+            }
+        }
+    }
+}
+
+#Preview {
+    ServiceListRowView(selectedService: .constant(Service(context: DataController.preview.container.viewContext)), isAnimating: .constant(true), service: Service(context: DataController.preview.container.viewContext), vehicle: Vehicle(context: DataController.preview.container.viewContext))
+}

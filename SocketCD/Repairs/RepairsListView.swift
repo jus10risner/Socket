@@ -1,0 +1,141 @@
+//
+//  RepairsListView.swift
+//  SocketCD
+//
+//  Created by Justin Risner on 3/14/24.
+//
+
+import SwiftUI
+
+struct RepairsListView: View {
+    @EnvironmentObject var settings: AppSettings
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var vehicle: Vehicle
+    
+    @FetchRequest var repairs: FetchedResults<Repair>
+    
+    init(vehicle: Vehicle) {
+        self.vehicle = vehicle
+        self._repairs = FetchRequest(
+            entity: Repair.entity(),
+            sortDescriptors: [NSSortDescriptor(keyPath: \Repair.date_, ascending: false)],
+            predicate: NSPredicate(format: "vehicle == %@", vehicle)
+        )
+    }
+    
+//    @State private var searchText = ""
+    @State private var showingAddRepair = false
+    @State private var showingContent = false
+    
+    var body: some View {
+        repairsList
+    }
+    
+    
+    // MARK: - Views
+    
+    var repairsList: some View {
+        AppropriateNavigationType {
+            List {
+                ForEach(repairs, id: \.id) { repair in
+                    NavigationLink {
+                        RepairDetailView(vehicle: vehicle, repair: repair)
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(repair.name)
+                                    .font(.headline)
+                                
+                                Text("\(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            Text(repair.date.formatted(date: .numeric, time: .omitted))
+                                .font(.subheadline)
+                                .foregroundStyle(Color.secondary)
+                        }
+                        .padding(.vertical, 5)
+                    }
+                }
+            }
+            .modifier(ConditionalListRowSpacing())
+            .overlay {
+                if vehicle.sortedRepairsArray.isEmpty {
+                    RepairsStartView()
+                }
+            }
+            .navigationTitle("Repairs")
+    //            .onAppear { repairs.nsPredicate = compoundPredicate }
+    //            .onChange(of: searchText) { _ in
+    //                repairs.nsPredicate = compoundPredicate
+    //            }
+            .onChange(of: vehicle.sortedRepairsArray) { _ in
+                vehicle.determineIfNotificationDue()
+            }
+            .sheet(isPresented: $showingAddRepair) {
+                AddRepairView(vehicle: vehicle)
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    VStack {
+                        Spacer()
+                        Text(vehicle.name)
+                            .font(.headline)
+                            .lineLimit(1)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Spacer()
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title2)
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(Color.secondary)
+                            .accessibilityLabel("Back to all vehicles")
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingAddRepair = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title2)
+                            .symbolRenderingMode(.hierarchical)
+                            .accessibilityLabel("Add New Repair")
+                    }
+                    // iOS 16 workaround, where button could't be clicked again after sheet was dismissed - iOS 15 and 17 work fine without this
+                    .id(UUID())
+                }
+            }
+        }
+//        .modifier(ConditionalSearchableViewModifier(isSearchable: sortedRepairs.count >= 7, searchString: $searchText))
+//        .searchable(text: $searchText)
+    }
+    
+//    private var compoundPredicate: NSPredicate {
+//        var predicates: [NSPredicate] = []
+//        
+//        predicates.append(NSPredicate(format: "vehicle == %@", vehicle))
+//        
+//        // Add search predicate
+//        if !searchText.isEmpty {
+//            predicates.append(NSPredicate(format: "name_ CONTAINS[c] %@", searchText))
+//        }
+//        
+//        // Combine predicates
+//        return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+//    }
+}
+
+#Preview {
+    RepairsListView(vehicle: Vehicle(context: DataController.preview.container.viewContext))
+        .environmentObject(AppSettings())
+}

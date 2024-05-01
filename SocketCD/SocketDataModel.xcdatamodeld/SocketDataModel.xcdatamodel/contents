@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="CustomInfo" representedClassName="CustomInfo" syncable="YES" codeGenerationType="class">
+        <attribute name="detail_" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="label_" optional="YES" attributeType="String"/>
+        <attribute name="note_" optional="YES" attributeType="String"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="customInfo" inverseEntity="Photo"/>
+        <relationship name="vehicle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vehicle" inverseName="customInfo" inverseEntity="Vehicle"/>
+    </entity>
+    <entity name="Fillup" representedClassName="Fillup" syncable="YES" codeGenerationType="class">
+        <attribute name="date_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="fillType_" attributeType="String" defaultValueString="Full Tank"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="note_" optional="YES" attributeType="String"/>
+        <attribute name="odometer_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pricePerUnit_" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="volume_" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="fillup" inverseEntity="Photo"/>
+        <relationship name="vehicle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vehicle" inverseName="fillups" inverseEntity="Vehicle"/>
+    </entity>
+    <entity name="Photo" representedClassName="Photo" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageData_" optional="YES" attributeType="Binary"/>
+        <attribute name="timeStamp_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="customInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CustomInfo" inverseName="photos" inverseEntity="CustomInfo"/>
+        <relationship name="fillup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Fillup" inverseName="photos" inverseEntity="Fillup"/>
+        <relationship name="repair" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Repair" inverseName="photos" inverseEntity="Repair"/>
+        <relationship name="serviceRecord" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ServiceRecord" inverseName="photos" inverseEntity="ServiceRecord"/>
+        <relationship name="vehicle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vehicle" inverseName="photo" inverseEntity="Vehicle"/>
+    </entity>
+    <entity name="Repair" representedClassName="Repair" syncable="YES" codeGenerationType="class">
+        <attribute name="cost_" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="date_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name_" optional="YES" attributeType="String"/>
+        <attribute name="note_" optional="YES" attributeType="String"/>
+        <attribute name="odometer_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="repair" inverseEntity="Photo"/>
+        <relationship name="vehicle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vehicle" inverseName="repairs" inverseEntity="Vehicle"/>
+    </entity>
+    <entity name="Service" representedClassName="Service" syncable="YES" codeGenerationType="class">
+        <attribute name="distanceBasedNotificationIdentifier_" optional="YES" attributeType="String"/>
+        <attribute name="distanceInterval_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="monthsInterval_" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="name_" optional="YES" attributeType="String"/>
+        <attribute name="note_" optional="YES" attributeType="String"/>
+        <attribute name="notificationScheduled_" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="timeBasedNotificationIdentifier_" optional="YES" attributeType="String"/>
+        <attribute name="timeInterval_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="serviceRecords" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ServiceRecord" inverseName="service" inverseEntity="ServiceRecord"/>
+        <relationship name="vehicle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vehicle" inverseName="services" inverseEntity="Vehicle"/>
+    </entity>
+    <entity name="ServiceRecord" representedClassName="ServiceRecord" syncable="YES" codeGenerationType="class">
+        <attribute name="cost_" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="note_" optional="YES" attributeType="String"/>
+        <attribute name="odometer_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="serviceRecord" inverseEntity="Photo"/>
+        <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="serviceRecords" inverseEntity="Service"/>
+    </entity>
+    <entity name="Vehicle" representedClassName="Vehicle" syncable="YES" codeGenerationType="class">
+        <attribute name="colorComponents_" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="[CGFloat]"/>
+        <attribute name="displayOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name_" optional="YES" attributeType="String"/>
+        <attribute name="odometer_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="customInfo" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CustomInfo" inverseName="vehicle" inverseEntity="CustomInfo"/>
+        <relationship name="fillups" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Fillup" inverseName="vehicle" inverseEntity="Fillup"/>
+        <relationship name="photo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Photo" inverseName="vehicle" inverseEntity="Photo"/>
+        <relationship name="repairs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Repair" inverseName="vehicle" inverseEntity="Repair"/>
+        <relationship name="services" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Service" inverseName="vehicle" inverseEntity="Service"/>
+    </entity>
+</model>
