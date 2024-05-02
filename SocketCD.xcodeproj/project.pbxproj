@@ -113,6 +113,7 @@
 
 /* Begin PBXFileReference section */
 		9E189E362BD1ABE900095EC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepair.swift; sourceTree = "<group>"; };
 		9E620BF32BBF2DED005E16DD /* DraftRepairView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepairView.swift; sourceTree = "<group>"; };
 		9E620BF52BC04531005E16DD /* DraftFillup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftFillup.swift; sourceTree = "<group>"; };
@@ -321,6 +322,7 @@
 		9EEAC47D2BA0F9C20053C65E /* SocketCD */ = {
 			isa = PBXGroup;
 			children = (
+				9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */,
 				9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */,
 				9EEAC4802BA0F9C20053C65E /* HomeView.swift */,
 				9EEAC4C92BA256400053C65E /* Vehicle */,
@@ -873,6 +875,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = Primary;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = SocketCD/SocketCD.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SocketCD/Preview Content\"";
@@ -896,6 +900,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = risner.justin.SocketCD;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -913,6 +918,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = Primary;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = SocketCD/SocketCD.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SocketCD/Preview Content\"";
@@ -936,6 +943,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = risner.justin.SocketCD;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

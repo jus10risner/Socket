@@ -35,13 +35,13 @@ class DataController: ObservableObject {
     }()
     
     // Storage for Core Data
-    let container: NSPersistentContainer
-//    let container: NSPersistentCloudKitContainer
+//    let container: NSPersistentContainer
+    let container: NSPersistentCloudKitContainer
 
     // An initializer to load Core Data, optionally able to use an in-memory store.
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "SocketDataModel")
-//        container = NSPersistentCloudKitContainer(name: "SocketDataModel")
+//        container = NSPersistentContainer(name: "SocketDataModel")
+        container = NSPersistentCloudKitContainer(name: "SocketDataModel")
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.automaticallyMergesChangesFromParent = true
 //        container.viewContext.undoManager = UndoManager()
