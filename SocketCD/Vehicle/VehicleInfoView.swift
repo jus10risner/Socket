@@ -51,7 +51,7 @@ struct VehicleInfoView: View {
             }
             .sheet(isPresented: $showingEditVehicle) { EditVehicleView(vehicle: vehicle) }
             
-          // Sheet wasn't loading the url on first launch of ActivityView, so I manually added a getter/setter. Issue resolved.
+          // Sheet wasn't loading the url on first launch of ActivityView, so I manually added a getter/setter. This seems to have resolved the issue.
             .sheet(isPresented: Binding(
                 get: { showingActivityView },
                 set: { showingActivityView = $0 }
@@ -59,19 +59,6 @@ struct VehicleInfoView: View {
                 ActivityView(activityItems: [documentURL as Any], applicationActivities: nil)
             }
             .sheet(isPresented: $showingAddCustomInfo) { AddCustomInfoView(vehicle: vehicle) }
-//            .confirmationDialog("How would you like to share your records?", isPresented: $showingConfirmationDialog, titleVisibility: .visible) {
-//                Button("Printable Summary (PDF)") {
-//                    createMaintenanceRepairsPDF()
-//                    showingActivityView = true
-//                }
-//                
-//                Button("Spreadsheet File (CSV)") {
-//                    createMaintenanceRepairsCSV()
-//                    showingActivityView = true
-//                }
-//            } message: {
-//                Text("Attached images will not be included.")
-//            }
             .confirmationDialog("Permanently delete \(vehicle.name) and all of its records? \nThis action cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
                 Button("Delete", role: .destructive) {
                     vehicle.delete()
@@ -101,30 +88,7 @@ struct VehicleInfoView: View {
                             Label("Edit Vehicle", systemImage: "pencil")
                         }
                         
-                        Menu {
-                            Section("Printable Summary (PDF)") {
-                                Button("Maintenance & Repairs") {
-                                    createMaintenanceRepairsPDF()
-                                    showingActivityView = true
-                                }
-                            }
-                            .accessibilityHint("Share maintenance and repair records for this vehicle")
-                            
-                            Section("Spreadsheet Document (CSV)") {
-                                Button("Maintenance & Repairs") {
-                                    createMaintenanceRepairsCSV()
-                                    showingActivityView = true
-                                }
-                                
-                                Button("Fill-ups") {
-                                    createFillupsCSV()
-                                    showingActivityView = true
-                                }
-                                .accessibilityHint("Share fill-up records for this vehicle, in csv format")
-                            }
-                        } label: {
-                            Label("Share Records", systemImage: "square.and.arrow.up")
-                        }
+                        sharingMenu
                         
                         Divider()
                         
@@ -141,6 +105,40 @@ struct VehicleInfoView: View {
                     }
                 }
             }
+        }
+    }
+    
+    // Menu, including buttons for sharing vehicle records
+    private var sharingMenu: some View {
+        Menu {
+            Section("Maintenance & Repairs") {
+                Button {
+                    createMaintenanceRepairsPDF()
+                    showingActivityView = true
+                } label: {
+                    Label("PDF", systemImage: "doc")
+                }
+                
+                Button {
+                    createMaintenanceRepairsCSV()
+                    showingActivityView = true
+                } label: {
+                    Label("CSV", systemImage: "tablecells")
+                }
+            }
+            .accessibilityHint("Share maintenance and repair records for this vehicle")
+            
+            Section("Fill-ups") {
+                Button {
+                    createFillupsCSV()
+                    showingActivityView = true
+                } label: {
+                    Label("CSV", systemImage: "tablecells")
+                }
+            }
+            .accessibilityHint("Share fill-up records for this vehicle")
+        } label: {
+            Label("Share Records", systemImage: "square.and.arrow.up")
         }
     }
     
