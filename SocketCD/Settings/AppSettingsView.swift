@@ -41,6 +41,10 @@ struct AppSettingsView: View {
                         themeSettingsButton
                     }
                     
+                    Section("Data") {
+                        iCloudSyncSettingsbutton
+                    }
+                    
                     Section("More") {
                         contactButton
                         
@@ -63,6 +67,7 @@ struct AppSettingsView: View {
                 Text("Version \(AppInfo().version)")
                     .font(.subheadline)
                     .foregroundStyle(Color.secondary)
+                    .padding(.bottom, 10)
             }
             .background(Color(.systemGroupedBackground))
         }
@@ -134,8 +139,25 @@ struct AppSettingsView: View {
         } label: {
             Label("Units of Measure", systemImage: "ruler")
         }
-//        .onChange(of: settings.distanceUnit) { _ in try? context.save() }
-//        .onChange(of: settings.fuelEconomyUnit) { _ in try? context.save() }
+    }
+    
+    // Allows user to toggle iCloud sync on/off
+    private var iCloudSyncSettingsbutton: some View {
+        NavigationLink {
+            List {
+                Section {
+                    Toggle(isOn: $settings.iCloudSyncEnabled, label: {
+                        Text("Use iCloud")
+                    })
+                } footer: {
+                    Text("Toggle on to sync Socket's data to your iCloud account.")
+                }
+            }
+            .navigationTitle("iCloud Sync")
+            .navigationBarTitleDisplayMode(.inline)
+        } label: {
+            Label("iCloud Sync", systemImage: "arrow.triangle.2.circlepath.icloud")
+        }
     }
     
     // Navigates to Accent Color settings
