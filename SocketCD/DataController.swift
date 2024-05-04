@@ -6,12 +6,15 @@
 //
 
 import CoreData
-import Foundation
+import SwiftUI
 
 class DataController: ObservableObject {
     // A singleton for the entire app to use
     static let shared = DataController()
+    
+    // Properties to be passed to other views, for toggling
     var isShowingDataError: Bool = false
+    let iCloudSyncEnabled = UserDefaults.standard.bool(forKey: "iCloudSyncEnabled")
 
     // A test configuration for SwiftUI previews
     static var preview: DataController = {
@@ -34,27 +37,56 @@ class DataController: ObservableObject {
         return controller
     }()
     
-    // Storage for Core Data
-//    let container: NSPersistentContainer
-    let container: NSPersistentCloudKitContainer
-
-    // An initializer to load Core Data, optionally able to use an in-memory store.
-    init(inMemory: Bool = false) {
-//        container = NSPersistentContainer(name: "SocketDataModel")
-        container = NSPersistentCloudKitContainer(name: "SocketDataModel")
+    // Storage for Core Data. Sets the appropriate persistent container.
+    lazy var container: NSPersistentContainer = {
+//        container = NSPersistentCloudKitContainer(name: "SocketDataModel")
+        if iCloudSyncEnabled {
+            container = NSPersistentCloudKitContainer(name: "SocketDataModel")
+        } else {
+            container = NSPersistentContainer(name: "SocketDataModel")
+        }
+        
+        guard let description = container.persistentStoreDescriptions.first else {
+            fatalError("###\(#function): Failed to retrieve a persistent store description.")
+        }
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        
+        if cloudContainerAvailable == true {
+            description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.risner.justin.SocketCD")
+        } else {
+            description.cloudKitContainerOptions = nil
+        }
+        
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.automaticallyMergesChangesFromParent = true
 //        container.viewContext.undoManager = UndoManager()
-
-        if inMemory {
-            container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
-        }
 
         container.loadPersistentStores { description, error in
             if let error = error as NSError? {
                 self.isShowingDataError = true
                 print("Unresolved error: \(error.localizedDescription), \(error.userInfo)")
             }
+        }
+        
+        return container
+    }()
+    
+    // An initializer to load Core Data, optionally able to use an in-memory store.
+    init(inMemory: Bool = false) {
+        self.container = container
+        
+        if inMemory {
+            container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+        }
+    }
+    
+    // Checks to see if an iCloud container is available on the device
+    var cloudContainerAvailable: Bool {
+        if let _ = FileManager.default.ubiquityIdentityToken {
+            return true
+        } else {
+            return false
         }
     }
     
