@@ -30,7 +30,7 @@ struct AddPhotoButton: View {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     showingImagePicker = true
                 } label: {
-                    Label("Choose Photo", systemImage: "photo")
+                    Label("Choose Photo", systemImage: "photo.on.rectangle")
                 }
                 
                 Button {
@@ -41,7 +41,7 @@ struct AddPhotoButton: View {
                     Label("Take Photo", systemImage: "camera")
                 }
             } label: {
-                Label("Add Photo", systemImage: "photo")
+                Label("Add Photo", systemImage: "camera")
             }
             .font(.body)
             

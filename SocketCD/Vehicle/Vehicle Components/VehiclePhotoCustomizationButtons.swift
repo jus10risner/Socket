@@ -81,7 +81,7 @@ struct VehiclePhotoCustomizationButtons: View {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 showingImagePicker = true
             } label: {
-                Label("Choose Photo", systemImage: "photo")
+                Label("Choose Photo", systemImage: "photo.on.rectangle")
             }
             
             Button {
@@ -97,7 +97,7 @@ struct VehiclePhotoCustomizationButtons: View {
                     .fill(Color.selectedColor(for: .appTheme))
                     .frame(width: 40, height: 40)
                 
-                Image(systemName: "photo")
+                Image(systemName: "camera.fill")
                     .padding(8)
                     .foregroundStyle(Color.white)
             }
