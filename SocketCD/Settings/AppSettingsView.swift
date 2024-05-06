@@ -145,7 +145,7 @@ struct AppSettingsView: View {
             }
             .navigationTitle("Accent Color")
         } label: {
-            Label("Accent Color", systemImage: "paintpalette")
+            Label("Accent Color", systemImage: "paintbrush")
         }
     }
     
@@ -154,7 +154,7 @@ struct AppSettingsView: View {
         NavigationLink {
             AppIconSelectorView()
         } label: {
-            Label("App Icon", systemImage: "app")
+            Label("App Icon", systemImage: "app.badge")
         }
     }
     
@@ -199,16 +199,6 @@ struct AppSettingsView: View {
         }
     }
     
-    // Shares a link to Socket on the App Store
-    private var shareAppButton: some View {
-        Button {
-            // TODO: Add this link
-            // App Store link will be added here, when app is approved
-        } label: {
-            Label("Share Socket", systemImage: "square.and.arrow.up")
-        }
-    }
-    
     // Navigates to "Write a Review" for Socket, in the App Store
     private var rateButton: some View {
         Button {
@@ -216,6 +206,16 @@ struct AppSettingsView: View {
             // Link to App Store's "Write a Review" sheet
         } label: {
             Label("Rate Socket", systemImage: "star")
+        }
+    }
+    
+    // Shares a link to Socket on the App Store
+    private var shareAppButton: some View {
+        Button {
+            // TODO: Add this link
+            // App Store link will be added here, when app is approved
+        } label: {
+            Label("Share Socket", systemImage: "square.and.arrow.up")
         }
     }
 }

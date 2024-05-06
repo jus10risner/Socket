@@ -20,7 +20,6 @@ struct SocketCDApp: App {
                 .environmentObject(settings)
                 .task { AppearanceController.shared.setAppearance() }
                 .onAppear {
-                    
                     // Allows swiping to dismiss keyboard, for iOS 15; separate view modifier handles this for iOS 16+
                     UIScrollView.appearance().keyboardDismissMode = .interactive
                 }
