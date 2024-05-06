@@ -41,10 +41,6 @@ struct AppSettingsView: View {
                         themeSettingsButton
                     }
                     
-                    Section("Data") {
-                        iCloudSyncSettingsbutton
-                    }
-                    
                     Section("More") {
                         contactButton
                         
@@ -138,25 +134,6 @@ struct AppSettingsView: View {
             .pickerStyle(.inline)
         } label: {
             Label("Units of Measure", systemImage: "ruler")
-        }
-    }
-    
-    // Allows user to toggle iCloud sync on/off
-    private var iCloudSyncSettingsbutton: some View {
-        NavigationLink {
-            List {
-                Section {
-                    Toggle(isOn: $settings.iCloudSyncEnabled, label: {
-                        Text("Use iCloud")
-                    })
-                } footer: {
-                    Text("Toggle on to sync Socket's data to your iCloud account.")
-                }
-            }
-            .navigationTitle("iCloud Sync")
-            .navigationBarTitleDisplayMode(.inline)
-        } label: {
-            Label("iCloud Sync", systemImage: "icloud")
         }
     }
     

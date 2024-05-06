@@ -322,7 +322,6 @@
 		9EEAC47D2BA0F9C20053C65E /* SocketCD */ = {
 			isa = PBXGroup;
 			children = (
-				9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */,
 				9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */,
 				9EEAC4802BA0F9C20053C65E /* HomeView.swift */,
 				9EEAC4C92BA256400053C65E /* Vehicle */,
@@ -342,6 +341,7 @@
 				9EEAC48C2BA0FA280053C65E /* SocketDataModel.xcdatamodeld */,
 				9E189E362BD1ABE900095EC2 /* Assets.xcassets */,
 				9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */,
+				9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */,
 				9EEAC4842BA0F9C30053C65E /* Preview Content */,
 			);
 			path = SocketCD;

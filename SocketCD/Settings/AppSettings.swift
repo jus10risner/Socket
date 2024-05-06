@@ -47,10 +47,6 @@ class AppSettings: ObservableObject {
         willSet { objectWillChange.send() }
     }
     
-    @AppStorage("iCloudSyncEnabled") var iCloudSyncEnabled: Bool = false {
-        willSet { objectWillChange.send() }
-    }
-    
     
     // MARK: - Onboarding & What's New
     

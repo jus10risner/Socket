@@ -14,7 +14,6 @@ class DataController: ObservableObject {
     
     // Properties to be passed to other views, for toggling
     var isShowingDataError: Bool = false
-    let iCloudSyncEnabled = UserDefaults.standard.bool(forKey: "iCloudSyncEnabled")
 
     // A test configuration for SwiftUI previews
     static var preview: DataController = {
@@ -39,12 +38,7 @@ class DataController: ObservableObject {
     
     // Storage for Core Data. Sets the appropriate persistent container.
     lazy var container: NSPersistentContainer = {
-//        container = NSPersistentCloudKitContainer(name: "SocketDataModel")
-        if iCloudSyncEnabled {
-            container = NSPersistentCloudKitContainer(name: "SocketDataModel")
-        } else {
-            container = NSPersistentContainer(name: "SocketDataModel")
-        }
+        container = NSPersistentCloudKitContainer(name: "SocketDataModel")
         
         guard let description = container.persistentStoreDescriptions.first else {
             fatalError("###\(#function): Failed to retrieve a persistent store description.")
@@ -74,8 +68,6 @@ class DataController: ObservableObject {
     
     // An initializer to load Core Data, optionally able to use an in-memory store.
     init(inMemory: Bool = false) {
-        self.container = container
-        
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
