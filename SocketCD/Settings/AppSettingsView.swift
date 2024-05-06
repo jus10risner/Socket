@@ -156,7 +156,7 @@ struct AppSettingsView: View {
             .navigationTitle("iCloud Sync")
             .navigationBarTitleDisplayMode(.inline)
         } label: {
-            Label("iCloud Sync", systemImage: "arrow.triangle.2.circlepath.icloud")
+            Label("iCloud Sync", systemImage: "icloud")
         }
     }
     
