@@ -23,49 +23,47 @@ struct AppSettingsView: View {
     
     private var settingsView: some View {
         AppropriateNavigationType {
-            VStack {
-                Form {
-                    Section("General") {
-                        maintenanceAlertsSettingsButton
-                        
-                        fuelCostSettingsButton
-                        
-                        unitsOfMeasureSettingsButton
-                    }
+            Form {
+                Section("General") {
+                    maintenanceAlertsSettingsButton
                     
-                    Section("Appearance") {
-                        accentColorSettingsButton
-                        
-                        appIconSettingsButton
-                        
-                        themeSettingsButton
-                    }
+                    fuelCostSettingsButton
                     
-                    Section("More") {
-                        contactButton
-                        
-                        rateButton
-                        
-                        shareAppButton
-                    }
-                    .buttonStyle(.plain)
+                    unitsOfMeasureSettingsButton
                 }
-                .navigationTitle("Settings")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("Done") {
-                            dismiss()
-                        }
-                    }
+                
+                Section("Appearance") {
+                    accentColorSettingsButton
+                    
+                    appIconSettingsButton
+                    
+                    themeSettingsButton
                 }
+                
+                Section("More") {
+                    contactButton
+                    
+                    rateButton
+                    
+                    shareAppButton
+                }
+                .buttonStyle(.plain)
                 
                 Text("Version \(AppInfo().version)")
                     .font(.subheadline)
                     .foregroundStyle(Color.secondary)
-                    .padding(.bottom, 10)
+                    .listRowBackground(Color(.systemGroupedBackground))
+                    .frame(maxWidth: .infinity)
             }
-            .background(Color(.systemGroupedBackground))
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
         }
         .conditionalTint(.selectedColor(for: .appTheme))
         .alert("Could not send mail", isPresented: $showingMailError) {
