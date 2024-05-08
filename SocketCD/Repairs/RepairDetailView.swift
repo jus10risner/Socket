@@ -29,8 +29,16 @@ struct RepairDetailView: View {
                 Text("Date")
                     .badge(repair.date.formatted(date: .numeric, time: .omitted))
                 
-                Text("Name")
-                    .badge(repair.name)
+                // The .badge() modifier cuts off the Name text when the repair name is too long, so this accomodates long repair names
+                HStack {
+                    Text("Name")
+                    
+                    Spacer()
+                    
+                    Text(repair.name)
+                        .foregroundStyle(Color.secondary)
+                }
+                .accessibilityElement(children: .combine)
                 
                 Text("Odometer")
                     .badge("\(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)")
