@@ -38,30 +38,42 @@ struct RepairsListView: View {
         AppropriateNavigationType {
             List {
                 ForEach(repairs, id: \.id) { repair in
-                    NavigationLink {
-                        RepairDetailView(vehicle: vehicle, repair: repair)
-                    } label: {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(repair.name)
-                                    .font(.headline)
+                    ZStack(alignment: .leading) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color(.secondarySystemGroupedBackground))
+                        
+                        NavigationLink {
+                            RepairDetailView(vehicle: vehicle, repair: repair)
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(repair.name)
+                                        .font(.headline)
+                                    
+                                    Text("\(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)")
+                                        .font(.subheadline)
+                                        .foregroundStyle(Color.secondary)
+                                }
                                 
-                                Text("\(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)")
+                                Spacer()
+                                
+                                Text(repair.date.formatted(date: .numeric, time: .omitted))
                                     .font(.subheadline)
                                     .foregroundStyle(Color.secondary)
                             }
-                            
-                            Spacer()
-                            
-                            Text(repair.date.formatted(date: .numeric, time: .omitted))
-                                .font(.subheadline)
-                                .foregroundStyle(Color.secondary)
+                            .padding(.vertical, 5)
                         }
-                        .padding(.vertical, 5)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
                     }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color(.systemGroupedBackground))
+                    .listRowInsets(EdgeInsets(top: 2.5, leading: 20, bottom: 2.5, trailing: 20))
                 }
             }
-            .modifier(ConditionalListRowSpacing())
+            .listStyle(.plain)
+            .background(Color(.systemGroupedBackground))
+//            .modifier(ConditionalListRowSpacing())
             .overlay {
                 if vehicle.sortedRepairsArray.isEmpty {
                     RepairsStartView()

@@ -52,7 +52,9 @@ struct MaintenanceListView: View {
                     firstServiceInfo
                 }
             }
-            .modifier(ConditionalListRowSpacing())
+            .listStyle(.plain)
+            .background(Color(.systemGroupedBackground))
+//            .modifier(ConditionalListRowSpacing())
             .overlay {
                 if vehicle.sortedServicesArray.isEmpty {
                     MaintenanceStartView()
@@ -143,15 +145,19 @@ struct MaintenanceListView: View {
     private var firstServiceInfo: some View {
         Section {
             ZStack {
-                Color(.socketPurple)
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(Color(.socketPurple))
                 
                 Text("Add a record each time a maintenance service is performed, and Socket will help you remember when it's due next.")
-                    .padding(20)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 20)
                     .font(.subheadline)
                     .foregroundStyle(.white)
             }
+            .padding(.top, 30)
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color(.systemGroupedBackground))
         }
-        .listRowInsets(EdgeInsets())
     }
     
     

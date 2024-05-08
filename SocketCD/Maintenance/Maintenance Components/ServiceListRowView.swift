@@ -14,16 +14,26 @@ struct ServiceListRowView: View {
     let vehicle: Vehicle
     
     var body: some View {
-        NavigationLink {
-            ServiceDetailView(service: service, vehicle: vehicle)
-        } label: {
-            HStack {
-                serviceStatusIndicator
-                
-                serviceInfo
+        ZStack(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(Color(.secondarySystemGroupedBackground))
+            
+            NavigationLink {
+                ServiceDetailView(service: service, vehicle: vehicle)
+            } label: {
+                HStack {
+                    serviceStatusIndicator
+                    
+                    serviceInfo
+                }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 15)
         }
-        .padding(.vertical, 5)
+        .listRowSeparator(.hidden)
+        .listRowBackground(Color(.systemGroupedBackground))
+        .listRowInsets(EdgeInsets(top: 2.5, leading: 20, bottom: 2.5, trailing: 20))
+//        .padding(.vertical, 5)
         .swipeActions(edge: .leading) {
             Button {
                 selectedService = service
