@@ -37,7 +37,7 @@ class DataController: ObservableObject {
     }()
     
     // Storage for Core Data. Sets the appropriate persistent container.
-    lazy var container: NSPersistentContainer = {
+    lazy var container: NSPersistentCloudKitContainer = {
         container = NSPersistentCloudKitContainer(name: "SocketDataModel")
         
         guard let description = container.persistentStoreDescriptions.first else {
@@ -62,6 +62,12 @@ class DataController: ObservableObject {
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.automaticallyMergesChangesFromParent = true
 //        container.viewContext.undoManager = UndoManager()
+        
+//        do {
+//            try container.initializeCloudKitSchema()
+//        } catch {
+//            print(error.localizedDescription)
+//        }
         
         return container
     }()
