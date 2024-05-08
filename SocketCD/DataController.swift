@@ -51,10 +51,6 @@ class DataController: ObservableObject {
         } else {
             description.cloudKitContainerOptions = nil
         }
-        
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        container.viewContext.automaticallyMergesChangesFromParent = true
-//        container.viewContext.undoManager = UndoManager()
 
         container.loadPersistentStores { description, error in
             if let error = error as NSError? {
@@ -62,6 +58,10 @@ class DataController: ObservableObject {
                 print("Unresolved error: \(error.localizedDescription), \(error.userInfo)")
             }
         }
+        
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        container.viewContext.automaticallyMergesChangesFromParent = true
+//        container.viewContext.undoManager = UndoManager()
         
         return container
     }()
