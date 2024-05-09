@@ -201,6 +201,7 @@ extension Vehicle {
         }
     }
     
+    // Takes a Double value, and converts it into a currency string (e.g. 1.23 -> "$1.23")
     func convertToCurrency(value: Double) -> String {
         var returnString = ""
         let formatter = NumberFormatter()
@@ -212,72 +213,4 @@ extension Vehicle {
         
         return returnString
     }
-    
-    
-    // MARK: Unused
-    
-    // Used to start/restart the Maintenance Due animation on VehicleListView
-//    var serviceDue: Bool {
-//        var servicesDue = 0
-//
-//        for service in self.sortedServicesArray {
-//            if service.serviceStatus == .due || service.serviceStatus == .overDue {
-//                servicesDue += 1
-//            }
-//        }
-//
-//        if servicesDue > 0 {
-//            return true
-//        } else {
-//            return false
-//        }
-//    }
-//
-//    // Determines whether to show the maintenance alert for a vehicle, on VehicleListView
-//    var timeForService: Bool {
-//        let settings = AppSettings()
-////        var distanceDue: [Bool] = []
-////        var timeDue: [Bool] = []
-//        var numberOfServicesDue = 0
-//
-//        if !self.sortedServicesArray.isEmpty {
-//            for service in self.sortedServicesArray {
-//                if let distanceLeft = service.odometerDue {
-//                    let distanceToNextService = distanceLeft - (self.odometer)
-//
-//                    if distanceToNextService <= settings.distanceBeforeMaintenance {
-////                        distanceDue.append(true)
-//                        numberOfServicesDue += 1
-//                    } else {
-////                        distanceDue.append(false)
-//                    }
-//                }
-//
-//                if let timeLeft = service.dateDue {
-//                    let difference = Calendar.current.dateComponents([.day], from: Date.now, to: timeLeft)
-//
-//                    if let daysToNextService = difference.day {
-//                        if daysToNextService <= settings.daysBeforeMaintenance {
-////                            timeDue.append(true)
-//                            numberOfServicesDue += 1
-//                        } else {
-////                            timeDue.append(false)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//        if numberOfServicesDue > 0 {
-//            return true
-//        } else {
-//            return false
-//        }
-//
-////        if distanceDue.contains(true) || timeDue.contains(true) {
-////            return true
-////        } else {
-////            return false
-////        }
-//    }
 }
