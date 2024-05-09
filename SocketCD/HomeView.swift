@@ -55,15 +55,19 @@ struct HomeView: View {
                     }
                 }
                 .toolbar {
+                    #if DEBUG
                     ToolbarItemGroup(placement: .topBarLeading) {
+                        dataController.cloudContainerAvailable ? Image(systemName: "checkmark.icloud") : Image(systemName: "xmark.icloud")
+                        
                         Button {
                             settings.welcomeViewPresented = true
                             settings.quickFillTipPresented = false
                         } label: {
                             Image(systemName: "sparkles")
-                                .foregroundStyle(Color.clear)
+                            //                                .foregroundStyle(Color.clear)
                         }
                     }
+                    #endif
                     
                     ToolbarItemGroup(placement: .topBarTrailing) {
                         // Not ideal, but the Add Vehicle toolbar button would stop working after its sheet was dismissed, until I added the text below to the toolbar; now it functions as expected.
