@@ -27,7 +27,6 @@ struct MaintenanceListView: View {
         )
     }
     
-//    @State private var searchText = ""
     @State private var showingAddService = false
     @State var selectedService: Service? = nil
     @State var isAnimating: Bool = false
@@ -54,7 +53,6 @@ struct MaintenanceListView: View {
             }
             .listStyle(.plain)
             .background(Color(.systemGroupedBackground))
-//            .modifier(ConditionalListRowSpacing())
             .overlay {
                 if vehicle.sortedServicesArray.isEmpty {
                     MaintenanceStartView()
@@ -62,13 +60,6 @@ struct MaintenanceListView: View {
             }
             .navigationTitle("Maintenance")
             .onAppear { restartAnimation() }
-    //            .onChange(of: searchText) { _ in
-    //                if !searchText.isEmpty {
-    //                    services.nsPredicate = compoundPredicate
-    //                } else {
-    //                    services.nsPredicate = NSPredicate(format: "vehicle == %@", vehicle)
-    //                }
-    //            }
             .onChange(of: vehicle.sortedServicesArray) { _ in
                 restartAnimation()
                 
@@ -122,8 +113,6 @@ struct MaintenanceListView: View {
             }
         }
         .interactiveDismissDisabled()
-//        .modifier(ConditionalSearchableViewModifier(isSearchable: vehicle.sortedServices.count >= 7, searchString: $searchText))
-//        .searchable(text: $searchText)
     }
     
     // Determines whether to show firstServiceInfo tip
@@ -197,20 +186,6 @@ struct MaintenanceListView: View {
             }
         }
     }
-    
-//    private var compoundPredicate: NSPredicate {
-//        var predicates: [NSPredicate] = []
-//        
-//        predicates.append(NSPredicate(format: "vehicle == %@", vehicle))
-//        
-//        // Add search predicate
-//        if !searchText.isEmpty {
-//            predicates.append(NSPredicate(format: "name_ CONTAINS[c] %@", searchText))
-//        }
-//        
-//        // Combine predicates
-//        return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-//    }
 }
 
 #Preview {

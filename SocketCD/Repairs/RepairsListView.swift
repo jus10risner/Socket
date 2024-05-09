@@ -23,7 +23,6 @@ struct RepairsListView: View {
         )
     }
     
-//    @State private var searchText = ""
     @State private var showingAddRepair = false
     @State private var showingContent = false
     
@@ -73,17 +72,12 @@ struct RepairsListView: View {
             }
             .listStyle(.plain)
             .background(Color(.systemGroupedBackground))
-//            .modifier(ConditionalListRowSpacing())
             .overlay {
                 if vehicle.sortedRepairsArray.isEmpty {
                     RepairsStartView()
                 }
             }
             .navigationTitle("Repairs")
-    //            .onAppear { repairs.nsPredicate = compoundPredicate }
-    //            .onChange(of: searchText) { _ in
-    //                repairs.nsPredicate = compoundPredicate
-    //            }
             .onChange(of: vehicle.sortedRepairsArray) { _ in
                 vehicle.determineIfNotificationDue()
             }
@@ -128,23 +122,7 @@ struct RepairsListView: View {
                 }
             }
         }
-//        .modifier(ConditionalSearchableViewModifier(isSearchable: sortedRepairs.count >= 7, searchString: $searchText))
-//        .searchable(text: $searchText)
     }
-    
-//    private var compoundPredicate: NSPredicate {
-//        var predicates: [NSPredicate] = []
-//        
-//        predicates.append(NSPredicate(format: "vehicle == %@", vehicle))
-//        
-//        // Add search predicate
-//        if !searchText.isEmpty {
-//            predicates.append(NSPredicate(format: "name_ CONTAINS[c] %@", searchText))
-//        }
-//        
-//        // Combine predicates
-//        return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-//    }
 }
 
 #Preview {
