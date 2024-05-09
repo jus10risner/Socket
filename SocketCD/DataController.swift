@@ -63,11 +63,15 @@ class DataController: ObservableObject {
         container.viewContext.automaticallyMergesChangesFromParent = true
 //        container.viewContext.undoManager = UndoManager()
         
-//        do {
-//            try container.initializeCloudKitSchema()
-//        } catch {
-//            print(error.localizedDescription)
-//        }
+        #if DEBUG
+        do {
+            // Use the container to initialize the development schema.
+            try container.initializeCloudKitSchema(options: [])
+        } catch {
+            // Handle any errors.
+            print(error.localizedDescription)
+        }
+        #endif
         
         return container
     }()
