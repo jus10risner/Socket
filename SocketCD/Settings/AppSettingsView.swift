@@ -43,9 +43,9 @@ struct AppSettingsView: View {
                 Section("More") {
                     contactButton
                     
-                    rateButton
-                    
-                    shareAppButton
+//                    rateButton
+//                    
+//                    shareAppButton
                 }
                 .buttonStyle(.plain)
                 
