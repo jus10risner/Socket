@@ -55,7 +55,7 @@ struct MaintenanceListView: View {
             .background(Color(.systemGroupedBackground))
             .overlay {
                 if vehicle.sortedServicesArray.isEmpty {
-                    MaintenanceStartView()
+                    MaintenanceStartView(showingAddService: $showingAddService)
                 }
             }
             .navigationTitle("Maintenance")

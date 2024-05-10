@@ -74,7 +74,7 @@ struct RepairsListView: View {
             .background(Color(.systemGroupedBackground))
             .overlay {
                 if vehicle.sortedRepairsArray.isEmpty {
-                    RepairsStartView()
+                    RepairsStartView(showingAddRepair: $showingAddRepair)
                 }
             }
             .navigationTitle("Repairs")

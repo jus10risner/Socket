@@ -149,7 +149,7 @@ struct FillupsDashboardView: View {
             }
             .overlay {
                 if vehicle.sortedFillupsArray.isEmpty {
-                    FillupsStartView()
+                    FillupsStartView(showingAddFillup: $showingAddFillup)
                 }
             }
             .navigationTitle("Fill-ups")

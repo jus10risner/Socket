@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RepairsStartView: View {
+    @Binding var showingAddRepair: Bool
     @State private var showingMoreInfo = false
     
     var body: some View {
@@ -18,12 +19,17 @@ struct RepairsStartView: View {
                 Image(systemName: "wrench")
                     .font(.largeTitle)
                     .foregroundStyle(Color.secondary)
+                    .frame(width: 50, height: 50)
                     .accessibilityHidden(true)
                 
                 HStack(spacing: 3) {
                     Text("Tap")
-                    Image(systemName: "plus.circle.fill").foregroundStyle(Color.selectedColor(for: .repairsTheme)).symbolRenderingMode(.hierarchical)
-                        .font(.title)
+                    Button {
+                        showingAddRepair = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill").foregroundStyle(Color.selectedColor(for: .repairsTheme)).symbolRenderingMode(.hierarchical)
+                            .font(.title)
+                    }
                     Text("to add a repair record")
                 }
                 .accessibilityElement()
@@ -53,5 +59,5 @@ struct RepairsStartView: View {
 }
 
 #Preview {
-    RepairsStartView()
+    RepairsStartView(showingAddRepair: .constant(false))
 }

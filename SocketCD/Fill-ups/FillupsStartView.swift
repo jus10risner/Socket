@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FillupsStartView: View {
+    @Binding var showingAddFillup: Bool
     @State private var showingMoreInfo = false
     
     var body: some View {
@@ -18,12 +19,17 @@ struct FillupsStartView: View {
                 Image(systemName: "fuelpump")
                     .font(.largeTitle)
                     .foregroundStyle(Color.secondary)
+                    .frame(width: 50, height: 50)
                     .accessibilityHidden(true)
                 
                 HStack(spacing: 3) {
                     Text("Tap")
-                    Image(systemName: "plus.circle.fill").foregroundStyle(Color.selectedColor(for: .fillupsTheme)).symbolRenderingMode(.hierarchical)
-                        .font(.title)
+                    Button {
+                        showingAddFillup = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill").foregroundStyle(Color.selectedColor(for: .fillupsTheme)).symbolRenderingMode(.hierarchical)
+                            .font(.title)
+                    }
                     Text("to add a fill-up")
                 }
                 .accessibilityElement()
@@ -52,5 +58,5 @@ struct FillupsStartView: View {
 }
 
 #Preview {
-    FillupsStartView()
+    FillupsStartView(showingAddFillup: .constant(false))
 }

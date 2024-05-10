@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MaintenanceStartView: View {
+    @Binding var showingAddService: Bool
     @State private var showingMoreInfo = false
     
     var body: some View {
@@ -18,12 +19,17 @@ struct MaintenanceStartView: View {
                 Image("book.and.wrench")
                     .font(.largeTitle)
                     .foregroundStyle(Color.secondary)
+                    .frame(width: 50, height: 50)
                     .accessibilityHidden(true)
                 
                 HStack(spacing: 3) {
                     Text("Tap")
-                    Image(systemName: "plus.circle.fill").foregroundStyle(Color.selectedColor(for: .maintenanceTheme)).symbolRenderingMode(.hierarchical)
-                        .font(.title)
+                    Button {
+                        showingAddService = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill").foregroundStyle(Color.selectedColor(for: .maintenanceTheme)).symbolRenderingMode(.hierarchical)
+                            .font(.title)
+                    }
                     Text("to set up a new service")
                 }
                 .accessibilityElement()
@@ -55,5 +61,5 @@ struct MaintenanceStartView: View {
 }
 
 #Preview {
-    MaintenanceStartView()
+    MaintenanceStartView(showingAddService: .constant(false))
 }
