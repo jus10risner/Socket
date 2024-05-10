@@ -69,7 +69,7 @@ class DataController: ObservableObject {
             try container.initializeCloudKitSchema(options: [])
         } catch {
             // Handle any errors.
-            print(error.localizedDescription)
+            print("Unable to initialize CloudKit schema: \(error.localizedDescription)")
         }
         #endif
         
