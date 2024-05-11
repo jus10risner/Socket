@@ -55,9 +55,12 @@ extension ServiceRecord {
             }
         }
         
+        // Triggers notification reschedule, if appropriate
+        service.notificationScheduled = false
+        
         try? context.save()
         
-        service.updateNotifications()
+//        service.updateNotifications()
     }
     
     func delete() {

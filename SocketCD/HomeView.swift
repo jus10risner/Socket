@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.scenePhase) var scenePhase
     @EnvironmentObject var settings: AppSettings
     @ObservedObject var dataController: DataController
     
@@ -41,7 +42,14 @@ struct HomeView: View {
                 .navigationTitle("Vehicles")
                 .onAppear { checkForViewsToBeShownOnLaunch() }
                 .onChange(of: notificationBadgeNumber) { _ in UIApplication.shared.applicationIconBadgeNumber = notificationBadgeNumber }
-                .onChange(of: settings.daysBeforeMaintenance) { _ in rescheduleNotifications() }
+                .onChange(of: [settings.daysBeforeMaintenance, settings.distanceBeforeMaintenance]) { _ in
+                    setUpNotifications(reschedule: true)
+                }
+                .onChange(of: scenePhase) { phase in
+                    if phase == .background {
+                        setUpNotifications(reschedule: false)
+                    }
+                }
                 .sheet(item: $selectedVehicle) { vehicle in
                     // Needs to be here, rather than on VehicleListView, for ShareLink to work properly
                     VehicleTabView(vehicle: vehicle)
@@ -183,29 +191,40 @@ struct HomeView: View {
         }
     }
     
-    // Updates notifications, if appropriate, after the user makes a change to one of the values in in Settings -> Alerts
-    func rescheduleNotifications() {
-        for vehicle in vehicles {
-            for service in vehicle.sortedServicesArray {
-                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [service.timeBasedNotificationIdentifier, service.distanceBasedNotificationIdentifier])
-
-                if let dateDue = service.dateDue {
-                    if dateDue > Date.now {
-                        service.scheduleNotificationOnDate(dateDue, for: vehicle)
+    // Schedules notifications, if appropriate, when the app's scenePhase is set to .background
+    func setUpNotifications(reschedule: Bool) {
+        UNUserNotificationCenter.current().getNotificationSettings { permissions in
+            if permissions.authorizationStatus == .authorized {
+                for vehicle in vehicles {
+                    for service in vehicle.sortedServicesArray {
+                        if reschedule == true {
+                            service.cancelPendingNotifications()
+                        }
+                        
+                        // Sets up notifications for any service that is due, but does not yet have a notification scheduled; this ensures that each device syncing with iCloud gets its own local notifications, when appropriate
+                        if service.notificationScheduled == false {
+                                if let dateDue = service.dateDue {
+                                    if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
+                                    if dateDue > Date.now && alertDate > Date.now {
+                                        service.scheduleNotificationOnDate(dateDue, for: vehicle)
+                                    }
+                                }
+                            }
+                            
+                            if let odometerDue = service.odometerDue {
+                                let distanceToNextService = odometerDue - vehicle.odometer
+                                
+                                if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
+                                    service.scheduleNotificationForTomorrow(for: vehicle)
+                                }
+                            }
+                        }
                     }
                 }
-                
-                if let odometerDue = service.odometerDue {
-                    let distanceToNextService = odometerDue - vehicle.odometer
-                    
-                    if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
-                        service.scheduleNotificationForTomorrow(for: vehicle)
-                    }
-                }
-            }
+            } else {
+               print("Push notifications have not been authorized")
+           }
         }
-
-        print("Notifications rescheduled!")
     }
 }
 
