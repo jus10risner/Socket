@@ -136,12 +136,31 @@ struct MaintenanceListView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundStyle(Color(.socketPurple))
+                    .accessibilityElement()
                 
-                Text("Add a record each time a maintenance service is performed, and Socket will help you remember when it's due next.")
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 20)
-                    .font(.subheadline)
-                    .foregroundStyle(.white)
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("Now that you have a maintenance service set up, let's add a service record.")
+                    
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("1. Swipe or tap \(services.first?.name ?? "the service") above")
+                        
+                        HStack(spacing: 3) {
+                            Text("2. Tap")
+                            
+                            Label("Add Service Record", systemImage: "plus.square.on.square.fill")
+                                .labelStyle(.iconOnly)
+                            
+                            Text("to add a new record")
+                        }
+                    }
+                    
+                    Text("Add a service record each time maintenance is performed, and Socket can help you remember when it's due next.")
+                }
+                .padding(.horizontal, 30)
+                .padding(.vertical, 30)
+                .font(.subheadline)
+                .foregroundStyle(.white)
+                .accessibilityElement(children: .combine)
             }
             .padding(.top, 30)
             .listRowSeparator(.hidden)
