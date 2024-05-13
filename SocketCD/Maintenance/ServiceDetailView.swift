@@ -28,17 +28,24 @@ struct ServiceDetailView: View {
         List {
             Section {
                 VStack(alignment: .leading) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(service.name)
-                            .font(.title2.bold())
-                            .foregroundStyle(Color.primary)
+                    HStack {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text(service.name)
+                                .font(.title2.bold())
+                                .foregroundStyle(Color.primary)
+                                .multilineTextAlignment(.leading)
+                            
+                            Text("Due every \(distanceIntervalText)\(eitherOr)\(timeIntervalText)")
+                                .font(.caption)
+                                .foregroundStyle(Color.secondary)
+                        }
+                        .padding(.vertical, 5)
+                        .accessibilityElement(children: .combine)
                         
-                        Text("Due every \(distanceIntervalText)\(eitherOr)\(timeIntervalText)")
-                            .font(.caption)
-                            .foregroundStyle(Color.secondary)
+                        Spacer()
+                        
+                        serviceMenu
                     }
-                    .padding(.vertical, 5)
-                    .accessibilityElement(children: .combine)
                     
                     Divider()
                     
@@ -46,7 +53,9 @@ struct ServiceDetailView: View {
                         Text("Next Due:")
                             .bold()
                         
-                        serviceNextDueInfo
+                        if service.sortedServiceRecordsArray.isEmpty == false {
+                            serviceNextDueInfo
+                        }
                     }
                     .padding(.vertical, 5)
                     .font(.subheadline)
@@ -62,40 +71,15 @@ struct ServiceDetailView: View {
             }
             
             if !service.sortedServiceRecordsArray.isEmpty {
-                Section {
-                    ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
-                        NavigationLink {
-                            RecordDetailView(record: record, vehicle: vehicle, service: service)
-                        } label: {
-                            // Using HStack, because iOS 15 doesn't show badge text at all, if Text("").badge("") is used
-                            HStack {
-                                Text("\(record.odometer) \(settings.shortenedDistanceUnit)")
-                                
-                                Spacer()
-                                
-                                Text("\(record.date.formatted(date: .numeric, time: .omitted))")
-                                    .foregroundStyle(Color.secondary)
-                            }
-                            .accessibilityElement(children: .combine)
-                        }
-                    }
-                } header: {
-                    HStack(spacing: 3) {
-                        Image(systemName: "clock.arrow.circlepath")
-                            .accessibilityHidden(true)
-                        
-                        Text("Service History")
-                    }
-                    .font(.footnote)
-                    .foregroundStyle(Color.secondary)
-                }
-                .textCase(nil)
+                serviceHistory
+            } else {
+                serviceRecordHint
             }
         }
         .navigationTitle("Service Details")
 //        .navigationBarTitleDisplayMode(.inline)
 //        .modifier(CustomNavigationTitleDisplayMode())
-        .onAppear { service.sortedServiceRecordsArray.isEmpty ? showingAddRecord = true : nil }
+//        .onAppear { service.sortedServiceRecordsArray.isEmpty ? showingAddRecord = true : nil }
         .sheet(isPresented: $showingAddRecord) {
             AddRecordView(vehicle: vehicle, service: service)
         }
@@ -118,7 +102,7 @@ struct ServiceDetailView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-                serviceMenu
+//                serviceMenu
                 
                 Button {
                     showingAddRecord = true
@@ -136,7 +120,7 @@ struct ServiceDetailView: View {
             Button {
                 showingEditService = true
             } label: {
-                Label("Edit Service", systemImage: "pencil")
+                Label("Edit Service Info", systemImage: "pencil")
             }
             
             Button(role: .destructive) {
@@ -145,8 +129,8 @@ struct ServiceDetailView: View {
                 Label("Delete Service", systemImage: "trash")
             }
         } label: {
-            Image(systemName: "ellipsis.circle")
-                .accessibilityLabel("Service Options")
+            Label("Service Options", systemImage: "ellipsis.circle")
+                .labelStyle(.iconOnly)
         }
     }
     
@@ -192,6 +176,62 @@ struct ServiceDetailView: View {
             .padding(.horizontal, 2)
             .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder())
             .accessibilityLabel("Odometer")
+    }
+    
+    // Service History section
+    private var serviceHistory: some View {
+        Section {
+            ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
+                NavigationLink {
+                    RecordDetailView(record: record, vehicle: vehicle, service: service)
+                } label: {
+                    // Using HStack, because iOS 15 doesn't show badge text at all, if Text("").badge("") is used
+                    HStack {
+                        Text("\(record.odometer) \(settings.shortenedDistanceUnit)")
+                        
+                        Spacer()
+                        
+                        Text("\(record.date.formatted(date: .numeric, time: .omitted))")
+                            .foregroundStyle(Color.secondary)
+                    }
+                    .accessibilityElement(children: .combine)
+                }
+            }
+        } header: {
+            HStack(spacing: 3) {
+                Image(systemName: "clock.arrow.circlepath")
+                    .accessibilityHidden(true)
+                
+                Text("Service History")
+            }
+            .font(.footnote)
+            .foregroundStyle(Color.secondary)
+        }
+        .textCase(nil)
+    }
+    
+    // Hint for adding a new service record
+    private var serviceRecordHint: some View {
+        Section {
+            HStack(spacing: 3) {
+                Text("Tap")
+                
+                Button {
+                    showingAddRecord = true
+                } label: {
+                    Label("Add Service Record", systemImage: "plus.square.on.square")
+                        .font(.title3)
+                        .labelStyle(.iconOnly)
+                }
+                
+                Text("to add a new service record")
+            }
+            .frame(maxWidth: .infinity)
+            .padding(20)
+            .font(.subheadline)
+            .foregroundStyle(.white)
+        }
+        .listRowBackground(Color(.socketPurple))
     }
     
     
