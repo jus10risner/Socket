@@ -38,8 +38,7 @@ struct ServiceListRowView: View {
             Button {
                 selectedService = service
             } label: {
-                Label("", systemImage: "plus.square.on.square")
-                    .accessibilityLabel("Add a Service Record")
+                Label("Add Service Record", systemImage: "plus.square.on.square")
             }
             .conditionalTint(Color.selectedColor(for: .maintenanceTheme))
         }
