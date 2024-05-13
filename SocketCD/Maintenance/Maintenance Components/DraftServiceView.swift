@@ -94,7 +94,7 @@ struct DraftServiceView: View {
             }
             .focused($isInputActive)
            
-            Section("Service Note") {
+            Section(header: Text("Service Note (optional)"), footer: Text("Add info that you want to reference each time this service is performed (e.g. oil type, filter number)")) {
                 TextEditor(text: $draftService.serviceNote)
                     .frame(minHeight: 50)
                     .focused($isInputActive)
@@ -107,4 +107,5 @@ struct DraftServiceView: View {
 
 #Preview {
     DraftServiceView(draftService: DraftService(), selectedInterval: .constant(.distance), isEditView: true)
+        .environmentObject(AppSettings())
 }
