@@ -38,7 +38,6 @@ struct CustomInfoDetailView: View {
                 }
                 .textCase(nil)
             }
-//            .textSelection(.enabled)
             
             if customInfo.note != "" {
                 Section("Note") {
@@ -53,7 +52,7 @@ struct CustomInfoDetailView: View {
         .navigationTitle(customInfo.label)
 //        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingEditCustomInfo) { EditCustomInfoView(customInfo: customInfo) }
-        .alert("Delete Custom Info", isPresented: $showingDeleteAlert) {
+        .alert("Delete Vehicle Info", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
                 customInfo.delete()
                 dismiss()
