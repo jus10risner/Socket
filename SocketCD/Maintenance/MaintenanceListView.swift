@@ -30,6 +30,7 @@ struct MaintenanceListView: View {
     @State private var showingAddService = false
     @State var selectedService: Service? = nil
     @State var isAnimating: Bool = false
+    @State private var showingFirstServiceInfo = false
     
     var body: some View {
         maintenanceList
@@ -47,28 +48,32 @@ struct MaintenanceListView: View {
                 
                 servicesWithStatus(.notDue)
             
-                if serviceHint == true {
+                if serviceTipDue == true {
                     firstServiceInfo
                 }
             }
+            .navigationTitle("Maintenance")
             .listStyle(.plain)
             .background(Color(.systemGroupedBackground))
+            .overlay {
+                if showingFirstServiceInfo == true {
+                    if let firstService = services.first {
+                        MaintenanceOnboardingView(vehicle: vehicle, service: firstService, showingServiceRecordTip: $showingFirstServiceInfo)
+                    }
+                }
+            }
             .overlay {
                 if vehicle.sortedServicesArray.isEmpty {
                     MaintenanceStartView(showingAddService: $showingAddService)
                 }
             }
-            .navigationTitle("Maintenance")
-            .onAppear { restartAnimation() }
             .onChange(of: vehicle.sortedServicesArray) { _ in
-                restartAnimation()
-                
                 guard settings.notificationPermissionRequested == true else {
                     requestNotificationPermission()
                     return
                 }
             }
-            .sheet(isPresented: $showingAddService) {
+            .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
                 AddServiceView(vehicle: vehicle)
             }
             .sheet(item: $selectedService) { service in
@@ -116,7 +121,7 @@ struct MaintenanceListView: View {
     }
     
     // Determines whether to show firstServiceInfo tip
-    private var serviceHint: Bool {
+    private var serviceTipDue: Bool {
         var serviceRecordCount = 0
         
         if allServices.count > 0 {
@@ -139,25 +144,13 @@ struct MaintenanceListView: View {
                     .accessibilityElement()
                 
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Now that you have a maintenance service set up, let's add a service record.")
+                    Text("Now that you have a maintenance service set up, you can add a record each time this service is completed.")
                     
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("1. Swipe or tap \(services.first?.name ?? "the service") above")
-                        
-                        HStack(spacing: 3) {
-                            Text("2. Tap")
-                            
-                            Label("Add Service Record", systemImage: "plus.square.on.square.fill")
-                                .labelStyle(.iconOnly)
-                            
-                            Text("to add a new record")
-                        }
-                    }
-                    
-                    Text("Add a service record each time maintenance is performed, and Socket can help you remember when it's due next.")
+                    Text("Just swipe or tap on the service above, then tap \(Image(systemName: "plus.square.on.square.fill")) to add a new record.")
+                        .accessibilityElement()
+                        .accessibilityLabel("Just swipe or tap on a service above, then tap Add Service Record to add a new record.")
                 }
-                .padding(.horizontal, 30)
-                .padding(.vertical, 30)
+                .padding(30)
                 .font(.subheadline)
                 .foregroundStyle(.white)
                 .accessibilityElement(children: .combine)
@@ -170,12 +163,6 @@ struct MaintenanceListView: View {
     
     
     // MARK: - Methods
-    
-    // Restarts the arrow animation, when a service has been set up, but has no service records yet
-    func restartAnimation() {
-        isAnimating = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { isAnimating = true }
-    }
     
     // Asks the user for permission to display notifications
     func requestNotificationPermission() {
@@ -201,8 +188,15 @@ struct MaintenanceListView: View {
     func servicesWithStatus(_ serviceStatus: ServiceStatus) -> some View {
         ForEach(services, id: \.id) { service in
             if service.serviceStatus == serviceStatus {
-                ServiceListRowView(selectedService: $selectedService, isAnimating: $isAnimating, service: service, vehicle: vehicle)
+                ServiceListRowView(selectedService: $selectedService, service: service, vehicle: vehicle)
             }
+        }
+    }
+    
+    // Determines whether to show MaintenanceOnboardingView
+    func determineIfFirstServiceInfoDue() {
+        if serviceTipDue == true && vehicle.sortedServicesArray.count == 1 {
+            showingFirstServiceInfo = true
         }
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ServiceListRowView: View {
     @Binding var selectedService: Service?
-    @Binding var isAnimating: Bool
+//    @Binding var isAnimating: Bool
     @ObservedObject var service: Service
     let vehicle: Vehicle
     
@@ -73,14 +73,14 @@ struct ServiceListRowView: View {
                 .font(.headline)
             
             if service.sortedServiceRecordsArray.isEmpty {
-                HStack(spacing: isAnimating ? 15 : 3) {
-                    Text("Swipe to add a service record")
+//                HStack(spacing: isAnimating ? 15 : 3) {
+                    Text("Swipe or tap to add a service record")
                     
-                    Image(systemName: "arrow.right")
-                        .flipsForRightToLeftLayoutDirection(true)
-                        .animation(isAnimating ? .easeInOut(duration: 1).repeatForever() : .default, value: isAnimating)
-                        .accessibilityHidden(true)
-                }
+//                    Image(systemName: "arrow.right")
+//                        .flipsForRightToLeftLayoutDirection(true)
+//                        .animation(isAnimating ? .easeInOut(duration: 1).repeatForever() : .default, value: isAnimating)
+//                        .accessibilityHidden(true)
+//                }
                 .font(.subheadline)
                 .foregroundStyle(Color.secondary)
             } else {
@@ -93,5 +93,5 @@ struct ServiceListRowView: View {
 }
 
 #Preview {
-    ServiceListRowView(selectedService: .constant(Service(context: DataController.preview.container.viewContext)), isAnimating: .constant(true), service: Service(context: DataController.preview.container.viewContext), vehicle: Vehicle(context: DataController.preview.container.viewContext))
+    ServiceListRowView(selectedService: .constant(Service(context: DataController.preview.container.viewContext)), service: Service(context: DataController.preview.container.viewContext), vehicle: Vehicle(context: DataController.preview.container.viewContext))
 }
