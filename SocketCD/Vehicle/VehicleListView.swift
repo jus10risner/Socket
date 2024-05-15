@@ -76,6 +76,10 @@ struct VehicleListView: View {
                 return NSItemProvider()
             }
             .listRowBackground(Color(.customBackground))
+            
+            if vehicles.count == 1 && settings.onboardingTipsPresented == false {
+                onboardingTips
+            }
         }
         .listStyle(.plain)
         .animation(.easeInOut, value: Array(vehicles))
@@ -100,6 +104,30 @@ struct VehicleListView: View {
             }
             
             Button("Cancel", role: .cancel) { vehicleToDelete = nil }
+        }
+    }
+    
+    // Tip that displays immediately after the first vehicle has been added, until another view is shown
+    private var onboardingTips: some View {
+        Section {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(Color.socketPurple)
+                    .accessibilityElement()
+                
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("You can swipe on a vehicle, to quickly add fill-ups or make changes, right from this screen.")
+                    
+                    Text("When you're ready, tap your vehicle to begin adding maintenance services, repairs, and more.")
+                }
+                .padding(30)
+                .font(.subheadline)
+                .foregroundStyle(Color.white)
+                .accessibilityElement(children: .combine)
+            }
+            .padding(.top, 30)
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.customBackground)
         }
     }
     

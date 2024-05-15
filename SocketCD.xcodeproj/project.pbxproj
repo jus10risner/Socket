@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9E189E372BD1ABE900095EC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E189E362BD1ABE900095EC2 /* Assets.xcassets */; };
+		9E312D772BF2924B0069CBFF /* MaintenanceOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */; };
 		9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */; };
 		9E620BF42BBF2DED005E16DD /* DraftRepairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF32BBF2DED005E16DD /* DraftRepairView.swift */; };
 		9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF52BC04531005E16DD /* DraftFillup.swift */; };
@@ -25,6 +26,7 @@
 		9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53452BADD68A00F75D49 /* AppInfo.swift */; };
 		9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */; };
 		9E6A534C2BB2063500F75D49 /* SwipeToDismissKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A534B2BB2063500F75D49 /* SwipeToDismissKeyboard.swift */; };
+		9E7507572BF50FB9000E25BD /* OnboardingTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7507562BF50FB9000E25BD /* OnboardingTips.swift */; };
 		9E97B2752BD2C694002B1E9F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */; };
 		9E97B27D2BD3FBE8002B1E9F /* SocketCDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E97B27C2BD3FBE8002B1E9F /* SocketCDTests.swift */; };
 		9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E97B2852BD40364002B1E9F /* ServiceListRowView.swift */; };
@@ -59,7 +61,6 @@
 		9EEAC4D52BA259870053C65E /* VehiclePhotoCustomizationButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D42BA259870053C65E /* VehiclePhotoCustomizationButtons.swift */; };
 		9EEAC4D72BA332E50053C65E /* VehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D62BA332E50053C65E /* VehicleListView.swift */; };
 		9EEAC4DB2BA33B7B0053C65E /* VehicleTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4DA2BA33B7B0053C65E /* VehicleTabView.swift */; };
-		9EEAC4DD2BA33DA40053C65E /* QuickFillTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4DC2BA33DA40053C65E /* QuickFillTip.swift */; };
 		9EEAC4DF2BA343B00053C65E /* EditVehicleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */; };
 		9EEAC4E12BA360E80053C65E /* VehicleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */; };
 		9EEAC4E42BA3641F0053C65E /* AddCustomInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E32BA3641F0053C65E /* AddCustomInfoView.swift */; };
@@ -111,6 +112,7 @@
 
 /* Begin PBXFileReference section */
 		9E189E362BD1ABE900095EC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceOnboardingView.swift; sourceTree = "<group>"; };
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepair.swift; sourceTree = "<group>"; };
 		9E620BF32BBF2DED005E16DD /* DraftRepairView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepairView.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		9E6A53452BADD68A00F75D49 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectorView.swift; sourceTree = "<group>"; };
 		9E6A534B2BB2063500F75D49 /* SwipeToDismissKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDismissKeyboard.swift; sourceTree = "<group>"; };
+		9E7507562BF50FB9000E25BD /* OnboardingTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTips.swift; sourceTree = "<group>"; };
 		9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E97B27A2BD3FBE8002B1E9F /* SocketCDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocketCDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E97B27C2BD3FBE8002B1E9F /* SocketCDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketCDTests.swift; sourceTree = "<group>"; };
@@ -165,7 +168,6 @@
 		9EEAC4D42BA259870053C65E /* VehiclePhotoCustomizationButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclePhotoCustomizationButtons.swift; sourceTree = "<group>"; };
 		9EEAC4D62BA332E50053C65E /* VehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListView.swift; sourceTree = "<group>"; };
 		9EEAC4DA2BA33B7B0053C65E /* VehicleTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleTabView.swift; sourceTree = "<group>"; };
-		9EEAC4DC2BA33DA40053C65E /* QuickFillTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickFillTip.swift; sourceTree = "<group>"; };
 		9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVehicleView.swift; sourceTree = "<group>"; };
 		9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleInfoView.swift; sourceTree = "<group>"; };
 		9EEAC4E32BA3641F0053C65E /* AddCustomInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomInfoView.swift; sourceTree = "<group>"; };
@@ -405,7 +407,8 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC4C52BA253950053C65E /* WelcomeView.swift */,
-				9EEAC4DC2BA33DA40053C65E /* QuickFillTip.swift */,
+				9E7507562BF50FB9000E25BD /* OnboardingTips.swift */,
+				9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -604,6 +607,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E7507572BF50FB9000E25BD /* OnboardingTips.swift in Sources */,
 				9EEAC5012BA389020053C65E /* Service+helper.swift in Sources */,
 				9E6A534C2BB2063500F75D49 /* SwipeToDismissKeyboard.swift in Sources */,
 				9EEAC51E2BA4A2280053C65E /* MaintenanceListView.swift in Sources */,
@@ -667,6 +671,7 @@
 				9E620BFE2BC06721005E16DD /* DraftServiceRecord.swift in Sources */,
 				9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */,
 				9EEAC4B32BA1F08F0053C65E /* CameraCapture.swift in Sources */,
+				9E312D772BF2924B0069CBFF /* MaintenanceOnboardingView.swift in Sources */,
 				9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */,
 				9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */,
 				9E620BF42BBF2DED005E16DD /* DraftRepairView.swift in Sources */,
@@ -682,7 +687,6 @@
 				9EEAC5222BA4B18A0053C65E /* AddServiceView.swift in Sources */,
 				9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */,
 				9EEAC4E62BA364AA0053C65E /* CustomInfo+helper.swift in Sources */,
-				9EEAC4DD2BA33DA40053C65E /* QuickFillTip.swift in Sources */,
 				9EEAC5192BA48D720053C65E /* EditFillupView.swift in Sources */,
 				9EEAC5112BA4852C0053C65E /* FillTypePickerView.swift in Sources */,
 				9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */,

@@ -14,14 +14,11 @@ struct HomeView: View {
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
-    // Used to determine whether to show QuickFillTip
-    @FetchRequest(sortDescriptors: []) var fillups: FetchedResults<Fillup>
-    
     @State private var showingAddVehicle = false
     @State private var showingSettings = false
     @State private var selectedVehicle: Vehicle?
     
-    @State var showingQuickFillTip = false
+    @State private var showingOnboardingTip = false
     
     var body: some View {
         homeView
@@ -50,16 +47,21 @@ struct HomeView: View {
                         setUpNotifications(reschedule: false)
                     }
                 }
+                .onChange(of: selectedVehicle) { _ in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                        settings.onboardingTipsPresented = true
+                    }
+                }
                 .sheet(item: $selectedVehicle) { vehicle in
                     // Needs to be here, rather than on VehicleListView, for ShareLink to work properly
                     VehicleTabView(vehicle: vehicle)
                 }
                 .sheet(isPresented: $showingSettings) { AppSettingsView() }
-                .sheet(isPresented: $showingAddVehicle) { AddVehicleView() }
+                .sheet(isPresented: $showingAddVehicle, onDismiss: { checkOnboardingTipsStatus() }) { AddVehicleView() }
                 .sheet(isPresented: $settings.welcomeViewPresented) { WelcomeView() }
                 .overlay {
-                    if showingQuickFillTip {
-                        QuickFillTip(showingQuickFillTip: $showingQuickFillTip, vehicle: vehicles[0])
+                    if showingOnboardingTip {
+                        OnboardingTips(showingOnboardingTip: $showingOnboardingTip, vehicle: vehicles[0])
                     }
                 }
                 .toolbar {
@@ -69,18 +71,14 @@ struct HomeView: View {
                         
                         Button {
                             settings.welcomeViewPresented = true
-                            settings.quickFillTipPresented = false
+                            settings.onboardingTipsPresented = false
                         } label: {
                             Image(systemName: "sparkles")
-                            //                                .foregroundStyle(Color.clear)
                         }
                     }
                     #endif
                     
                     ToolbarItemGroup(placement: .topBarTrailing) {
-                        // Not ideal, but the Add Vehicle toolbar button would stop working after its sheet was dismissed, until I added the text below to the toolbar; now it functions as expected.
-    //                    Text(showingAddVehicle ? " " : "").hidden()
-                        
                         Group {
                             Button {
                                 showingAddVehicle = true
@@ -96,7 +94,6 @@ struct HomeView: View {
                                     .accessibilityLabel("Settings")
                             }
                         }
-                        .disabled(showingQuickFillTip)
                     }
                 }
                 // Fires only if there is a problem loading or saving Core Data persistent stores
@@ -159,7 +156,7 @@ struct HomeView: View {
     
     // Check to see if any informational views (welcome/update/tips) should be shown
     func checkForViewsToBeShownOnLaunch() {
-        checkQuickFillTipStatus()
+        checkOnboardingTipsStatus()
         checkForVersionUpdate()
     }
     
@@ -181,12 +178,12 @@ struct HomeView: View {
     }
     
     // Checks to see whether to show QuickFillTip
-    func checkQuickFillTipStatus() {
-        if settings.welcomeViewPresented == false && settings.quickFillTipPresented == false {
-            print("welcome view shown, but not quick fill")
-            if fillups.count > 0 {
-                showingQuickFillTip = true
-                settings.quickFillTipPresented = true
+    func checkOnboardingTipsStatus() {
+        if settings.welcomeViewPresented == false && settings.onboardingTipsPresented == false {
+            if vehicles.count == 1 {
+                showingOnboardingTip = true
+            } else if vehicles.count > 1 {
+                settings.onboardingTipsPresented = true
             }
         }
     }

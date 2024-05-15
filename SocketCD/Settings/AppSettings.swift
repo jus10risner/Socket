@@ -53,8 +53,8 @@ class AppSettings: ObservableObject {
     // Shows WelcomeView immediately on first launch of app; toggles to false on dismiss
     @AppStorage("welcomeViewPresented") var welcomeViewPresented: Bool = true
     
-    // Toggles to true when QuickFillTip has been shown
-    @AppStorage("quickFillTipPresented") var quickFillTipPresented: Bool = false
+    // Toggles to true when OnboardingTips has been shown
+    @AppStorage("onboardingTipsPresented") var onboardingTipsPresented: Bool = false
     
     // Used to determine whether the user has launched the app since the most recent update was released
     @AppStorage("savedAppVersion") var savedAppVersion: String = ""
