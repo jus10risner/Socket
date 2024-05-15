@@ -23,7 +23,7 @@ struct DraftServiceRecordView: View {
     
     private var serviceRecordForm: some View {
         Form {
-            Section {
+            Section(footer: Text("*required")) {
                 DatePicker("Service Date", selection: $draftServiceRecord.date, displayedComponents: .date)
                     .accentColor(Color.selectedColor(for: .maintenanceTheme))
                 
@@ -35,7 +35,7 @@ struct DraftServiceRecordView: View {
                                 .foregroundStyle(Color.secondary)
                         }
                         
-                        TextField("Odometer", value: $draftServiceRecord.odometer, format: .number.decimalSeparator(strategy: .automatic))
+                        TextField("Odometer*", value: $draftServiceRecord.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
                             .focused($fieldInFocus)
                             .onAppear {

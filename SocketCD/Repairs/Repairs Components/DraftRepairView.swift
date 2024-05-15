@@ -23,11 +23,11 @@ struct DraftRepairView: View {
     
     private var repairForm: some View {
         Form {
-            Section {
+            Section(footer: Text("*required")) {
                 DatePicker("Repair Date", selection: $draftRepair.date, displayedComponents: .date)
                     .accentColor(Color.selectedColor(for: .repairsTheme))
                     
-                TextField("Repair Name", text: $draftRepair.name)
+                TextField("Repair Name*", text: $draftRepair.name)
                     .textInputAutocapitalization(.words)
                     .focused($fieldInFocus)
                     .onAppear {
@@ -47,7 +47,7 @@ struct DraftRepairView: View {
                                 .accessibilityHidden(true)
                         }
                         
-                        TextField("Odometer", value: $draftRepair.odometer, format: .number.decimalSeparator(strategy: .automatic))
+                        TextField("Odometer*", value: $draftRepair.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
                     }
                     
