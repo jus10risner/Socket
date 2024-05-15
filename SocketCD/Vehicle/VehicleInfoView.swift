@@ -26,6 +26,7 @@ struct VehicleInfoView: View {
     
     @State private var showingEditVehicle = false
     @State private var showingDeleteAlert = false
+    @State private var showingMoreInfo = false
     @State private var showingAddCustomInfo = false
     @State private var showingConfirmationDialog = false
     @State private var showingActivityView = false
@@ -46,6 +47,7 @@ struct VehicleInfoView: View {
                 
                 customInfoSection
             }
+            .navigationBarTitleDisplayMode(.inline)
             .onChange(of: vehicle.odometer) { _ in
                 vehicle.determineIfNotificationDue()
             }
@@ -189,7 +191,7 @@ struct VehicleInfoView: View {
                 
                 VStack(spacing: 0) {
                     Text(vehicle.name)
-                        .font(.title3.bold())
+                        .font(.title2.bold())
                         .multilineTextAlignment(.center)
                     
                     Text("\(vehicle.odometer) \(settings.shortenedDistanceUnit)")
@@ -200,18 +202,29 @@ struct VehicleInfoView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .listRowInsets(EdgeInsets(top: 1, leading: 0, bottom: 0, trailing: 0))
         .listRowBackground(Color(.systemGroupedBackground))
     }
     
     // Displays any additional vehicle info added by the user
     private var customInfoSection: some View {
-        Section(footer: addInfoButton) {
+        Section {
             if vehicle.sortedCustomInfoArray.isEmpty {
-                Text("Add additional vehicle info (VIN, license plate, etc.) here, for easy reference.")
-                    .font(.subheadline)
-                    .foregroundStyle(Color.secondary)
-                    .padding(.vertical, 10)
+                VStack(spacing: 20) {
+                    Text("Add things like your vehicle's VIN or license plate number here, for easy reference.")
+                        .foregroundStyle(Color.secondary)
+                    
+                    HStack(spacing: 3) {
+                        Text("Tap")
+                        
+                        addInfoButton
+                        
+                        Text("to add vehicle info")
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .font(.subheadline)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 20)
             } else {
                 ForEach(customInfo, id: \.id) { customInfo in
                     NavigationLink {
@@ -228,20 +241,32 @@ struct VehicleInfoView: View {
 //                    try? context.save()
 //                }
             }
+        } header: {
+            HStack {
+                Text("Additional Vehicle Info")
+                    .font(.headline)
+                    .foregroundStyle(Color.primary)
+                
+                Spacer()
+                
+                addInfoButton
+            }
         }
+        .textCase(nil)
     }
     
-    // Button component, for adding custom vehicle info
+    // Button component, for adding additional vehicle info
     private var addInfoButton: some View {
         Button {
             showingAddCustomInfo = true
         } label: {
-            Label("Add Vehicle Info", systemImage: "plus.square")
-                .font(.body)
-                .frame(maxWidth: .infinity)
-                .padding(10)
-                .accessibilityHint("Add additional information about this vehicle")
+            Label("Add Vehicle Info", systemImage: "plus.circle.fill")
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(.white, .indigo)
+                .labelStyle(.iconOnly)
+                .font(.title2)
         }
+        .buttonStyle(.plain)
     }
     
     
