@@ -78,8 +78,6 @@ struct ServiceDetailView: View {
         }
         .navigationTitle("Service Details")
 //        .navigationBarTitleDisplayMode(.inline)
-//        .modifier(CustomNavigationTitleDisplayMode())
-//        .onAppear { service.sortedServiceRecordsArray.isEmpty ? showingAddRecord = true : nil }
         .sheet(isPresented: $showingAddRecord) {
             AddRecordView(vehicle: vehicle, service: service)
         }
@@ -102,8 +100,6 @@ struct ServiceDetailView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-//                serviceMenu
-                
                 Button {
                     showingAddRecord = true
                 } label: {
@@ -130,6 +126,7 @@ struct ServiceDetailView: View {
             }
         } label: {
             Label("Service Options", systemImage: "ellipsis.circle")
+                .font(.title2)
                 .labelStyle(.iconOnly)
         }
     }
