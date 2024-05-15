@@ -63,4 +63,5 @@ struct AddFillupView: View {
 
 #Preview {
     AddFillupView(vehicle: Vehicle(context: DataController.preview.container.viewContext), quickFill: false)
+        .environmentObject(AppSettings())
 }

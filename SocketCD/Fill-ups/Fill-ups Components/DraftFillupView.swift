@@ -26,7 +26,7 @@ struct DraftFillupView: View {
     
     private var fillupForm: some View {
         Form {
-            Section {
+            Section(footer: Text("*required")) {
                 DatePicker("Fill-up Date", selection: $draftFillup.date, displayedComponents: .date)
                     .accentColor(Color.selectedColor(for: .fillupsTheme))
                 
@@ -38,7 +38,7 @@ struct DraftFillupView: View {
                             .accessibilityHidden(true)
                     }
                     
-                    TextField("Odometer", value: $draftFillup.odometer, format: .number.decimalSeparator(strategy: .automatic))
+                    TextField("Odometer*", value: $draftFillup.odometer, format: .number.decimalSeparator(strategy: .automatic))
                         .keyboardType(.numberPad)
                         .focused($fieldInFocus)
                         .onAppear {
@@ -59,7 +59,7 @@ struct DraftFillupView: View {
                                 .accessibilityHidden(true)
                         }
                         
-                        TextField("\(vehicle.volumeUnit)s of Fuel", value: $draftFillup.volume, format: .number.decimalSeparator(strategy: .automatic))
+                        TextField("\(vehicle.volumeUnit)s of Fuel*", value: $draftFillup.volume, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.decimalPad)
                     }
                     
