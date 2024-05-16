@@ -195,7 +195,7 @@ struct MaintenanceListView: View {
     
     // Determines whether to show MaintenanceOnboardingView
     func determineIfFirstServiceInfoDue() {
-        if serviceTipDue == true && vehicle.sortedServicesArray.count == 1 {
+        if serviceTipDue == true && allServices.count == 1 {
             showingFirstServiceInfo = true
         }
     }
