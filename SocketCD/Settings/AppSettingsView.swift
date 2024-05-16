@@ -12,7 +12,7 @@ struct AppSettingsView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     
-    @State var showingMailError = false
+    @State private var showingMailError = false
     
     var body: some View {
         settingsView

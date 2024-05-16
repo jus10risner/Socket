@@ -31,7 +31,7 @@ struct VehicleInfoView: View {
     @State private var showingConfirmationDialog = false
     @State private var showingActivityView = false
     
-    @State var documentURL: URL?
+    @State private var documentURL: URL?
     
     var body: some View {
         vehicleInfo

@@ -13,9 +13,9 @@ struct ServiceDetailView: View {
     @ObservedObject var service: Service
     let vehicle: Vehicle
     
-    @State var showingAddRecord = false
-    @State var showingEditService = false
-    @State var showingAlert = false
+    @State private var showingAddRecord = false
+    @State private var showingEditService = false
+    @State private var showingAlert = false
     
     var body: some View {
         serviceDetails

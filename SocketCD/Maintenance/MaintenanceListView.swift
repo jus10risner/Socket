@@ -28,8 +28,8 @@ struct MaintenanceListView: View {
     }
     
     @State private var showingAddService = false
-    @State var selectedService: Service? = nil
-    @State var isAnimating: Bool = false
+    @State private var selectedService: Service? = nil
+    @State private var isAnimating: Bool = false
     @State private var showingFirstServiceInfo = false
     
     var body: some View {
