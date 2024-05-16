@@ -32,24 +32,29 @@ struct HomeView: View {
             VehicleListView(selectedVehicle: $selectedVehicle)
                 .overlay {
                     if vehicles.isEmpty {
-                        emptyState
+                        EmptyVehicleListView()
                     }
                 }
                 .background(Color(.customBackground))
                 .navigationTitle("Vehicles")
                 .onAppear { checkForViewsToBeShownOnLaunch() }
-                .onChange(of: notificationBadgeNumber) { _ in UIApplication.shared.applicationIconBadgeNumber = notificationBadgeNumber }
+                .onChange(of: notificationBadgeNumber) { _ in
+                    // Sets the app icon's notification badge number
+                    UIApplication.shared.applicationIconBadgeNumber = notificationBadgeNumber
+                }
                 .onChange(of: [settings.daysBeforeMaintenance, settings.distanceBeforeMaintenance]) { _ in
-                    setUpNotifications(reschedule: true)
+                    setUpNotifications(cancelPending: true)
                 }
                 .onChange(of: scenePhase) { phase in
                     if phase == .background {
-                        setUpNotifications(reschedule: false)
+                        setUpNotifications(cancelPending: false)
                     }
                 }
                 .onChange(of: selectedVehicle) { _ in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                        settings.onboardingTipsPresented = true
+                    if settings.onboardingTipsPresented == false {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                            settings.onboardingTipsPresented = true
+                        }
                     }
                 }
                 .sheet(item: $selectedVehicle) { vehicle in
@@ -107,32 +112,6 @@ struct HomeView: View {
         .conditionalTint(.primary)
     }
     
-    // What the user sees when there are no vehicles in the model
-    private var emptyState: some View {
-        ZStack {
-            Color(.customBackground)
-            
-            VStack(spacing: 10) {
-                Image(systemName: "car.fill")
-                    .font(.system(size: 50))
-                    .foregroundStyle(Color(.socketPurple))
-                    .accessibilityHidden(true)
-                
-                VStack {
-                    Text("Add a Vehicle")
-                        .font(.title2.bold())
-                    
-                    Text("Tap the plus button to get started.")
-                        .font(.subheadline)
-                        .foregroundStyle(Color.secondary)
-                }
-                .accessibilityElement()
-                .accessibilityLabel("Tap the Add a Vehicle button to get started")
-            }
-        }
-        .ignoresSafeArea()
-    }
-    
     
     // MARK: - Computed Properties
     
@@ -156,7 +135,9 @@ struct HomeView: View {
     
     // Check to see if any informational views (welcome/update/tips) should be shown
     func checkForViewsToBeShownOnLaunch() {
-        checkOnboardingTipsStatus()
+        // Removes delivered notifications from Notification Center
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        
         checkForVersionUpdate()
     }
     
@@ -189,12 +170,12 @@ struct HomeView: View {
     }
     
     // Schedules notifications, if appropriate, when the app's scenePhase is set to .background
-    func setUpNotifications(reschedule: Bool) {
+    func setUpNotifications(cancelPending: Bool) {
         UNUserNotificationCenter.current().getNotificationSettings { permissions in
             if permissions.authorizationStatus == .authorized {
                 for vehicle in vehicles {
                     for service in vehicle.sortedServicesArray {
-                        if reschedule == true {
+                        if cancelPending == true {
                             service.cancelPendingNotifications()
                         }
                         
