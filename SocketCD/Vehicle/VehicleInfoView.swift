@@ -262,7 +262,7 @@ struct VehicleInfoView: View {
         } label: {
             Label("Add Vehicle Info", systemImage: "plus.circle.fill")
                 .symbolRenderingMode(.palette)
-                .foregroundStyle(.white, .indigo)
+                .foregroundStyle(Color.white, Color.selectedColor(for: .appTheme))
                 .labelStyle(.iconOnly)
                 .font(.title2)
         }
