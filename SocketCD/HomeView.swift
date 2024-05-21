@@ -35,6 +35,7 @@ struct HomeView: View {
                         EmptyVehicleListView()
                     }
                 }
+                .modifier(RemoveBackgroundColor()) // Required for iOS 16.0 to display the customBackground color
                 .background(Color(.customBackground))
                 .navigationTitle("Vehicles")
                 .onAppear { checkForViewsToBeShownOnLaunch() }
