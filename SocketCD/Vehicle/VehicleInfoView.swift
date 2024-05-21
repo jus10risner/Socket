@@ -90,7 +90,7 @@ struct VehicleInfoView: View {
                             Label("Edit Vehicle", systemImage: "pencil")
                         }
                         
-                        sharingMenu
+                        exportMenu
                         
                         Divider()
                         
@@ -110,8 +110,8 @@ struct VehicleInfoView: View {
         }
     }
     
-    // Menu, including buttons for sharing vehicle records. iOS 15 doesn't display section headers in menus, so there's some conditional logic for showing the appropriate header style
-    private var sharingMenu: some View {
+    // Menu, including buttons for exporting/sharing vehicle records. iOS 15 doesn't display section headers in menus, so there's some conditional logic for showing the appropriate header style
+    private var exportMenu: some View {
         Menu {
             Section {
                 if #unavailable (iOS 16) {
@@ -137,7 +137,7 @@ struct VehicleInfoView: View {
                     Text("Maintenance & Repairs")
                 }
             }
-            .accessibilityHint("Share maintenance and repair records for this vehicle")
+            .accessibilityHint("Export maintenance and repair records for this vehicle")
             
             Section {
                 if #unavailable (iOS 16) {
@@ -156,9 +156,9 @@ struct VehicleInfoView: View {
                     Text("Fill-ups")
                 }
             }
-            .accessibilityHint("Share fill-up records for this vehicle")
+            .accessibilityHint("Export fill-up records for this vehicle")
         } label: {
-            Label("Share Records", systemImage: "square.and.arrow.up")
+            Label("Export Records", systemImage: "square.and.arrow.up")
         }
     }
     
