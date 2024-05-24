@@ -27,6 +27,7 @@ struct FillupsDashboardView: View {
     @State private var showingfuelEconomyInfo = false
     
     @State private var animatingTrendArrow = false
+    @State private var fuelEconomyDataPoints: [Double] = []
     
     var body: some View {
         fillupsDashboard
@@ -152,8 +153,12 @@ struct FillupsDashboardView: View {
                     FillupsStartView(showingAddFillup: $showingAddFillup)
                 }
             }
+            .onAppear {
+                populateFuelEconomyDataPoints()
+            }
             .navigationTitle("Fill-ups")
             .onChange(of: vehicle.sortedFillupsArray) { _ in
+                populateFuelEconomyDataPoints()
                 animateTrendArrow(shouldReset: true)
                 vehicle.determineIfNotificationDue()
             }
@@ -278,17 +283,19 @@ struct FillupsDashboardView: View {
     // MARK: - Computed Properties
     
     // Provides the points that the line chart connects
-    private var fuelEconomyDataPoints: [Double] {
-        var dataPoints: [Double] = []
-        
-        for fillup in fillups.reversed() {
-            if fillup.fuelEconomy != 0 {
-                dataPoints.append(fillup.fuelEconomy)
-            }
-        }
-        
-        return dataPoints
-    }
+//    private var fuelEconomyDataPoints: [Double] {
+//        var dataPoints: [Double] = []
+//        
+//        for fillup in fillups.reversed() {
+//            if fillup.fuelEconomy != 0 {
+//                dataPoints.append(fillup.fuelEconomy)
+//            }
+//        }
+//        
+//        return dataPoints
+//        
+////        return [0, 21.2, 15.2, 23.5, 23.7, 21.4, 21.6, 27.6, 25.7, 26.0, 25.1, 23.5, 19.9, 24.6, 17.0, 26.3, 23.7, 18.0, 22.5, 18.8, 25.3, 19.6, 23.2, 28.8, 21.1, 27.8, 19.2, 23.7, 23.4, 24.9, 24.3, 22.9, 23.4, 23.2, 26.8, 26.0, 26.4, 23.6, 24.5, 22.2, 27.7, 23.3, 26.2, 25.7, 27.8, 23.1, 25.9, 23.1, 23.0, 27.0, 25.4, 26.8, 24.8]
+//    }
     
     // Returns text, describing how may fill-ups remain until the fuel economy chart is available
     private var fillupsRemaining: Text {
@@ -330,6 +337,19 @@ struct FillupsDashboardView: View {
     
     
     // MARK: - Methods
+    
+    // Populates the fuelEconomyDataPoints array with all non-zero fuel economy values found in the fillups fetch request
+    func populateFuelEconomyDataPoints() {
+        var dataPoints: [Double] = []
+        
+        for fillup in fillups.reversed() {
+            if fillup.fuelEconomy != 0 {
+                dataPoints.append(fillup.fuelEconomy)
+            }
+        }
+
+        fuelEconomyDataPoints = dataPoints
+    }
     
     // Animates trendArrow into view, with option to reset to it's original position off-screen (for animation after adding new fill-up)
     func animateTrendArrow(shouldReset: Bool) {
