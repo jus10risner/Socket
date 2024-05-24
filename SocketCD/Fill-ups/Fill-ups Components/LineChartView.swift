@@ -74,7 +74,7 @@ struct LineChartView: View {
     // MARK: - Methods
     
     func animateLineChart() {
-        withAnimation(.snappy) {
+        withAnimation(.smooth) {
             percentage = 1.0
         }
     }
