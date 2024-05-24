@@ -32,6 +32,7 @@ struct VehicleInfoView: View {
     @State private var showingActivityView = false
     
     @State private var documentURL: URL?
+    @State private var showingPageSizeSelector = false
     
     var body: some View {
         vehicleInfo
@@ -65,6 +66,19 @@ struct VehicleInfoView: View {
                 Button("Delete", role: .destructive) {
                     vehicle.delete()
                     dismiss()
+                }
+                
+                Button("Cancel", role: .cancel) { }
+            }
+            .confirmationDialog("Which paper size do you use?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
+                Button("A4") {
+                    createRecordsPDF(pageSize: CGRect(x: 0, y: 0, width: 595.2, height: 841.8))
+                    showingActivityView = true
+                }
+                
+                Button("US Letter (8.5 x 11)") {
+                    createRecordsPDF(pageSize: CGRect(x: 0, y: 0, width: 612, height: 792))
+                    showingActivityView = true
                 }
                 
                 Button("Cancel", role: .cancel) { }
@@ -120,8 +134,7 @@ struct VehicleInfoView: View {
                 }
                 
                 Button {
-                    createMaintenanceRepairsPDF()
-                    showingActivityView = true
+                    showingPageSizeSelector = true
                 } label: {
                     Label("PDF", systemImage: "doc")
                 }
@@ -233,13 +246,6 @@ struct VehicleInfoView: View {
                         Text(customInfo.label)
                     }
                 }
-//                .onDelete{ indexSet in
-//                    for index in indexSet {
-//                        context.delete(customInfo[index])
-//                    }
-//                    
-//                    try? context.save()
-//                }
             }
         } header: {
             HStack {
@@ -273,35 +279,37 @@ struct VehicleInfoView: View {
     // MARK: - Methods
     
     // Creates PDF of Maintenance & Repair Records
-    func createMaintenanceRepairsPDF() {
+    // based on example from: https://www.hackingwithswift.com/forums/swiftui/how-to-generate-a-pdf-from-a-scrollview/5205
+    func createRecordsPDF(pageSize: CGRect) {
+        // Define the file name and extension, and set up a temporary directory to hold the exported info, while the share sheet is being shown
         let fileName = "\(vehicle.name) Records.pdf"
         let tempDirectory = NSTemporaryDirectory()
         let fileURL = URL(fileURLWithPath: tempDirectory, isDirectory: true).appendingPathComponent(fileName)
         
-        let pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
-        let renderer = UIGraphicsPDFRenderer(bounds: pageRect)
-
+        // Provide an empty array, for appending records; this will be sorted after everything has been added
         var allRecords: [String] = []
-
-        var pdfHeader = "Maintenance & Repairs (as of \(Date.now.formatted(date: .numeric, time: .omitted)))\n\n"
-        pdfHeader.append("Vehicle: \(vehicle.name)\n")
-        pdfHeader.append("Odometer: \(vehicle.odometer.formatted()) \(settings.shortenedDistanceUnit)\n\n")
+        
+        // Define the header text, and provide an empty string for the body text
+        let title = "Maintenance & Repairs (as of \(Date.now.formatted(date: .numeric, time: .omitted)))\nVehicle: \(vehicle.name)\nOdometer: \(vehicle.odometer.formatted()) \(settings.shortenedDistanceUnit)\n\n"
+        var bodyText = ""
         
         // Append service records to allRecords array
         for service in vehicle.sortedServicesArray {
             for record in service.sortedServiceRecordsArray {
                 let formattedDate = record.date.formatted(date: .numeric, time: .omitted)
                 
+                // If another service or repair was performed on the same date, add details under that date
                 for item in allRecords {
-                    if item.components(separatedBy: "\n").contains(formattedDate) {
+                    if item.components(separatedBy: " - ").contains(formattedDate) {
                         if let itemIndex = allRecords.firstIndex(of: item) {
-                            allRecords[itemIndex].append("    \(service.name)\(record.note != "" ? " - Note: \(record.note)\n" : "\n")")
+                            allRecords[itemIndex].append("    • \(service.name)\(record.note != "" ? "\n       Note: \(record.note)\n" : "\n")")
                         }
                     }
                 }
                    
-                if !allRecords.contains(where: { $0.components(separatedBy: "\n").first! == formattedDate }) {
-                    allRecords.append("\(formattedDate)\n    \(record.odometer.formatted()) \(settings.shortenedDistanceUnit)\n    \(service.name)\(record.note != "" ? " - Note: \(record.note)\n" : "\n")")
+                // If no services or repairs were already performed on this date, add a new date header, before this service's details
+                if !allRecords.contains(where: { $0.components(separatedBy: " - ").first! == formattedDate }) {
+                    allRecords.append("\(formattedDate) - \(record.odometer.formatted()) \(settings.shortenedDistanceUnit)\n    • \(service.name)\(record.note != "" ? "\n       Note: \(record.note)\n" : "\n")")
                 }
             }
         }
@@ -310,19 +318,22 @@ struct VehicleInfoView: View {
         for repair in vehicle.sortedRepairsArray {
             let formattedDate = repair.date.formatted(date: .numeric, time: .omitted)
             
+            // If another service or repair was performed on the same date, add details under that date
             for item in allRecords {
-                if item.components(separatedBy: "\n").contains(formattedDate) {
+                if item.components(separatedBy: " - ").contains(formattedDate) {
                     if let itemIndex = allRecords.firstIndex(of: item) {
-                        allRecords[itemIndex].append("    \(repair.name)\(repair.note != "" ? " - Note: \(repair.note)\n" : "\n")")
+                        allRecords[itemIndex].append("    • \(repair.name)\(repair.note != "" ? "\n       Note: \(repair.note)\n" : "\n")")
                     }
                 }
             }
             
-            if !allRecords.contains(where: { $0.components(separatedBy: "\n").first! == formattedDate }) {
-                allRecords.append("\(formattedDate)\n    \(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)\n    \(repair.name)\(repair.note != "" ? " - Note: \(repair.note)\n" : "\n")")
+            // If no services or repairs were already performed on this date, add a new date header, before this repair's details
+            if !allRecords.contains(where: { $0.components(separatedBy: " - ").first! == formattedDate }) {
+                allRecords.append("\(formattedDate) - \(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)\n    • \(repair.name)\(repair.note != "" ? "\n       Note: \(repair.note)\n" : "\n")")
             }
         }
         
+        // Add extra line break, for clear separation between dates and their respective services/repairs
         for index in allRecords.indices {
             allRecords[index].append("\n")
         }
@@ -331,20 +342,50 @@ struct VehicleInfoView: View {
         let df = DateFormatter()
         df.setLocalizedDateFormatFromTemplate("MM/dd/yyyy")
         
-        let sortedRecords = allRecords.sorted { df.date(from: $0.components(separatedBy: "\n").first ?? "") ?? Date.now > df.date(from: $1.components(separatedBy: "\n").first ?? "") ?? Date.now }.joined()
+        let sortedRecords = allRecords.sorted { df.date(from: $0.components(separatedBy: " - ").first ?? "") ?? Date.now > df.date(from: $1.components(separatedBy: " - ").first ?? "") ?? Date.now }.joined()
 
-        pdfHeader.append(sortedRecords)
+        bodyText.append(sortedRecords)
         
-        // Render PDF document
-        let data = renderer.pdfData { ctx in
-            ctx.beginPage()
+        // Define attributes of the title and body text
+        let titleAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)]
+        let bodyTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)]
 
-            pdfHeader.draw(in: pageRect.insetBy(dx: 50, dy: 50))
+        let formattedTitle = NSMutableAttributedString(string: title, attributes: titleAttributes)
+        let formattedBodyText = NSAttributedString(string: bodyText, attributes: bodyTextAttributes)
+        formattedTitle.append(formattedBodyText)
+
+        // Create Print Formatter with text
+        let formatter = UISimpleTextPrintFormatter(attributedText: formattedTitle)
+
+        // Add formatter with pageRender
+        let render = UIPrintPageRenderer()
+        render.addPrintFormatter(formatter, startingAtPageAt: 0)
+
+        // Assign paperRect and printableRect
+        let page = pageSize
+        let printable = page.inset(by: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50))
+
+        render.setValue(NSValue(cgRect: page), forKey: "paperRect")
+        render.setValue(NSValue(cgRect: printable), forKey: "printableRect")
+
+        // Create PDF context and draw
+        let rect = CGRect.zero
+        let pdfData = NSMutableData()
+        UIGraphicsBeginPDFContextToData(pdfData, rect, nil)
+
+        for i in 1...render.numberOfPages {
+            UIGraphicsBeginPDFPage()
+            
+            let bounds = UIGraphicsGetPDFContextBounds()
+            
+            render.drawPage(at: i - 1, in: bounds)
         }
 
-        // Save PDF document to temporary directory
+        UIGraphicsEndPDFContext()
+
+        // Save PDF file to the temporary directory
         do {
-            try data.write(to: fileURL)
+            try pdfData.write(to: fileURL)
             documentURL = fileURL
         } catch {
             print("Failed to create file: \(error)")
