@@ -258,46 +258,47 @@ extension Service {
     
     // MARK: - Notification Scheduling Methods
     
-//    // updates notifications and recalculates when service is due, after changes are made to the service itself
-//    func updateNotifications() {
-//        let settings = AppSettings()
-//        
-//        UNUserNotificationCenter.current().getNotificationSettings { permissions in
-//            if permissions.authorizationStatus == .authorized {
-//                self.cancelPendingNotifications()
-//                
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                    if let dateDue = self.dateDue {
-//                        if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
-//                            if dateDue >= Date.now && alertDate > Date.now {
-//                                if let vehicle = self.vehicle {
-//                                    self.scheduleNotificationOnDate(alertDate, for: vehicle)
-//                                }
-//                            } else {
-//                                print("no need to schedule a date notification")
-//                            }
-//                        }
-//                    }
-//                    
-//                    if let odometerDue = self.odometerDue {
-//                        if let vehicleOdometer = self.vehicle?.odometer {
-//                            let distanceToNextService = odometerDue - vehicleOdometer
-//                            
-//                            if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
-//                                if let vehicle = self.vehicle {
-//                                    self.scheduleNotificationForTomorrow(for: vehicle)
-//                                }
-//                            } else {
-//                                print("no need to schedule a distance notification")
-//                            }
-//                        }
-//                    }
-//                }
-//            } else {
-//                print("Push notifications have not been authorized")
-//            }
-//        }
-//    }
+    // updates notifications and recalculates when service is due, after changes are made to the service itself
+    func updateNotifications(vehicle: Vehicle) {
+        let context = DataController.shared.container.viewContext
+        let settings = AppSettings()
+        
+        // Reschedule all pending date-based notifications, as long as the alert date has not passed, to ensure that any devices syncing through iCloud have local notifications scheduled, as appropriate
+        if self.notificationScheduled == true {
+            if let dateDue = self.dateDue {
+                if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
+                    if alertDate > Date.now {
+                        // Remove the date-based notification
+                        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.timeBasedNotificationIdentifier])
+                        self.notificationScheduled = false
+                        try? context.save()
+                        print("canceled date-based notification")
+                    }
+                }
+            }
+        }
+        
+        // Sets up notifications for any service that is due, but does not yet have a notification scheduled; this ensures that each device syncing with iCloud gets its own local notifications, when appropriate
+        if self.notificationScheduled == false {
+            if let dateDue = self.dateDue {
+                if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
+                    if dateDue > Date.now && alertDate > Date.now {
+                        self.scheduleNotificationOnDate(alertDate, for: vehicle)
+                    } else if dateDue > Date.now && alertDate < Date.now {
+                        self.scheduleNotificationForTomorrow(for: vehicle)
+                    }
+                }
+            }
+            
+            if let odometerDue = self.odometerDue {
+                let distanceToNextService = odometerDue - vehicle.odometer
+                
+                if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
+                    self.scheduleNotificationForTomorrow(for: vehicle)
+                }
+            }
+        }
+    }
     
     func cancelPendingNotifications() {
         if self.notificationScheduled == true {
