@@ -77,7 +77,7 @@ struct VehicleListView: View {
             }
             .listRowBackground(Color(.customBackground))
             
-            if vehicles.count == 1 && settings.onboardingTipsPresented == false {
+            if vehicles.count == 1 && settings.onboardingTipsAlreadyPresented == false {
                 onboardingTips
             }
         }

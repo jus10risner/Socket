@@ -52,9 +52,9 @@ struct HomeView: View {
                     }
                 }
                 .onChange(of: selectedVehicle) { _ in
-                    if settings.onboardingTipsPresented == false {
+                    if settings.onboardingTipsAlreadyPresented == false {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                            settings.onboardingTipsPresented = true
+                            settings.onboardingTipsAlreadyPresented = true
                         }
                     }
                 }
@@ -77,7 +77,7 @@ struct HomeView: View {
                         
                         Button {
                             settings.welcomeViewPresented = true
-                            settings.onboardingTipsPresented = false
+                            settings.onboardingTipsAlreadyPresented = false
                         } label: {
                             Image(systemName: "sparkles")
                         }
@@ -159,13 +159,13 @@ struct HomeView: View {
         }
     }
     
-    // Checks to see whether to show QuickFillTip
+    // Checks to see whether to show OnboardingTips
     func checkOnboardingTipsStatus() {
-        if settings.welcomeViewPresented == false && settings.onboardingTipsPresented == false {
+        if settings.welcomeViewPresented == false && settings.onboardingTipsAlreadyPresented == false {
             if vehicles.count == 1 {
                 showingOnboardingTip = true
             } else if vehicles.count > 1 {
-                settings.onboardingTipsPresented = true
+                settings.onboardingTipsAlreadyPresented = true
             }
         }
     }
