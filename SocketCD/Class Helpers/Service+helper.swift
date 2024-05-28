@@ -215,8 +215,8 @@ extension Service {
         self.monthsInterval = draftService.monthsInterval
         self.note = draftService.serviceNote
         
-        // Triggers notification reschedule, if appropriate
-        self.notificationScheduled = false
+        // Cancels any notifications that have been scheduled for this service, so they can be rescheduled, if appropriate
+        self.cancelPendingNotifications()
         
         try? context.save()
         
@@ -226,6 +226,7 @@ extension Service {
     func delete() {
         let context = DataController.shared.container.viewContext
         
+        self.cancelPendingNotifications()
         context.delete(self)
         try? context.save()
     }
@@ -247,8 +248,8 @@ extension Service {
             }
         }
         
-        // Triggers notification reschedule, if appropriate
-        self.notificationScheduled = false
+        // Cancels any notifications that have been scheduled for this service, so they can be rescheduled, if appropriate
+        self.cancelPendingNotifications()
         
         try? context.save()
         
@@ -301,15 +302,18 @@ extension Service {
     }
     
     func cancelPendingNotifications() {
+        let context = DataController.shared.container.viewContext
         if self.notificationScheduled == true {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.timeBasedNotificationIdentifier, self.distanceBasedNotificationIdentifier])
             self.notificationScheduled = false
+            try? context.save()
             print("Cancelled notification")
         }
     }
     
     // Schedule notification based on time interval
     func scheduleNotificationOnDate(_ date: Date, for vehicle: Vehicle) {
+        let context = DataController.shared.container.viewContext
         let content = UNMutableNotificationContent()
         content.title = "Time for Maintenance!"
         content.body = "\(self.name) due soon for \(vehicle.name)"
@@ -337,10 +341,13 @@ extension Service {
         print("Alert Date: \(date.formatted(date: .numeric, time: .omitted))")
         
         self.notificationScheduled = true
+        
+        try? context.save()
     }
     
     // Schedule notification based on distance interval
     func scheduleNotificationForTomorrow(for vehicle: Vehicle) {
+        let context = DataController.shared.container.viewContext
         let content = UNMutableNotificationContent()
         content.title = "Time for Maintenance!"
         content.body = "\(self.name) due soon for \(vehicle.name)"
@@ -367,5 +374,7 @@ extension Service {
         print("Notification scheduled for tomorrow!")
         
         self.notificationScheduled = true
+        
+        try? context.save()
     }
 }
