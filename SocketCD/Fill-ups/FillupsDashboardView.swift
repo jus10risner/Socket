@@ -157,7 +157,7 @@ struct FillupsDashboardView: View {
                 populateFuelEconomyDataPoints()
             }
             .navigationTitle("Fill-ups")
-            .onChange(of: vehicle.sortedFillupsArray) { _ in
+            .onChange(of: Array(fillups)) { _ in
                 populateFuelEconomyDataPoints()
                 animateTrendArrow(shouldReset: true)
             }

@@ -67,7 +67,7 @@ struct MaintenanceListView: View {
                     MaintenanceStartView(showingAddService: $showingAddService)
                 }
             }
-            .onChange(of: vehicle.sortedServicesArray) { _ in
+            .onChange(of: Array(services)) { _ in
                 guard settings.notificationPermissionRequested == true else {
                     requestNotificationPermission()
                     return
