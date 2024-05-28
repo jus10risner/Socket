@@ -49,9 +49,10 @@ struct VehicleInfoView: View {
                 customInfoSection
             }
             .navigationBarTitleDisplayMode(.inline)
-            .onChange(of: vehicle.odometer) { _ in
-                vehicle.determineIfNotificationDue()
-            }
+//            .onChange(of: vehicle.odometer) { _ in
+//                print("odometer changed (vehicle info)")
+//                vehicle.determineIfNotificationDue()
+//            }
             .sheet(isPresented: $showingEditVehicle) { EditVehicleView(vehicle: vehicle) }
             
           // Sheet wasn't loading the url on first launch of ActivityView, so I manually added a getter/setter. This seems to have resolved the issue.
