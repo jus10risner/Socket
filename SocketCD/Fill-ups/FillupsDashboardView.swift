@@ -29,6 +29,8 @@ struct FillupsDashboardView: View {
     @State private var animatingTrendArrow = false
     @State private var fuelEconomyDataPoints: [Double] = []
     
+    @State private var selectedDateRange: DateRange = .sixMonths
+    
     var body: some View {
         fillupsDashboard
     }
@@ -96,30 +98,39 @@ struct FillupsDashboardView: View {
                         
                         fuelEconomyDataPoints.count >= 2 ? Divider() : nil
                         
-                        HStack {
-                            if fuelEconomyDataPoints.count >= 2 {
-                                chartYAxis
-                                
-                                VStack {
-                                    Spacer()
-                                    LineChartView(data: fuelEconomyDataPoints, average: averageFuelEconomy)
-                                    Spacer()
-                                }
-                            } else {
-                                ZStack {
-                                    Color(.socketPurple)
+                        VStack(alignment: .center, spacing: 15) {
+                            HStack {
+                                if fuelEconomyDataPoints.count >= 2 {
+                                    chartYAxis
                                     
-                                    Text("Add \(fillupsRemaining) more **Full Tank** \(fillupsRemaining == Text("1") ? "fill-up" : "fill-ups") to see a graph of your fuel economy over time.")
-                                        .padding(20)
-                                        .font(.subheadline)
-                                        .foregroundStyle(.white)
+                                    VStack {
+                                        Spacer()
+                                        LineChartView(data: fuelEconomyDataPoints, average: averageFuelEconomy)
+                                        Spacer()
+                                    }
+                                } else {
+                                    ZStack {
+                                        Color(.socketPurple)
+                                        
+                                        Text("Add \(fillupsRemaining) more **Full Tank** \(fillupsRemaining == Text("1") ? "fill-up" : "fill-ups") to see a graph of your fuel economy over time.")
+                                            .padding(20)
+                                            .font(.subheadline)
+                                            .foregroundStyle(.white)
+                                    }
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
                                 }
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
                             }
+                            .font(.caption)
+                            .foregroundStyle(Color.secondary)
+                            .aspectRatio(2, contentMode: .fit)
+                            
+                            Picker("", selection: $selectedDateRange) {
+                                ForEach(DateRange.allCases, id: \.self) {
+                                    Text($0.rawValue)
+                                }
+                            }
+                            .pickerStyle(.segmented)
                         }
-                        .font(.caption)
-                        .foregroundStyle(Color.secondary)
-                        .aspectRatio(2, contentMode: .fit)
                         
                         Group {
                             if fillups.count > 2 {
@@ -157,6 +168,9 @@ struct FillupsDashboardView: View {
                 populateFuelEconomyDataPoints()
             }
             .navigationTitle("Fill-ups")
+            .onChange(of: selectedDateRange) { _ in
+                populateFuelEconomyDataPoints()
+            }
             .onChange(of: Array(fillups)) { _ in
                 populateFuelEconomyDataPoints()
                 animateTrendArrow(shouldReset: true)
@@ -285,21 +299,6 @@ struct FillupsDashboardView: View {
     
     // MARK: - Computed Properties
     
-    // Provides the points that the line chart connects
-//    private var fuelEconomyDataPoints: [Double] {
-//        var dataPoints: [Double] = []
-//        
-//        for fillup in fillups.reversed() {
-//            if fillup.fuelEconomy != 0 {
-//                dataPoints.append(fillup.fuelEconomy)
-//            }
-//        }
-//        
-//        return dataPoints
-//        
-////        return [0, 21.2, 15.2, 23.5, 23.7, 21.4, 21.6, 27.6, 25.7, 26.0, 25.1, 23.5, 19.9, 24.6, 17.0, 26.3, 23.7, 18.0, 22.5, 18.8, 25.3, 19.6, 23.2, 28.8, 21.1, 27.8, 19.2, 23.7, 23.4, 24.9, 24.3, 22.9, 23.4, 23.2, 26.8, 26.0, 26.4, 23.6, 24.5, 22.2, 27.7, 23.3, 26.2, 25.7, 27.8, 23.1, 25.9, 23.1, 23.0, 27.0, 25.4, 26.8, 24.8]
-//    }
-    
     // Returns text, describing how may fill-ups remain until the fuel economy chart is available
     private var fillupsRemaining: Text {
         var numberRemaining = Text("")
@@ -326,8 +325,21 @@ struct FillupsDashboardView: View {
         
         for fillup in fillups {
             if fillup != fillups.last && fillup.fillType != .missedFill {
-                distances.append(Int(fillup.tripDistance))
-                volumes.append(fillup.volume)
+                switch selectedDateRange {
+                case .sixMonths:
+                    if fillup.date > Calendar.current.date(byAdding: .month, value: -6, to: Date.now)! {
+                        distances.append(Int(fillup.tripDistance))
+                        volumes.append(fillup.volume)
+                    }
+                case .year:
+                    if fillup.date > Calendar.current.date(byAdding: .year, value: -1, to: Date.now)! {
+                        distances.append(Int(fillup.tripDistance))
+                        volumes.append(fillup.volume)
+                    }
+                case .all:
+                    distances.append(Int(fillup.tripDistance))
+                    volumes.append(fillup.volume)
+                }
             }
         }
         
@@ -347,7 +359,18 @@ struct FillupsDashboardView: View {
         
         for fillup in fillups.reversed() {
             if fillup.fuelEconomy != 0 {
-                dataPoints.append(fillup.fuelEconomy)
+                switch selectedDateRange {
+                case .sixMonths:
+                    if fillup.date > Calendar.current.date(byAdding: .month, value: -6, to: Date.now)! {
+                        dataPoints.append(fillup.fuelEconomy)
+                    }
+                case .year:
+                    if fillup.date > Calendar.current.date(byAdding: .year, value: -1, to: Date.now)! {
+                        dataPoints.append(fillup.fuelEconomy)
+                    }
+                case .all:
+                    dataPoints.append(fillup.fuelEconomy)
+                }
             }
         }
 

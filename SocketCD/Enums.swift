@@ -46,6 +46,10 @@ enum FillType: String, CaseIterable {
     case fullTank = "Full Tank", partialFill = "Partial Fill", missedFill = "Missed Fill-up"
 }
 
+enum DateRange: String, CaseIterable {
+    case sixMonths = "6M", year = "1Y", all = "ALL"
+}
+
 
 // MARK: - Services
 
