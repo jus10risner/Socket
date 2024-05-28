@@ -96,12 +96,7 @@ struct RecordDetailView: View {
         }
         .alert("Delete Record", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
-                record.delete()
-                
-                // Cancels pending notifications, if the last record is deleted
-                if service.sortedServiceRecordsArray.isEmpty {
-                    service.cancelPendingNotifications()
-                }
+                record.delete(for: service)
                 
                 dismiss()
             }
