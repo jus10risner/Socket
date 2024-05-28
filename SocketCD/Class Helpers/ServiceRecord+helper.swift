@@ -55,17 +55,18 @@ extension ServiceRecord {
             }
         }
         
-        // Triggers notification reschedule, if appropriate
-        service.notificationScheduled = false
+        // Cancels any notifications that have been scheduled for this service, so they can be rescheduled, if appropriate
+        service.cancelPendingNotifications()
         
         try? context.save()
         
 //        service.updateNotifications()
     }
     
-    func delete() {
+    func delete(for service: Service) {
         let context = DataController.shared.container.viewContext
         
+        service.cancelPendingNotifications()
         context.delete(self)
         try? context.save()
     }
