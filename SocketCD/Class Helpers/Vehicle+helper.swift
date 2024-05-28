@@ -184,23 +184,6 @@ extension Vehicle {
     
     // MARK: - Other Methods
     
-    // Looks at all maintenance services for a vehicle, and schedules a notification, if appropriate
-    func determineIfNotificationDue() {
-        let settings = AppSettings()
-        print("Odometer changed. Determining if a notification is due.")
-
-        for service in sortedServicesArray {
-            if let odometerDue = service.odometerDue {
-                let distanceToNextService = odometerDue - self.odometer
-
-                if distanceToNextService <= settings.distanceBeforeMaintenance && service.notificationScheduled == false {
-                    service.scheduleNotificationForTomorrow(for: self)
-                    service.notificationScheduled = true
-                }
-            }
-        }
-    }
-    
     // Takes a Double value, and converts it into a currency string (e.g. 1.23 -> "$1.23")
     func convertToCurrency(value: Double) -> String {
         var returnString = ""

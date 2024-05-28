@@ -78,9 +78,10 @@ struct RepairsListView: View {
                 }
             }
             .navigationTitle("Repairs")
-            .onChange(of: vehicle.sortedRepairsArray) { _ in
-                vehicle.determineIfNotificationDue()
-            }
+//            .onChange(of: vehicle.odometer) { _ in
+//                print("Odometer changed (repairs)")
+//                vehicle.determineIfNotificationDue()
+//            }
             .sheet(isPresented: $showingAddRepair) {
                 AddRepairView(vehicle: vehicle)
             }

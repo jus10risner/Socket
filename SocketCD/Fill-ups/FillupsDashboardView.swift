@@ -160,8 +160,11 @@ struct FillupsDashboardView: View {
             .onChange(of: vehicle.sortedFillupsArray) { _ in
                 populateFuelEconomyDataPoints()
                 animateTrendArrow(shouldReset: true)
-                vehicle.determineIfNotificationDue()
             }
+//            .onChange(of: vehicle.odometer) { _ in
+//                print("odometer changed (fill-ups)")
+//                vehicle.determineIfNotificationDue()
+//            }
             .sheet(isPresented: $showingAddFillup) {
                 AddFillupView(vehicle: vehicle, quickFill: false)
             }
