@@ -322,14 +322,17 @@ extension Service {
         dateComponents.year = components.year
         dateComponents.hour = 10
         
+        #if DEBUG
+        // Temporary notifications, for testing
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let request = UNNotificationRequest(identifier: timeBasedNotificationIdentifier, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+        #else
+        // Production notification timelines
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         let request = UNNotificationRequest(identifier: timeBasedNotificationIdentifier, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
-        
-        // Temporary notifications, for testing
-//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-//        let request = UNNotificationRequest(identifier: timeBasedNotificationIdentifier, content: content, trigger: trigger)
-//        UNUserNotificationCenter.current().add(request)
+        #endif
         
         print("Alert Date: \(date.formatted(date: .numeric, time: .omitted))")
         
@@ -349,14 +352,17 @@ extension Service {
         dateComponents.day = components.day
         dateComponents.hour = 10
         
+        #if DEBUG
+        // Temporary notifications, for testing
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let request = UNNotificationRequest(identifier: distanceBasedNotificationIdentifier, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+        #else
+        // Production notification timelines
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         let request = UNNotificationRequest(identifier: distanceBasedNotificationIdentifier, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
-        
-        // Temporary notifications, for testing
-//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-//        let request = UNNotificationRequest(identifier: distanceBasedNotificationIdentifier, content: content, trigger: trigger)
-//        UNUserNotificationCenter.current().add(request)
+        #endif
         
         print("Notification scheduled for tomorrow!")
         
