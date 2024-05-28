@@ -170,39 +170,26 @@ struct HomeView: View {
         }
     }
     
-    // Schedules notifications, if appropriate, when the app's scenePhase is set to .background
+    // Schedules notifications, if appropriate, when the app's scenePhase is set to .background. Cancels all pending notifications, if cancelPending is true.
     func setUpNotifications(cancelPending: Bool) {
-        UNUserNotificationCenter.current().getNotificationSettings { permissions in
-            if permissions.authorizationStatus == .authorized {
-                for vehicle in vehicles {
-                    for service in vehicle.sortedServicesArray {
-                        if cancelPending == true {
-                            service.cancelPendingNotifications()
-                        }
-                        
-                        // Sets up notifications for any service that is due, but does not yet have a notification scheduled; this ensures that each device syncing with iCloud gets its own local notifications, when appropriate
-                        if service.notificationScheduled == false {
-                                if let dateDue = service.dateDue {
-                                    if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
-                                    if dateDue > Date.now && alertDate > Date.now {
-                                        service.scheduleNotificationOnDate(dateDue, for: vehicle)
-                                    }
-                                }
-                            }
-                            
-                            if let odometerDue = service.odometerDue {
-                                let distanceToNextService = odometerDue - vehicle.odometer
-                                
-                                if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
-                                    service.scheduleNotificationForTomorrow(for: vehicle)
-                                }
-                            }
-                        }
+        let center = UNUserNotificationCenter.current()
+        
+        center.getNotificationSettings { permissions in
+            guard permissions.authorizationStatus == .authorized else {
+                print("Push notifications have not been authorized")
+                return
+            }
+            
+            for vehicle in vehicles {
+                for service in vehicle.sortedServicesArray {
+                    if cancelPending == true {
+                        // Cancels all pending notifications on the device
+                        service.cancelPendingNotifications()
                     }
+                    
+                    service.updateNotifications(vehicle: vehicle)
                 }
-            } else {
-               print("Push notifications have not been authorized")
-           }
+            }
         }
     }
 }
