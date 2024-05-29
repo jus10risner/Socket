@@ -172,9 +172,7 @@ struct HomeView: View {
     
     // Schedules notifications, if appropriate, when the app's scenePhase is set to .background. Cancels all pending notifications, if cancelPending is true.
     func setUpNotifications(cancelPending: Bool) {
-        let center = UNUserNotificationCenter.current()
-        
-        center.getNotificationSettings { permissions in
+        UNUserNotificationCenter.current().getNotificationSettings { permissions in
             guard permissions.authorizationStatus == .authorized else {
                 print("Push notifications have not been authorized")
                 return
