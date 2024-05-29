@@ -46,14 +46,14 @@ struct LineChartView: View {
                             
                             path.move(to: CGPoint(x: 0, y: yPosition))
                             
-                            path.addLine(to: CGPoint(x: geo.size.width, y: yPosition))
+                            path.addLine(to: CGPoint(x: (geo.size.width * 0.95), y: yPosition))
                         }
                         .stroke(Color.secondary.opacity(0.5), style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [5]))
                     }
                     
                     Path { path in
                         for index in data.indices {
-                            let xPosition = geo.size.width / CGFloat(data.count) * CGFloat(index)// removed + 1 from index
+                            let xPosition = (geo.size.width * 0.95) / CGFloat(data.count) * CGFloat(index)
                             let yPosition = (1 - CGFloat((data[index] - minY) / yAxis)) * geo.size.height
                             
                             if index == 0 {
