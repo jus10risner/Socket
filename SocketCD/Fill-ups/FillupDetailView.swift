@@ -86,8 +86,7 @@ struct FillupDetailView: View {
             }
         }
         .navigationTitle("Fill-up Details")
-//        .navigationBarTitleDisplayMode(.inline)
-//        .modifier(CustomNavigationTitleDisplayMode())
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingEditFillup) {
             EditFillupView(vehicle: vehicle, fillup: fillup)
         }

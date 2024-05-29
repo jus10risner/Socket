@@ -77,7 +77,7 @@ struct ServiceDetailView: View {
             }
         }
         .navigationTitle("Service Details")
-//        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingAddRecord) {
             AddRecordView(vehicle: vehicle, service: service)
         }

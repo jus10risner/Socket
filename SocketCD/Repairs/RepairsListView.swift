@@ -72,16 +72,12 @@ struct RepairsListView: View {
             }
             .listStyle(.plain)
             .background(Color(.systemGroupedBackground))
+            .navigationTitle("Repairs")
             .overlay {
                 if vehicle.sortedRepairsArray.isEmpty {
                     RepairsStartView(showingAddRepair: $showingAddRepair)
                 }
             }
-            .navigationTitle("Repairs")
-//            .onChange(of: vehicle.odometer) { _ in
-//                print("Odometer changed (repairs)")
-//                vehicle.determineIfNotificationDue()
-//            }
             .sheet(isPresented: $showingAddRepair) {
                 AddRepairView(vehicle: vehicle)
             }

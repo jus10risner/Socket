@@ -58,8 +58,7 @@ struct RepairDetailView: View {
             }
         }
         .navigationTitle("Repair Details")
-//        .navigationBarTitleDisplayMode(.inline)
-//        .modifier(CustomNavigationTitleDisplayMode())
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {

@@ -69,8 +69,7 @@ struct RecordDetailView: View {
             }
         }
         .navigationTitle("Record Details")
-//        .navigationBarTitleDisplayMode(.inline)
-//        .modifier(CustomNavigationTitleDisplayMode())
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {

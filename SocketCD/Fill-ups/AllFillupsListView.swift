@@ -70,8 +70,7 @@ struct AllFillupsListView: View {
             }
         }
         .navigationTitle("Fill-up History")
-//        .navigationBarTitleDisplayMode(.inline)
-//        .modifier(CustomNavigationTitleDisplayMode())
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear { if fillups.isEmpty { dismiss() }  }
     }
 }
