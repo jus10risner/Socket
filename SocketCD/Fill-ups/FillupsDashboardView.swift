@@ -43,93 +43,15 @@ struct FillupsDashboardView: View {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 15) {
-                        VStack(alignment: .leading, spacing: 10) {
-                            HStack {
-                                Text("Latest Fill-up")
-                                    .font(.headline)
-                                
-                                Spacer()
-                                
-                                Text(fillups.first?.date.formatted(date: .numeric, time: .omitted) ?? "-")
-                                    .font(.subheadline)
-                                    .foregroundStyle(Color.secondary)
-                            }
-                            
-                            if let latestFillup = fillups.first {
-                                if latestFillup.fuelEconomy != 0 {
-                                    HStack(spacing: 3) {
-                                        fillups.count < 3 ? nil : trendArrow
-                                        
-                                        HStack(alignment: .firstTextBaseline, spacing: 2) {
-                                            Text("\((latestFillup.fuelEconomy), specifier: "%.1f")")
-                                                .font(.title.bold())
-                                            Text("\(settings.fuelEconomyUnit.rawValue)")
-                                                .bold()
-                                                .foregroundStyle(Color.secondary)
-                                        }
-                                    }
-                                } else {
-                                    if fillups.count == 1 {
-                                        Text("First Fill")
-                                            .bold()
-                                            .foregroundStyle(Color.secondary)
-                                    } else {
-                                        HStack(alignment: .firstTextBaseline, spacing: 3) {
-                                            Text("Fuel Economy Unavailable")
-                                                .font(.subheadline.bold())
-                                                .foregroundStyle(Color.secondary)
-                                            
-                                            Button {
-                                                showingfuelEconomyInfo = true
-                                            } label: {
-                                                Label("Learn More", systemImage: "info.circle")
-                                                    .labelStyle(.iconOnly)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        .accessibilityElement(children: .combine)
-                        // Prevents everything except the graph line from animating
-                        .transaction { transaction in
-                            transaction.animation = nil
-                        }
+                        latestFillupInfo
                         
-                        fuelEconomyDataPoints.count >= 2 ? Divider() : nil
-                        
-                        VStack(alignment: .center, spacing: 15) {
-                            HStack {
-                                if fuelEconomyDataPoints.count >= 2 {
-                                    chartYAxis
-                                    
-                                    VStack {
-                                        Spacer()
-                                        LineChartView(data: fuelEconomyDataPoints, average: averageFuelEconomy)
-                                        Spacer()
-                                    }
-                                } else {
-                                    ZStack {
-                                        Color(.socketPurple)
-                                        
-                                        Text("Add \(fillupsRemaining) more **Full Tank** \(fillupsRemaining == Text("1") ? "fill-up" : "fill-ups") to see a graph of your fuel economy over time.")
-                                            .padding(20)
-                                            .font(.subheadline)
-                                            .foregroundStyle(.white)
-                                    }
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                                }
-                            }
-                            .font(.caption)
-                            .foregroundStyle(Color.secondary)
-                            .aspectRatio(2, contentMode: .fit)
+                        if fuelEconomyDataPoints.count >= 2 {
+                            Divider()
                             
-                            Picker("", selection: $selectedDateRange) {
-                                ForEach(DateRange.allCases, id: \.self) {
-                                    Text($0.rawValue)
-                                }
-                            }
-                            .pickerStyle(.segmented)
+                            fuelEconomyChart
+                        }  else {
+                            chartHint
+                                .padding(.bottom, 5)
                         }
                         
                         Group {
@@ -238,6 +160,115 @@ struct FillupsDashboardView: View {
         }
     }
     
+    // View that groups the trend arrow, fuel economy info, and headline into one element
+    private var headlineGroup: some View {
+        HStack {
+            if fillups.count > 3 {
+                trendArrow
+            }
+            
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Latest Fill-up")
+                    .font(.headline)
+                
+                if let latestFillup = fillups.first {
+                    if latestFillup.fuelEconomy != 0 {
+                        HStack(spacing: 3) {
+                            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                                Text("\((latestFillup.fuelEconomy), specifier: "%.1f")")
+                                    .font(.title.bold())
+                                Text("\(settings.fuelEconomyUnit.rawValue)")
+                                    .bold()
+                                    .foregroundStyle(Color.secondary)
+                            }
+                        }
+                    } else {
+                        if fillups.count == 1 {
+                            Text("First Fill")
+                                .bold()
+                                .foregroundStyle(Color.secondary)
+                                .padding(.top, 10)
+                        } else {
+                            HStack(alignment: .firstTextBaseline, spacing: 3) {
+                                Text("Fuel Economy Unavailable")
+                                    .font(.subheadline.bold())
+                                    .foregroundStyle(Color.secondary)
+                                
+                                Button {
+                                    showingfuelEconomyInfo = true
+                                } label: {
+                                    Label("Learn More", systemImage: "info.circle")
+                                        .labelStyle(.iconOnly)
+                                }
+                            }
+                            .padding(.top, 10)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Displays info about the latest fill-up
+    private var latestFillupInfo: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .top) {
+                headlineGroup
+                
+                Spacer()
+                
+                Text(fillups.first?.date.formatted(date: .numeric, time: .omitted) ?? "-")
+                    .font(.subheadline)
+                    .foregroundStyle(Color.secondary)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        // Prevents everything except the graph line from animating
+        .transaction { transaction in
+            transaction.animation = nil
+        }
+    }
+    
+    // Presents a line chart, with fuel economy over the time period specified in a picker (default is last 6 months)
+    private var fuelEconomyChart: some View {
+        VStack(alignment: .center, spacing: 15) {
+            HStack {
+                chartYAxis
+                
+                VStack {
+                    Spacer()
+                    LineChartView(data: fuelEconomyDataPoints, average: averageFuelEconomy)
+                    Spacer()
+                }
+            }
+            .font(.caption)
+            .foregroundStyle(Color.secondary)
+            .aspectRatio(2, contentMode: .fit)
+            .clipShape(Rectangle())
+            
+            Picker("", selection: $selectedDateRange) {
+                ForEach(DateRange.allCases, id: \.self) {
+                    Text($0.rawValue)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+    }
+    
+    // Displays a hint that explains how many full tank fill-ups remain, until the fuel economy chart will be avaialble
+    private var chartHint: some View {
+        ZStack {
+            Color(.socketPurple)
+            
+            Text("Add \(fillupsRemaining) more **Full Tank** \(fillupsRemaining == Text("1") ? "fill-up" : "fill-ups") to see a graph of your fuel economy over time.")
+                .padding(20)
+                .font(.subheadline)
+                .foregroundStyle(.white)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .aspectRatio(2, contentMode: .fit)
+    }
+    
     // Arrow that signals to users whether their latest fill-up had better fuel economy than the previous fill-up
     private var trendArrow: some View {
         let latestFillupFuelEconomy = fillups.first?.fuelEconomy ?? 0
@@ -245,7 +276,7 @@ struct FillupsDashboardView: View {
         
         return ZStack {
             Circle()
-                .frame(width: 35, height: 35)
+                .frame(width: 40, height: 40)
                 .foregroundStyle(Color(.tertiarySystemGroupedBackground))
             
             if latestFillupFuelEconomy > previousFillupFuelEconomy {
@@ -256,12 +287,12 @@ struct FillupsDashboardView: View {
                 equalSign
             }
         }
-        .font(.title2.bold())
+        .font(.title.bold())
         .animation(.bouncy, value: animatingTrendArrow)
         .onAppear { animateTrendArrow(shouldReset: false) }
         .mask {
             Circle()
-                .frame(width: 35, height: 35)
+                .frame(width: 40, height: 40)
         }
     }
     
