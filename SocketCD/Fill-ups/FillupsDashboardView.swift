@@ -70,14 +70,18 @@ struct FillupsDashboardView: View {
                 }
                 .listRowSeparator(.hidden)
                 
-                NavigationLink {
-                    AllFillupsListView(vehicle: vehicle)
-                } label: {
-                    HStack(spacing: 3) {
-                        Image(systemName: "clock.arrow.circlepath")
-                            .accessibilityHidden(true)
-                        
-                        Text("Fill-up History")
+                ZStack {
+                    Color.clear
+                    
+                    NavigationLink {
+                        AllFillupsListView(vehicle: vehicle)
+                    } label: {
+                        HStack(spacing: 3) {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .accessibilityHidden(true)
+                            
+                            Text("Fill-up History")
+                        }
                     }
                 }
             }
