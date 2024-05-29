@@ -159,6 +159,7 @@ struct FillupsDashboardView: View {
                     }
                 }
             }
+            .navigationTitle("Fill-ups")
             .overlay {
                 if vehicle.sortedFillupsArray.isEmpty {
                     FillupsStartView(showingAddFillup: $showingAddFillup)
@@ -167,7 +168,6 @@ struct FillupsDashboardView: View {
             .onAppear {
                 populateFuelEconomyDataPoints()
             }
-            .navigationTitle("Fill-ups")
             .onChange(of: selectedDateRange) { _ in
                 populateFuelEconomyDataPoints()
             }
@@ -175,10 +175,6 @@ struct FillupsDashboardView: View {
                 populateFuelEconomyDataPoints()
                 animateTrendArrow(shouldReset: true)
             }
-//            .onChange(of: vehicle.odometer) { _ in
-//                print("odometer changed (fill-ups)")
-//                vehicle.determineIfNotificationDue()
-//            }
             .sheet(isPresented: $showingAddFillup) {
                 AddFillupView(vehicle: vehicle, quickFill: false)
             }
@@ -221,8 +217,6 @@ struct FillupsDashboardView: View {
                 }
             }
         }
-//        .modifier(ConditionalSearchableViewModifier(isSearchable: sortedRepairs.count >= 7, searchString: $searchText))
-//        .searchable(text: $searchText)
     }
     
     // Returns the numbers along the y-axis on the left side of the fuel economy chart
@@ -275,8 +269,7 @@ struct FillupsDashboardView: View {
     private var upArrow: some View {
         Image(systemName: "chevron.up")
             .foregroundStyle(.green)
-            .offset(y: animatingTrendArrow ? 0 : 25)
-//            .animation(.spring, value: animatingTrendArrow)
+            .offset(y: animatingTrendArrow ? 0 : 40)
             .accessibilityLabel("Fuel economy is up since your last fill-up")
     }
     
@@ -284,8 +277,7 @@ struct FillupsDashboardView: View {
     private var downArrow: some View {
         Image(systemName: "chevron.down")
             .foregroundStyle(.red)
-            .offset(y: animatingTrendArrow ? 0 : -25)
-//            .animation(.spring, value: animatingTrendArrow)
+            .offset(y: animatingTrendArrow ? 0 : -40)
             .accessibilityLabel("Fuel economy is down since your last fill-up")
     }
     
