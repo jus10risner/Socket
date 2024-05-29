@@ -11,8 +11,10 @@ struct AppSettingsView: View {
     @EnvironmentObject var settings: AppSettings
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
+    let appStoreURL: URL = URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009")!
     
     @State private var showingMailError = false
+    @State private var showingActivityView = false
     
     var body: some View {
         settingsView
@@ -43,9 +45,9 @@ struct AppSettingsView: View {
                 Section("More") {
                     contactButton
                     
-//                    rateButton
-//                    
-//                    shareAppButton
+                    rateButton
+                    
+                    shareAppButton
                 }
                 .buttonStyle(.plain)
                 
@@ -57,6 +59,7 @@ struct AppSettingsView: View {
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showingActivityView) { ActivityView(activityItems: [appStoreURL as Any], applicationActivities: nil) }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
@@ -199,21 +202,25 @@ struct AppSettingsView: View {
     
     // Navigates to "Write a Review" for Socket, in the App Store
     private var rateButton: some View {
-        Button {
-            // TODO: Add this link
-            // Link to App Store's "Write a Review" sheet
-        } label: {
-            Label("Rate Socket", systemImage: "star")
-        }
+        Link(destination: URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009?action=write-review")!, label: {
+            Label("Rate on the App Store", systemImage: "star")
+        })
     }
     
     // Shares a link to Socket on the App Store
     private var shareAppButton: some View {
-        Button {
-            // TODO: Add this link
-            // App Store link will be added here, when app is approved
-        } label: {
-            Label("Share Socket", systemImage: "square.and.arrow.up")
+        Group {
+            if #available(iOS 16, *) {
+                ShareLink(item: appStoreURL) {
+                    Label("Share Socket", systemImage: "square.and.arrow.up")
+                }
+            } else {
+                Button {
+                    showingActivityView = true
+                } label: {
+                    Label("Share Socket", systemImage: "square.and.arrow.up")
+                }
+            }
         }
     }
 }
