@@ -64,10 +64,15 @@ struct ServiceDetailView: View {
             
             
             if service.note != "" {
-                Section("Service Note") {
-                    Text(service.note)
+                Section {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Service Note")
+                            .font(.footnote)
+                            .foregroundStyle(Color.secondary)
+                        
+                        Text(service.note)
+                    }
                 }
-                .textCase(nil)
             }
             
             if !service.sortedServiceRecordsArray.isEmpty {
@@ -178,33 +183,60 @@ struct ServiceDetailView: View {
     // Service History section
     private var serviceHistory: some View {
         Section {
-            ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
-                NavigationLink {
-                    RecordDetailView(record: record, vehicle: vehicle, service: service)
-                } label: {
-                    // Using HStack, because iOS 15 doesn't show badge text at all, if Text("").badge("") is used
-                    HStack {
-                        Text("\(record.odometer) \(settings.shortenedDistanceUnit)")
-                        
-                        Spacer()
-                        
-                        Text("\(record.date.formatted(date: .numeric, time: .omitted))")
-                            .foregroundStyle(Color.secondary)
+            DisclosureGroup {
+                ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
+                    NavigationLink {
+                        RecordDetailView(record: record, vehicle: vehicle, service: service)
+                    } label: {
+                        // Using HStack, because iOS 15 doesn't show badge text at all, if Text("").badge("") is used
+                        HStack {
+                            Text("\(record.odometer) \(settings.shortenedDistanceUnit)")
+                            
+                            Spacer()
+                            
+                            Text("\(record.date.formatted(date: .numeric, time: .omitted))")
+                                .foregroundStyle(Color.secondary)
+                        }
+                        .accessibilityElement(children: .combine)
                     }
-                    .accessibilityElement(children: .combine)
                 }
+            } label: {
+                HStack(spacing: 3) {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .accessibilityHidden(true)
+                    
+                    Text("Service History")
+                }
+//                .font(.footnote)
+//                .foregroundStyle(Color.secondary)
             }
-        } header: {
-            HStack(spacing: 3) {
-                Image(systemName: "clock.arrow.circlepath")
-                    .accessibilityHidden(true)
-                
-                Text("Service History")
-            }
-            .font(.footnote)
-            .foregroundStyle(Color.secondary)
+//            ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
+//                NavigationLink {
+//                    RecordDetailView(record: record, vehicle: vehicle, service: service)
+//                } label: {
+//                    // Using HStack, because iOS 15 doesn't show badge text at all, if Text("").badge("") is used
+//                    HStack {
+//                        Text("\(record.odometer) \(settings.shortenedDistanceUnit)")
+//                        
+//                        Spacer()
+//                        
+//                        Text("\(record.date.formatted(date: .numeric, time: .omitted))")
+//                            .foregroundStyle(Color.secondary)
+//                    }
+//                    .accessibilityElement(children: .combine)
+//                }
+//            }
+//        } header: {
+//            HStack(spacing: 3) {
+//                Image(systemName: "clock.arrow.circlepath")
+//                    .accessibilityHidden(true)
+//                
+//                Text("Service History")
+//            }
+//            .font(.footnote)
+//            .foregroundStyle(Color.secondary)
         }
-        .textCase(nil)
+//        .textCase(nil)
     }
     
     // Hint for adding a new service record
