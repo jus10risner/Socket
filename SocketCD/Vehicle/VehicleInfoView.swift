@@ -254,6 +254,7 @@ struct VehicleInfoView: View {
                 
                 addInfoButton
             }
+            .listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 5, trailing: 0))
         }
         .textCase(nil)
     }
