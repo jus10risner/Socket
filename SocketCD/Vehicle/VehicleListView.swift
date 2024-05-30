@@ -116,7 +116,7 @@ struct VehicleListView: View {
                     .accessibilityElement()
                 
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("You can swipe on a vehicle, to quickly add fill-ups or make changes, right from this screen.")
+                    Text("You can swipe on a vehicle, to quickly add fill-ups or make changes to that vehicle, right from this screen.")
                     
                     Text("When you're ready, tap your vehicle to begin adding maintenance services, repairs, and more.")
                 }
