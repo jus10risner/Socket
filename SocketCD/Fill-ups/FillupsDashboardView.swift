@@ -167,7 +167,7 @@ struct FillupsDashboardView: View {
     // View that groups the trend arrow, fuel economy info, and headline into one element
     private var headlineGroup: some View {
         HStack {
-            if fillups.count > 3 {
+            if fillups.count > 3 && fillups.first?.fuelEconomy != 0 {
                 trendArrow
             }
             
