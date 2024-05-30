@@ -28,30 +28,9 @@ struct ServiceDetailView: View {
         List {
             Section {
                 VStack(alignment: .leading) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(service.name)
-                                .font(.title2.bold())
-                                .foregroundStyle(Color.primary)
-                                .multilineTextAlignment(.leading)
-                            
-                            Text("Due every \(distanceIntervalText)\(eitherOr)\(timeIntervalText)")
-                                .font(.caption)
-                                .foregroundStyle(Color.secondary)
-                        }
-                        .padding(.vertical, 5)
-                        .accessibilityElement(children: .combine)
-                        
-                        Spacer()
-                        
-                        serviceMenu
-                    }
-                    
-                    Divider()
-                    
-                    HStack {
-                        Text("Next Due:")
-                            .bold()
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Next Due")
+                            .font(.headline)
                         
                         if service.sortedServiceRecordsArray.isEmpty == false {
                             serviceNextDueInfo
@@ -59,21 +38,43 @@ struct ServiceDetailView: View {
                     }
                     .padding(.vertical, 5)
                     .font(.subheadline)
-                }
-            }
-            
-            
-            if service.note != "" {
-                Section {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Service Note")
-                            .font(.footnote)
-                            .foregroundStyle(Color.secondary)
+                    
+                    if service.note != "" {
+                        Divider()
                         
-                        Text(service.note)
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Service Note")
+                            
+                            Text(service.note)
+                                .foregroundStyle(Color.secondary)
+                                .textSelection(.enabled)
+                        }
+                        .padding(.vertical, 5)
+                        .font(.subheadline)
                     }
                 }
+            } header: {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(service.name)
+                            .font(.title2.bold())
+                            .foregroundStyle(Color.primary)
+                            .multilineTextAlignment(.leading)
+                        
+                        Text("Due every \(distanceIntervalText)\(eitherOr)\(timeIntervalText)")
+                            .font(.caption)
+                            .foregroundStyle(Color.secondary)
+                    }
+                    .padding(.bottom, 5)
+                    .accessibilityElement(children: .combine)
+                    
+                    Spacer()
+                    
+                    serviceMenu
+                }
+                .listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
             }
+            .textCase(nil)
             
             if !service.sortedServiceRecordsArray.isEmpty {
                 serviceHistory
@@ -143,7 +144,7 @@ struct ServiceDetailView: View {
                 HStack(spacing: 2) {
                     odometerSymbol
                     
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
                         VStack(spacing: 2) {
                             Text("\(service.odometerDue?.formatted() ?? "-") \(settings.shortenedDistanceUnit)")
                         }
@@ -167,7 +168,7 @@ struct ServiceDetailView: View {
                 }
             }
         }
-//        .font(.subheadline)
+        .foregroundStyle(Color.secondary)
         .accessibilityElement(children: .combine)
     }
     
@@ -207,36 +208,8 @@ struct ServiceDetailView: View {
                     
                     Text("Service History")
                 }
-//                .font(.footnote)
-//                .foregroundStyle(Color.secondary)
             }
-//            ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
-//                NavigationLink {
-//                    RecordDetailView(record: record, vehicle: vehicle, service: service)
-//                } label: {
-//                    // Using HStack, because iOS 15 doesn't show badge text at all, if Text("").badge("") is used
-//                    HStack {
-//                        Text("\(record.odometer) \(settings.shortenedDistanceUnit)")
-//                        
-//                        Spacer()
-//                        
-//                        Text("\(record.date.formatted(date: .numeric, time: .omitted))")
-//                            .foregroundStyle(Color.secondary)
-//                    }
-//                    .accessibilityElement(children: .combine)
-//                }
-//            }
-//        } header: {
-//            HStack(spacing: 3) {
-//                Image(systemName: "clock.arrow.circlepath")
-//                    .accessibilityHidden(true)
-//                
-//                Text("Service History")
-//            }
-//            .font(.footnote)
-//            .foregroundStyle(Color.secondary)
         }
-//        .textCase(nil)
     }
     
     // Hint for adding a new service record
