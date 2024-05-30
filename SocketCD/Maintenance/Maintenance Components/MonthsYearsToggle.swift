@@ -11,8 +11,8 @@ struct MonthsYearsToggle: View {
     @Binding var monthsInterval: Bool
     let timeInterval: Int?
     
-    @State private var boxRotation = 0.001 // Using 0.0 here causes error: "ignoring singular matrix..."
-    @State private var textRotation = 0.001 // ""
+    @State private var boxRotation = 0.001 // Using 0.0 here causes error: "ignoring singular matrix..." on iOS 16+
+    @State private var textRotation = 0.0 // ""
     
     var body: some View {
         monthsYearsToggleButton
