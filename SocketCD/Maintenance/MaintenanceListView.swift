@@ -67,12 +67,8 @@ struct MaintenanceListView: View {
                     MaintenanceStartView(showingAddService: $showingAddService)
                 }
             }
-            .onChange(of: Array(services)) { _ in
-                guard settings.notificationPermissionRequested == true else {
-                    requestNotificationPermission()
-                    return
-                }
-            }
+            .onAppear { checkForNotificationPermission() }
+            .onChange(of: Array(services)) { _ in checkForNotificationPermission() }
             .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
                 AddServiceView(vehicle: vehicle)
             }
@@ -164,24 +160,28 @@ struct MaintenanceListView: View {
     
     // MARK: - Methods
     
-    // Asks the user for permission to display notifications
-    func requestNotificationPermission() {
-        let settings = AppSettings()
+    // Asks the user for permission to display notifications, when appropriate
+    func checkForNotificationPermission() {
         let center = UNUserNotificationCenter.current()
         
-        center.getNotificationSettings { settings in
-            if settings.authorizationStatus == .notDetermined {
-                center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                    if success {
-                        print("Success!")
-                    } else if let error = error {
-                        print(error.localizedDescription)
+        if settings.notificationPermissionRequested == false && services.count > 0 {
+            center.getNotificationSettings { permissions in
+                if permissions.authorizationStatus == .notDetermined {
+                    print("Requesting permission for notifications")
+                    center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                        if success {
+                            print("Success!")
+                        } else if let error = error {
+                            print(error.localizedDescription)
+                        }
                     }
+                } else {
+                    print("Notification permission has already been requested")
                 }
             }
+            
+            settings.notificationPermissionRequested = true
         }
-        
-        settings.notificationPermissionRequested = true
     }
     
     // Groups services with a given service status (not due, due, overdue) together, in a list
