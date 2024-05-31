@@ -30,7 +30,7 @@ struct ServiceDetailView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Next Due")
-                            .bold()
+                            .font(.headline)
                         
                         if service.sortedServiceRecordsArray.isEmpty == false {
                             serviceNextDueInfo
@@ -48,7 +48,7 @@ struct ServiceDetailView: View {
                         
                         VStack(alignment: .leading, spacing: 5) {
                             Text("Service Note")
-                                .bold()
+                                .font(.headline)
                             
                             Text(service.note)
                                 .font(.subheadline)
@@ -137,9 +137,9 @@ struct ServiceDetailView: View {
                 Label("Delete Service", systemImage: "trash")
             }
         } label: {
-            Label("Service Options", systemImage: "ellipsis.circle.fill")
+            Label("Service Options", systemImage: "chevron.down.circle.fill")
                 .symbolRenderingMode(.hierarchical)
-                .font(.title2)
+                .font(.title3)
                 .labelStyle(.iconOnly)
         }
     }
