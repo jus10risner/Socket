@@ -27,50 +27,56 @@ struct ServiceDetailView: View {
     private var serviceDetails: some View {
         List {
             Section {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Next Due")
-                            .font(.headline)
+                            .bold()
                         
                         if service.sortedServiceRecordsArray.isEmpty == false {
                             serviceNextDueInfo
+                                .font(.subheadline)
+                        } else {
+                            Text("Add a service record to find out!")
+                                .font(.subheadline)
+                                .foregroundStyle(Color.secondary)
                         }
                     }
                     .padding(.vertical, 5)
-                    .font(.subheadline)
                     
                     if service.note != "" {
                         Divider()
                         
                         VStack(alignment: .leading, spacing: 5) {
                             Text("Service Note")
+                                .bold()
                             
                             Text(service.note)
+                                .font(.subheadline)
                                 .foregroundStyle(Color.secondary)
                                 .textSelection(.enabled)
                         }
                         .padding(.vertical, 5)
-                        .font(.subheadline)
                     }
                 }
             } header: {
                 HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(service.name)
-                            .font(.title2.bold())
-                            .foregroundStyle(Color.primary)
-                            .multilineTextAlignment(.leading)
+                    VStack(alignment: .leading, spacing: 1) {
+                        HStack(spacing: 4) {
+                            Text(service.name)
+                                .font(.title2.bold())
+                                .foregroundStyle(Color.primary)
+                                .multilineTextAlignment(.leading)
+                            
+                            serviceMenu
+                        }
                         
                         Text("Due every \(distanceIntervalText)\(eitherOr)\(timeIntervalText)")
                             .font(.caption)
                             .foregroundStyle(Color.secondary)
                     }
-                    .padding(.bottom, 5)
                     .accessibilityElement(children: .combine)
                     
                     Spacer()
-                    
-                    serviceMenu
                 }
                 .listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
             }
@@ -131,7 +137,8 @@ struct ServiceDetailView: View {
                 Label("Delete Service", systemImage: "trash")
             }
         } label: {
-            Label("Service Options", systemImage: "ellipsis.circle")
+            Label("Service Options", systemImage: "ellipsis.circle.fill")
+                .symbolRenderingMode(.hierarchical)
                 .font(.title2)
                 .labelStyle(.iconOnly)
         }
@@ -232,6 +239,8 @@ struct ServiceDetailView: View {
             .padding(20)
             .font(.subheadline)
             .foregroundStyle(.white)
+            .accessibilityElement()
+            .accessibilityLabel("Tap the Add Service Record button, to add a service record")
         }
         .listRowBackground(Color(.socketPurple))
     }
