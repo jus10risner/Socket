@@ -781,7 +781,7 @@
 				CODE_SIGN_ENTITLEMENTS = SocketCD/SocketCD.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"SocketCD/Preview Content\"";
 				DEVELOPMENT_TEAM = X8A236JXFT;
 				ENABLE_PREVIEWS = YES;
@@ -1001,7 +1001,7 @@
 				CODE_SIGN_ENTITLEMENTS = SocketCD/SocketCD.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"SocketCD/Preview Content\"";
 				DEVELOPMENT_TEAM = X8A236JXFT;
 				ENABLE_PREVIEWS = YES;
@@ -1045,7 +1045,7 @@
 				CODE_SIGN_ENTITLEMENTS = SocketCD/SocketCD.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"SocketCD/Preview Content\"";
 				DEVELOPMENT_TEAM = X8A236JXFT;
 				ENABLE_PREVIEWS = YES;
