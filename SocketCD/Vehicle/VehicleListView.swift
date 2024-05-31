@@ -21,6 +21,8 @@ struct VehicleListView: View {
     @State private var vehicleToDelete: Vehicle?
     @State private var showingDeleteAlert = false
     
+    @Binding var showingOnboardingText: Bool
+    
     var body: some View {
         vehicleCardList
     }
@@ -77,12 +79,17 @@ struct VehicleListView: View {
             }
             .listRowBackground(Color(.customBackground))
             
-            if vehicles.count == 1 && settings.onboardingTipsAlreadyPresented == false {
-                onboardingTips
+            if showingOnboardingText == true {
+                onboardingTipText
             }
         }
         .listStyle(.plain)
         .animation(.easeInOut, value: Array(vehicles))
+        .onAppear {
+            if vehicles.count == 1 && settings.onboardingTipsAlreadyPresented == false {
+                showingOnboardingText = true
+            }
+        }
         .sheet(item: $quickFillupVehicle) { vehicle in
             AddFillupView(vehicle: vehicle, quickFill: true)
                 .conditionalTint(Color.selectedColor(for: .fillupsTheme))
@@ -108,7 +115,7 @@ struct VehicleListView: View {
     }
     
     // Tip that displays immediately after the first vehicle has been added, until another view is shown
-    private var onboardingTips: some View {
+    private var onboardingTipText: some View {
         Section {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -156,5 +163,5 @@ struct VehicleListView: View {
 }
 
 #Preview {
-    VehicleListView(selectedVehicle: .constant(Vehicle(context: DataController.preview.container.viewContext)))
+    VehicleListView(selectedVehicle: .constant(Vehicle(context: DataController.preview.container.viewContext)), showingOnboardingText: .constant(true))
 }

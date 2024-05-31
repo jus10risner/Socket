@@ -19,6 +19,7 @@ struct HomeView: View {
     @State private var selectedVehicle: Vehicle?
     
     @State private var showingOnboardingTip = false
+    @State private var showingOnboardingText = false
     
     var body: some View {
         homeView
@@ -29,7 +30,7 @@ struct HomeView: View {
     
     private var homeView: some View {
         AppropriateNavigationType {
-            VehicleListView(selectedVehicle: $selectedVehicle)
+            VehicleListView(selectedVehicle: $selectedVehicle, showingOnboardingText: $showingOnboardingText)
                 .overlay {
                     if vehicles.isEmpty {
                         EmptyVehicleListView()
@@ -54,6 +55,7 @@ struct HomeView: View {
                 .onChange(of: selectedVehicle) { _ in
                     if settings.onboardingTipsAlreadyPresented == false {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                            showingOnboardingText = false
                             settings.onboardingTipsAlreadyPresented = true
                         }
                     }
@@ -164,6 +166,7 @@ struct HomeView: View {
         if settings.welcomeViewPresented == false && settings.onboardingTipsAlreadyPresented == false {
             if vehicles.count == 1 {
                 showingOnboardingTip = true
+                showingOnboardingText = true
             } else if vehicles.count > 1 {
                 settings.onboardingTipsAlreadyPresented = true
             }
