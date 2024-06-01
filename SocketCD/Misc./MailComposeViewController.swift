@@ -28,7 +28,7 @@ class MailComposeViewController: UIViewController, MFMailComposeViewControllerDe
         let mail = MFMailComposeViewController()
         mail.mailComposeDelegate = self
         mail.setToRecipients(["socketsupport@justinrisner.com"])
-        mail.setMessageBody("\n\n\nSocket Version: \(appVersion)(\(buildNumber))\niOS Version: \(operatingSystem)", isHTML: false)
+        mail.setMessageBody("\n\n\nSocket Version: \(appVersion) (\(buildNumber))\niOS Version: \(operatingSystem)", isHTML: false)
         
         // Finds the topmost view controller and presents from there, to avoid "...which was already presenting" error
         let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
