@@ -63,9 +63,11 @@ struct ServiceDetailView: View {
                     VStack(alignment: .leading, spacing: 1) {
                         HStack(spacing: 4) {
                             Text(service.name)
-                                .font(.title2.bold())
+                                .font(.title.bold())
                                 .foregroundStyle(Color.primary)
                                 .multilineTextAlignment(.leading)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.75)
                             
                             serviceMenu
                         }
@@ -78,7 +80,7 @@ struct ServiceDetailView: View {
                     
                     Spacer()
                 }
-                .listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 0))
             }
             .textCase(nil)
             
