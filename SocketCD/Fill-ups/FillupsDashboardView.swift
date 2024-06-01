@@ -303,7 +303,7 @@ struct FillupsDashboardView: View {
     // Up arrow Image
     private var upArrow: some View {
         Image(systemName: "chevron.up")
-            .foregroundStyle(.green)
+            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .red : .green)
             .offset(y: animatingTrendArrow ? 0 : 40)
             .accessibilityLabel("Fuel economy is up since your last fill-up")
     }
@@ -311,7 +311,7 @@ struct FillupsDashboardView: View {
     // Down arrow Image
     private var downArrow: some View {
         Image(systemName: "chevron.down")
-            .foregroundStyle(.red)
+            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .green : .red)
             .offset(y: animatingTrendArrow ? 0 : -40)
             .accessibilityLabel("Fuel economy is down since your last fill-up")
     }
