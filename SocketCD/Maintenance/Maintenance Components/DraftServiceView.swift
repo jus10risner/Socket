@@ -63,7 +63,7 @@ struct DraftServiceView: View {
                             HStack {
                                 TextField("5,000", value: $draftService.distanceInterval, format: .number.decimalSeparator(strategy: .automatic))
                                     .fixedSize()
-                                Text(settings.distanceUnit.rawValue)
+                                Text(settings.shortenedDistanceUnit)
                             }
                         case .time:
                             HStack {
@@ -77,7 +77,7 @@ struct DraftServiceView: View {
                                 HStack {
                                     TextField("5,000", value: $draftService.distanceInterval, format: .number.decimalSeparator(strategy: .automatic))
                                         .fixedSize()
-                                    Text("\(settings.distanceUnit.rawValue) or")
+                                    Text("\(settings.shortenedDistanceUnit) or")
                                     TextField("6", value: $draftService.timeInterval, format: .number)
                                         .fixedSize()
                                     

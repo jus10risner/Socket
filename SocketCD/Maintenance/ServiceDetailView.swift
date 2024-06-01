@@ -268,7 +268,7 @@ struct ServiceDetailView: View {
     // Distance interval between services (if provided), expressed as a string
     private var distanceIntervalText: String {
         if service.distanceInterval != 0 && service.distanceInterval != 0 {
-            return "\(service.distanceInterval.formatted()) \(settings.distanceUnit.rawValue)"
+            return "\(service.distanceInterval.formatted()) \(settings.shortenedDistanceUnit)"
         } else {
             return ""
         }

@@ -172,9 +172,9 @@ extension Service {
         
         if let distanceToNextService {
             if distanceToNextService < 0 {
-                descriptionString = "Overdue by \(abs(distanceToNextService).formatted()) \(settings.distanceUnit.rawValue)"
+                descriptionString = "Overdue by \(abs(distanceToNextService).formatted()) \(settings.shortenedDistanceUnit)"
             } else {
-                descriptionString = "Due in \(distanceToNextService.formatted()) \(settings.distanceUnit.rawValue)"
+                descriptionString = "Due in \(distanceToNextService.formatted()) \(settings.shortenedDistanceUnit)"
                 
                 if daysToNextService != nil {
                     descriptionString.append(" or ")
