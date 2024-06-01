@@ -36,6 +36,7 @@ struct RepairDetailView: View {
                     Spacer()
                     
                     Text(repair.name)
+                        .multilineTextAlignment(.trailing)
                         .foregroundStyle(Color.secondary)
                 }
                 .accessibilityElement(children: .combine)
