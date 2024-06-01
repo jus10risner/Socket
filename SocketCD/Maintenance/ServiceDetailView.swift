@@ -36,7 +36,7 @@ struct ServiceDetailView: View {
                             serviceNextDueInfo
                                 .font(.subheadline)
                         } else {
-                            Text("Add a service record to find out!")
+                            Text("Add a service record first!")
                                 .font(.subheadline)
                                 .foregroundStyle(Color.secondary)
                         }
@@ -61,16 +61,12 @@ struct ServiceDetailView: View {
             } header: {
                 HStack {
                     VStack(alignment: .leading, spacing: 1) {
-                        HStack(spacing: 4) {
-                            Text(service.name)
-                                .font(.title.bold())
-                                .foregroundStyle(Color.primary)
-                                .multilineTextAlignment(.leading)
-                                .lineLimit(2)
-                                .minimumScaleFactor(0.75)
-                            
-                            serviceMenu
-                        }
+                        Text(service.name)
+                            .font(.title.bold())
+                            .foregroundStyle(Color.primary)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.75)
                         
                         Text("Due every \(distanceIntervalText)\(eitherOr)\(timeIntervalText)")
                             .font(.caption)
@@ -120,6 +116,8 @@ struct ServiceDetailView: View {
                     Image(systemName: "plus.square.on.square")
                         .accessibilityLabel("Add a Service Record")
                 }
+                
+                serviceMenu
             }
         }
     }
@@ -139,10 +137,10 @@ struct ServiceDetailView: View {
                 Label("Delete Service", systemImage: "trash")
             }
         } label: {
-            Label("Service Options", systemImage: "chevron.down.circle.fill")
+            Image(systemName: "ellipsis.circle.fill")
                 .symbolRenderingMode(.hierarchical)
                 .font(.title3)
-                .labelStyle(.iconOnly)
+                .accessibilityLabel("Service Options")
         }
     }
     
