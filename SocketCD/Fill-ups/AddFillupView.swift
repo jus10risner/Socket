@@ -27,6 +27,8 @@ struct AddFillupView: View {
             VStack(spacing: 0) {
                 if quickFill == true {
                     Text(vehicle.name)
+                        .padding(.horizontal, 10)
+                        .multilineTextAlignment(.center)
                         .foregroundStyle(Color.secondary)
                 }
                 

@@ -24,6 +24,8 @@ struct AddRecordView: View {
         AppropriateNavigationType {
             VStack(spacing: 0) {
                 Text(service.name)
+                    .padding(.horizontal, 10)
+                    .multilineTextAlignment(.center)
                     .foregroundStyle(Color.secondary)
                 
                 DraftServiceRecordView(draftServiceRecord: draftServiceRecord, isEditView: false)
