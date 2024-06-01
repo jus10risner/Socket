@@ -73,16 +73,9 @@ struct ServiceListRowView: View {
                 .font(.headline)
             
             if service.sortedServiceRecordsArray.isEmpty {
-//                HStack(spacing: isAnimating ? 15 : 3) {
-                    Text("Swipe or tap to add a service record")
-                    
-//                    Image(systemName: "arrow.right")
-//                        .flipsForRightToLeftLayoutDirection(true)
-//                        .animation(isAnimating ? .easeInOut(duration: 1).repeatForever() : .default, value: isAnimating)
-//                        .accessibilityHidden(true)
-//                }
-                .font(.subheadline)
-                .foregroundStyle(Color.secondary)
+                Text("Swipe or tap to add a service record")
+                    .font(.subheadline)
+                    .foregroundStyle(Color.secondary)
             } else {
                 Text(service.nextServiceDueDescription)
                     .font(.subheadline)
