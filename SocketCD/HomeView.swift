@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Environment(\.scenePhase) var scenePhase
     @EnvironmentObject var settings: AppSettings
     @ObservedObject var dataController: DataController
     
@@ -47,17 +46,17 @@ struct HomeView: View {
                 .onChange(of: [settings.daysBeforeMaintenance, settings.distanceBeforeMaintenance]) { _ in
                     setUpNotifications(cancelPending: true)
                 }
-                .onChange(of: scenePhase) { phase in
-                    if phase == .background {
-                        setUpNotifications(cancelPending: false)
-                    }
-                }
                 .onChange(of: selectedVehicle) { _ in
                     if settings.onboardingTipsAlreadyPresented == false {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                             showingOnboardingText = false
                             settings.onboardingTipsAlreadyPresented = true
                         }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        // Ensures that all devices syncing via iCloud have the same local notifications
+                        setUpNotifications(cancelPending: false)
                     }
                 }
                 .sheet(item: $selectedVehicle) { vehicle in
@@ -173,24 +172,16 @@ struct HomeView: View {
         }
     }
     
-    // Schedules notifications, if appropriate, when the app's scenePhase is set to .background. Cancels all pending notifications, if cancelPending is true.
+    // Schedules local notifications, if appropriate
     func setUpNotifications(cancelPending: Bool) {
-        UNUserNotificationCenter.current().getNotificationSettings { permissions in
-            guard permissions.authorizationStatus == .authorized else {
-                print("Push notifications have not been authorized")
-                return
-            }
-            
-            for vehicle in vehicles {
+        for vehicle in vehicles {
+            if cancelPending == true {
                 for service in vehicle.sortedServicesArray {
-                    if cancelPending == true {
-                        // Cancels all pending notifications on the device
-                        service.cancelPendingNotifications()
-                    }
-                    
-                    service.updateNotifications(vehicle: vehicle)
+                    service.cancelPendingNotifications()
                 }
             }
+            
+            vehicle.updateAllNotifications()
         }
     }
 }

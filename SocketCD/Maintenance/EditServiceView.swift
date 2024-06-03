@@ -30,7 +30,7 @@ struct EditServiceView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Done") {
-                            service.updateAndSave(draftService: draftService, selectedInterval: selectedInterval)
+                            service.updateAndSave(vehicle: vehicle, draftService: draftService, selectedInterval: selectedInterval)
                             
                             dismiss()
                         }

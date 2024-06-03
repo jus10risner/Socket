@@ -57,10 +57,9 @@ extension ServiceRecord {
         
         // Cancels any notifications that have been scheduled for this service, so they can be rescheduled, if appropriate
         service.cancelPendingNotifications()
+        service.updateNotificationsForService(vehicle: vehicle)
         
         try? context.save()
-        
-//        service.updateNotifications()
     }
     
     func delete(for service: Service) {

@@ -200,7 +200,7 @@ extension Service {
     
     // MARK: - CRUD Methods
     
-    func updateAndSave(draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
+    func updateAndSave(vehicle: Vehicle, draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
         let context = DataController.shared.container.viewContext
         
         if selectedInterval == .distance {
@@ -217,10 +217,9 @@ extension Service {
         
         // Cancels any notifications that have been scheduled for this service, so they can be rescheduled, if appropriate
         self.cancelPendingNotifications()
+        self.updateNotificationsForService(vehicle: vehicle)
         
         try? context.save()
-        
-//        updateNotifications()
     }
     
     func delete() {
@@ -250,43 +249,24 @@ extension Service {
         
         // Cancels any notifications that have been scheduled for this service, so they can be rescheduled, if appropriate
         self.cancelPendingNotifications()
+        self.updateNotificationsForService(vehicle: vehicle)
         
         try? context.save()
-        
-//        updateNotifications()
     }
     
     
     // MARK: - Notification Scheduling Methods
     
-    // updates notifications and recalculates when service is due, after changes are made to the service itself
-    func updateNotifications(vehicle: Vehicle) {
+    // Determines when & whether notifications are due, and schedules them, if appropriate, after changes are made to the service itself
+    func updateNotificationsForService(vehicle: Vehicle) {
         let context = DataController.shared.container.viewContext
         let settings = AppSettings()
-        
-        // Reschedule all pending date-based notifications, as long as the alert date has not passed, to ensure that any devices syncing through iCloud have local notifications scheduled, as appropriate
-        if self.notificationScheduled == true {
-            if let dateDue = self.dateDue {
-                if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
-                    if alertDate > Date.now {
-                        // Remove the date-based notification
-                        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.timeBasedNotificationIdentifier])
-                        self.notificationScheduled = false
-                        try? context.save()
-                        print("canceled date-based notification")
-                    }
-                }
-            }
-        }
-        
-        // Sets up notifications for any service that is due, but does not yet have a notification scheduled; this ensures that each device syncing with iCloud gets its own local notifications, when appropriate
+            
         if self.notificationScheduled == false {
             if let dateDue = self.dateDue {
                 if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
                     if dateDue > Date.now && alertDate > Date.now {
                         self.scheduleNotificationOnDate(alertDate, for: vehicle)
-                    } else if dateDue > Date.now && alertDate < Date.now {
-                        self.scheduleNotificationForTomorrow(for: vehicle)
                     }
                 }
             }
@@ -299,6 +279,8 @@ extension Service {
                 }
             }
         }
+        
+        try? context.save()
     }
     
     func cancelPendingNotifications() {
@@ -313,7 +295,6 @@ extension Service {
     
     // Schedule notification based on time interval
     func scheduleNotificationOnDate(_ date: Date, for vehicle: Vehicle) {
-        let context = DataController.shared.container.viewContext
         let content = UNMutableNotificationContent()
         content.title = "Time for Maintenance!"
         content.body = "\(self.name) due soon for \(vehicle.name)"
@@ -341,13 +322,10 @@ extension Service {
         print("Alert Date: \(date.formatted(date: .numeric, time: .omitted))")
         
         self.notificationScheduled = true
-        
-        try? context.save()
     }
     
     // Schedule notification based on distance interval
     func scheduleNotificationForTomorrow(for vehicle: Vehicle) {
-        let context = DataController.shared.container.viewContext
         let content = UNMutableNotificationContent()
         content.title = "Time for Maintenance!"
         content.body = "\(self.name) due soon for \(vehicle.name)"
@@ -374,7 +352,5 @@ extension Service {
         print("Notification scheduled for tomorrow!")
         
         self.notificationScheduled = true
-        
-        try? context.save()
     }
 }
