@@ -299,14 +299,14 @@ struct VehicleInfoView: View {
                 for item in allRecords {
                     if item.components(separatedBy: " - ").contains(formattedDate) {
                         if let itemIndex = allRecords.firstIndex(of: item) {
-                            allRecords[itemIndex].append("    • \(service.name)\(record.note != "" ? "\n       Note: \(record.note)\n" : "\n")")
+                            allRecords[itemIndex].append("\t• \(service.name)\n\(record.note != "" ? "\t\tNote: \(record.note)\n" : "\0")")
                         }
                     }
                 }
                    
                 // If no services or repairs were already performed on this date, add a new date header, before this service's details
                 if !allRecords.contains(where: { $0.components(separatedBy: " - ").first! == formattedDate }) {
-                    allRecords.append("\(formattedDate) - \(record.odometer.formatted()) \(settings.shortenedDistanceUnit)\n    • \(service.name)\(record.note != "" ? "\n       Note: \(record.note)\n" : "\n")")
+                    allRecords.append("\(formattedDate) - \(record.odometer.formatted()) \(settings.shortenedDistanceUnit)\n\t• \(service.name)\n\(record.note != "" ? "\t\tNote: \(record.note)\n" : "\0")")
                 }
             }
         }
@@ -319,14 +319,14 @@ struct VehicleInfoView: View {
             for item in allRecords {
                 if item.components(separatedBy: " - ").contains(formattedDate) {
                     if let itemIndex = allRecords.firstIndex(of: item) {
-                        allRecords[itemIndex].append("    • \(repair.name)\(repair.note != "" ? "\n       Note: \(repair.note)\n" : "\n")")
+                        allRecords[itemIndex].append("\t• \(repair.name)\n\(repair.note != "" ? "\t\tNote: \(repair.note)\n" : "\0")")
                     }
                 }
             }
             
             // If no services or repairs were already performed on this date, add a new date header, before this repair's details
             if !allRecords.contains(where: { $0.components(separatedBy: " - ").first! == formattedDate }) {
-                allRecords.append("\(formattedDate) - \(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)\n    • \(repair.name)\(repair.note != "" ? "\n       Note: \(repair.note)\n" : "\n")")
+                allRecords.append("\(formattedDate) - \(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)\n\t• \(repair.name)\n\(repair.note != "" ? "\t\tNote: \(repair.note)\n" : "\0")")
             }
         }
         
