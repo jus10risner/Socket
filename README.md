@@ -37,12 +37,14 @@
 ## Challenges
 
 <details>
-  <summary><b>Title Transitions</b></summary>
+  <summary><b>Navigation Title Transitions</b></summary>
   </br>
 
 iOS 16 doesn’t seem to be able to negotiate the transition from a large navigation title to an inline navigation title, when both parent and child views are lists (with the parent view’s list items being navigation links). When using `NavigationView`, the child view maintains a large, empty space above the content, as though the navigation title were still large, even when it is manually set to be inline. When using `NavigationStack`, the parent view’s list jumps as the title transitions to inline, then the title remains inline when navigating back to the parent view (see clip below).
 
 To resolve these issues, I first created a view modifier called `AppropriateNavigationType` that applies `NavigationView` on devices running iOS 15, and `NavigationStack` on devices running iOS16+. This prevents the large blank space from appearing at the top of the detail view in iOS 16. I then placed a `ZStack`, with a background element, around each navigation link on the parent views. This results in the parent views’ navigation titles smoothly transitioning to inline and back to large, when navigation to and from child views.
+
+<img src='https://github.com/jus10risner/Socket/assets/79346093/726e3096-c32b-4914-b219-33b8b75725af' height='500'>
 
 </details>
 
