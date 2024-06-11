@@ -35,16 +35,20 @@
 
 ## Challenges
 
-###  - Title Transitions
+<details>
+  <summary>Title Transitions</summary>
 
-iOS 16 doesn’t seem to be able to negotiate the transition from a large navigation title to an inline navigation title, when both parent and child views are lists (with the parent view’s list items being navigation links). When using `NavigationView`, the child view maintains a large, empty space above the content, as though the navigation title were still large, even when it is manually set to be inline. When using `NavigationStack`, the parent view’s list jumps as the title transitions to inline, then the title remains inline when navigating back to the parent view (see clip below).
+  iOS 16 doesn’t seem to be able to negotiate the transition from a large navigation title to an inline navigation title, when both parent and child views are lists (with the parent view’s list items being navigation links). When using `NavigationView`, the child view maintains a large, empty space above the content, as though the navigation title were still large, even when it is manually set to be inline. When using `NavigationStack`, the parent view’s list jumps as the title transitions to inline, then the title remains inline when navigating back to the parent view (see clip below).
 
 To resolve these issues, I first created a view modifier called `AppropriateNavigationType` that applies `NavigationView` on devices running iOS 15, and `NavigationStack` on devices running iOS16+. This prevents the large blank space from appearing at the top of the detail view in iOS 16. I then placed a `ZStack`, with a background element, around each navigation link on the parent views. This results in the parent views’ navigation titles smoothly transitioning to inline and back to large, when navigation to and from child views.
 
+</details>
 
-
-### - Dismissing The Keyboard
+<details>
+  <summary>Dismissing The Keyboard</summary>
 
 In iOS 15 and 16, attaching a *Done* button to the keyboard toolbar was an easy and reliable way to dismiss the keyboard. Beginning with iOS 17, the keyboard toolbar would only intermittently appear, making the *Done* button unreliable, and thus inappropriate to use. Instead, I added `UIScrollView.appearance().keyboardDismissMode = .interactive` to the root view of the app, to be applied when the app launches. This allows users to swipe to dismiss the keyboard, which is how many of Apple’s apps work, so I had no reservations in replacing the keyboard toolbar button with this feature.
 
 I quickly learned that iOS 16 did not seem to be following the instructions I had laid out for keyboard dismissal, though iOS 15 and 17 worked as expected. I again created a custom view modifier, with this one applying `.scrollDismissesKeyboard(.interactively)` to iOS 16+ (it was introduced alongside iOS 16, and isn’t available for previous versions). With this, the swipe to dismiss feature works throughout the app, on each supported version of iOS. 
+  
+</details>
