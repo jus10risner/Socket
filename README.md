@@ -25,12 +25,12 @@
 ## Details
 
 - Built almost entirely using SwiftUI
-- `UIViewControllerRepresentable` used to make the following UIKit-only features (as of iOS 15.0) available in SwiftUI:
-  - `UIActivityViewController` for sharing photos and exporting records
-  - `UIImagePickerController` for using the camera capture feature
-  - `PHPickerViewController` for using the photo picker
-- Core Data used for persistence, primarily because it can handle large amounts of data efficiently
-- CloudKit, combined with `NSPersistentCloudKitContainer` used to persist data locally, and sync to iCloud
+  - `UIViewControllerRepresentable` was used to make the following UIKit-only features (as of iOS 15.0) available in SwiftUI:
+    - `UIActivityViewController` for sharing photos and exporting records
+    - `UIImagePickerController` for using the camera capture feature
+    - `PHPickerViewController` for using the photo picker
+- Core Data used for persistence
+  - `NSPersistentCloudKitContainer` used to both persist data locally and sync to iCloud
 
 
 ## Challenges
