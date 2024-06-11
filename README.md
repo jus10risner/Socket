@@ -14,12 +14,13 @@
 
 ## Features
 
-- Log maintenance services, and receive alerts each time they are due
+- Log maintenance services, and (optionally) receive alerts each time a service is due
 - Document repairs, with the option to keep it simple or add notes and/or photos
 - Log fill-ups, and see fuel economy trends over time
 - Add additional information about each vehicle, for easy reference
-- Export maintenance and repair records in PDF or CSV format, and fill-up records in CSV format
-- iCloud sync
+- Export maintenance and repair records in PDF or CSV format
+- Export fill-up records in CSV format
+- iCloud sync, for peace of mind
 
 
 ## Details
