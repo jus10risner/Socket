@@ -11,6 +11,12 @@
   </a>
 </div>
 
+## 
+A few years ago, I opened the App Store app on my iPhone and searched for a vehicle maintenance tracker. I was looking for something simple and user-friendly, with all the features one would expect from this type of app: maintenance reminders, repair and fill-up logging, and the ability to export vehicle records. My search results were full of apps that seemed to focus primarily on either UI design or feature set, but few did both well, and none seemed to prioritize the user experience.
+
+<br>
+Seeing an opportunity to build the app I was looking for, I started learning the Swift programming language and iOS development fundamentals. With this knowledge, I was able to create an app with the features I expected, while leveraging my UX design experience to make it simple and easy to use.
+
 
 ## Features
 
