@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9E189E372BD1ABE900095EC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E189E362BD1ABE900095EC2 /* Assets.xcassets */; };
+		9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E235B912DFB58CA008F7327 /* CameraViewModel.swift */; };
 		9E312D772BF2924B0069CBFF /* MaintenanceOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */; };
 		9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */; };
 		9E620BF42BBF2DED005E16DD /* DraftRepairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF32BBF2DED005E16DD /* DraftRepairView.swift */; };
@@ -114,6 +115,7 @@
 
 /* Begin PBXFileReference section */
 		9E189E362BD1ABE900095EC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9E235B912DFB58CA008F7327 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceOnboardingView.swift; sourceTree = "<group>"; };
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepair.swift; sourceTree = "<group>"; };
@@ -392,6 +394,7 @@
 				9EEAC4B82BA1F1180053C65E /* ImageDetailView.swift */,
 				9EEAC4B62BA1F0CE0053C65E /* ImageViewer.swift */,
 				9EEAC4B42BA1F0A50053C65E /* CameraManager.swift */,
+				9E235B912DFB58CA008F7327 /* CameraViewModel.swift */,
 			);
 			path = "Photo Handling";
 			sourceTree = "<group>";
@@ -670,6 +673,7 @@
 				9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */,
 				9EEAC4E82BA367A00053C65E /* AddPhotoButton.swift in Sources */,
 				9EEAC4D52BA259870053C65E /* VehiclePhotoCustomizationButtons.swift in Sources */,
+				9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */,
 				9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */,
 				9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */,
 				9EEAC4DB2BA33B7B0053C65E /* VehicleTabView.swift in Sources */,

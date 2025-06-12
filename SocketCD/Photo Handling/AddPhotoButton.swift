@@ -10,12 +10,10 @@ import SwiftUI
 
 struct AddPhotoButton: View {
     @Environment(\.managedObjectContext) var context
+    @StateObject private var cameraViewModel = CameraViewModel()
     let cameraManager = CameraManager()
     
     @State private var showingImagePicker = false
-    @State private var showingCameraAvailabilityAlert = false
-    @State private var showingCameraAlert = false
-    @State private var showingCameraCapture = false
     @State private var showingPhotoError = false
     
     @State private var uiImage: UIImage?
@@ -35,7 +33,7 @@ struct AddPhotoButton: View {
                 
                 Button {
                     Task {
-                        await cameraManager.setUpCaptureSession(cameraAvailabilityAlert: &showingCameraAvailabilityAlert, cameraAccessAlert: &showingCameraAlert, cameraCapture: &showingCameraCapture)
+                        await cameraViewModel.requestCameraAccessAndAvailability()
                     }
                 } label: {
                     Label("Take Photo", systemImage: "camera")
@@ -49,16 +47,16 @@ struct AddPhotoButton: View {
         }
         .onChange(of: uiImage) { _ in verifyAndAppend() }
         .appropriateImagePickerModal(isPresented: $showingImagePicker, image: $uiImage, onDismiss: nil)
-        .fullScreenCover(isPresented: $showingCameraCapture) {
+        .fullScreenCover(isPresented: $cameraViewModel.showingCamera) {
             CameraCapture(image: $uiImage)
                 .ignoresSafeArea()
         }
-        .alert("No Camera Found", isPresented: $showingCameraAvailabilityAlert) {
+        .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
             Button("OK", role: .cancel) { }
         } message: {
             Text("\nThis device does not appear to have a functioning camera.")
         }
-        .alert("No Camera Access", isPresented: $showingCameraAlert) {
+        .alert("No Camera Access", isPresented: $cameraViewModel.showingCameraAccessAlert) {
             Button("Go to Settings") {
                 Task {
                     await cameraManager.openSocketSettings()

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct VehiclePhotoCustomizationButtons: View {
     @Environment(\.managedObjectContext) var context
+    @StateObject private var cameraViewModel = CameraViewModel()
     let cameraManager = CameraManager()
     
     @Binding var inputImage: UIImage?
@@ -18,9 +19,6 @@ struct VehiclePhotoCustomizationButtons: View {
     @Binding var selectedColor: Color
     
     @State private var showingImagePicker = false
-    @State private var showingCameraAvailabilityAlert = false
-    @State private var showingCameraAlert = false
-    @State private var showingCameraCapture = false
     @State private var showingPhotoError = false
     
     var body: some View {
@@ -47,17 +45,17 @@ struct VehiclePhotoCustomizationButtons: View {
         .padding(.top, 5)
         .animation(.default, value: carPhoto)
         .appropriateImagePickerModal(isPresented: $showingImagePicker, image: $inputImage, onDismiss: { loadImage() })
-        .fullScreenCover(isPresented: $showingCameraCapture, onDismiss: { loadImage() }) {
+        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: { loadImage() }) {
             CameraCapture(image: $inputImage)
                 .ignoresSafeArea()
         }
         .onChange(of: inputImage) { _ in verifyAndAdd() }
-        .alert("No Camera Found", isPresented: $showingCameraAvailabilityAlert) {
+        .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
             Button("OK", role: .cancel) { }
         } message: {
             Text("This device does not appear to have a functioning camera.")
         }
-        .alert("No Camera Access", isPresented: $showingCameraAlert) {
+        .alert("No Camera Access", isPresented: $cameraViewModel.showingCameraAccessAlert) {
             Button("Go to Settings") {
                 Task {
                     await cameraManager.openSocketSettings()
@@ -86,7 +84,7 @@ struct VehiclePhotoCustomizationButtons: View {
             
             Button {
                 Task {
-                    await cameraManager.setUpCaptureSession(cameraAvailabilityAlert: &showingCameraAvailabilityAlert, cameraAccessAlert: &showingCameraAlert, cameraCapture: &showingCameraCapture)
+                    await cameraViewModel.requestCameraAccessAndAvailability()
                 }
             } label: {
                 Label("Take Photo", systemImage: "camera")
