@@ -46,7 +46,10 @@ struct AddPhotoButton: View {
             Spacer()
         }
         .onChange(of: uiImage) { verifyAndAppend() }
-        .appropriateImagePickerModal(isPresented: $showingImagePicker, image: $uiImage, onDismiss: nil)
+        .sheet(isPresented: $showingImagePicker) {
+            ImagePicker(image: $uiImage)
+        }
+//        .appropriateImagePickerModal(isPresented: $showingImagePicker, image: $uiImage, onDismiss: nil)
         .fullScreenCover(isPresented: $cameraViewModel.showingCamera) {
             CameraCapture(image: $uiImage)
                 .ignoresSafeArea()
