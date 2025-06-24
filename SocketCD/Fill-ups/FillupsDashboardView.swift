@@ -94,10 +94,10 @@ struct FillupsDashboardView: View {
             .onAppear {
                 populateFuelEconomyDataPoints()
             }
-            .onChange(of: selectedDateRange) { _ in
+            .onChange(of: selectedDateRange) {
                 populateFuelEconomyDataPoints()
             }
-            .onChange(of: Array(fillups)) { _ in
+            .onChange(of: Array(fillups)) {
                 populateFuelEconomyDataPoints()
                 animateTrendArrow(shouldReset: true)
             }

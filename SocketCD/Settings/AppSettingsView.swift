@@ -170,7 +170,7 @@ struct AppSettingsView: View {
                         }
                     }
                     .labelsHidden()
-                    .onChange(of: settings.appAppearance) { _ in
+                    .onChange(of: settings.appAppearance) {
                         AppearanceController.shared.setAppearance()
 //                        try? context.save()
                     }

@@ -56,7 +56,7 @@ struct DraftServiceRecordView: View {
                                 .foregroundStyle(Color.secondary)
                         }
                         
-                        TextField("Cost", value: $draftServiceRecord.cost, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                        TextField("Cost", value: $draftServiceRecord.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                             .keyboardType(.decimalPad)
                     }
                 }

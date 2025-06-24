@@ -45,7 +45,7 @@ struct AddPhotoButton: View {
             
             Spacer()
         }
-        .onChange(of: uiImage) { _ in verifyAndAppend() }
+        .onChange(of: uiImage) { verifyAndAppend() }
         .appropriateImagePickerModal(isPresented: $showingImagePicker, image: $uiImage, onDismiss: nil)
         .fullScreenCover(isPresented: $cameraViewModel.showingCamera) {
             CameraCapture(image: $uiImage)

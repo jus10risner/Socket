@@ -37,7 +37,7 @@ struct FillupDetailView: View {
                     .badge(fillup.volume.formatted())
                 
                 Text("Price per \(volumeUnit)")
-                    .badge((fillup.pricePerUnit ?? 0).formatted(.currency(code: Locale.current.currencyCode ?? "USD").precision(.fractionLength(2...))))
+                    .badge((fillup.pricePerUnit ?? 0).formatted(.currency(code: Locale.current.currency?.identifier ?? "USD").precision(.fractionLength(2...))))
             }
             
             Section {

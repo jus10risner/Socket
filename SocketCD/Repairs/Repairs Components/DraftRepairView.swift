@@ -61,7 +61,7 @@ struct DraftRepairView: View {
                                 .accessibilityHidden(true)
                         }
                         
-                        TextField("Cost", value: $draftRepair.cost, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                        TextField("Cost", value: $draftRepair.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                             .keyboardType(.decimalPad)
                     }
                 }

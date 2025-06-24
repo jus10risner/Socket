@@ -17,7 +17,7 @@ struct AppIconSelectorView: View {
                 
                 alternateIconButtonsList
             }
-            .onChange(of: settings.appIcon) { _ in
+            .onChange(of: settings.appIcon) {
                 UIApplication.shared.setAlternateIconName(settings.appIcon?.rawValue)
             }
         }

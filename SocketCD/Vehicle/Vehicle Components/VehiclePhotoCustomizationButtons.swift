@@ -49,7 +49,7 @@ struct VehiclePhotoCustomizationButtons: View {
             CameraCapture(image: $inputImage)
                 .ignoresSafeArea()
         }
-        .onChange(of: inputImage) { _ in verifyAndAdd() }
+        .onChange(of: inputImage) { verifyAndAdd() }
         .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
             Button("OK", role: .cancel) { }
         } message: {

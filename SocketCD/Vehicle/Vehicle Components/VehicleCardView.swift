@@ -77,7 +77,7 @@ struct VehicleCardView: View {
                     
                     if serviceDue == true {
                         maintenanceAlert
-                            .onChange(of: serviceDue) { _ in
+                            .onChange(of: serviceDue) {
                                 animateMaintenanceAlert()
                             }
                     }

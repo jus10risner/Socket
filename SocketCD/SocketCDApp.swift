@@ -24,7 +24,7 @@ struct SocketCDApp: App {
                     UIScrollView.appearance().keyboardDismissMode = .interactive
                 }
         }
-        .onChange(of: scenePhase) { _ in
+        .onChange(of: scenePhase) {
             dataController.save()
         }
     }

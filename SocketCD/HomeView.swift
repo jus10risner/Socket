@@ -39,14 +39,15 @@ struct HomeView: View {
                 .background(Color(.customBackground))
                 .navigationTitle("Vehicles")
                 .onAppear { checkForViewsToBeShownOnLaunch() }
-                .onChange(of: notificationBadgeNumber) { _ in
+                .onChange(of: notificationBadgeNumber) {
                     // Sets the app icon's notification badge number
-                    UIApplication.shared.applicationIconBadgeNumber = notificationBadgeNumber
+//                    UIApplication.shared.applicationIconBadgeNumber = notificationBadgeNumber
+                    UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)
                 }
-                .onChange(of: [settings.daysBeforeMaintenance, settings.distanceBeforeMaintenance]) { _ in
+                .onChange(of: [settings.daysBeforeMaintenance, settings.distanceBeforeMaintenance]) {
                     setUpNotifications(cancelPending: true)
                 }
-                .onChange(of: selectedVehicle) { _ in
+                .onChange(of: selectedVehicle) {
                     if settings.onboardingTipsAlreadyPresented == false {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                             showingOnboardingText = false
