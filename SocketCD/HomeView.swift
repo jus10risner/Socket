@@ -112,7 +112,7 @@ struct HomeView: View {
                 }
 
         }
-        .conditionalTint(.primary)
+        .tint(.primary)
     }
     
     

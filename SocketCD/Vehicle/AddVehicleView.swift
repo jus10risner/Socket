@@ -84,7 +84,7 @@ struct AddVehicleView: View {
                 Text("\nPlease choose a different name.")
             }
         }
-        .conditionalTint(.selectedColor(for: .appTheme))
+        .tint(.selectedColor(for: .appTheme))
     }
     
     // Form where users enter a name for the vehicle, and an odometer reading

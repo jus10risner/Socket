@@ -40,7 +40,7 @@ struct ServiceListRowView: View {
             } label: {
                 Label("Add Service Record", systemImage: "plus.square.on.square")
             }
-            .conditionalTint(Color.selectedColor(for: .maintenanceTheme))
+            .tint(Color.selectedColor(for: .maintenanceTheme))
         }
     }
     

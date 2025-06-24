@@ -18,16 +18,6 @@ extension View {
       }
     }
     
-    // Custom modifier that applies .tint modifier for iOS 16+ and .accentColor modifier for iOS 15, when tinting views
-    @ViewBuilder
-    func conditionalTint(_ color: Color) -> some View {
-        if #available(iOS 16, *) {
-            self.tint(color)
-        } else {
-            self.accentColor(color)
-        }
-    }
-    
     // Custom modifier that uses the appropriate modal style, based on iOS version
     @ViewBuilder
     func appropriateImagePickerModal(isPresented: Binding<Bool>, image: Binding<UIImage?>, onDismiss: (() -> ())?) -> some View {

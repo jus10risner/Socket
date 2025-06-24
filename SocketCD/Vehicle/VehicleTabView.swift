@@ -59,7 +59,7 @@ struct VehicleTabView: View {
                 .tint(.selectedColor(for: .appTheme))
                 .tag(SelectedTab.vehicleInfo)
         }
-        .conditionalTint(selectedTab.color())
+        .tint(selectedTab.color())
         .transition(.move(edge: .bottom))
     }
     
