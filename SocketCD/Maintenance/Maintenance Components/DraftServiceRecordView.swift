@@ -73,7 +73,7 @@ struct DraftServiceRecordView: View {
                 EditablePhotoGridView(photos: $draftServiceRecord.photos)
             }
         }
-        .modifier(SwipeToDismissKeyboard())
+        .scrollDismissesKeyboard(.interactively)
     }
 }
 

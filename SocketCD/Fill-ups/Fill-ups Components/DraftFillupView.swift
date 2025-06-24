@@ -93,7 +93,7 @@ struct DraftFillupView: View {
                 EditablePhotoGridView(photos: $draftFillup.photos)
             }
         }
-        .modifier(SwipeToDismissKeyboard())
+        .scrollDismissesKeyboard(.interactively)
     }
 }
 

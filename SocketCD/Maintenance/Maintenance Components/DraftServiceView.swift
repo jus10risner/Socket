@@ -101,7 +101,7 @@ struct DraftServiceView: View {
             }
             
         }
-        .modifier(SwipeToDismissKeyboard())
+        .scrollDismissesKeyboard(.interactively)
     }
 }
 

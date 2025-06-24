@@ -41,7 +41,7 @@ struct DraftCustomInfoView: View {
                 EditablePhotoGridView(photos: $draftCustomInfo.photos)
             }
         }
-        .modifier(SwipeToDismissKeyboard())
+        .scrollDismissesKeyboard(.interactively)
     }
 }
 

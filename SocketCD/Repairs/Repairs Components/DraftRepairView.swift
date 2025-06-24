@@ -78,7 +78,7 @@ struct DraftRepairView: View {
                 EditablePhotoGridView(photos: $draftRepair.photos)
             }
         }
-        .modifier(SwipeToDismissKeyboard())
+        .scrollDismissesKeyboard(.interactively)
     }
 }
 

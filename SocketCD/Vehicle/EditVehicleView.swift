@@ -75,7 +75,7 @@ struct EditVehicleView: View {
                     Button("Cancel", role: .cancel) { dismiss() }
                 }
             }
-            .modifier(SwipeToDismissKeyboard())
+            .scrollDismissesKeyboard(.interactively)
         }
     }
 }
