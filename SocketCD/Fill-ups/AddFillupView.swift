@@ -23,7 +23,7 @@ struct AddFillupView: View {
     }
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             VStack(spacing: 0) {
                 if quickFill == true {
                     Text(vehicle.name)

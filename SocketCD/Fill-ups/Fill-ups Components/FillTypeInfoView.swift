@@ -18,7 +18,7 @@ struct FillTypeInfoView: View {
     // MARK: - Views
     
     private var fillTypeInfo: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             Form {
                 Section {
                     VStack(alignment: .leading) {

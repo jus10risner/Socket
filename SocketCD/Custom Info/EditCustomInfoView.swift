@@ -19,7 +19,7 @@ struct EditCustomInfoView: View {
     }
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             DraftCustomInfoView(draftCustomInfo: draftCustomInfo, isEditView: true)
                 .navigationTitle("Edit Info")
                 .navigationBarTitleDisplayMode(.inline)

@@ -21,7 +21,7 @@ struct AddCustomInfoView: View {
     }
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             DraftCustomInfoView(draftCustomInfo: draftCustomInfo, isEditView: false)
                 .navigationTitle("New Vehicle Info")
                 .navigationBarTitleDisplayMode(.inline)

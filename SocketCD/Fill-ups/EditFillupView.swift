@@ -23,7 +23,7 @@ struct EditFillupView: View {
     }
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             DraftFillupView(draftFillup: draftFillup, vehicle: vehicle, isEditView: true, showingFillTypeInfo: $showingFillTypeInfo)
                 .navigationTitle("Edit Fill-up")
                 .navigationBarTitleDisplayMode(.inline)

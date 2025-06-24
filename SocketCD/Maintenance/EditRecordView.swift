@@ -23,7 +23,7 @@ struct EditRecordView: View {
     }
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             VStack(spacing: 0) {
                 Text(service.name)
                     .padding(.horizontal, 10)

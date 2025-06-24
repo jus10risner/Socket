@@ -40,7 +40,7 @@ struct MaintenanceListView: View {
     // MARK: - Views
     
     private var maintenanceList: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             List {
                 servicesWithStatus(.overDue)
                 

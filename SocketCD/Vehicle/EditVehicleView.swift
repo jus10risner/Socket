@@ -34,7 +34,7 @@ struct EditVehicleView: View {
     // MARK: - Views
     
     private var editVehicleForm: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             Form {
                 VStack(spacing: 20) {
                     VStack {

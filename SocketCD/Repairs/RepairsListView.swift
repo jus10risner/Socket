@@ -34,7 +34,7 @@ struct RepairsListView: View {
     // MARK: - Views
     
     var repairsList: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             List {
                 ForEach(repairs, id: \.id) { repair in
                     ZStack(alignment: .leading) {

@@ -23,7 +23,7 @@ struct EditServiceView: View {
     @State private var selectedInterval: ServiceIntervalTypes = .distance
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             DraftServiceView(draftService: draftService, selectedInterval: $selectedInterval, isEditView: true)
                 .navigationTitle("Edit Service")
                 .navigationBarTitleDisplayMode(.inline)

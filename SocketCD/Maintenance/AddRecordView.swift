@@ -21,7 +21,7 @@ struct AddRecordView: View {
     }
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             VStack(spacing: 0) {
                 Text(service.name)
                     .padding(.horizontal, 10)

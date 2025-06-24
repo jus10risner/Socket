@@ -18,7 +18,7 @@ struct FuelEconomyInfoView: View {
     // MARK: - Views
     
     private var fuelEconomyInfo: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             Form {
                 Section {
                     VStack(alignment: .leading) {

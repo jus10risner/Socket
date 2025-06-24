@@ -19,7 +19,7 @@ struct AddRepairView: View {
     }
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             DraftRepairView(draftRepair: draftRepair, isEditView: false)
                 .navigationTitle("New Repair Record")
                 .navigationBarTitleDisplayMode(.inline)

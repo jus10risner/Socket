@@ -28,7 +28,7 @@ struct HomeView: View {
     // MARK: - Views
     
     private var homeView: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             VehicleListView(selectedVehicle: $selectedVehicle, showingOnboardingText: $showingOnboardingText)
                 .overlay {
                     if vehicles.isEmpty {

@@ -15,7 +15,7 @@ struct ImageDetailView: View {
     @State private var imageURL: URL?
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             ZStack {
                 ImageViewer(image: Image(uiImage: image))
                 

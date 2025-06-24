@@ -21,7 +21,7 @@ struct EditRepairView: View {
     }
     
     var body: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             DraftRepairView(draftRepair: draftRepair, isEditView: true)
                 .navigationTitle("Edit Repair")
                 .navigationBarTitleDisplayMode(.inline)

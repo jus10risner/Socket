@@ -39,7 +39,7 @@ struct FillupsDashboardView: View {
     // MARK: - Views
     
     private var fillupsDashboard: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 15) {

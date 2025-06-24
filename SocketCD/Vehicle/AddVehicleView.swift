@@ -33,7 +33,7 @@ struct AddVehicleView: View {
     // MARK: - Views
     
     private var addVehicleFlow: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             TabView(selection: $selectedTab) {
                 vehicleNameAndOdometer
                 

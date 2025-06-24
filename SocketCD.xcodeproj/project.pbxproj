@@ -42,7 +42,6 @@
 		9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4972BA1E99F0053C65E /* Enums.swift */; };
 		9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4992BA1ED8C0053C65E /* AppearanceController.swift */; };
 		9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC49B2BA1EE440053C65E /* AppSettingsView.swift */; };
-		9EEAC49F2BA1EE9C0053C65E /* AppropriateNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC49E2BA1EE9C0053C65E /* AppropriateNavigationType.swift */; };
 		9EEAC4A32BA1EEF80053C65E /* ConditionalSearchableViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4A22BA1EEF80053C65E /* ConditionalSearchableViewModifier.swift */; };
 		9EEAC4A72BA1EF720053C65E /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4A62BA1EF720053C65E /* ActivityView.swift */; };
 		9EEAC4AA2BA1EFF40053C65E /* Color+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4A92BA1EFF40053C65E /* Color+helper.swift */; };
@@ -152,7 +151,6 @@
 		9EEAC4972BA1E99F0053C65E /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		9EEAC4992BA1ED8C0053C65E /* AppearanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceController.swift; sourceTree = "<group>"; };
 		9EEAC49B2BA1EE440053C65E /* AppSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
-		9EEAC49E2BA1EE9C0053C65E /* AppropriateNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppropriateNavigationType.swift; sourceTree = "<group>"; };
 		9EEAC4A22BA1EEF80053C65E /* ConditionalSearchableViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalSearchableViewModifier.swift; sourceTree = "<group>"; };
 		9EEAC4A62BA1EF720053C65E /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		9EEAC4A92BA1EFF40053C65E /* Color+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+helper.swift"; sourceTree = "<group>"; };
@@ -377,7 +375,6 @@
 		9EEAC49D2BA1EE6D0053C65E /* View Modifiers */ = {
 			isa = PBXGroup;
 			children = (
-				9EEAC49E2BA1EE9C0053C65E /* AppropriateNavigationType.swift */,
 				9EEAC4A22BA1EEF80053C65E /* ConditionalSearchableViewModifier.swift */,
 				9E75075A2BFD26D5000E25BD /* RemoveBackgroundColor.swift */,
 				9E6A534B2BB2063500F75D49 /* SwipeToDismissKeyboard.swift */,
@@ -665,7 +662,6 @@
 				9EEAC4B52BA1F0A50053C65E /* CameraManager.swift in Sources */,
 				9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */,
 				9EE5620D2BD9706600F5BE7E /* VehicleCardView.swift in Sources */,
-				9EEAC49F2BA1EE9C0053C65E /* AppropriateNavigationType.swift in Sources */,
 				9E620C092BC08194005E16DD /* AddEditVehicleImageView.swift in Sources */,
 				9EEAC4F92BA37D040053C65E /* AddRepairView.swift in Sources */,
 				9EEAC4EE2BA374D70053C65E /* CustomInfoDetailView.swift in Sources */,

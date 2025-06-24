@@ -24,7 +24,7 @@ struct AppSettingsView: View {
     // MARK: - Views
     
     private var settingsView: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             Form {
                 Section("General") {
                     maintenanceAlertsSettingsButton

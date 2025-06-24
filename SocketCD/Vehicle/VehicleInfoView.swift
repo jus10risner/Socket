@@ -42,7 +42,7 @@ struct VehicleInfoView: View {
     // MARK: - Views
     
     private var vehicleInfo: some View {
-        AppropriateNavigationType {
+        NavigationStack {
             List {
                 vehicleDetailsSection
                 
