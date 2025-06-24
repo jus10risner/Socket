@@ -46,8 +46,8 @@ struct VehiclePhotoCustomizationButtons: View {
         .animation(.default, value: carPhoto)
         .sheet(isPresented: $showingImagePicker, onDismiss: { loadImage() }, content: {
             ImagePicker(image: $inputImage)
+                .ignoresSafeArea()
         })
-//        .appropriateImagePickerModal(isPresented: $showingImagePicker, image: $inputImage, onDismiss: { loadImage() })
         .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: { loadImage() }) {
             CameraCapture(image: $inputImage)
                 .ignoresSafeArea()
