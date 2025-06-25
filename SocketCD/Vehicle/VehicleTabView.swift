@@ -28,30 +28,26 @@ struct VehicleTabView: View {
         TabView(selection: $selectedTab) {
             MaintenanceListView(vehicle: vehicle)
                 .tabItem {
-                    // Used so that symbol displays at correct size on iOS 15; it was exported from SFSymbols for Xcode 13 compatibility
-                    Group {
-                        Label("Maintenance", image: "book.and.wrench")
-                    }
-                    .font(.title2)
+                    Label("Maintenance", systemImage: "book.and.wrench")
                 }
                 .tint(Color.selectedColor(for: .maintenanceTheme))
                 .tag(SelectedTab.maintenance)
                 .badge(tabBadgeNumber)
-//
+
             RepairsListView(vehicle: vehicle)
                 .tabItem {
                     Label("Repairs", systemImage: "wrench")
                 }
                 .tint(Color.selectedColor(for: .repairsTheme))
                 .tag(SelectedTab.repairs)
-//
+
             FillupsDashboardView(vehicle: vehicle)
                 .tabItem {
                     Label("Fill-ups", systemImage: "fuelpump")
                 }
                 .tint(Color.selectedColor(for: .fillupsTheme))
                 .tag(SelectedTab.fillups)
-//
+
             VehicleInfoView(vehicle: vehicle)
                 .tabItem {
                     Label("Vehicle", systemImage: "car")
@@ -60,7 +56,7 @@ struct VehicleTabView: View {
                 .tag(SelectedTab.vehicleInfo)
         }
         .tint(selectedTab.color())
-        .transition(.move(edge: .bottom))
+//        .transition(.move(edge: .bottom))
     }
     
     
