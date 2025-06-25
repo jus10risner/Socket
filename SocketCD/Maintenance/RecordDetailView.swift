@@ -26,36 +26,13 @@ struct RecordDetailView: View {
     private var recordDetails: some View {
         List {
             Section {
-                // Using HStack, because iOS 15 doesn't show badge text at all, if Text("").badge("") is used
-                HStack {
-                    Text("Date")
-                    
-                    Spacer()
-                    
-                    Text(record.date.formatted(date: .numeric, time: .omitted))
-                        .foregroundStyle(Color.secondary)
-                }
-                .accessibilityElement(children: .combine)
+                LabeledContent("Date", value: record.date.formatted(date: .numeric, time: .omitted))
                 
-                HStack {
-                    Text("Odometer")
-                    
-                    Spacer()
-                    
+                LabeledContent("Odometer") {
                     Text("\(record.odometer.formatted()) \(settings.shortenedDistanceUnit)")
-                        .foregroundStyle(Color.secondary)
                 }
-                .accessibilityElement(children: .combine)
                 
-                HStack {
-                    Text("Cost")
-                    
-                    Spacer()
-                    
-                    Text(vehicle.convertToCurrency(value: record.cost ?? 0))
-                        .foregroundStyle(Color.secondary)
-                }
-                .accessibilityElement(children: .combine)
+                LabeledContent("Cost", value: vehicle.convertToCurrency(value: record.cost ?? 0))
             }
             
             if record.note != "" {

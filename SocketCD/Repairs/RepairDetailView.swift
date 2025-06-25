@@ -26,26 +26,15 @@ struct RepairDetailView: View {
     private var repairDetail: some View {
         List {
             Section {
-                Text("Date")
-                    .badge(repair.date.formatted(date: .numeric, time: .omitted))
+                LabeledContent("Date", value: repair.date.formatted(date: .numeric, time: .omitted))
                 
-                // The .badge() modifier cuts off the Name text when the repair name is too long, so this accomodates long repair names
-                HStack {
-                    Text("Name")
-                    
-                    Spacer()
-                    
-                    Text(repair.name)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundStyle(Color.secondary)
+                LabeledContent("Name", value: repair.name)
+                
+                LabeledContent("Odometer") {
+                    Text("\(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)")
                 }
-                .accessibilityElement(children: .combine)
                 
-                Text("Odometer")
-                    .badge("\(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)")
-                
-                Text("Cost")
-                    .badge(vehicle.convertToCurrency(value: repair.cost ?? 0))
+                LabeledContent("Cost", value: vehicle.convertToCurrency(value: repair.cost ?? 0))
             }
             
             if repair.note != "" {

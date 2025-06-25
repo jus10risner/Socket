@@ -27,31 +27,23 @@ struct FillupDetailView: View {
     private var fillupDetails: some View {
         List {
             Section {
-                Text("Fill-up Date")
-                    .badge(fillup.date.formatted(date: .numeric, time: .omitted))
+                LabeledContent("Fill-up Date", value: fillup.date.formatted(date: .numeric, time: .omitted))
                 
-                Text("Odometer")
-                    .badge("\(fillup.odometer.formatted()) \(settings.shortenedDistanceUnit)")
+                LabeledContent("Odometer") {
+                    Text("\(fillup.odometer.formatted()) \(settings.shortenedDistanceUnit)")
+                }
                 
-                Text("\(volumeUnit)s of Fuel")
-                    .badge(fillup.volume.formatted())
+                LabeledContent("\(volumeUnit)s of Fuel", value: fillup.volume.formatted())
                 
-                Text("Price per \(volumeUnit)")
-                    .badge((fillup.pricePerUnit ?? 0).formatted(.currency(code: Locale.current.currency?.identifier ?? "USD").precision(.fractionLength(2...))))
+                LabeledContent("Price per \(volumeUnit)", value: (fillup.pricePerUnit ?? 0).formatted(.currency(code: Locale.current.currency?.identifier ?? "USD").precision(.fractionLength(2...))))
             }
             
             Section {
-                Text("Trip")
-                    .badge("\(fillup.tripDistance.formatted()) \(settings.shortenedDistanceUnit)")
+                LabeledContent("Trip") {
+                    Text("\(fillup.tripDistance.formatted()) \(settings.shortenedDistanceUnit)")
+                }
                 
-                HStack {
-                    Text("Fuel Economy")
-                    if fillup.fuelEconomy == 0 {
-                        infoButton
-                    }
-                    
-                    Spacer()
-                    
+                LabeledContent {
                     if fillup.fuelEconomy != 0 {
                         Text("\(fillup.fuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
                             .foregroundStyle(Color.secondary)
@@ -68,11 +60,16 @@ struct FillupDetailView: View {
                                 .foregroundStyle(Color.secondary)
                         }
                     }
+                } label: {
+                    HStack {
+                        Text("Fuel Economy")
+                        if fillup.fuelEconomy == 0 {
+                            infoButton
+                        }
+                    }
                 }
-                .accessibilityElement(children: .combine)
-//
-                Text("Total Cost")
-                    .badge(vehicle.convertToCurrency(value: fillup.totalCost ?? 0))
+                
+                LabeledContent("Total Cost", value: vehicle.convertToCurrency(value: fillup.totalCost ?? 0))
             }
             
             if fillup.note != "" {

@@ -196,16 +196,7 @@ struct ServiceDetailView: View {
                     NavigationLink {
                         RecordDetailView(record: record, vehicle: vehicle, service: service)
                     } label: {
-                        // Using HStack, because iOS 15 doesn't show badge text at all, if Text("").badge("") is used
-                        HStack {
-                            Text("\(record.odometer) \(settings.shortenedDistanceUnit)")
-                            
-                            Spacer()
-                            
-                            Text("\(record.date.formatted(date: .numeric, time: .omitted))")
-                                .foregroundStyle(Color.secondary)
-                        }
-                        .accessibilityElement(children: .combine)
+                        LabeledContent("\(record.odometer) \(settings.shortenedDistanceUnit)", value: record.date.formatted(date: .numeric, time: .omitted))
                     }
                 }
             } label: {

@@ -36,7 +36,7 @@ struct AllFillupsListView: View {
                 NavigationLink {
                     FillupDetailView(vehicle: vehicle, fillup: fillup)
                 } label: {
-                    HStack {
+                    LabeledContent {
                         HStack(alignment: .firstTextBaseline, spacing: 3) {
                             if fillup.fillType == .partialFill {
                                 Image(systemName: "circle.bottomhalf.filled")
@@ -59,13 +59,41 @@ struct AllFillupsListView: View {
                                 }
                             }
                         }
-                        
-                        Spacer()
-                        
+                    } label: {
                         Text(fillup.date.formatted(date: .numeric, time: .omitted))
-                            .foregroundStyle(Color.secondary)
                     }
-                    .accessibilityElement(children: .combine)
+
+                    
+//                    HStack {
+//                        HStack(alignment: .firstTextBaseline, spacing: 3) {
+//                            if fillup.fillType == .partialFill {
+//                                Image(systemName: "circle.bottomhalf.filled")
+//                                    .accessibilityHidden(true)
+//                                Text("Partial Fill")
+//                            } else {
+//                                if fillup == vehicle.sortedFillupsArray.last {
+//                                    Image(systemName: "fuelpump.circle")
+//                                        .accessibilityHidden(true)
+//                                    Text("First Fill")
+//                                } else if fillup.fuelEconomy == 0 && fillup.fillType != .partialFill {
+//                                    Image(systemName: "circle.fill")
+//                                        .accessibilityHidden(true)
+//                                    Text("Full Tank")
+//                                } else {
+//                                    Text("\(fillup.fuelEconomy, specifier: "%.1f")")
+//                                        .font(.headline)
+//                                    Text(settings.fuelEconomyUnit.rawValue)
+//                                        .foregroundStyle(Color.secondary)
+//                                }
+//                            }
+//                        }
+//                        
+//                        Spacer()
+//                        
+//                        Text(fillup.date.formatted(date: .numeric, time: .omitted))
+//                            .foregroundStyle(Color.secondary)
+//                    }
+//                    .accessibilityElement(children: .combine)
                 }
             }
         }
