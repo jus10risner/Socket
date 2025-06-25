@@ -204,4 +204,5 @@ struct MaintenanceListView: View {
 
 #Preview {
     MaintenanceListView(vehicle: Vehicle(context: DataController.preview.container.viewContext))
+        .environmentObject(AppSettings())
 }
