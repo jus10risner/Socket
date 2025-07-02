@@ -69,7 +69,7 @@ struct WelcomeView: View {
     // Short intro to Maintenance in Socket
     private var maintenanceBlurb: some View {
         HStack(spacing: 15) {
-            Image("book.and.wrench.fill")
+            Image(systemName: "book.and.wrench.fill")
                 .font(.title)
                 .foregroundStyle(Color.selectedColor(for: .maintenanceTheme))
                 .frame(minWidth: 40)
