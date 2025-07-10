@@ -16,7 +16,7 @@ struct MaintenanceStartView: View {
             Color(.systemGroupedBackground)
             
             VStack(spacing: 20) {
-                Image("book.and.wrench")
+                Image(systemName: "book.and.wrench")
                     .font(.largeTitle)
                     .foregroundStyle(Color.secondary)
                     .frame(width: 50, height: 50)
