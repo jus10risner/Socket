@@ -81,17 +81,17 @@ struct VehicleInfoView: View {
                 Button("Cancel", role: .cancel) { }
             }
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title2)
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(Color.secondary)
-                            .accessibilityLabel("Back to all vehicles")
-                    }
-                }
+//                ToolbarItem(placement: .topBarLeading) {
+//                    Button {
+//                        dismiss()
+//                    } label: {
+//                        Image(systemName: "xmark.circle.fill")
+//                            .font(.title2)
+//                            .symbolRenderingMode(.hierarchical)
+//                            .foregroundStyle(Color.secondary)
+//                            .accessibilityLabel("Back to all vehicles")
+//                    }
+//                }
                 
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Menu {

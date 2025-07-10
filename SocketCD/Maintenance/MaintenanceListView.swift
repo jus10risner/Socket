@@ -77,28 +77,28 @@ struct MaintenanceListView: View {
                 AddRecordView(vehicle: vehicle, service: service)
             }
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    VStack {
-                        Spacer()
-                        Text(vehicle.name)
-                            .font(.headline)
-                            .lineLimit(1)
-                            .fixedSize(horizontal: false, vertical: true)
-                        Spacer()
-                    }
-                }
-                
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title2)
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(Color.secondary)
-                            .accessibilityLabel("Back to all vehicles")
-                    }
-                }
+//                ToolbarItem(placement: .principal) {
+//                    VStack {
+//                        Spacer()
+//                        Text(vehicle.name)
+//                            .font(.headline)
+//                            .lineLimit(1)
+//                            .fixedSize(horizontal: false, vertical: true)
+//                        Spacer()
+//                    }
+//                }
+//                
+//                ToolbarItem(placement: .topBarLeading) {
+//                    Button {
+//                        dismiss()
+//                    } label: {
+//                        Image(systemName: "xmark.circle.fill")
+//                            .font(.title2)
+//                            .symbolRenderingMode(.hierarchical)
+//                            .foregroundStyle(Color.secondary)
+//                            .accessibilityLabel("Back to all vehicles")
+//                    }
+//                }
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -110,7 +110,7 @@ struct MaintenanceListView: View {
                             .accessibilityLabel("Add New Maintenance Service")
                     }
                     // iOS 16 workaround, where button could't be clicked again after sheet was dismissed - iOS 15 and 17 work fine without this
-                    .id(UUID())
+//                    .id(UUID())
                 }
             }
         }
