@@ -32,6 +32,7 @@
 		9E97B2752BD2C694002B1E9F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */; };
 		9E97B27D2BD3FBE8002B1E9F /* SocketCDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E97B27C2BD3FBE8002B1E9F /* SocketCDTests.swift */; };
 		9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E97B2852BD40364002B1E9F /* ServiceListRowView.swift */; };
+		9E9C05AA2E218B2A00E9C0E2 /* ServiceIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C05A92E218B2A00E9C0E2 /* ServiceIndicatorView.swift */; };
 		9E9ED3A62E12E7BF00EB89F8 /* FuelEconomyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */; };
 		9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */; };
 		9EE5620D2BD9706600F5BE7E /* VehicleCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5620C2BD9706600F5BE7E /* VehicleCardView.swift */; };
@@ -141,6 +142,7 @@
 		9E97B27A2BD3FBE8002B1E9F /* SocketCDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocketCDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E97B27C2BD3FBE8002B1E9F /* SocketCDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketCDTests.swift; sourceTree = "<group>"; };
 		9E97B2852BD40364002B1E9F /* ServiceListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceListRowView.swift; sourceTree = "<group>"; };
+		9E9C05A92E218B2A00E9C0E2 /* ServiceIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceIndicatorView.swift; sourceTree = "<group>"; };
 		9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartView.swift; sourceTree = "<group>"; };
 		9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendArrowView.swift; sourceTree = "<group>"; };
 		9EE5620C2BD9706600F5BE7E /* VehicleCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleCardView.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				9E620BFF2BC06853005E16DD /* DraftServiceRecordView.swift */,
 				9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */,
 				9E97B2852BD40364002B1E9F /* ServiceListRowView.swift */,
+				9E9C05A92E218B2A00E9C0E2 /* ServiceIndicatorView.swift */,
 			);
 			path = "Maintenance Components";
 			sourceTree = "<group>";
@@ -624,6 +627,7 @@
 				9EEAC4AA2BA1EFF40053C65E /* Color+helper.swift in Sources */,
 				9EEAC4D12BA2587C0053C65E /* PlaceholderPhotoView.swift in Sources */,
 				9E7507592BF68C84000E25BD /* EmptyVehicleListView.swift in Sources */,
+				9E9C05AA2E218B2A00E9C0E2 /* ServiceIndicatorView.swift in Sources */,
 				9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */,
 				9EEAC4AE2BA1F0380053C65E /* View+helper.swift in Sources */,
 				9EEAC4FB2BA37FDB0053C65E /* RepairDetailView.swift in Sources */,
