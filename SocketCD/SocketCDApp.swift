@@ -15,7 +15,7 @@ struct SocketCDApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView(dataController: dataController)
+            ContentView(dataController: dataController)
                 .environment(\.managedObjectContext, dataController.container.viewContext)
                 .environmentObject(settings)
                 .task { AppearanceController.shared.setAppearance() }

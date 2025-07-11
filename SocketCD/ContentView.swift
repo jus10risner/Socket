@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  ContentView.swift
 //  SocketCD
 //
 //  Created by Justin Risner on 3/12/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeView: View {
+struct ContentView: View {
     @EnvironmentObject var settings: AppSettings
     @ObservedObject var dataController: DataController
     
@@ -200,6 +200,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(dataController: DataController())
+    ContentView(dataController: DataController())
         .environmentObject(AppSettings())
 }
