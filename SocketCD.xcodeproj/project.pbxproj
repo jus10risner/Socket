@@ -780,7 +780,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Dark, Light, Dark Monochrome, Light Monochrome";
-				ASSETCATALOG_COMPILER_APPICON_NAME = Primary;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Light Monochrome";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = SocketCD/SocketCD.entitlements;
