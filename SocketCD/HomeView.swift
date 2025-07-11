@@ -20,8 +20,20 @@ struct HomeView: View {
     @State private var showingOnboardingTip = false
     @State private var showingOnboardingText = false
     
+    @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
+    
     var body: some View {
-        homeView
+        NavigationSplitView(columnVisibility: $columnVisibility) {
+            VehicleListView(selectedVehicle: $selectedVehicle, showingOnboardingText: $showingOnboardingText)
+        } detail: {
+            if let selectedVehicle {
+                VehicleDashboardView(vehicle: selectedVehicle)
+            } else {
+                Text("Please select a vehicle")
+            }
+        }
+        .tint(.primary)
+        .navigationSplitViewStyle(.balanced)
     }
     
     
