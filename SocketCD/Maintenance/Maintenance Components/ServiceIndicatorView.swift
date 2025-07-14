@@ -12,8 +12,7 @@ struct ServiceIndicatorView: View {
     let vehicle: Vehicle
     @ObservedObject var service: Service
     
-    @State private var isAnimating = false
-    @State private var circleProgress: CGFloat = 0.0
+    @State private var remaining: CGFloat = 0.0
     
     var body: some View {
         Circle()
@@ -27,48 +26,49 @@ struct ServiceIndicatorView: View {
                             .stroke(Color.red, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                         
                         Image(systemName: "exclamationmark")
-                            .font(.title3.bold())
+                            .font(.title2.bold())
                             .foregroundStyle(Color.red)
-//                            .symbolEffect(.pulse, options: .repeat(2), value: isAnimating)
+                            .symbolEffect(.bounce, value: remaining)
                     }
                 default:
                     Circle()
-                        .trim(from: circleProgress, to: 1)
-                        .stroke(currentColor(for: circleProgress), style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                        .trim(from: remaining, to: 1.0)
+                        .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                         .rotationEffect(.degrees(-90))
                 }
             }
-            .animation(.easeInOut.delay(0.5), value: circleProgress)
+            .animation(.easeInOut(duration: 0.75), value: remaining)
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    isAnimating = true
-                    circleProgress = 0.8
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    remaining = 1.0 - progress
+                    
                 }
             }
     }
     
-//    private var progress: CGFloat {
-//        guard let odometerDue = service.odometerDue else { return 0 }
-//        guard let dateDue = service.dateDue else { return 0 }
-//        
-//        let milesDriven = odometerDue - vehicle.odometer
-//        let odometerProgress = (milesDriven / service.distanceInterval)
-//        
-//        let daysPassed = Calendar.current.dateComponents([.day], from: Date(), to: dateDue).day ?? 0
-//        let timeProgress = (daysPassed / service.timeInterval)
-//        
-//        print(odometerProgress)
-//        print(timeProgress)
-//        
-//        return CGFloat(max(odometerProgress, timeProgress))
-//    }
-    
-    func currentColor(for value: CGFloat) -> Color {
-        if value >= 0.8 {
-            return .yellow
-        } else {
-            return .green
+    private var progress: CGFloat {
+        var odometerProgress: CGFloat = 0
+        var timeProgress: CGFloat = 0
+        
+        if let odometerDue = service.odometerDue {
+            let milesLeft = CGFloat(odometerDue - vehicle.odometer)
+            odometerProgress = milesLeft / CGFloat(service.distanceInterval)
         }
+        
+        if let dateDue = service.dateDue {
+            let daysLeft = CGFloat(Calendar.current.dateComponents([.day], from: Date.now, to: dateDue).day ?? 0)
+            var totalDays: CGFloat
+            
+            if service.monthsInterval == true {
+                totalDays = CGFloat(service.timeInterval * 30)
+            } else {
+                totalDays = CGFloat(service.timeInterval * 365)
+            }
+            
+            timeProgress = daysLeft / totalDays
+        }
+        
+        return min(1, max(odometerProgress, timeProgress))
     }
 }
 
