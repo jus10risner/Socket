@@ -53,7 +53,7 @@ struct ServiceIndicatorView: View {
         
         if let odometerDue = service.odometerDue {
             let milesLeft = CGFloat(odometerDue - vehicle.odometer)
-            odometerProgress = min(0, milesLeft / CGFloat(service.distanceInterval))
+            odometerProgress = max(0, milesLeft / CGFloat(service.distanceInterval))
         }
         
         if let dateDue = service.dateDue {
@@ -66,7 +66,7 @@ struct ServiceIndicatorView: View {
                 totalDays = CGFloat(service.timeInterval * 365)
             }
             
-            timeProgress = min(0, daysLeft / totalDays)
+            timeProgress = max(0, daysLeft / totalDays)
         }
         
         // Returns the greater of odomterProgress or timeProgress, or 1, if service is overdue
