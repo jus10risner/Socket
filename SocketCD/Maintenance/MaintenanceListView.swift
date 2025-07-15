@@ -52,7 +52,8 @@ struct MaintenanceListView: View {
                 }
             }
             .navigationTitle("Maintenance")
-            .listStyle(.plain)
+//            .listStyle(.plain)
+            .listRowSpacing(5)
             .background(Color(.systemGroupedBackground))
             .overlay {
                 if showingFirstServiceInfo == true {
