@@ -12,7 +12,7 @@ struct ServiceIndicatorView: View {
     let vehicle: Vehicle
     @ObservedObject var service: Service
     
-    @State private var remaining: CGFloat = 0.0
+    @State private var remainingValue: CGFloat = 0.0
     
     var body: some View {
         Circle()
@@ -28,31 +28,32 @@ struct ServiceIndicatorView: View {
                         Image(systemName: "exclamationmark")
                             .font(.title2.bold())
                             .foregroundStyle(Color.red)
-                            .symbolEffect(.bounce, value: remaining)
+                            .symbolEffect(.bounce, value: remainingValue)
                     }
                 default:
                     Circle()
-                        .trim(from: remaining, to: 1.0)
+                        .trim(from: remainingValue, to: 1.0)
                         .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                         .rotationEffect(.degrees(-90))
                 }
             }
-            .animation(.easeInOut(duration: 0.75), value: remaining)
+            .animation(.easeInOut(duration: 0.5), value: remainingValue)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    remaining = 1.0 - progress
+                    remainingValue = 1.0 - progress
                     
                 }
             }
     }
     
+    // Calculates progress toward next maintenance service
     private var progress: CGFloat {
         var odometerProgress: CGFloat = 0
         var timeProgress: CGFloat = 0
         
         if let odometerDue = service.odometerDue {
             let milesLeft = CGFloat(odometerDue - vehicle.odometer)
-            odometerProgress = milesLeft / CGFloat(service.distanceInterval)
+            odometerProgress = min(0, milesLeft / CGFloat(service.distanceInterval))
         }
         
         if let dateDue = service.dateDue {
@@ -65,9 +66,10 @@ struct ServiceIndicatorView: View {
                 totalDays = CGFloat(service.timeInterval * 365)
             }
             
-            timeProgress = daysLeft / totalDays
+            timeProgress = min(0, daysLeft / totalDays)
         }
         
+        // Returns the greater of odomterProgress or timeProgress, or 1, if service is overdue
         return min(1, max(odometerProgress, timeProgress))
     }
 }

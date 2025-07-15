@@ -28,7 +28,6 @@ struct MaintenanceListView: View {
     }
     
     @State private var showingAddService = false
-    @State private var selectedService: Service? = nil
     @State private var isAnimating: Bool = false
     @State private var showingFirstServiceInfo = false
     
@@ -72,9 +71,6 @@ struct MaintenanceListView: View {
             .onChange(of: vehicle.odometer) { vehicle.updateOdometerBasedNotifications() }
             .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
                 AddServiceView(vehicle: vehicle)
-            }
-            .sheet(item: $selectedService) { service in
-                AddRecordView(vehicle: vehicle, service: service)
             }
             .toolbar {
 //                ToolbarItem(placement: .principal) {
@@ -189,7 +185,7 @@ struct MaintenanceListView: View {
     func servicesWithStatus(_ serviceStatus: ServiceStatus) -> some View {
         ForEach(services, id: \.id) { service in
             if service.serviceStatus == serviceStatus {
-                ServiceListRowView(selectedService: $selectedService, service: service, vehicle: vehicle)
+                ServiceListRowView(service: service, vehicle: vehicle)
             }
         }
     }
