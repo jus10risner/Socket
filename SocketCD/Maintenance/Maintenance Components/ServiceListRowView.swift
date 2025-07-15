@@ -8,35 +8,23 @@
 import SwiftUI
 
 struct ServiceListRowView: View {
-//    @Binding var selectedService: Service?
-//    @Binding var isAnimating: Bool
     @ObservedObject var service: Service
     let vehicle: Vehicle
     
     @State private var selectedService: Service?
     
     var body: some View {
-        ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(Color(.secondarySystemGroupedBackground))
-            
-            NavigationLink {
-                ServiceDetailView(service: service, vehicle: vehicle)
-            } label: {
-                HStack {
-//                    serviceStatusIndicator
-                    ServiceIndicatorView(vehicle: vehicle, service: service)
-                    
-                    serviceInfo
-                }
+        NavigationLink {
+            ServiceDetailView(service: service, vehicle: vehicle)
+        } label: {
+            Label {
+                serviceInfo
+            } icon: {
+                ServiceIndicatorView(vehicle: vehicle, service: service)
             }
-            .padding()
-//            .padding(.horizontal, 20)
-//            .padding(.vertical, 15)
+            .labelStyle(CenteredLabelStyle())
         }
         .listRowSeparator(.hidden)
-        .listRowBackground(Color(.systemGroupedBackground))
-        .listRowInsets(EdgeInsets(top: 2.5, leading: 20, bottom: 2.5, trailing: 20))
         .sheet(item: $selectedService) { service in
             AddRecordView(vehicle: vehicle, service: service)
         }
