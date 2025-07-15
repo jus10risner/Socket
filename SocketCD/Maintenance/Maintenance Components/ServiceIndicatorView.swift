@@ -16,17 +16,17 @@ struct ServiceIndicatorView: View {
     
     var body: some View {
         Circle()
-            .stroke(Color.secondary.opacity(0.2), lineWidth: 5)
-            .frame(width: 40)
+            .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
+            .frame(width: 30)
             .overlay {
                 switch service.serviceStatus {
                 case .overDue:
                     ZStack {
                         Circle()
-                            .stroke(Color.red, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                            .stroke(Color.red, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                         
                         Image(systemName: "exclamationmark")
-                            .font(.title2.bold())
+                            .font(.title3.bold())
                             .foregroundStyle(Color.red)
                             .symbolEffect(.bounce, value: remainingValue)
                     }
