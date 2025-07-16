@@ -39,41 +39,40 @@ struct MaintenanceListView: View {
     // MARK: - Views
     
     private var maintenanceList: some View {
-        NavigationStack {
-            List {
-                servicesWithStatus(.overDue)
-                
-                servicesWithStatus(.due)
-                
-                servicesWithStatus(.notDue)
+        List {
+            servicesWithStatus(.overDue)
             
-                if serviceTipDue == true {
-                    firstServiceInfo
-                }
+            servicesWithStatus(.due)
+            
+            servicesWithStatus(.notDue)
+        
+            if serviceTipDue == true {
+                firstServiceInfo
             }
-            .navigationTitle("Maintenance")
+        }
+        .navigationTitle("Maintenance")
 //            .listStyle(.plain)
-            .listRowSpacing(5)
-            .background(Color(.systemGroupedBackground))
-            .overlay {
-                if showingFirstServiceInfo == true {
-                    if let firstService = services.first {
-                        MaintenanceOnboardingView(vehicle: vehicle, service: firstService, showingServiceRecordTip: $showingFirstServiceInfo)
-                    }
+        .listRowSpacing(5)
+        .background(Color(.systemGroupedBackground))
+        .overlay {
+            if showingFirstServiceInfo == true {
+                if let firstService = services.first {
+                    MaintenanceOnboardingView(vehicle: vehicle, service: firstService, showingServiceRecordTip: $showingFirstServiceInfo)
                 }
             }
-            .overlay {
-                if vehicle.sortedServicesArray.isEmpty {
-                    MaintenanceStartView(showingAddService: $showingAddService)
-                }
+        }
+        .overlay {
+            if vehicle.sortedServicesArray.isEmpty {
+                MaintenanceStartView(showingAddService: $showingAddService)
             }
-            .onAppear { checkForNotificationPermission() }
-            .onChange(of: Array(services)) { checkForNotificationPermission() }
-            .onChange(of: vehicle.odometer) { vehicle.updateOdometerBasedNotifications() }
-            .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
-                AddServiceView(vehicle: vehicle)
-            }
-            .toolbar {
+        }
+        .onAppear { checkForNotificationPermission() }
+        .onChange(of: Array(services)) { checkForNotificationPermission() }
+        .onChange(of: vehicle.odometer) { vehicle.updateOdometerBasedNotifications() }
+        .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
+            AddServiceView(vehicle: vehicle)
+        }
+        .toolbar {
 //                ToolbarItem(placement: .principal) {
 //                    VStack {
 //                        Spacer()
@@ -84,7 +83,7 @@ struct MaintenanceListView: View {
 //                        Spacer()
 //                    }
 //                }
-//                
+//
 //                ToolbarItem(placement: .topBarLeading) {
 //                    Button {
 //                        dismiss()
@@ -96,22 +95,20 @@ struct MaintenanceListView: View {
 //                            .accessibilityLabel("Back to all vehicles")
 //                    }
 //                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingAddService = true
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title2)
-                            .symbolRenderingMode(.hierarchical)
-                            .accessibilityLabel("Add New Maintenance Service")
-                    }
-                    // iOS 16 workaround, where button could't be clicked again after sheet was dismissed - iOS 15 and 17 work fine without this
-//                    .id(UUID())
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showingAddService = true
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title2)
+                        .symbolRenderingMode(.hierarchical)
+                        .accessibilityLabel("Add New Maintenance Service")
                 }
+                // iOS 16 workaround, where button could't be clicked again after sheet was dismissed - iOS 15 and 17 work fine without this
+//                    .id(UUID())
             }
         }
-        .interactiveDismissDisabled()
     }
     
     // Determines whether to show firstServiceInfo tip

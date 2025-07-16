@@ -42,45 +42,44 @@ struct VehicleInfoView: View {
     // MARK: - Views
     
     private var vehicleInfo: some View {
-        NavigationStack {
-            List {
-                vehicleDetailsSection
-                
-                customInfoSection
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .sheet(isPresented: $showingEditVehicle) { EditVehicleView(vehicle: vehicle) }
+        List {
+            vehicleDetailsSection
             
-          // Sheet wasn't loading the url on first launch of ActivityView, so I manually added a getter/setter. This seems to have resolved the issue.
-            .sheet(isPresented: Binding(
-                get: { showingActivityView },
-                set: { showingActivityView = $0 }
-            )) {
-                ActivityView(activityItems: [documentURL as Any], applicationActivities: nil)
+            customInfoSection
+        }
+        .navigationTitle("Vehicle")
+        .sheet(isPresented: $showingEditVehicle) { EditVehicleView(vehicle: vehicle) }
+        
+      // Sheet wasn't loading the url on first launch of ActivityView, so I manually added a getter/setter. This seems to have resolved the issue.
+        .sheet(isPresented: Binding(
+            get: { showingActivityView },
+            set: { showingActivityView = $0 }
+        )) {
+            ActivityView(activityItems: [documentURL as Any], applicationActivities: nil)
+        }
+        .sheet(isPresented: $showingAddCustomInfo) { AddCustomInfoView(vehicle: vehicle) }
+        .confirmationDialog("Permanently delete \(vehicle.name) and all of its records? \nThis action cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
+                vehicle.delete()
+                dismiss()
             }
-            .sheet(isPresented: $showingAddCustomInfo) { AddCustomInfoView(vehicle: vehicle) }
-            .confirmationDialog("Permanently delete \(vehicle.name) and all of its records? \nThis action cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
-                Button("Delete", role: .destructive) {
-                    vehicle.delete()
-                    dismiss()
-                }
-                
-                Button("Cancel", role: .cancel) { }
+            
+            Button("Cancel", role: .cancel) { }
+        }
+        .confirmationDialog("Which paper size do you use?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
+            Button("A4") {
+                createRecordsPDF(pageSize: CGRect(x: 0, y: 0, width: 595.2, height: 841.8))
+                showingActivityView = true
             }
-            .confirmationDialog("Which paper size do you use?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
-                Button("A4") {
-                    createRecordsPDF(pageSize: CGRect(x: 0, y: 0, width: 595.2, height: 841.8))
-                    showingActivityView = true
-                }
-                
-                Button("US Letter (8.5 x 11)") {
-                    createRecordsPDF(pageSize: CGRect(x: 0, y: 0, width: 612, height: 792))
-                    showingActivityView = true
-                }
-                
-                Button("Cancel", role: .cancel) { }
+            
+            Button("US Letter (8.5 x 11)") {
+                createRecordsPDF(pageSize: CGRect(x: 0, y: 0, width: 612, height: 792))
+                showingActivityView = true
             }
-            .toolbar {
+            
+            Button("Cancel", role: .cancel) { }
+        }
+        .toolbar {
 //                ToolbarItem(placement: .topBarLeading) {
 //                    Button {
 //                        dismiss()
@@ -92,30 +91,29 @@ struct VehicleInfoView: View {
 //                            .accessibilityLabel("Back to all vehicles")
 //                    }
 //                }
-                
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Menu {
-                        Button {
-                            showingEditVehicle = true
-                        } label: {
-                            Label("Edit Vehicle", systemImage: "pencil")
-                        }
-                        
-                        exportMenu
-                        
-                        Divider()
-                        
-                        Button(role: .destructive) {
-                            showingDeleteAlert = true
-                        } label: {
-                            Label("Delete Vehicle", systemImage: "trash")
-                        }
+            
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Menu {
+                    Button {
+                        showingEditVehicle = true
                     } label: {
-                        Image(systemName: "ellipsis.circle.fill")
-                            .font(.title2)
-                            .symbolRenderingMode(.hierarchical)
-                            .accessibilityLabel("Vehicle Options")
+                        Label("Edit Vehicle", systemImage: "pencil")
                     }
+                    
+                    exportMenu
+                    
+                    Divider()
+                    
+                    Button(role: .destructive) {
+                        showingDeleteAlert = true
+                    } label: {
+                        Label("Delete Vehicle", systemImage: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle.fill")
+                        .font(.title2)
+                        .symbolRenderingMode(.hierarchical)
+                        .accessibilityLabel("Vehicle Options")
                 }
             }
         }

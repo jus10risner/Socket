@@ -39,28 +39,27 @@ struct FillupsDashboardView: View {
     // MARK: - Views
     
     private var fillupsDashboard: some View {
-        NavigationStack {
-            List {
-                Section {
-                    VStack(alignment: .leading, spacing: 15) {
+        List {
+            Section {
+                VStack(alignment: .leading, spacing: 15) {
 //                        latestFillupInfo
-                        headlineGroup
-                        
+                    headlineGroup
+                    
 //                        if fuelEconomyDataPoints.count >= 2 {
 //                            Divider()
-//                            
+//
 //                            fuelEconomyChart
-                            
-                            FuelEconomyChartView(fillups: fillups)
+                        
+                        FuelEconomyChartView(fillups: fillups)
 //                        }  else {
 //                            chartHint
 //                                .padding(.bottom, 5)
 //                        }
-                        
+                    
 //                        Group {
 //                            if fillups.count > 2 {
 ////                                fuelEconomyDataPoints.count >= 2 ? Divider() : nil
-//                                
+//
 //                                Text("Average")
 //                                    .badge("\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
 //                            }
@@ -68,41 +67,40 @@ struct FillupsDashboardView: View {
 //                        .transaction { transaction in
 //                            transaction.animation = nil
 //                        }
-                    }
-                    .padding(.vertical)
                 }
-                .listRowSeparator(.hidden)
-                
-                NavigationLink {
-                    AllFillupsListView(vehicle: vehicle)
+                .padding(.vertical)
+            }
+            .listRowSeparator(.hidden)
+            
+            NavigationLink {
+                AllFillupsListView(vehicle: vehicle)
+            } label: {
+                Label("Fill-up History", systemImage: "clock.arrow.circlepath")
+                    .foregroundStyle(Color.primary)
+            }
+        }
+        .navigationTitle("Fill-ups")
+        .overlay {
+            if vehicle.sortedFillupsArray.isEmpty {
+                FillupsStartView(showingAddFillup: $showingAddFillup)
+            }
+        }
+        .sheet(isPresented: $showingAddFillup) {
+            AddFillupView(vehicle: vehicle, quickFill: false)
+        }
+        .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showingAddFillup = true
                 } label: {
-                    Label("Fill-up History", systemImage: "clock.arrow.circlepath")
-                        .foregroundStyle(Color.primary)
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title2)
+                        .symbolRenderingMode(.hierarchical)
+                        .accessibilityLabel("Add New Fill-up")
                 }
-            }
-            .navigationTitle("Fill-ups")
-            .overlay {
-                if vehicle.sortedFillupsArray.isEmpty {
-                    FillupsStartView(showingAddFillup: $showingAddFillup)
-                }
-            }
-            .sheet(isPresented: $showingAddFillup) {
-                AddFillupView(vehicle: vehicle, quickFill: false)
-            }
-            .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingAddFillup = true
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title2)
-                            .symbolRenderingMode(.hierarchical)
-                            .accessibilityLabel("Add New Fill-up")
-                    }
-                    // iOS 16 workaround, where button could't be clicked again after sheet was dismissed - iOS 15 and 17 work fine without this
+                // iOS 16 workaround, where button could't be clicked again after sheet was dismissed - iOS 15 and 17 work fine without this
 //                    .id(UUID())
-                }
             }
         }
     }
