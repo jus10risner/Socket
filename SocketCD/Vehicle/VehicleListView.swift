@@ -15,102 +15,75 @@ struct VehicleListView: View {
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
-    @State private var quickFillupVehicle: Vehicle?
-    @State private var quickEditVehicle: Vehicle?
+    @State private var showingAddVehicle = false
+    @State private var showingSettings = false
     
-    @State private var vehicleToDelete: Vehicle?
-    @State private var showingDeleteAlert = false
-    
-    @Binding var showingOnboardingText: Bool
+    @Binding var showingOnboardingText: Bool // Unused, for now
     
     var body: some View {
-        vehicleCardList
+        alternateVehicleCardList
     }
     
     
     // MARK: - Views
     
-    var vehicleCardList: some View {
-        List {
+    var alternateVehicleCardList: some View {
+        List(selection: $selectedVehicle) {
             ForEach(vehicles, id: \.id) { vehicle in
                 Button {
                     selectedVehicle = vehicle
                 } label: {
-                    VehicleCardView(vehicle: vehicle, quickFillupVehicle: $quickFillupVehicle, quickEditVehicle: $quickEditVehicle, vehicleToDelete: $vehicleToDelete, showingDeleteAlert: $showingDeleteAlert)
+                    VehicleCardView(vehicle: vehicle)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.plain) // Allows swipeActions to work
                 .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-                .swipeActions(edge: .leading) {
-                    Button {
-                        quickFillupVehicle = vehicle
-                    } label: {
-                        Label("", systemImage: "fuelpump")
-                            .accessibility(label: Text("Add Fill-up"))
-                    }
-                    .tint(Color.defaultFillupsAccent)
-                }
-                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                    Button {
-                        vehicleToDelete = vehicle
-                        showingDeleteAlert = true
-                    } label: {
-                        Label("", systemImage: "trash")
-                            .accessibility(label: Text("Delete Vehicle"))
-                    }
-                    .tint(Color.red)
-                    
-                    Button {
-                        quickEditVehicle = vehicle
-                    } label: {
-                        Label("", systemImage: "pencil")
-                            .accessibility(label: Text("Edit Vehicle"))
-                    }
-                    .tint(Color.defaultAppAccent)
-                }
+                .listRowInsets(EdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2))
+                .listRowBackground(Color.clear)
             }
-            .onMove {
-                move(from: $0, to: $1)
-                try? context.save()
-            }
-            .onDrag {
-                // Allows iOS 15 to use drag gesture to rearrange vehicles
-                return NSItemProvider()
-            }
-            .listRowBackground(Color(.customBackground))
+//            .onMove {
+//                move(from: $0, to: $1)
+//                try? context.save()
+//            }
             
             if showingOnboardingText == true {
                 onboardingTipText
             }
         }
-        .listStyle(.plain)
-        .animation(.easeInOut, value: Array(vehicles))
-        .onAppear {
-            if vehicles.count == 1 && settings.onboardingTipsAlreadyPresented == false {
-                showingOnboardingText = true
+        .overlay {
+            if vehicles.isEmpty {
+                EmptyVehicleListView()
             }
         }
-        .sheet(item: $quickFillupVehicle) { vehicle in
-            AddFillupView(vehicle: vehicle, quickFill: true)
-                .tint(Color.selectedColor(for: .fillupsTheme))
-        }
-        .sheet(item: $quickEditVehicle) { vehicle in
-            EditVehicleView(vehicle: vehicle)
-                .tint(Color.selectedColor(for: .appTheme))
-        }
-        .confirmationDialog("Permanently delete \(vehicleToDelete?.name ?? "this vehicle") and all of its records? \nThis cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
-            
-            Button("Delete", role: .destructive) {
-                withAnimation {
-                    if let vehicleToDelete {
-                        delete(vehicle: vehicleToDelete)
+//        .scrollContentBackground(.hidden)
+//        .background(Color(.customBackground))
+        .navigationTitle("Vehicles")
+        .listRowSpacing(5)
+//        .onAppear {
+//            if vehicles.count == 1 && settings.onboardingTipsAlreadyPresented == false {
+//                showingOnboardingText = true
+//            }
+//        }
+        .sheet(isPresented: $showingSettings) { AppSettingsView() }
+        .sheet(isPresented: $showingAddVehicle) { AddVehicleView() }
+        .toolbar {
+            ToolbarItem {
+                Menu {
+                    Button {
+                        showingAddVehicle = true
+                    } label: {
+                        Label("Add a Vehicle", systemImage: "plus")
                     }
                     
-                    vehicleToDelete = nil
+                    Button {
+                        showingSettings = true
+                    } label: {
+                        Label("Settings", systemImage: "gearshape")
+                    }
+                } label: {
+                    Label("Options", systemImage: "ellipsis.circle")
                 }
+                .tint(.primary)
             }
-            
-            Button("Cancel", role: .cancel) { vehicleToDelete = nil }
         }
     }
     
@@ -153,12 +126,6 @@ struct VehicleListView: View {
         for index in (0..<modifiedVehicleList.count) {
             modifiedVehicleList[index].displayOrder = Int64(index)
         }
-    }
-    
-    // Deletes a given vehicle from Core Data
-    func delete(vehicle: Vehicle) {
-        context.delete(vehicle)
-        try? context.save()
     }
 }
 

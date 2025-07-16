@@ -8,22 +8,15 @@
 import SwiftUI
 
 struct VehicleCardView: View {
+    @Environment(\.managedObjectContext) var context
     @EnvironmentObject var settings: AppSettings
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var vehicle: Vehicle
-    @Binding var quickFillupVehicle: Vehicle?
-    @Binding var quickEditVehicle: Vehicle?
-    @Binding var vehicleToDelete: Vehicle?
-    @Binding var showingDeleteAlert: Bool
     
     @FetchRequest var services: FetchedResults<Service>
     
-    init(vehicle: Vehicle, quickFillupVehicle: Binding<Vehicle?>?, quickEditVehicle: Binding<Vehicle?>?, vehicleToDelete: Binding<Vehicle?>?, showingDeleteAlert: Binding<Bool>) {
+    init(vehicle: Vehicle) {
         self.vehicle = vehicle
-        self._quickFillupVehicle = quickFillupVehicle ?? Binding.constant(nil)
-        self._quickEditVehicle = quickEditVehicle ?? Binding.constant(nil)
-        self._vehicleToDelete = vehicleToDelete ?? Binding.constant(nil)
-        self._showingDeleteAlert = showingDeleteAlert
         self._services = FetchRequest(
             entity: Service.entity(),
             sortDescriptors: [],
@@ -32,8 +25,122 @@ struct VehicleCardView: View {
     }
     
     @State private var isAnimating = false
+    @State private var cornerRadius: CGFloat = 20
+    
+    @State private var quickFillupVehicle: Vehicle?
+    @State private var quickEditVehicle: Vehicle?
+    @State private var vehicleToDelete: Vehicle?
+    @State private var showingDeleteAlert = false
     
     var body: some View {
+//        cardView
+        alternateCardView
+    }
+    
+    private var alternateCardView: some View {
+        VStack(spacing: 10) {
+            RoundedRectangle(cornerRadius: cornerRadius - 5)
+                .aspectRatio(2, contentMode: .fit)
+                .overlay(
+                    Group {
+                        if let carPhoto = vehicle.photo {
+                            VehiclePhotoView(carPhoto: carPhoto)
+                        } else {
+                            PlaceholderPhotoView(backgroundColor: vehicle.backgroundColor)
+                        }
+                    }
+                )
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius - 5))
+                .overlay {
+                    RoundedRectangle(cornerRadius: cornerRadius - 5)
+                        .stroke(.black.opacity(0.3), lineWidth: 0.25)
+                }
+//                .padding([.horizontal, .top], 5)
+                .accessibilityHidden(true)
+            
+            HStack {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(vehicle.name)
+                        .font(.headline)
+                        .lineLimit(1)
+                    
+                    
+                    Text("\(vehicle.odometer) \(settings.shortenedDistanceUnit)")
+                        .font(.caption)
+                        .foregroundStyle(Color.secondary)
+                }
+                
+                Spacer()
+                
+                if serviceDue == true {
+                    maintenanceAlert
+                        .onChange(of: serviceDue) {
+                            animateMaintenanceAlert()
+                        }
+                }
+                
+                vehicleMenu
+            }
+            .padding(.horizontal)
+        }
+        .padding([.horizontal, .top], 5)
+        .padding(.bottom, 10)
+        .background {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .colorSchemeBackground(colorScheme: colorScheme)
+                .shadow(color: .secondary.opacity(0.4), radius: colorScheme == .dark ? 0 : 2)
+        }
+        .swipeActions(edge: .leading) {
+            Button {
+                quickFillupVehicle = vehicle
+            } label: {
+                Label("Add Fill-up", systemImage: "fuelpump")
+                    .labelStyle(.iconOnly)
+            }
+            .tint(Color.defaultFillupsAccent)
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            Button {
+                vehicleToDelete = vehicle
+                showingDeleteAlert = true
+            } label: {
+                Label("Delete Vehicle", systemImage: "trash")
+                    .labelStyle(.iconOnly)
+            }
+            .tint(Color.red)
+            
+            Button {
+                quickEditVehicle = vehicle
+            } label: {
+                Label("Edit Vehicle", systemImage: "pencil")
+                    .labelStyle(.iconOnly)
+            }
+            .tint(Color.defaultAppAccent)
+        }
+        .sheet(item: $quickFillupVehicle) { vehicle in
+            AddFillupView(vehicle: vehicle, quickFill: true)
+                .tint(Color.selectedColor(for: .fillupsTheme))
+        }
+        .sheet(item: $quickEditVehicle) { vehicle in
+            EditVehicleView(vehicle: vehicle)
+                .tint(Color.selectedColor(for: .appTheme))
+        }
+        .confirmationDialog("Permanently delete \(vehicleToDelete?.name ?? "this vehicle") and all of its records? \nThis cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
+                withAnimation {
+                    if let vehicleToDelete {
+                        delete(vehicle: vehicleToDelete)
+                    }
+                    
+                    vehicleToDelete = nil
+                }
+            }
+            
+            Button("Cancel", role: .cancel) { vehicleToDelete = nil }
+        }
+    }
+    
+    private var cardView: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .colorSchemeBackground(colorScheme: colorScheme)
@@ -90,8 +197,6 @@ struct VehicleCardView: View {
         }
         .fixedSize(horizontal: false, vertical: true)
     }
-    
-    
     // MARK: - Views
     
     // Animated symbol, to draw user attention to a vehicle that is due for service
@@ -181,9 +286,20 @@ struct VehicleCardView: View {
             return false
         }
     }
+    
+    // Deletes a given vehicle from Core Data
+    func delete(vehicle: Vehicle) {
+        context.delete(vehicle)
+        try? context.save()
+    }
 }
 
 #Preview {
-    VehicleCardView(vehicle: Vehicle(context: DataController.preview.container.viewContext), quickFillupVehicle: nil, quickEditVehicle: nil, vehicleToDelete: nil, showingDeleteAlert: .constant(false))
+    let context = DataController.preview.container.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
+    
+    return VehicleCardView(vehicle: vehicle)
         .environmentObject(AppSettings())
 }

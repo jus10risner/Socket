@@ -13,8 +13,6 @@ struct ContentView: View {
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
-    @State private var showingAddVehicle = false
-    @State private var showingSettings = false
     @State private var selectedVehicle: Vehicle?
     
     @State private var showingOnboardingTip = false
@@ -25,6 +23,11 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             VehicleListView(selectedVehicle: $selectedVehicle, showingOnboardingText: $showingOnboardingText)
+                .toolbar(removing: .sidebarToggle)
+//                .onChange(of: notificationBadgeNumber) {
+//                    // Sets the app icon's notification badge number
+//                    UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)
+//                }
         } detail: {
             if let selectedVehicle {
                 VehicleDashboardView(vehicle: selectedVehicle)
@@ -34,98 +37,103 @@ struct ContentView: View {
         }
         .tint(.primary)
         .navigationSplitViewStyle(.balanced)
+        .onAppear {
+            if let firstVehicle = vehicles.first {
+                selectedVehicle = firstVehicle
+            }
+        }
     }
     
     
     // MARK: - Views
     
-    private var homeView: some View {
-        NavigationStack {
-            VehicleListView(selectedVehicle: $selectedVehicle, showingOnboardingText: $showingOnboardingText)
-                .overlay {
-                    if vehicles.isEmpty {
-                        EmptyVehicleListView()
-                    }
-                }
-                .scrollContentBackground(.hidden)
-                .background(Color(.customBackground))
-                .navigationTitle("Vehicles")
-                .onAppear { checkForViewsToBeShownOnLaunch() }
-                .onChange(of: notificationBadgeNumber) {
-                    // Sets the app icon's notification badge number
-//                    UIApplication.shared.applicationIconBadgeNumber = notificationBadgeNumber
-                    UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)
-                }
-                .onChange(of: [settings.daysBeforeMaintenance, settings.distanceBeforeMaintenance]) {
-                    setUpNotifications(cancelPending: true)
-                }
-                .onChange(of: selectedVehicle) {
-                    if settings.onboardingTipsAlreadyPresented == false {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                            showingOnboardingText = false
-                            settings.onboardingTipsAlreadyPresented = true
-                        }
-                    }
-                    
-                    DispatchQueue.main.async {
-                        // Ensures that all devices syncing via iCloud have the same local notifications
-                        setUpNotifications(cancelPending: false)
-                    }
-                }
-                .sheet(item: $selectedVehicle) { vehicle in
-                    // Needs to be here, rather than on VehicleListView, for ShareLink to work properly
-                    VehicleTabView(vehicle: vehicle)
-                }
-                .sheet(isPresented: $showingSettings) { AppSettingsView() }
-                .sheet(isPresented: $showingAddVehicle, onDismiss: { checkOnboardingTipsStatus() }) { AddVehicleView() }
-                .sheet(isPresented: $settings.welcomeViewPresented) { WelcomeView() }
-                .overlay {
-                    if showingOnboardingTip {
-                        OnboardingTips(showingOnboardingTip: $showingOnboardingTip, vehicle: vehicles[0])
-                    }
-                }
-                .toolbar {
-                    #if DEBUG
-                    ToolbarItemGroup(placement: .topBarLeading) {
-                        dataController.cloudContainerAvailable ? Image(systemName: "checkmark.icloud") : Image(systemName: "xmark.icloud")
-                        
-                        Button {
-                            settings.welcomeViewPresented = true
-                            settings.onboardingTipsAlreadyPresented = false
-                        } label: {
-                            Image(systemName: "sparkles")
-                        }
-                    }
-                    #endif
-                    
-                    ToolbarItemGroup(placement: .topBarTrailing) {
-                        Group {
-                            Button {
-                                showingAddVehicle = true
-                            } label: {
-                                Image(systemName: "plus")
-                                    .accessibilityLabel("Add a Vehicle")
-                            }
-                            
-                            Button {
-                                showingSettings = true
-                            } label: {
-                                Image(systemName: "gearshape")
-                                    .accessibilityLabel("Settings")
-                            }
-                        }
-                    }
-                }
-                // Fires only if there is a problem loading or saving Core Data persistent stores
-                .alert("No Data Found", isPresented: $dataController.isShowingDataError) {
-                    Button("OK", role: .cancel) { }
-                } message: {
-                    Text("\nThere was a problem loading data. \n\nIf your device is low on storage space, try deleting some unused apps, then restart Socket. \n\nPlease reinstall Socket, if the issue persists.")
-                }
-
-        }
-        .tint(.primary)
-    }
+//    private var homeView: some View {
+//        NavigationStack {
+//            VehicleListView(selectedVehicle: $selectedVehicle, showingOnboardingText: $showingOnboardingText)
+//                .overlay {
+//                    if vehicles.isEmpty {
+//                        EmptyVehicleListView()
+//                    }
+//                }
+//                .scrollContentBackground(.hidden)
+//                .background(Color(.customBackground))
+//                .navigationTitle("Vehicles")
+//                .onAppear { checkForViewsToBeShownOnLaunch() }
+//                .onChange(of: notificationBadgeNumber) {
+//                    // Sets the app icon's notification badge number
+////                    UIApplication.shared.applicationIconBadgeNumber = notificationBadgeNumber
+//                    UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)
+//                }
+//                .onChange(of: [settings.daysBeforeMaintenance, settings.distanceBeforeMaintenance]) {
+//                    setUpNotifications(cancelPending: true)
+//                }
+//                .onChange(of: selectedVehicle) {
+//                    if settings.onboardingTipsAlreadyPresented == false {
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+//                            showingOnboardingText = false
+//                            settings.onboardingTipsAlreadyPresented = true
+//                        }
+//                    }
+//                    
+//                    DispatchQueue.main.async {
+//                        // Ensures that all devices syncing via iCloud have the same local notifications
+//                        setUpNotifications(cancelPending: false)
+//                    }
+//                }
+//                .sheet(item: $selectedVehicle) { vehicle in
+//                    // Needs to be here, rather than on VehicleListView, for ShareLink to work properly
+//                    VehicleTabView(vehicle: vehicle)
+//                }
+//                .sheet(isPresented: $showingSettings) { AppSettingsView() }
+//                .sheet(isPresented: $showingAddVehicle, onDismiss: { checkOnboardingTipsStatus() }) { AddVehicleView() }
+//                .sheet(isPresented: $settings.welcomeViewPresented) { WelcomeView() }
+//                .overlay {
+//                    if showingOnboardingTip {
+//                        OnboardingTips(showingOnboardingTip: $showingOnboardingTip, vehicle: vehicles[0])
+//                    }
+//                }
+//                .toolbar {
+//                    #if DEBUG
+//                    ToolbarItemGroup(placement: .topBarLeading) {
+//                        dataController.cloudContainerAvailable ? Image(systemName: "checkmark.icloud") : Image(systemName: "xmark.icloud")
+//                        
+//                        Button {
+//                            settings.welcomeViewPresented = true
+//                            settings.onboardingTipsAlreadyPresented = false
+//                        } label: {
+//                            Image(systemName: "sparkles")
+//                        }
+//                    }
+//                    #endif
+//                    
+//                    ToolbarItemGroup(placement: .topBarTrailing) {
+//                        Group {
+//                            Button {
+//                                showingAddVehicle = true
+//                            } label: {
+//                                Image(systemName: "plus")
+//                                    .accessibilityLabel("Add a Vehicle")
+//                            }
+//                            
+//                            Button {
+//                                showingSettings = true
+//                            } label: {
+//                                Image(systemName: "gearshape")
+//                                    .accessibilityLabel("Settings")
+//                            }
+//                        }
+//                    }
+//                }
+//                // Fires only if there is a problem loading or saving Core Data persistent stores
+//                .alert("No Data Found", isPresented: $dataController.isShowingDataError) {
+//                    Button("OK", role: .cancel) { }
+//                } message: {
+//                    Text("\nThere was a problem loading data. \n\nIf your device is low on storage space, try deleting some unused apps, then restart Socket. \n\nPlease reinstall Socket, if the issue persists.")
+//                }
+//
+//        }
+//        .tint(.primary)
+//    }
     
     
     // MARK: - Computed Properties

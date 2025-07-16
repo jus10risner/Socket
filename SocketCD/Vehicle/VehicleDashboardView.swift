@@ -8,91 +8,107 @@
 import SwiftUI
 
 struct VehicleDashboardView: View {
-//    @Binding var selectedVehicle: Vehicle
-    let selectedVehicle: Vehicle
+    @EnvironmentObject var settings: AppSettings
+    let vehicle: Vehicle
     
-    let columns: [GridItem] = {
-        [GridItem(.adaptive(minimum: 300), spacing: 5)]
-    }()
+    @FetchRequest var fillups: FetchedResults<Fillup>
+    
+    init(vehicle: Vehicle) {
+        self.vehicle = vehicle
+        self._fillups = FetchRequest(
+            entity: Fillup.entity(),
+            sortDescriptors: [NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)],
+            predicate: NSPredicate(format: "vehicle == %@", vehicle)
+        )
+    }
+    
+    @State private var selectedSection: AppSection?
+    @State private var showingAddService = false
+    @State private var showingAddRepair = false
+    @State private var showingAddFillup = false
+    @State private var showingFuelEconomyInfo = false
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 5) {
-                    Text("Overview")
-                        .font(.title2.bold())
-                        .frame(maxWidth: .infinity, alignment: .leading)
+            List {
+                Section {
+                    maintenanceDashboardCard(vehicle: vehicle)
                     
-                    LazyVGrid(columns: columns, spacing: 5) {
-                        largeDashboardCard(label: Label("Next Service Due", systemImage: "book.and.wrench.fill"), color: .blue, primaryText: "Oil & Filter Change", secondaryText: "2,481 mi or 72 days")
+                    HStack{
+                        odometerDashboardCard(vehicle: vehicle)
                         
-                        
-                        HStack(spacing: 5) {
-                            smallDashboardCard(label: Label("Odometer", systemImage: "road.lanes"), color: .indigo, primaryText: "12,345", secondaryText: "mi")
-                            
-                            smallDashboardCard(label: Label("Latest Fill-up", systemImage: "fuelpump.fill"), color: .mint, primaryText: "27.3", secondaryText: "mpg")
-                        }
+                        fuelEconomyDashboardCard(vehicle: vehicle)
                     }
                 }
-                .padding(.top, 15)
-                .padding(.horizontal)
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
                 
-                VStack(spacing: 5) {
-                    Text("Records")
-                        .font(.title2.bold())
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                Section("Records") {
+                    quickActionButtons
+                        .listRowInsets(EdgeInsets())
                     
-                    LazyVGrid(columns: columns, spacing: 5) {
+                    ForEach(AppSection.allCases, id: \.self) { section in
                         NavigationLink {
-                            MaintenanceListView(vehicle: selectedVehicle)
+                            destinationView(for: section, vehicle: vehicle)
                         } label: {
-                            categoryCardLabel(label: Label("Maintenance", systemImage: "book.and.wrench.fill"), linkText: "Maintenance", color: .blue)
+                            sectionLabel(section: section)
                         }
-                        
-                        categoryCardLabel(label: Label("Repairs", systemImage: "wrench.fill"), linkText: "Repairs", color: .orange)
-
-                        categoryCardLabel(label: Label("Fill-ups", systemImage: "fuelpump.fill"), linkText: "Fill-ups", color: .mint)
-                        
-                        quickActionButtons
                     }
                 }
-                .padding(.horizontal)
-                .padding(.top, 15)
+                .headerProminence(.increased)
             }
-//            .background(Color(.systemGroupedBackground))
+            .listRowSpacing(5)
+            .listStyle(.insetGrouped)
+            //            }
+            //            .background(Color(.systemGroupedBackground))
+            .scrollContentBackground(.hidden)
             .background {
-                LinearGradient(colors: [Color.indigo.opacity(0.6), Color(.systemGroupedBackground), Color(.systemGroupedBackground)], startPoint: .top, endPoint: .bottom)
+                LinearGradient(colors: [Color.indigo.opacity(0.5), Color(.systemGroupedBackground), Color(.systemGroupedBackground), Color(.systemGroupedBackground)], startPoint: .top, endPoint: .bottom)
                     .background(.ultraThinMaterial)
                     .ignoresSafeArea()
             }
-            .navigationTitle(selectedVehicle.name)
-//            .toolbar {
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    Button {
-//                        // Vehicle Settings
-//                    } label: {
-//                        Label("Settings", systemImage: "ellipsis.circle")
-//                    }
-//                }
-//            }
+            .navigationTitle(vehicle.name)
+            .sheet(isPresented: $showingAddService) {
+                AddServiceView(vehicle: vehicle)
+                    .tint(Color.selectedColor(for: .maintenanceTheme))
+            }
+            .sheet(isPresented: $showingAddRepair) {
+                AddRepairView(vehicle: vehicle)
+                    .tint(Color.selectedColor(for: .repairsTheme))
+            }
+            .sheet(isPresented: $showingAddFillup) {
+                AddFillupView(vehicle: vehicle, quickFill: false)
+                    .tint(Color.selectedColor(for: .fillupsTheme))
+            }
+            .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        // Vehicle Settings
+                    } label: {
+                        Label("Settings", systemImage: "ellipsis.circle")
+                    }
+                }
+            }
         }
-        .tint(.primary)
+//        }
+//        .tint(.primary)
     }
     
-    func smallDashboardCard<LabelContent: View>(label: LabelContent, color: Color, primaryText: String, secondaryText: String) -> some View {
+    func odometerDashboardCard(vehicle: Vehicle) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            label
+            Label("Odometer", systemImage: "road.lanes")
                 .labelStyle(.titleOnly)
                 .font(.headline)
-                .foregroundStyle(color)
+                .foregroundStyle(Color.selectedColor(for: .appTheme))
             
-            Spacer()
+//            Spacer()
             
             HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text(primaryText)
+                Text("\(vehicle.odometer)")
                     .font(.title3.bold())
                 
-                Text(secondaryText)
+                Text(settings.shortenedDistanceUnit)
                     .foregroundStyle(Color.secondary)
             }
         }
@@ -101,34 +117,65 @@ struct VehicleDashboardView: View {
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
     }
     
-    func largeDashboardCard<LabelContent: View>(label: LabelContent, color: Color, primaryText: String, secondaryText: String) -> some View {
+    func fuelEconomyDashboardCard(vehicle: Vehicle) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            label
+            Label("Latest Fill-up", systemImage: "fuelpump.fill")
                 .labelStyle(.titleOnly)
                 .font(.headline)
-                .foregroundStyle(color)
+                .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
             
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(primaryText)
-                        .font(.title3.bold())
-                    
-                    Text(secondaryText)
-                        .font(.subheadline)
-                        .foregroundStyle(Color.secondary)
-                }
-                //
-                Spacer()
-                
-                Circle()
-                    .stroke(Color.secondary.opacity(0.2), lineWidth: 5)
-                    .frame(width: 40)
-                    .overlay {
-                        Circle()
-                            .trim(from: 0, to: 0.25)
-                            .stroke(Color.green, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                            .rotationEffect(.degrees(-180))
+//            Spacer()
+            
+            if let fillup = vehicle.sortedFillupsArray.dropFirst().first {
+                HStack {
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
+                        Text(fillup.fuelEconomy, format: .number.precision(.fractionLength(1)))
+                            .font(.title3.bold())
+                        
+                        Text(settings.fuelEconomyUnit.rawValue)
+                            .foregroundStyle(Color.secondary)
                     }
+                    
+                    Spacer()
+                    
+                    TrendArrowView(fillups: fillups)
+//                        .scaleEffect(0.75)
+                }
+            } else {
+                Text("No Fill-ups")
+                    .font(.title3.bold())
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding()
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
+    }
+    
+    func maintenanceDashboardCard(vehicle: Vehicle) -> some View {
+        return VStack(alignment: .leading, spacing: 10) {
+            Label("Next Service Due", systemImage: "book.and.wrench.fill")
+                .labelStyle(.titleOnly)
+                .font(.headline)
+                .foregroundStyle(Color.selectedColor(for: .maintenanceTheme))
+            
+            if let service = vehicle.sortedServicesArray.first {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(service.name)
+                            .font(.title3.bold())
+                        
+                        Text(service.nextServiceDueDescription)
+                            .font(.subheadline)
+                            .foregroundStyle(Color.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    ServiceIndicatorView(vehicle: vehicle, service: service)
+                }
+            } else {
+                Text("No Services Scheduled")
+                    .font(.title3.bold())
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -136,67 +183,81 @@ struct VehicleDashboardView: View {
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
     }
     
-    func categoryCardLabel<LabelContent: View>(label: LabelContent, linkText: String, color: Color) -> some View {
-        LabeledContent {
-            Image(systemName: "chevron.right")
-                .foregroundStyle(Color.secondary.opacity(0.5))
-        } label: {
-            label
-                .foregroundStyle(color)
-        }
-        .padding()
-        .contentShape(RoundedRectangle(cornerRadius: 15))
-        .font(.headline)
-        .frame(maxHeight: .infinity)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
+    func sectionLabel(section: AppSection) -> some View {
+        Label(section.rawValue.capitalized, systemImage: section.symbol)
+            .foregroundStyle(section.color)
+            .listRowSeparator(.hidden)
     }
     
     private var quickActionButtons: some View {
         HStack(spacing: 5) {
             Button {
-                // Add Maintenance
+                showingAddService = true
             } label: {
                 //                                    Label("Log Maintenance", systemImage: "plus.circle.fill")
                 Label("Log Maintenance", image: "book.and.wrench.fill.badge.plus")
                     .symbolRenderingMode(.hierarchical)
                     .labelStyle(.iconOnly)
-                    .font(.title2)
+//                    .font(.title2)
                     .foregroundStyle(.blue)
 //                    .padding()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                        .frame(width: 60, height: 60)
+                    .contentShape(RoundedRectangle(cornerRadius: 10))
             }
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
             
             Button {
-                // Add Maintenance
+                showingAddRepair = true
             } label: {
                 //                                    Label("Add Repair", systemImage: "plus.circle.fill")
                 Label("Add Repair", image: "wrench.adjustable.fill.badge.plus")
                     .symbolRenderingMode(.hierarchical)
                     .labelStyle(.iconOnly)
-                    .font(.title2)
+//                    .font(.title2)
                     .foregroundStyle(.orange)
 //                    .padding()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                        .frame(width: 60, height: 60)
+                    .contentShape(RoundedRectangle(cornerRadius: 10))
             }
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
             
             Button {
-                // Add Maintenance
+                showingAddFillup = true
             } label: {
                 //                                    Label("Fill-up", systemImage: "plus")
                 Label("Add Fill-up", image: "fuelpump.fill.badge.plus")
                     .symbolRenderingMode(.hierarchical)
                     .labelStyle(.iconOnly)
-                    .font(.title2)
+//                    .font(.title2)
                     .foregroundStyle(.mint)
                     .padding(10)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                        .frame(width: 60, height: 60)
+                    .contentShape(RoundedRectangle(cornerRadius: 10))
             }
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
+        }
+        .buttonStyle(.plain)
+        .listRowBackground(Color.clear)
+    }
+    
+    @ViewBuilder
+    func destinationView(for section: AppSection, vehicle: Vehicle) -> some View {
+        switch section {
+        case .maintenance:
+            MaintenanceListView(vehicle: vehicle)
+                .tint(section.color)
+        case .repairs:
+            RepairsListView(vehicle: vehicle)
+                .tint(section.color)
+        case .fillups:
+            FillupsDashboardView(vehicle: vehicle)
+                .tint(section.color)
+        case .vehicle:
+            VehicleInfoView(vehicle: vehicle)
+                .tint(section.color)
         }
     }
 }
@@ -207,5 +268,6 @@ struct VehicleDashboardView: View {
     vehicle.name = "My Car"
     vehicle.odometer = 12345
     
-    return VehicleDashboardView(selectedVehicle: vehicle)
+    return VehicleDashboardView(vehicle: vehicle)
+        .environmentObject(AppSettings())
 }
