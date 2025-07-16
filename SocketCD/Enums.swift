@@ -13,16 +13,25 @@ enum FocusedField {
     case vehicleName, vehicleOdometer
 }
 
-// MARK: - TabView
+// MARK: - VehicleDashboardView
 
-// Returns both tags and tint colors for each tab
-enum SelectedTab: Int {
-    case maintenance = 0
-    case repairs = 1
-    case fillups = 2
-    case vehicleInfo = 3
+enum AppSection: String, CaseIterable {
+    case maintenance, repairs, fillups, vehicle
     
-    func color() -> Color {
+    var symbol: String {
+        switch self {
+        case .maintenance:
+            return "book.and.wrench.fill"
+        case .repairs:
+            return "wrench.fill"
+        case .fillups:
+            return "fuelpump.fill"
+        case .vehicle:
+            return "car.fill"
+        }
+    }
+    
+    var color: Color {
         switch self {
         case .maintenance:
             return Color.selectedColor(for: .maintenanceTheme)
@@ -30,7 +39,7 @@ enum SelectedTab: Int {
             return Color.selectedColor(for: .repairsTheme)
         case .fillups:
             return Color.selectedColor(for: .fillupsTheme)
-        case .vehicleInfo:
+        case .vehicle:
             return Color.selectedColor(for: .appTheme)
         }
     }
