@@ -65,7 +65,6 @@
 		9EEAC4D32BA258960053C65E /* Photo+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D22BA258960053C65E /* Photo+helper.swift */; };
 		9EEAC4D52BA259870053C65E /* VehiclePhotoCustomizationButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D42BA259870053C65E /* VehiclePhotoCustomizationButtons.swift */; };
 		9EEAC4D72BA332E50053C65E /* VehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D62BA332E50053C65E /* VehicleListView.swift */; };
-		9EEAC4DB2BA33B7B0053C65E /* VehicleTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4DA2BA33B7B0053C65E /* VehicleTabView.swift */; };
 		9EEAC4DF2BA343B00053C65E /* EditVehicleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */; };
 		9EEAC4E12BA360E80053C65E /* VehicleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */; };
 		9EEAC4E42BA3641F0053C65E /* AddCustomInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E32BA3641F0053C65E /* AddCustomInfoView.swift */; };
@@ -177,7 +176,6 @@
 		9EEAC4D22BA258960053C65E /* Photo+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+helper.swift"; sourceTree = "<group>"; };
 		9EEAC4D42BA259870053C65E /* VehiclePhotoCustomizationButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclePhotoCustomizationButtons.swift; sourceTree = "<group>"; };
 		9EEAC4D62BA332E50053C65E /* VehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListView.swift; sourceTree = "<group>"; };
-		9EEAC4DA2BA33B7B0053C65E /* VehicleTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleTabView.swift; sourceTree = "<group>"; };
 		9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVehicleView.swift; sourceTree = "<group>"; };
 		9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleInfoView.swift; sourceTree = "<group>"; };
 		9EEAC4E32BA3641F0053C65E /* AddCustomInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomInfoView.swift; sourceTree = "<group>"; };
@@ -428,7 +426,6 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC4D62BA332E50053C65E /* VehicleListView.swift */,
-				9EEAC4DA2BA33B7B0053C65E /* VehicleTabView.swift */,
 				9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */,
 				9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */,
 				9EEAC4CA2BA256570053C65E /* AddVehicleView.swift */,
@@ -683,7 +680,6 @@
 				9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */,
 				9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */,
 				9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */,
-				9EEAC4DB2BA33B7B0053C65E /* VehicleTabView.swift in Sources */,
 				9EEAC4C12BA24EEC0053C65E /* AppSettings.swift in Sources */,
 				9EEAC4CB2BA256570053C65E /* AddVehicleView.swift in Sources */,
 				9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */,
