@@ -35,6 +35,7 @@ struct TrendArrowView: View {
                 equalSign
             }
         }
+        .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
         .font(.title.bold())
         .animation(.bouncy, value: animatingTrendArrow)
         .onAppear { animateTrendArrow(shouldReset: false) }
@@ -50,7 +51,7 @@ struct TrendArrowView: View {
     // Up arrow Image
     private var upArrow: some View {
         Image(systemName: "chevron.up")
-            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .red : .green)
+//            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .red : .green)
             .offset(y: animatingTrendArrow ? 0 : 40)
             .accessibilityLabel("Fuel economy is up since your last fill-up")
     }
@@ -58,7 +59,7 @@ struct TrendArrowView: View {
     // Down arrow Image
     private var downArrow: some View {
         Image(systemName: "chevron.down")
-            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .green : .red)
+//            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .green : .red)
             .offset(y: animatingTrendArrow ? 0 : -40)
             .accessibilityLabel("Fuel economy is down since your last fill-up")
     }
@@ -66,7 +67,7 @@ struct TrendArrowView: View {
     // Equal sign Image
     private var equalSign: some View {
         Image(systemName: "equal")
-            .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+//            .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
             .accessibilityLabel("Fuel economy is the same as your last fill-up")
     }
     
