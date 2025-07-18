@@ -147,55 +147,88 @@ extension Service {
         }
     }
     
-    // Determines when service is next due, and provides a string describing when service is next due (or if it's overdue). Used on MaintenanceListView
-    var nextServiceDueDescription: String {
+    // Returns a string that describes when service is next due (or by how much service is overdue). Used on VehicleDashboardView and MaintenanceListView
+    func nextDueDescription(context: ServiceContext) -> String {
         let settings = AppSettings()
-        var distanceToNextService: Int?
-        var daysToNextService: Int?
-        var descriptionString = ""
         
-        if let odometerDue {
-            if let vehicleOdometer = vehicle?.odometer {
-                distanceToNextService = odometerDue - vehicleOdometer
-            }
-        }
-        
-        if let dateDue {
-            if dateDue != sortedServiceRecordsArray.first?.date {
-                let dateDifference = Calendar.current.dateComponents([.day], from: Date.now, to: dateDue)
-                
-                if let daysRemaining = dateDifference.day {
-                    daysToNextService = daysRemaining
-                }
-            }
-        }
-        
-        if let distanceToNextService {
-            if distanceToNextService < 0 {
-                descriptionString = "Overdue by \(abs(distanceToNextService).formatted()) \(settings.shortenedDistanceUnit)"
+        switch (context.daysUntilDue, context.milesUntilDue) {
+        case let (d?, m?):
+            if d < 0 && m < 0 {
+                // If both are overdue, pick the one that's *more* overdue
+                return abs(d) >= abs(m) ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Overdue by \(abs(m).formatted()) \(settings.shortenedDistanceUnit)"
+            } else if d < 0 {
+                return "Overdue by \(pluralize(abs(d), unit: "day"))"
+            } else if m < 0 {
+                return "Overdue by \(abs(m).formatted()) \(settings.shortenedDistanceUnit)"
             } else {
-                descriptionString = "Due in \(distanceToNextService.formatted()) \(settings.shortenedDistanceUnit)"
-                
-                if daysToNextService != nil {
-                    descriptionString.append(" or ")
-                }
+                return "Due in \(abs(m).formatted()) \(settings.shortenedDistanceUnit) or \(pluralize(d, unit: "day"))"
             }
+
+        case let (d?, nil):
+            return d < 0 ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Due in \(pluralize(d, unit: "day"))"
+
+        case let (nil, m?):
+            return m < 0 ? "Overdue by \(abs(m).formatted()) \(settings.shortenedDistanceUnit)" : "Due in \(abs(m).formatted()) \(settings.shortenedDistanceUnit)"
+
+        default:
+            return "No Service Logged"
         }
-        
-        if let daysToNextService {
-            if daysToNextService < 0 {
-                descriptionString = "Overdue by \(abs(daysToNextService).formatted()) \(daysToNextService == 1 ? "day" : "days")"
-            } else {
-                if distanceToNextService == nil {
-                    descriptionString = "Due in "
-                }
-                
-                descriptionString.append("\(daysToNextService.formatted()) \(daysToNextService > 1 ? "days" : "day")")
-            }
-        }
-        
-        return descriptionString
     }
+    
+    // Accepts a singular unit type and appends an 's' to make it plural, when appropriate; formats the count, so it displays as users expect
+    func pluralize(_ count: Int, unit: String) -> String {
+        return count == 1 ? "\(count.formatted()) \(unit)" : "\(count.formatted()) \(unit)s"
+    }
+    
+    // Determines when service is next due, and provides a string describing when service is next due (or if it's overdue). Used on MaintenanceListView
+//    var nextServiceDueDescription: String {
+//        let settings = AppSettings()
+//        var distanceToNextService: Int?
+//        var daysToNextService: Int?
+//        var descriptionString = ""
+//        
+//        if let odometerDue {
+//            if let vehicleOdometer = vehicle?.odometer {
+//                distanceToNextService = odometerDue - vehicleOdometer
+//            }
+//        }
+//        
+//        if let dateDue {
+//            if dateDue != sortedServiceRecordsArray.first?.date {
+//                let dateDifference = Calendar.current.dateComponents([.day], from: Date.now, to: dateDue)
+//                
+//                if let daysRemaining = dateDifference.day {
+//                    daysToNextService = daysRemaining
+//                }
+//            }
+//        }
+//        
+//        if let distanceToNextService {
+//            if distanceToNextService < 0 {
+//                descriptionString = "Overdue by \(abs(distanceToNextService).formatted()) \(settings.shortenedDistanceUnit)"
+//            } else {
+//                descriptionString = "Due in \(distanceToNextService.formatted()) \(settings.shortenedDistanceUnit)"
+//                
+//                if daysToNextService != nil {
+//                    descriptionString.append(" or ")
+//                }
+//            }
+//        }
+//        
+//        if let daysToNextService {
+//            if daysToNextService < 0 {
+//                descriptionString = "Overdue by \(abs(daysToNextService).formatted()) \(daysToNextService == 1 ? "day" : "days")"
+//            } else {
+//                if distanceToNextService == nil {
+//                    descriptionString = "Due in "
+//                }
+//                
+//                descriptionString.append("\(daysToNextService.formatted()) \(daysToNextService > 1 ? "days" : "day")")
+//            }
+//        }
+//        
+//        return descriptionString
+//    }
     
     
     // MARK: - CRUD Methods

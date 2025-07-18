@@ -36,6 +36,7 @@
 		9E9C05AC2E26984B00E9C0E2 /* CenteredLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */; };
 		9E9ED3A62E12E7BF00EB89F8 /* FuelEconomyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */; };
 		9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */; };
+		9EE1DAD22E2A9FB000798D29 /* ServiceContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */; };
 		9EE5620D2BD9706600F5BE7E /* VehicleCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5620C2BD9706600F5BE7E /* VehicleCardView.swift */; };
 		9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */; };
 		9EEAC4812BA0F9C20053C65E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4802BA0F9C20053C65E /* ContentView.swift */; };
@@ -146,6 +147,7 @@
 		9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredLabelStyle.swift; sourceTree = "<group>"; };
 		9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartView.swift; sourceTree = "<group>"; };
 		9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendArrowView.swift; sourceTree = "<group>"; };
+		9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceContext.swift; sourceTree = "<group>"; };
 		9EE5620C2BD9706600F5BE7E /* VehicleCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleCardView.swift; sourceTree = "<group>"; };
 		9EEAC47B2BA0F9C20053C65E /* SocketCD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocketCD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketCDApp.swift; sourceTree = "<group>"; };
@@ -371,6 +373,7 @@
 				9EEAC4D22BA258960053C65E /* Photo+helper.swift */,
 				9EEAC4F62BA37A5C0053C65E /* Repair+helper.swift */,
 				9EEAC5002BA389020053C65E /* Service+helper.swift */,
+				9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */,
 				9EEAC5022BA389140053C65E /* ServiceRecord+helper.swift */,
 				9EEAC4CC2BA2571E0053C65E /* Vehicle+helper.swift */,
 				9EEAC4AD2BA1F0380053C65E /* View+helper.swift */,
@@ -678,6 +681,7 @@
 				9EEAC4D52BA259870053C65E /* VehiclePhotoCustomizationButtons.swift in Sources */,
 				9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */,
 				9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */,
+				9EE1DAD22E2A9FB000798D29 /* ServiceContext.swift in Sources */,
 				9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */,
 				9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */,
 				9EEAC4C12BA24EEC0053C65E /* AppSettings.swift in Sources */,

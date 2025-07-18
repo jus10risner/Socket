@@ -164,7 +164,7 @@ struct VehicleDashboardView: View {
                         Text(service.name)
                             .font(.title3.bold())
                         
-                        Text(service.nextServiceDueDescription)
+                        Text(service.nextDueDescription(context: ServiceContext(service: service, currentOdometer: vehicle.odometer)))
                             .font(.subheadline)
                             .foregroundStyle(Color.secondary)
                     }
