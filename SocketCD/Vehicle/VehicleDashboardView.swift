@@ -158,7 +158,7 @@ struct VehicleDashboardView: View {
                 .font(.headline)
                 .foregroundStyle(Color.selectedColor(for: .maintenanceTheme))
             
-            if let service = vehicle.sortedServicesArray.first {
+            if let service = nextDueService(from: vehicle.sortedServicesArray, currentOdometer: vehicle.odometer) {
                 HStack {
                     VStack(alignment: .leading) {
                         Text(service.name)
@@ -241,6 +241,32 @@ struct VehicleDashboardView: View {
         }
         .buttonStyle(.plain)
         .listRowBackground(Color.clear)
+    }
+    
+    // Returns the next service due (or the most overdue service)
+    func nextDueService(from services: [Service], currentOdometer: Int) -> Service? {
+        let prioritized = services.compactMap { service -> (service: Service, priority: Int)? in
+            let context = ServiceContext(service: service, currentOdometer: currentOdometer)
+            guard let priority = priority(context: context) else { return nil }
+            
+            return (service: service, priority: priority)
+        }
+
+        return prioritized.min { $0.priority < $1.priority }?.service
+    }
+    
+    // Calculates the miles or days left until service is due
+    func priority(context: ServiceContext) -> Int? {
+        switch (context.daysUntilDue, context.milesUntilDue) {
+        case let (d?, m?):
+            return min(d, m)
+        case let (d?, nil):
+            return d
+        case let (nil, m?):
+            return m
+        default:
+            return nil
+        }
     }
     
     @ViewBuilder
