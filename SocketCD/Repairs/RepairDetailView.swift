@@ -34,7 +34,7 @@ struct RepairDetailView: View {
                     Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
                 }
                 
-                LabeledContent("Cost", value: vehicle.convertToCurrency(value: repair.cost ?? 0))
+                LabeledContent("Cost", value: (repair.cost ?? 0).asCurrency())
             }
             
             if repair.note != "" {

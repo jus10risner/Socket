@@ -188,20 +188,6 @@ extension Vehicle {
     
     // MARK: - Other Methods
     
-    // Takes a Double value, and converts it into a currency string (e.g. 1.23 -> "$1.23")
-    func convertToCurrency(value: Double) -> String {
-        var returnString = ""
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        
-        if let returnValue = formatter.string(from: NSNumber(value: value)) {
-            returnString = returnValue
-        }
-        
-        return returnString
-    }
-    
-    
     // Checks to see when all notifications are due for this vehicle, and schedules them for the correct times
     func updateAllNotifications() {
         let context = DataController.shared.container.viewContext

@@ -32,7 +32,7 @@ struct RecordDetailView: View {
                     Text("\(record.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
                 }
                 
-                LabeledContent("Cost", value: vehicle.convertToCurrency(value: record.cost ?? 0))
+                LabeledContent("Cost", value: (record.cost ?? 0).asCurrency())
             }
             
             if record.note != "" {

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AddVehicleView: View {
+    @EnvironmentObject var settings: AppSettings
     @Environment(\.managedObjectContext) var context
     @Environment(\.dismiss) var dismiss
     @StateObject var draftVehicle = DraftVehicle()
@@ -84,7 +85,7 @@ struct AddVehicleView: View {
                 Text("\nPlease choose a different name.")
             }
         }
-        .tint(.selectedColor(for: .appTheme))
+        .tint(settings.accentColor(for: .appTheme))
     }
     
     // Form where users enter a name for the vehicle, and an odometer reading

@@ -68,7 +68,7 @@ struct AppSettingsView: View {
                 }
             }
         }
-        .tint(.selectedColor(for: .appTheme))
+        .tint(settings.accentColor(for: .appTheme))
         .alert("Could not send mail", isPresented: $showingMailError) {
             Button("OK", role: .cancel) { }
         } message: {

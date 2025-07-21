@@ -35,7 +35,7 @@ struct FillupDetailView: View {
                 
                 LabeledContent("\(settings.fuelEconomyUnit.volumeUnit)s of Fuel", value: fillup.volume.formatted())
                 
-                LabeledContent("Price per \(settings.fuelEconomyUnit.volumeUnit)", value: (fillup.pricePerUnit ?? 0).formatted(.currency(code: Locale.current.currency?.identifier ?? "USD").precision(.fractionLength(2...))))
+                LabeledContent("Price per \(settings.fuelEconomyUnit.volumeUnit)", value: (fillup.pricePerUnit ?? 0).asCurrency())
             }
             
             Section {
@@ -69,7 +69,7 @@ struct FillupDetailView: View {
                     }
                 }
                 
-                LabeledContent("Total Cost", value: vehicle.convertToCurrency(value: fillup.totalCost ?? 0))
+                LabeledContent("Total Cost", value: (fillup.totalCost ?? 0).asCurrency())
             }
             
             if fillup.note != "" {
