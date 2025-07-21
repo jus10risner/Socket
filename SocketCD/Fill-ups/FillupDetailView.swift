@@ -33,9 +33,9 @@ struct FillupDetailView: View {
                     Text("\(fillup.odometer.formatted()) \(settings.shortenedDistanceUnit)")
                 }
                 
-                LabeledContent("\(volumeUnit)s of Fuel", value: fillup.volume.formatted())
+                LabeledContent("\(settings.fuelEconomyUnit.volumeUnit)s of Fuel", value: fillup.volume.formatted())
                 
-                LabeledContent("Price per \(volumeUnit)", value: (fillup.pricePerUnit ?? 0).formatted(.currency(code: Locale.current.currency?.identifier ?? "USD").precision(.fractionLength(2...))))
+                LabeledContent("Price per \(settings.fuelEconomyUnit.volumeUnit)", value: (fillup.pricePerUnit ?? 0).formatted(.currency(code: Locale.current.currency?.identifier ?? "USD").precision(.fractionLength(2...))))
             }
             
             Section {

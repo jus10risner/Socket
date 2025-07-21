@@ -434,7 +434,7 @@ struct VehicleInfoView: View {
         
         var allFillups: [String] = []
         
-        var csvHeader = "Date, Odometer, \(vehicle.volumeUnit)s of Fuel, Price per \(vehicle.volumeUnit), Trip (\(settings.shortenedDistanceUnit)), Fuel Economy (\(settings.fuelEconomyUnit.rawValue)), Total Cost, Full Tank?, Note\n"
+        var csvHeader = "Date, Odometer, \(settings.fuelEconomyUnit.volumeUnit)s of Fuel, Price per \(settings.fuelEconomyUnit.volumeUnit), Trip (\(settings.shortenedDistanceUnit)), Fuel Economy (\(settings.fuelEconomyUnit.rawValue)), Total Cost, Full Tank?, Note\n"
 
         // Append fill-up records to allFillups array
         for fillup in vehicle.sortedFillupsArray {
