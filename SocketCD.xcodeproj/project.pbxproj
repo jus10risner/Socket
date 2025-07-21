@@ -90,7 +90,6 @@
 		9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */; };
 		9EEAC50E2BA483290053C65E /* AddFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC50D2BA483290053C65E /* AddFillupView.swift */; };
 		9EEAC5112BA4852C0053C65E /* FillTypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5102BA4852C0053C65E /* FillTypePickerView.swift */; };
-		9EEAC5132BA485510053C65E /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5122BA485510053C65E /* LineChartView.swift */; };
 		9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5142BA489D30053C65E /* AllFillupsListView.swift */; };
 		9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5162BA48A7E0053C65E /* FillupDetailView.swift */; };
 		9EEAC5192BA48D720053C65E /* EditFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5182BA48D720053C65E /* EditFillupView.swift */; };
@@ -202,7 +201,6 @@
 		9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillTypeInfoView.swift; sourceTree = "<group>"; };
 		9EEAC50D2BA483290053C65E /* AddFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFillupView.swift; sourceTree = "<group>"; };
 		9EEAC5102BA4852C0053C65E /* FillTypePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillTypePickerView.swift; sourceTree = "<group>"; };
-		9EEAC5122BA485510053C65E /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		9EEAC5142BA489D30053C65E /* AllFillupsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFillupsListView.swift; sourceTree = "<group>"; };
 		9EEAC5162BA48A7E0053C65E /* FillupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupDetailView.swift; sourceTree = "<group>"; };
 		9EEAC5182BA48D720053C65E /* EditFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFillupView.swift; sourceTree = "<group>"; };
@@ -486,7 +484,6 @@
 				9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */,
 				9EEAC5102BA4852C0053C65E /* FillTypePickerView.swift */,
 				9EEAC5092BA482840053C65E /* FuelEconomyInfoView.swift */,
-				9EEAC5122BA485510053C65E /* LineChartView.swift */,
 				9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */,
 			);
 			path = "Fill-ups Components";
@@ -666,7 +663,6 @@
 				9EEAC4B92BA1F1180053C65E /* ImageDetailView.swift in Sources */,
 				9EEAC4FD2BA380BA0053C65E /* EditRepairView.swift in Sources */,
 				9EEAC50A2BA482840053C65E /* FuelEconomyInfoView.swift in Sources */,
-				9EEAC5132BA485510053C65E /* LineChartView.swift in Sources */,
 				9EEAC51C2BA4A1E70053C65E /* MaintenanceStartView.swift in Sources */,
 				9EEAC5032BA389140053C65E /* ServiceRecord+helper.swift in Sources */,
 				9EEAC4B52BA1F0A50053C65E /* CameraManager.swift in Sources */,
