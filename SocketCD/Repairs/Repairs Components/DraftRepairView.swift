@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DraftRepairView: View {
+    @EnvironmentObject var settings: AppSettings
     @ObservedObject var draftRepair: DraftRepair
     let isEditView: Bool
     
@@ -25,7 +26,7 @@ struct DraftRepairView: View {
         Form {
             Section(footer: Text("*required")) {
                 DatePicker("Repair Date", selection: $draftRepair.date, displayedComponents: .date)
-                    .accentColor(Color.selectedColor(for: .repairsTheme))
+                    .accentColor(settings.accentColor(for: .repairsTheme))
                     
                 TextField("Repair Name*", text: $draftRepair.name)
                     .textInputAutocapitalization(.words)
@@ -84,4 +85,5 @@ struct DraftRepairView: View {
 
 #Preview {
     DraftRepairView(draftRepair: DraftRepair(), isEditView: false)
+        .environmentObject(AppSettings())
 }

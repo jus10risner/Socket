@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FillTypeInfoView: View {
+    @EnvironmentObject var settings: AppSettings
     @Binding var showingFillTypeInfo: Bool
     
     var body: some View {
@@ -25,7 +26,7 @@ struct FillTypeInfoView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Full Tank")
                                 .font(.headline)
-                                .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+                                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
                             
                             Text("Select this fill type if you have filled your fuel tank completely.")
                             
@@ -40,7 +41,7 @@ struct FillTypeInfoView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Partial Fill")
                                 .font(.headline)
-                                .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+                                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
                             
                             Text("Select this fill type if fuel was added, but the fuel tank is not completely full.")
                             
@@ -56,7 +57,7 @@ struct FillTypeInfoView: View {
                             VStack(alignment: .leading) {
                                 Text("Missed Fill-up")
                                     .font(.headline)
-                                    .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+                                    .foregroundStyle(settings.accentColor(for: .fillupsTheme))
                                 
                                 Text("(Full Tank)")
                                     .font(.caption)
@@ -109,4 +110,5 @@ struct FillTypeInfoView: View {
 
 #Preview {
     FillTypeInfoView(showingFillTypeInfo: .constant(true))
+        .environmentObject(AppSettings())
 }

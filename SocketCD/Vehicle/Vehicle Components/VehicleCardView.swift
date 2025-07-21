@@ -119,11 +119,11 @@ struct VehicleCardView: View {
         }
         .sheet(item: $quickFillupVehicle) { vehicle in
             AddFillupView(vehicle: vehicle, quickFill: true)
-                .tint(Color.selectedColor(for: .fillupsTheme))
+                .tint(settings.accentColor(for: .fillupsTheme))
         }
         .sheet(item: $quickEditVehicle) { vehicle in
             EditVehicleView(vehicle: vehicle)
-                .tint(Color.selectedColor(for: .appTheme))
+                .tint(settings.accentColor(for: .appTheme))
         }
         .confirmationDialog("Permanently delete \(vehicleToDelete?.name ?? "this vehicle") and all of its records? \nThis cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {

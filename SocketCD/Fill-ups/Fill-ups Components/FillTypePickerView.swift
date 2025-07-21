@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FillTypePicker: View {
+    @EnvironmentObject var settings: AppSettings
     @Binding var fillType: FillType
     @Binding var showingFillTypeInfo: Bool
     
@@ -22,7 +23,7 @@ struct FillTypePicker: View {
                     }
                 } label: {
                     Image(systemName: "info.circle")
-                        .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+                        .foregroundStyle(settings.accentColor(for: .fillupsTheme))
                         .accessibilityLabel("Learn More")
                 }
             }
@@ -43,7 +44,7 @@ struct FillTypePicker: View {
                         .font(.caption)
                         .accessibilityHidden(true)
                 }
-                .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             }
             .transaction { transaction in
                 transaction.animation = nil
@@ -55,4 +56,5 @@ struct FillTypePicker: View {
 
 #Preview {
     FillTypePicker(fillType: .constant(.fullTank), showingFillTypeInfo: .constant(true))
+        .environmentObject(AppSettings())
 }

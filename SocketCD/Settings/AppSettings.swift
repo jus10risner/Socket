@@ -62,13 +62,20 @@ class AppSettings: ObservableObject {
     
     // MARK: - Helpers
     
-    // Abbreviation of distance units
-    var shortenedDistanceUnit: String {
-        switch distanceUnit {
-        case .miles:
-            "mi"
-        case .kilometers:
-            "km"
+    func accentColor(for theme: AvailableThemes) -> Color {
+        if let accentColor {
+            return accentColor.value
+        }
+
+        switch theme {
+        case .appTheme:
+            return .defaultAppAccent
+        case .maintenanceTheme:
+            return .defaultMaintenanceAccent
+        case .repairsTheme:
+            return .defaultRepairsAccent
+        case .fillupsTheme:
+            return .defaultFillupsAccent
         }
     }
     

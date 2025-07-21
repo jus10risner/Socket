@@ -89,7 +89,7 @@ struct FuelEconomyChartView: View {
 //            .aspectRatio(2, contentMode: .fit)
             .padding(5)
             .clipShape(Rectangle())
-            .tint(Color.selectedColor(for: .fillupsTheme).gradient)
+            .tint(settings.accentColor(for: .fillupsTheme).gradient)
 //            .overlay {
 //                VStack {
 //                    if let selectedDate,

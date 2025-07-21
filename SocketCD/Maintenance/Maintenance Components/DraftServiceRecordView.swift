@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DraftServiceRecordView: View {
+    @EnvironmentObject var settings: AppSettings
     @ObservedObject var draftServiceRecord: DraftServiceRecord
     let isEditView: Bool
     
@@ -25,7 +26,7 @@ struct DraftServiceRecordView: View {
         Form {
             Section(footer: Text("*required")) {
                 DatePicker("Service Date", selection: $draftServiceRecord.date, displayedComponents: .date)
-                    .accentColor(Color.selectedColor(for: .maintenanceTheme))
+                    .accentColor(settings.accentColor(for: .maintenanceTheme))
                 
                 HStack {
                     VStack(alignment: .leading, spacing: 5) {
@@ -79,4 +80,5 @@ struct DraftServiceRecordView: View {
 
 #Preview {
     DraftServiceRecordView(draftServiceRecord: DraftServiceRecord(), isEditView: true)
+        .environmentObject(AppSettings())
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RepairsStartView: View {
+    @EnvironmentObject var settings: AppSettings
     @Binding var showingAddRepair: Bool
     @State private var showingMoreInfo = false
     
@@ -27,7 +28,7 @@ struct RepairsStartView: View {
                     Button {
                         showingAddRepair = true
                     } label: {
-                        Image(systemName: "plus.circle.fill").foregroundStyle(Color.selectedColor(for: .repairsTheme)).symbolRenderingMode(.hierarchical)
+                        Image(systemName: "plus.circle.fill").foregroundStyle(settings.accentColor(for: .repairsTheme)).symbolRenderingMode(.hierarchical)
                             .font(.title)
                     }
                     Text("to add a repair record")
@@ -60,4 +61,5 @@ struct RepairsStartView: View {
 
 #Preview {
     RepairsStartView(showingAddRepair: .constant(false))
+        .environmentObject(AppSettings())
 }

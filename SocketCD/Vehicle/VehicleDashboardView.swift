@@ -70,26 +70,27 @@ struct VehicleDashboardView: View {
             .navigationTitle(vehicle.name)
             .sheet(isPresented: $showingAddService) {
                 AddServiceView(vehicle: vehicle)
-                    .tint(Color.selectedColor(for: .maintenanceTheme))
+//                    .tint(settings.accentColor(for: .maintenanceTheme))
+                    .tint(settings.accentColor(for: .maintenanceTheme))
             }
             .sheet(isPresented: $showingAddRepair) {
                 AddRepairView(vehicle: vehicle)
-                    .tint(Color.selectedColor(for: .repairsTheme))
+                    .tint(settings.accentColor(for: .repairsTheme))
             }
             .sheet(isPresented: $showingAddFillup) {
                 AddFillupView(vehicle: vehicle, quickFill: false)
-                    .tint(Color.selectedColor(for: .fillupsTheme))
+                    .tint(settings.accentColor(for: .fillupsTheme))
             }
-            .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        // Vehicle Settings
-                    } label: {
-                        Label("Settings", systemImage: "ellipsis.circle")
-                    }
-                }
-            }
+//            .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
+//            .toolbar {
+//                ToolbarItem(placement: .topBarTrailing) {
+//                    Button {
+//                        // Vehicle Settings
+//                    } label: {
+//                        Label("Settings", systemImage: "ellipsis.circle")
+//                    }
+//                }
+//            }
         }
 //        }
 //        .tint(.primary)
@@ -100,9 +101,7 @@ struct VehicleDashboardView: View {
             Label("Odometer", systemImage: "road.lanes")
                 .labelStyle(.titleOnly)
                 .font(.headline)
-                .foregroundStyle(Color.selectedColor(for: .appTheme))
-            
-//            Spacer()
+                .foregroundStyle(settings.accentColor(for: .appTheme))
             
             HStack(alignment: .firstTextBaseline, spacing: 3) {
                 Text("\(vehicle.odometer)")
@@ -110,6 +109,13 @@ struct VehicleDashboardView: View {
                 
                 Text(settings.distanceUnit.abbreviated)
                     .foregroundStyle(Color.secondary)
+                
+                Spacer()
+                
+                Image(systemName: "pencil")
+                    .font(.title2.bold())
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundStyle(settings.accentColor(for: .appTheme))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -122,9 +128,7 @@ struct VehicleDashboardView: View {
             Label("Latest Fill-up", systemImage: "fuelpump.fill")
                 .labelStyle(.titleOnly)
                 .font(.headline)
-                .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
-            
-//            Spacer()
+                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             
             if let fillup = vehicle.sortedFillupsArray.dropFirst().first {
                 HStack {
@@ -156,7 +160,7 @@ struct VehicleDashboardView: View {
             Label("Next Service Due", systemImage: "book.and.wrench.fill")
                 .labelStyle(.titleOnly)
                 .font(.headline)
-                .foregroundStyle(Color.selectedColor(for: .maintenanceTheme))
+                .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
             
             if let service = nextDueService(from: vehicle.sortedServicesArray, currentOdometer: vehicle.odometer) {
                 HStack {
@@ -183,10 +187,15 @@ struct VehicleDashboardView: View {
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
     }
     
-    func sectionLabel(section: AppSection) -> some View {
-        Label(section.rawValue.capitalized, systemImage: section.symbol)
-            .foregroundStyle(section.color)
-            .listRowSeparator(.hidden)
+    private func sectionLabel(section: AppSection) -> some View {
+        Label {
+            Text(section.rawValue.capitalized)
+                .foregroundStyle(Color.primary)
+        } icon: {
+            Image(systemName: section.symbol)
+        }
+        .foregroundStyle(settings.accentColor(for: section.theme))
+        .listRowSeparator(.hidden)
     }
     
     private var quickActionButtons: some View {
@@ -196,14 +205,7 @@ struct VehicleDashboardView: View {
             } label: {
                 //                                    Label("Log Maintenance", systemImage: "plus.circle.fill")
                 Label("Log Maintenance", image: "book.and.wrench.fill.badge.plus")
-                    .symbolRenderingMode(.hierarchical)
-                    .labelStyle(.iconOnly)
-//                    .font(.title2)
-                    .foregroundStyle(.blue)
-//                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                        .frame(width: 60, height: 60)
-                    .contentShape(RoundedRectangle(cornerRadius: 10))
+                    .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
             }
             .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
             
@@ -212,14 +214,7 @@ struct VehicleDashboardView: View {
             } label: {
                 //                                    Label("Add Repair", systemImage: "plus.circle.fill")
                 Label("Add Repair", image: "wrench.adjustable.fill.badge.plus")
-                    .symbolRenderingMode(.hierarchical)
-                    .labelStyle(.iconOnly)
-//                    .font(.title2)
-                    .foregroundStyle(.orange)
-//                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                        .frame(width: 60, height: 60)
-                    .contentShape(RoundedRectangle(cornerRadius: 10))
+                    .foregroundStyle(settings.accentColor(for: .repairsTheme))
             }
             .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
             
@@ -228,14 +223,7 @@ struct VehicleDashboardView: View {
             } label: {
                 //                                    Label("Fill-up", systemImage: "plus")
                 Label("Add Fill-up", image: "fuelpump.fill.badge.plus")
-                    .symbolRenderingMode(.hierarchical)
-                    .labelStyle(.iconOnly)
-//                    .font(.title2)
-                    .foregroundStyle(.mint)
-                    .padding(10)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                        .frame(width: 60, height: 60)
-                    .contentShape(RoundedRectangle(cornerRadius: 10))
+                    .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             }
             .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
         }
@@ -274,13 +262,13 @@ struct VehicleDashboardView: View {
         switch section {
         case .maintenance:
             MaintenanceListView(vehicle: vehicle)
-                .tint(section.color)
+                .tint(settings.accentColor(for: section.theme))
         case .repairs:
             RepairsListView(vehicle: vehicle)
-                .tint(section.color)
+                .tint(settings.accentColor(for: section.theme))
         case .fillups:
             FillupsDashboardView(vehicle: vehicle)
-                .tint(section.color)
+                .tint(settings.accentColor(for: section.theme))
         case .vehicle:
             VehicleInfoView(vehicle: vehicle)
                 .tint(section.color)

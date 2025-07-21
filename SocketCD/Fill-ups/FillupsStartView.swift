@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FillupsStartView: View {
+    @EnvironmentObject var settings: AppSettings
     @Binding var showingAddFillup: Bool
     @State private var showingMoreInfo = false
     
@@ -27,7 +28,7 @@ struct FillupsStartView: View {
                     Button {
                         showingAddFillup = true
                     } label: {
-                        Image(systemName: "plus.circle.fill").foregroundStyle(Color.selectedColor(for: .fillupsTheme)).symbolRenderingMode(.hierarchical)
+                        Image(systemName: "plus.circle.fill").foregroundStyle(settings.accentColor(for: .fillupsTheme)).symbolRenderingMode(.hierarchical)
                             .font(.title)
                     }
                     Text("to add a fill-up")

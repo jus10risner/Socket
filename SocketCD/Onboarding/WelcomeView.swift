@@ -52,7 +52,7 @@ struct WelcomeView: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
-                        .foregroundStyle(Color.selectedColor(for: .appTheme))
+                        .foregroundStyle(settings.accentColor(for: .appTheme))
                         .frame(height: 50)
                     
                     Text("Continue")
@@ -71,7 +71,7 @@ struct WelcomeView: View {
         HStack(spacing: 15) {
             Image(systemName: "book.and.wrench.fill")
                 .font(.title)
-                .foregroundStyle(Color.selectedColor(for: .maintenanceTheme))
+                .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
                 .frame(minWidth: 40)
                 .accessibilityHidden(true)
             
@@ -90,7 +90,7 @@ struct WelcomeView: View {
         HStack(spacing: 15) {
             Image(systemName: "wrench.fill")
                 .font(.title)
-                .foregroundStyle(Color.selectedColor(for: .repairsTheme))
+                .foregroundStyle(settings.accentColor(for: .repairsTheme))
                 .frame(minWidth: 40)
                 .accessibilityHidden(true)
             
@@ -109,7 +109,7 @@ struct WelcomeView: View {
         HStack(spacing: 15) {
             Image(systemName: "fuelpump.fill")
                 .font(.title)
-                .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
                 .frame(minWidth: 40)
                 .accessibilityHidden(true)
             

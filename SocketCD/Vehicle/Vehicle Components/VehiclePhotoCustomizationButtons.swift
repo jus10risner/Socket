@@ -9,6 +9,7 @@ import AVFoundation
 import SwiftUI
 
 struct VehiclePhotoCustomizationButtons: View {
+    @EnvironmentObject var settings: AppSettings
     @Environment(\.managedObjectContext) var context
     @StateObject private var cameraViewModel = CameraViewModel()
     let cameraManager = CameraManager()
@@ -95,7 +96,7 @@ struct VehiclePhotoCustomizationButtons: View {
         } label: {
             ZStack {
                 Circle()
-                    .fill(Color.selectedColor(for: .appTheme))
+                    .fill(settings.accentColor(for: .appTheme))
                     .frame(width: 40, height: 40)
                 
                 Image(systemName: "camera.fill")
@@ -112,7 +113,7 @@ struct VehiclePhotoCustomizationButtons: View {
     private var colorSelectButton: some View {
         ZStack {
             Circle()
-                .fill(Color.selectedColor(for: .appTheme))
+                .fill(settings.accentColor(for: .appTheme))
                 .frame(width: 40, height: 40)
             
             Image(systemName: "paintbrush.fill")

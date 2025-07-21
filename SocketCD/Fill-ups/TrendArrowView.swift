@@ -35,7 +35,7 @@ struct TrendArrowView: View {
                 equalSign
             }
         }
-        .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+        .foregroundStyle(settings.accentColor(for: .fillupsTheme))
         .font(.title.bold())
         .animation(.bouncy, value: animatingTrendArrow)
         .onAppear { animateTrendArrow(shouldReset: false) }
@@ -67,7 +67,7 @@ struct TrendArrowView: View {
     // Equal sign Image
     private var equalSign: some View {
         Image(systemName: "equal")
-//            .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+//            .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             .accessibilityLabel("Fuel economy is the same as your last fill-up")
     }
     

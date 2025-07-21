@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FuelEconomyInfoView: View {
+    @EnvironmentObject var settings: AppSettings
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -34,7 +35,7 @@ struct FuelEconomyInfoView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Partial Fill")
                                 .font(.headline)
-                                .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+                                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
                             
                             Text("This fill type is used only to estimate average fuel economy for this vehicle.")
                             
@@ -47,7 +48,7 @@ struct FuelEconomyInfoView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Missed Fill-up")
                                 .font(.headline)
-                                .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+                                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
                             
                             Text("This fill type is treated like your very first fill-up, and fuel economy is not calculated.")
                             
@@ -86,4 +87,5 @@ struct FuelEconomyInfoView: View {
 
 #Preview {
     FuelEconomyInfoView()
+        .environmentObject(AppSettings())
 }

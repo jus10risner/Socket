@@ -31,16 +31,12 @@ enum AppSection: String, CaseIterable {
         }
     }
     
-    var color: Color {
+    var theme: AvailableThemes {
         switch self {
-        case .maintenance:
-            return Color.selectedColor(for: .maintenanceTheme)
-        case .repairs:
-            return Color.selectedColor(for: .repairsTheme)
-        case .fillups:
-            return Color.selectedColor(for: .fillupsTheme)
-        case .vehicle:
-            return Color.selectedColor(for: .appTheme)
+        case .maintenance: return .maintenanceTheme
+        case .repairs: return .repairsTheme
+        case .fillups: return .fillupsTheme
+        case .vehicle: return .appTheme
         }
     }
 }
@@ -83,6 +79,30 @@ enum AvailableThemes {
 
 enum AccentColors: String, CaseIterable {
     case red = "red", orange = "orange", yellow = "yellow", green = "green", blue = "blue", indigo = "indigo", purple = "purple", cyan = "cyan", mint = "mint"
+    
+    // Returns the Color for the user's selected accent color
+    var value: Color {
+        switch self {
+        case .red:
+            Color.red
+        case .orange:
+            Color.orange
+        case .yellow:
+            Color.yellow
+        case .green:
+            Color.green
+        case .blue:
+            Color.blue
+        case .indigo:
+            Color.indigo
+        case .purple:
+            Color.purple
+        case .cyan:
+            Color.cyan
+        case .mint:
+            Color.mint
+        }
+    }
 }
 
 enum DistanceUnits: String, CaseIterable {

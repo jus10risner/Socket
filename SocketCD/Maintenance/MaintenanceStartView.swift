@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MaintenanceStartView: View {
+    @EnvironmentObject var settings: AppSettings
     @Binding var showingAddService: Bool
     @State private var showingMoreInfo = false
     
@@ -27,7 +28,7 @@ struct MaintenanceStartView: View {
                     Button {
                         showingAddService = true
                     } label: {
-                        Image(systemName: "plus.circle.fill").foregroundStyle(Color.selectedColor(for: .maintenanceTheme)).symbolRenderingMode(.hierarchical)
+                        Image(systemName: "plus.circle.fill").foregroundStyle(settings.accentColor(for: .maintenanceTheme)).symbolRenderingMode(.hierarchical)
                             .font(.title)
                     }
                     Text("to set up a new service")
@@ -62,4 +63,5 @@ struct MaintenanceStartView: View {
 
 #Preview {
     MaintenanceStartView(showingAddService: .constant(false))
+        .environmentObject(AppSettings())
 }

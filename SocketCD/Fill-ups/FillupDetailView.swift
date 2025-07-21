@@ -132,20 +132,20 @@ struct FillupDetailView: View {
                 .labelStyle(.iconOnly)
         }
         .buttonStyle(.plain)
-        .foregroundStyle(Color.selectedColor(for: .fillupsTheme))
+        .foregroundStyle(settings.accentColor(for: .fillupsTheme))
     }
     
     
     // MARK: - Computed Properties
     
     // Returns the appropriate volume unit, based on the fuel economy units selected in Settings
-    private var volumeUnit: String {
-        if settings.fuelEconomyUnit == .mpg {
-            return "Gallon"
-        } else {
-            return "Liter"
-        }
-    }
+//    private var volumeUnit: String {
+//        if settings.fuelEconomyUnit == .mpg {
+//            return "Gallon"
+//        } else {
+//            return "Liter"
+//        }
+//    }
 }
 
 #Preview {

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MonthsYearsToggle: View {
+    @EnvironmentObject var settings: AppSettings
     @Binding var monthsInterval: Bool
     let timeInterval: Int?
     
@@ -32,8 +33,8 @@ struct MonthsYearsToggle: View {
         }
         .rotation3DEffect(.degrees(textRotation), axis: (x: 0, y: 1, z: 0))
         .padding(4)
-        .overlay(RoundedRectangle(cornerRadius: 5).strokeBorder(Color.selectedColor(for: .maintenanceTheme)))
-        .foregroundStyle(Color.selectedColor(for: .maintenanceTheme))
+        .overlay(RoundedRectangle(cornerRadius: 5).strokeBorder(settings.accentColor(for: .maintenanceTheme)))
+        .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
         .onTapGesture {
             flipButton()
         }
@@ -72,4 +73,5 @@ struct MonthsYearsToggle: View {
 
 #Preview {
     MonthsYearsToggle(monthsInterval: .constant(true), timeInterval: 2)
+        .environmentObject(AppSettings())
 }

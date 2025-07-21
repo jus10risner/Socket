@@ -28,7 +28,7 @@ struct DraftFillupView: View {
         Form {
             Section(footer: Text("*required")) {
                 DatePicker("Fill-up Date", selection: $draftFillup.date, displayedComponents: .date)
-                    .accentColor(Color.selectedColor(for: .fillupsTheme))
+                    .accentColor(settings.accentColor(for: .fillupsTheme))
                 
                 VStack(alignment: .leading, spacing: 5) {
                     if isEditView {
