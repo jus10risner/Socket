@@ -50,7 +50,7 @@ struct FillupsDashboardView: View {
 //
 //                            fuelEconomyChart
                         
-                        FuelEconomyChartView(fillups: fillups)
+                        FuelEconomyChartView(fillups: Array(fillups))
 //                        }  else {
 //                            chartHint
 //                                .padding(.bottom, 5)
@@ -73,7 +73,7 @@ struct FillupsDashboardView: View {
             .listRowSeparator(.hidden)
             
             NavigationLink {
-                AllFillupsListView(vehicle: vehicle)
+                AllFillupsListView(fillups: Array(fillups))
             } label: {
                 Label("Fill-up History", systemImage: "clock.arrow.circlepath")
                     .foregroundStyle(Color.primary)

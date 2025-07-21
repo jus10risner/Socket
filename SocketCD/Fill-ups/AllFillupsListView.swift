@@ -10,18 +10,19 @@ import SwiftUI
 struct AllFillupsListView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var settings: AppSettings
-    @ObservedObject var vehicle: Vehicle
-    
-    @FetchRequest var fillups: FetchedResults<Fillup>
-    
-    init(vehicle: Vehicle) {
-        self.vehicle = vehicle
-        self._fillups = FetchRequest(
-            entity: Fillup.entity(),
-            sortDescriptors: [NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)],
-            predicate: NSPredicate(format: "vehicle == %@", vehicle)
-        )
-    }
+    let fillups: [Fillup]
+//    @ObservedObject var vehicle: Vehicle
+//    
+//    @FetchRequest var fillups: FetchedResults<Fillup>
+//    
+//    init(vehicle: Vehicle) {
+//        self.vehicle = vehicle
+//        self._fillups = FetchRequest(
+//            entity: Fillup.entity(),
+//            sortDescriptors: [NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)],
+//            predicate: NSPredicate(format: "vehicle == %@", vehicle)
+//        )
+//    }
     
     var body: some View {
         allFillupsList
@@ -34,7 +35,8 @@ struct AllFillupsListView: View {
         List {
             ForEach(fillups, id: \.id) { fillup in
                 NavigationLink {
-                    FillupDetailView(vehicle: vehicle, fillup: fillup)
+//                    FillupDetailView(vehicle: vehicle, fillup: fillup)
+                    FillupDetailView(fillup: fillup)
                 } label: {
                     LabeledContent {
                         HStack(alignment: .firstTextBaseline, spacing: 3) {
@@ -43,7 +45,7 @@ struct AllFillupsListView: View {
                                     .accessibilityHidden(true)
                                 Text("Partial Fill")
                             } else {
-                                if fillup == vehicle.sortedFillupsArray.last {
+                                if fillup == fillups.last {
                                     Image(systemName: "fuelpump.circle")
                                         .accessibilityHidden(true)
                                     Text("First Fill")
@@ -104,6 +106,6 @@ struct AllFillupsListView: View {
 }
 
 #Preview {
-    AllFillupsListView(vehicle: Vehicle(context: DataController.preview.container.viewContext))
+    AllFillupsListView(fillups: [])
         .environmentObject(AppSettings())
 }

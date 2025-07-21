@@ -10,7 +10,8 @@ import SwiftUI
 
 struct FuelEconomyChartView: View {
     @EnvironmentObject private var settings: AppSettings
-    let fillups: FetchedResults<Fillup>
+//    let fillups: FetchedResults<Fillup>
+    let fillups: [Fillup]
     
     @State private var selectedDateRange: DateRange = .threeMonths
     @State private var selectedDate: Date? = nil
