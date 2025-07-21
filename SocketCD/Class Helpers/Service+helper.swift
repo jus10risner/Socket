@@ -155,20 +155,20 @@ extension Service {
         case let (d?, m?):
             if d < 0 && m < 0 {
                 // If both are overdue, pick the one that's *more* overdue
-                return abs(d) >= abs(m) ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Overdue by \(abs(m).formatted()) \(settings.shortenedDistanceUnit)"
+                return abs(d) >= abs(m) ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
             } else if d < 0 {
                 return "Overdue by \(pluralize(abs(d), unit: "day"))"
             } else if m < 0 {
-                return "Overdue by \(abs(m).formatted()) \(settings.shortenedDistanceUnit)"
+                return "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
             } else {
-                return "Due in \(abs(m).formatted()) \(settings.shortenedDistanceUnit) or \(pluralize(d, unit: "day"))"
+                return "Due in \(abs(m).formatted()) \(settings.distanceUnit.abbreviated) or \(pluralize(d, unit: "day"))"
             }
 
         case let (d?, nil):
             return d < 0 ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Due in \(pluralize(d, unit: "day"))"
 
         case let (nil, m?):
-            return m < 0 ? "Overdue by \(abs(m).formatted()) \(settings.shortenedDistanceUnit)" : "Due in \(abs(m).formatted()) \(settings.shortenedDistanceUnit)"
+            return m < 0 ? "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)" : "Due in \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
 
         default:
             return "No Service Logged"
@@ -205,9 +205,9 @@ extension Service {
 //        
 //        if let distanceToNextService {
 //            if distanceToNextService < 0 {
-//                descriptionString = "Overdue by \(abs(distanceToNextService).formatted()) \(settings.shortenedDistanceUnit)"
+//                descriptionString = "Overdue by \(abs(distanceToNextService).formatted()) \(settings.distanceUnit.abbreviated)"
 //            } else {
-//                descriptionString = "Due in \(distanceToNextService.formatted()) \(settings.shortenedDistanceUnit)"
+//                descriptionString = "Due in \(distanceToNextService.formatted()) \(settings.distanceUnit.abbreviated)"
 //                
 //                if daysToNextService != nil {
 //                    descriptionString.append(" or ")

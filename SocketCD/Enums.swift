@@ -87,6 +87,16 @@ enum AccentColors: String, CaseIterable {
 
 enum DistanceUnits: String, CaseIterable {
     case miles = "miles", kilometers = "kilometers"
+    
+    // Returns an abbreviated string for the user's selected distance units
+    var abbreviated: String {
+        switch self {
+        case .miles:
+            return "mi"
+        default: 
+            return "km"
+        }
+    }
 }
 
 enum FuelEconomyUnits: String, CaseIterable {

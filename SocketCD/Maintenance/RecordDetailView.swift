@@ -29,7 +29,7 @@ struct RecordDetailView: View {
                 LabeledContent("Date", value: record.date.formatted(date: .numeric, time: .omitted))
                 
                 LabeledContent("Odometer") {
-                    Text("\(record.odometer.formatted()) \(settings.shortenedDistanceUnit)")
+                    Text("\(record.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
                 }
                 
                 LabeledContent("Cost", value: vehicle.convertToCurrency(value: record.cost ?? 0))

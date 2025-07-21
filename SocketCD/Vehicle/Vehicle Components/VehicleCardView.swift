@@ -65,7 +65,7 @@ struct VehicleCardView: View {
                         .lineLimit(1)
                     
                     
-                    Text("\(vehicle.odometer) \(settings.shortenedDistanceUnit)")
+                    Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
                         .font(.caption)
                         .foregroundStyle(Color.secondary)
                 }
@@ -175,7 +175,7 @@ struct VehicleCardView: View {
                             .lineLimit(1)
                         
                         
-                        Text("\(vehicle.odometer) \(settings.shortenedDistanceUnit)")
+                        Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
                             .font(.caption)
                             .foregroundStyle(Color.secondary)
                     }

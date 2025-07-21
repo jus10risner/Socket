@@ -108,7 +108,7 @@ struct VehicleDashboardView: View {
                 Text("\(vehicle.odometer)")
                     .font(.title3.bold())
                 
-                Text(settings.shortenedDistanceUnit)
+                Text(settings.distanceUnit.abbreviated)
                     .foregroundStyle(Color.secondary)
             }
         }

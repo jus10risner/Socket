@@ -48,7 +48,7 @@ struct RepairsListView: View {
                                 Text(repair.name)
                                     .font(.headline)
                                 
-                                Text("\(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)")
+                                Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
                                     .font(.subheadline)
                                     .foregroundStyle(Color.secondary)
                             }

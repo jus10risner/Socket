@@ -202,7 +202,7 @@ struct VehicleInfoView: View {
                         .font(.title2.bold())
                         .multilineTextAlignment(.center)
                     
-                    Text("\(vehicle.odometer) \(settings.shortenedDistanceUnit)")
+                    Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
                         .font(.subheadline)
                         .foregroundStyle(Color.secondary)
                 }
@@ -285,7 +285,7 @@ struct VehicleInfoView: View {
         var allRecords: [String] = []
         
         // Define the header text, and provide an empty string for the body text
-        let title = "Maintenance & Repairs (as of \(Date.now.formatted(date: .numeric, time: .omitted)))\nVehicle: \(vehicle.name)\nOdometer: \(vehicle.odometer.formatted()) \(settings.shortenedDistanceUnit)\n\n"
+        let title = "Maintenance & Repairs (as of \(Date.now.formatted(date: .numeric, time: .omitted)))\nVehicle: \(vehicle.name)\nOdometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)\n\n"
         var bodyText = ""
         
         // Append service records to allRecords array
@@ -304,7 +304,7 @@ struct VehicleInfoView: View {
                    
                 // If no services or repairs were already performed on this date, add a new date header, before this service's details
                 if !allRecords.contains(where: { $0.components(separatedBy: " - ").first! == formattedDate }) {
-                    allRecords.append("\(formattedDate) - \(record.odometer.formatted()) \(settings.shortenedDistanceUnit)\n\t• \(service.name)\n\(record.note != "" ? "\t\tNote: \(record.note)\n" : "\0")")
+                    allRecords.append("\(formattedDate) - \(record.odometer.formatted()) \(settings.distanceUnit.abbreviated)\n\t• \(service.name)\n\(record.note != "" ? "\t\tNote: \(record.note)\n" : "\0")")
                 }
             }
         }
@@ -324,7 +324,7 @@ struct VehicleInfoView: View {
             
             // If no services or repairs were already performed on this date, add a new date header, before this repair's details
             if !allRecords.contains(where: { $0.components(separatedBy: " - ").first! == formattedDate }) {
-                allRecords.append("\(formattedDate) - \(repair.odometer.formatted()) \(settings.shortenedDistanceUnit)\n\t• \(repair.name)\n\(repair.note != "" ? "\t\tNote: \(repair.note)\n" : "\0")")
+                allRecords.append("\(formattedDate) - \(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)\n\t• \(repair.name)\n\(repair.note != "" ? "\t\tNote: \(repair.note)\n" : "\0")")
             }
         }
         
@@ -434,7 +434,7 @@ struct VehicleInfoView: View {
         
         var allFillups: [String] = []
         
-        var csvHeader = "Date, Odometer, \(settings.fuelEconomyUnit.volumeUnit)s of Fuel, Price per \(settings.fuelEconomyUnit.volumeUnit), Trip (\(settings.shortenedDistanceUnit)), Fuel Economy (\(settings.fuelEconomyUnit.rawValue)), Total Cost, Full Tank?, Note\n"
+        var csvHeader = "Date, Odometer, \(settings.fuelEconomyUnit.volumeUnit)s of Fuel, Price per \(settings.fuelEconomyUnit.volumeUnit), Trip (\(settings.distanceUnit.abbreviated)), Fuel Economy (\(settings.fuelEconomyUnit.rawValue)), Total Cost, Full Tank?, Note\n"
 
         // Append fill-up records to allFillups array
         for fillup in vehicle.sortedFillupsArray {

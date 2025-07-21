@@ -30,7 +30,7 @@ struct FillupDetailView: View {
                 LabeledContent("Fill-up Date", value: fillup.date.formatted(date: .numeric, time: .omitted))
                 
                 LabeledContent("Odometer") {
-                    Text("\(fillup.odometer.formatted()) \(settings.shortenedDistanceUnit)")
+                    Text("\(fillup.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
                 }
                 
                 LabeledContent("\(settings.fuelEconomyUnit.volumeUnit)s of Fuel", value: fillup.volume.formatted())
@@ -40,7 +40,7 @@ struct FillupDetailView: View {
             
             Section {
                 LabeledContent("Trip") {
-                    Text("\(fillup.tripDistance.formatted()) \(settings.shortenedDistanceUnit)")
+                    Text("\(fillup.tripDistance.formatted()) \(settings.distanceUnit.abbreviated)")
                 }
                 
                 LabeledContent {

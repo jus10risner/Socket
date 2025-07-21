@@ -153,7 +153,7 @@ struct ServiceDetailView: View {
                     
                     HStack(alignment: .firstTextBaseline, spacing: 3) {
                         VStack(spacing: 2) {
-                            Text("\(service.odometerDue?.formatted() ?? "-") \(settings.shortenedDistanceUnit)")
+                            Text("\(service.odometerDue?.formatted() ?? "-") \(settings.distanceUnit.abbreviated)")
                         }
                         
                         Text("or")
@@ -167,7 +167,7 @@ struct ServiceDetailView: View {
                 HStack(spacing: 2) {
                     odometerSymbol
                     
-                    Text("\(service.odometerDue?.formatted() ?? "-") \(settings.shortenedDistanceUnit)")
+                    Text("\(service.odometerDue?.formatted() ?? "-") \(settings.distanceUnit.abbreviated)")
                 }
             } else if service.timeInterval != 0 && service.distanceInterval == 0 {
                 VStack {
@@ -196,7 +196,7 @@ struct ServiceDetailView: View {
                     NavigationLink {
                         RecordDetailView(record: record, vehicle: vehicle, service: service)
                     } label: {
-                        LabeledContent("\(record.odometer) \(settings.shortenedDistanceUnit)", value: record.date.formatted(date: .numeric, time: .omitted))
+                        LabeledContent("\(record.odometer) \(settings.distanceUnit.abbreviated)", value: record.date.formatted(date: .numeric, time: .omitted))
                     }
                 }
             } label: {
@@ -259,7 +259,7 @@ struct ServiceDetailView: View {
     // Distance interval between services (if provided), expressed as a string
     private var distanceIntervalText: String {
         if service.distanceInterval != 0 && service.distanceInterval != 0 {
-            return "\(service.distanceInterval.formatted()) \(settings.shortenedDistanceUnit)"
+            return "\(service.distanceInterval.formatted()) \(settings.distanceUnit.abbreviated)"
         } else {
             return ""
         }
