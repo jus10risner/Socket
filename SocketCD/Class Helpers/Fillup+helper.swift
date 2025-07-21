@@ -109,7 +109,7 @@ extension Fillup {
     
     // MARK: - Methods
     
-    func updateAndSave(vehicle: Vehicle, draftFillup: DraftFillup) {
+    func updateAndSave(draftFillup: DraftFillup) {
         let context = DataController.shared.container.viewContext
         
         self.date = draftFillup.date
@@ -120,11 +120,15 @@ extension Fillup {
         self.note = draftFillup.note
         self.photos = NSSet(array: draftFillup.photos)
         
-        if let odometer = draftFillup.odometer {
-            if odometer > vehicle.odometer {
-                vehicle.odometer = odometer
-            }
+        if let vehicle = self.vehicle, let draftOdometer = draftFillup.odometer, draftOdometer > vehicle.odometer {
+            vehicle.odometer = draftOdometer
         }
+        
+//        if let odometer = draftFillup.odometer {
+//            if odometer > vehicle.odometer {
+//                vehicle.odometer = odometer
+//            }
+//        }
         
         try? context.save()
     }

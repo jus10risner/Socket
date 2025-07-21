@@ -10,7 +10,7 @@ import SwiftUI
 struct DraftFillupView: View {
     @EnvironmentObject var settings: AppSettings
     @ObservedObject var draftFillup: DraftFillup
-    let vehicle: Vehicle
+//    let vehicle: Vehicle
     let isEditView: Bool
     @Binding var showingFillTypeInfo: Bool
     
@@ -98,6 +98,6 @@ struct DraftFillupView: View {
 }
 
 #Preview {
-    DraftFillupView(draftFillup: DraftFillup(), vehicle: Vehicle(context: DataController.preview.container.viewContext), isEditView: true, showingFillTypeInfo: .constant(false))
+    DraftFillupView(draftFillup: DraftFillup(), isEditView: true, showingFillTypeInfo: .constant(false))
         .environmentObject(AppSettings())
 }

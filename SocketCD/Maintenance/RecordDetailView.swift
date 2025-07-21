@@ -68,7 +68,7 @@ struct RecordDetailView: View {
             }
         }
         .sheet(isPresented: $showingEditRecord) {
-            EditRecordView(vehicle: vehicle, service: service, record: record)
+            EditRecordView(service: service, record: record)
         }
         .alert("Delete Record", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {

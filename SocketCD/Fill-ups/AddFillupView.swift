@@ -32,7 +32,7 @@ struct AddFillupView: View {
                         .foregroundStyle(Color.secondary)
                 }
                 
-                DraftFillupView(draftFillup: draftFillup, vehicle: vehicle, isEditView: false, showingFillTypeInfo: $showingFillTypeInfo)
+                DraftFillupView(draftFillup: draftFillup, isEditView: false, showingFillTypeInfo: $showingFillTypeInfo)
                     
             }
             .background(Color(.systemGroupedBackground))

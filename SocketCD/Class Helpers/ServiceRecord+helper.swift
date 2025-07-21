@@ -40,7 +40,7 @@ extension ServiceRecord {
     
     // MARK: - CRUD Methods
     
-    func updateAndSave(vehicle: Vehicle, service: Service, draftServiceRecord: DraftServiceRecord) {
+    func updateAndSave(service: Service, draftServiceRecord: DraftServiceRecord) {
         let context = DataController.shared.container.viewContext
         
         self.date = draftServiceRecord.date
@@ -48,16 +48,22 @@ extension ServiceRecord {
         self.cost = draftServiceRecord.cost
         self.note = draftServiceRecord.note
         self.photos = NSSet(array: draftServiceRecord.photos)
-
-        if let odometer = draftServiceRecord.odometer {
-            if odometer > vehicle.odometer {
-                vehicle.odometer = odometer
-            }
+        
+        if let vehicle = service.vehicle, let draftOdometer = draftServiceRecord.odometer, draftOdometer > vehicle.odometer {
+            vehicle.odometer = draftOdometer
         }
+
+//        if let odometer = draftServiceRecord.odometer {
+//            if odometer > vehicle.odometer {
+//                vehicle.odometer = odometer
+//            }
+//        }
         
         // Cancels any notifications that have been scheduled for this service, so they can be rescheduled, if appropriate
         service.cancelPendingNotifications()
-        service.updateNotificationsForService(vehicle: vehicle)
+        if let vehicle = service.vehicle {
+            service.updateNotificationsForService(vehicle: vehicle)
+        }
         
         try? context.save()
     }

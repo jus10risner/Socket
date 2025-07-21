@@ -70,7 +70,7 @@ struct RepairDetailView: View {
             }
         }
         .sheet(isPresented: $showingEditRepair) {
-            EditRepairView(vehicle: vehicle, repair: repair)
+            EditRepairView(repair: repair)
         }
         .alert("Delete Repair", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {

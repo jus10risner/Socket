@@ -10,13 +10,12 @@ import SwiftUI
 struct EditFillupView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var draftFillup = DraftFillup()
-    @ObservedObject var vehicle: Vehicle
+//    @ObservedObject var vehicle: Vehicle
     var fillup: Fillup
     
     @State private var showingFillTypeInfo = false
     
-    init(vehicle: Vehicle, fillup: Fillup) {
-        self.vehicle = vehicle
+    init(fillup: Fillup) {
         self.fillup = fillup
         
         _draftFillup = StateObject(wrappedValue: DraftFillup(fillup: fillup))
@@ -24,7 +23,7 @@ struct EditFillupView: View {
     
     var body: some View {
         NavigationStack {
-            DraftFillupView(draftFillup: draftFillup, vehicle: vehicle, isEditView: true, showingFillTypeInfo: $showingFillTypeInfo)
+            DraftFillupView(draftFillup: draftFillup, isEditView: true, showingFillTypeInfo: $showingFillTypeInfo)
                 .navigationTitle("Edit Fill-up")
                 .navigationBarTitleDisplayMode(.inline)
                 .onAppear { fillup.populateCorrectCost(draftFillup: draftFillup) }
@@ -35,7 +34,7 @@ struct EditFillupView: View {
                     
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Done") {
-                            fillup.updateAndSave(vehicle: vehicle, draftFillup: draftFillup)
+                            fillup.updateAndSave(draftFillup: draftFillup)
                             
                             dismiss()
                         }
@@ -54,5 +53,5 @@ struct EditFillupView: View {
 }
 
 #Preview {
-    EditFillupView(vehicle: Vehicle(context: DataController.preview.container.viewContext), fillup: Fillup(context: DataController.preview.container.viewContext))
+    EditFillupView(fillup: Fillup(context: DataController.preview.container.viewContext))
 }

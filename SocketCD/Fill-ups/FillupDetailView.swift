@@ -10,7 +10,7 @@ import SwiftUI
 struct FillupDetailView: View {
     @EnvironmentObject var settings: AppSettings
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var vehicle: Vehicle
+//    @ObservedObject var vehicle: Vehicle
     @ObservedObject var fillup: Fillup
     
     @State private var showingEditFillup = false
@@ -85,7 +85,8 @@ struct FillupDetailView: View {
         .navigationTitle("Fill-up Details")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingEditFillup) {
-            EditFillupView(vehicle: vehicle, fillup: fillup)
+//            EditFillupView(vehicle: vehicle, fillup: fillup)
+            EditFillupView(fillup: fillup)
         }
         .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
@@ -149,6 +150,6 @@ struct FillupDetailView: View {
 }
 
 #Preview {
-    FillupDetailView(vehicle: Vehicle(context: DataController.preview.container.viewContext), fillup: Fillup(context: DataController.preview.container.viewContext))
+    FillupDetailView(fillup: Fillup(context: DataController.preview.container.viewContext))
         .environmentObject(AppSettings())
 }

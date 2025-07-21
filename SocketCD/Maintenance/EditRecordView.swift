@@ -10,12 +10,12 @@ import SwiftUI
 struct EditRecordView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var draftServiceRecord = DraftServiceRecord()
-    @ObservedObject var vehicle: Vehicle
+//    @ObservedObject var vehicle: Vehicle
     @ObservedObject var service: Service
     var record: ServiceRecord
     
-    init(vehicle: Vehicle, service: Service, record: ServiceRecord) {
-        self.vehicle = vehicle
+    init(service: Service, record: ServiceRecord) {
+//        self.vehicle = vehicle
         self.service = service
         self.record = record
         
@@ -42,7 +42,7 @@ struct EditRecordView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
-                        record.updateAndSave(vehicle: vehicle, service: service, draftServiceRecord: draftServiceRecord)
+                        record.updateAndSave(service: service, draftServiceRecord: draftServiceRecord)
                         
                         dismiss()
                     }
@@ -54,5 +54,5 @@ struct EditRecordView: View {
 }
 
 #Preview {
-    EditRecordView(vehicle: Vehicle(context: DataController.preview.container.viewContext), service: Service(context: DataController.preview.container.viewContext), record: ServiceRecord(context: DataController.preview.container.viewContext))
+    EditRecordView(service: Service(context: DataController.preview.container.viewContext), record: ServiceRecord(context: DataController.preview.container.viewContext))
 }

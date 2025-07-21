@@ -44,7 +44,7 @@ extension Repair {
     
     // MARK: - CRUD Methods
     
-    func updateAndSave(vehicle: Vehicle, draftRepair: DraftRepair) {
+    func updateAndSave(draftRepair: DraftRepair) {
         let context = DataController.shared.container.viewContext
         
         self.date = draftRepair.date
@@ -54,11 +54,15 @@ extension Repair {
         self.note = draftRepair.note
         self.photos = NSSet(array: draftRepair.photos)
         
-        if let odometer = draftRepair.odometer {
-            if odometer > vehicle.odometer {
-                vehicle.odometer = odometer
-            }
+        if let vehicle = self.vehicle, let draftOdometer = draftRepair.odometer, draftOdometer > vehicle.odometer {
+            vehicle.odometer = draftOdometer
         }
+        
+//        if let odometer = draftRepair.odometer {
+//            if odometer > vehicle.odometer {
+//                vehicle.odometer = odometer
+//            }
+//        }
         
         try? context.save()
     }

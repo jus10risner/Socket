@@ -10,11 +10,10 @@ import SwiftUI
 struct EditRepairView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var draftRepair = DraftRepair()
-    let vehicle: Vehicle
+//    let vehicle: Vehicle
     var repair: Repair
     
-    init(vehicle: Vehicle, repair: Repair) {
-        self.vehicle = vehicle
+    init(repair: Repair) {
         self.repair = repair
         
         _draftRepair = StateObject(wrappedValue: DraftRepair(repair: repair))
@@ -32,7 +31,7 @@ struct EditRepairView: View {
                     
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Done") {
-                            repair.updateAndSave(vehicle: vehicle, draftRepair: draftRepair)
+                            repair.updateAndSave(draftRepair: draftRepair)
                             
                             dismiss()
                         }
@@ -44,5 +43,5 @@ struct EditRepairView: View {
 }
 
 #Preview {
-    EditRepairView(vehicle: Vehicle(context: DataController.preview.container.viewContext), repair: Repair(context: DataController.preview.container.viewContext))
+    EditRepairView(repair: Repair(context: DataController.preview.container.viewContext))
 }
