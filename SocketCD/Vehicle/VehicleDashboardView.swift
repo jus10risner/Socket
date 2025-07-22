@@ -26,27 +26,32 @@ struct VehicleDashboardView: View {
     @State private var showingAddService = false
     @State private var showingAddRepair = false
     @State private var showingAddFillup = false
-    @State private var showingFuelEconomyInfo = false
+//    @State private var showingFuelEconomyInfo = false
+    
+    let columns: [GridItem] = {
+        [GridItem(.adaptive(minimum: 300), spacing: 5)]
+    }()
     
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    maintenanceDashboardCard(vehicle: vehicle)
-                    
-                    HStack{
-                        odometerDashboardCard(vehicle: vehicle)
+                    LazyVGrid(columns: columns, spacing: 5) {
+                        maintenanceDashboardCard(vehicle: vehicle)
                         
-                        fuelEconomyDashboardCard(vehicle: vehicle)
+                        HStack(spacing: 5) {
+                            odometerDashboardCard(vehicle: vehicle)
+                            
+                            fuelEconomyDashboardCard(vehicle: vehicle)
+                        }
+                        
+                        quickActionButtons
                     }
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
                 
                 Section("Records") {
-                    quickActionButtons
-                        .listRowInsets(EdgeInsets())
-                    
                     ForEach(AppSection.allCases, id: \.self) { section in
                         NavigationLink {
                             destinationView(for: section, vehicle: vehicle)
@@ -58,7 +63,7 @@ struct VehicleDashboardView: View {
                 .headerProminence(.increased)
             }
             .listRowSpacing(5)
-            .listStyle(.insetGrouped)
+//            .listStyle(.insetGrouped)
             //            }
             //            .background(Color(.systemGroupedBackground))
             .scrollContentBackground(.hidden)
@@ -92,8 +97,6 @@ struct VehicleDashboardView: View {
 //                }
 //            }
         }
-//        }
-//        .tint(.primary)
     }
     
     func odometerDashboardCard(vehicle: Vehicle) -> some View {
@@ -130,8 +133,12 @@ struct VehicleDashboardView: View {
                 .font(.headline)
                 .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             
-            if let fillup = vehicle.sortedFillupsArray.dropFirst().first {
-                HStack {
+            if let fillup = vehicle.sortedFillupsArray.first {
+                HStack(spacing: 3) {
+                    TrendArrowView(fillups: fillups)
+                        .scaleEffect(0.75)
+                        .frame(width: 30)
+                    
                     HStack(alignment: .firstTextBaseline, spacing: 3) {
                         Text(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1)))
                             .font(.title3.bold())
@@ -139,18 +146,13 @@ struct VehicleDashboardView: View {
                         Text(settings.fuelEconomyUnit.rawValue)
                             .foregroundStyle(Color.secondary)
                     }
-                    
-                    Spacer()
-                    
-                    TrendArrowView(fillups: fillups)
-//                        .scaleEffect(0.75)
                 }
             } else {
-                Text("No Fill-ups")
-                    .font(.title3.bold())
+                Text("No Fuel Economy")
+                    .foregroundStyle(Color.secondary)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .padding()
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
     }
@@ -179,7 +181,7 @@ struct VehicleDashboardView: View {
                 }
             } else {
                 Text("No Services Scheduled")
-                    .font(.title3.bold())
+                    .foregroundStyle(Color.secondary)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -200,32 +202,26 @@ struct VehicleDashboardView: View {
     
     private var quickActionButtons: some View {
         HStack(spacing: 5) {
-            Button {
+            QuickAddButton {
                 showingAddService = true
             } label: {
-                //                                    Label("Log Maintenance", systemImage: "plus.circle.fill")
                 Label("Log Maintenance", image: "book.and.wrench.fill.badge.plus")
                     .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
             }
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
-            
-            Button {
+
+            QuickAddButton {
                 showingAddRepair = true
             } label: {
-                //                                    Label("Add Repair", systemImage: "plus.circle.fill")
                 Label("Add Repair", image: "wrench.adjustable.fill.badge.plus")
                     .foregroundStyle(settings.accentColor(for: .repairsTheme))
             }
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
-            
-            Button {
+
+            QuickAddButton {
                 showingAddFillup = true
             } label: {
-                //                                    Label("Fill-up", systemImage: "plus")
                 Label("Add Fill-up", image: "fuelpump.fill.badge.plus")
                     .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             }
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
         }
         .buttonStyle(.plain)
         .listRowBackground(Color.clear)
@@ -271,8 +267,25 @@ struct VehicleDashboardView: View {
                 .tint(settings.accentColor(for: section.theme))
         case .vehicle:
             VehicleInfoView(vehicle: vehicle)
-                .tint(section.color)
+                .tint(settings.accentColor(for: section.theme))
         }
+    }
+}
+
+struct QuickAddButton<Label: View>: View {
+    let action: () -> Void
+    let label: () -> Label
+
+    var body: some View {
+        Button(action: action) {
+            label()
+                .symbolRenderingMode(.hierarchical)
+                .labelStyle(.iconOnly)
+                .padding(10)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .contentShape(RoundedRectangle(cornerRadius: 15))
+        }
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
     }
 }
 
