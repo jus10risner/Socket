@@ -67,20 +67,6 @@ extension Vehicle {
     
     
     
-    // MARK: - Computed Properties
-    
-    // Returns the fuel volume unit for the user's selected fuel economy units, in App Settings
-    var volumeUnit: String {
-        let settings = AppSettings()
-        
-        if settings.fuelEconomyUnit == .mpg {
-            return "Gallon"
-        } else {
-            return "Liter"
-        }
-    }
-    
-    
     // MARK: - CRUD Methods
     
     func updateAndSave(draftVehicle: DraftVehicle) {
