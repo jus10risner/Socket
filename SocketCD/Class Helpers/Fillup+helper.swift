@@ -51,23 +51,22 @@ extension Fillup {
     
     // Calculates the distance traveled between the current fill-up and the one before, if appropriate
     var tripDistance: Int {
-        guard let fillupsArray = vehicle?.sortedFillupsArray else { return 0 }
-        
-        if let index = fillupsArray.firstIndex(of: self) {
-            if fillupsArray.count > 1 && self.fillType != .missedFill {
-                if self != fillupsArray.last {
-                    let previousFillupOdometer = fillupsArray[index + 1].odometer
-                    
-                    return self.odometer - previousFillupOdometer
-                } else {
-                    return 0
-                }
-            } else {
-                return 0
-            }
-        } else {
+        guard let fillups = vehicle?.sortedFillupsArray,
+              let currentIndex = fillups.firstIndex(of: self),
+              fillups.count > 1 else {
             return 0
         }
+        
+        // If this is the first fill-up ever logged, return 0 (trip distance can't be calculated)
+        if currentIndex == fillups.count - 1 { return 0 }
+        
+        // Return 0 if this fill-up is logged as a missed fill-up (no distance calculated)
+        if fillType == .missedFill {
+            return 0
+        }
+        
+        let previousOdometer = fillups[currentIndex + 1].odometer
+        return odometer - previousOdometer
     }
     
     // Calculates fuel economy between the current fill-up and the one before, if appropriate
