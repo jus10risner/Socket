@@ -133,7 +133,7 @@ struct VehicleDashboardView: View {
             if let fillup = vehicle.sortedFillupsArray.dropFirst().first {
                 HStack {
                     HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        Text(fillup.fuelEconomy, format: .number.precision(.fractionLength(1)))
+                        Text(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1)))
                             .font(.title3.bold())
                         
                         Text(settings.fuelEconomyUnit.rawValue)

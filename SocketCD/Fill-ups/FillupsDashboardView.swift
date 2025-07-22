@@ -108,7 +108,7 @@ struct FillupsDashboardView: View {
     // View that groups the trend arrow, fuel economy info, and headline into one element
     private var headlineGroup: some View {
         HStack {
-            if fillups.count > 3 && fillups.first?.fuelEconomy != 0 {
+            if fillups.count > 3 && fillups.first?.fuelEconomy(settings: settings) != 0 {
 //                trendArrow
                 TrendArrowView(fillups: fillups)
             }
@@ -122,10 +122,10 @@ struct FillupsDashboardView: View {
                 .font(.headline)
                 
                 if let latestFillup = fillups.first {
-                    if latestFillup.fuelEconomy != 0 {
+                    if latestFillup.fuelEconomy(settings: settings) != 0 {
                         HStack(spacing: 3) {
                             HStack(alignment: .firstTextBaseline, spacing: 2) {
-                                Text("\((latestFillup.fuelEconomy), specifier: "%.1f")")
+                                Text("\((latestFillup.fuelEconomy(settings: settings)), specifier: "%.1f")")
                                     .font(.title.bold())
                                 Text("\(settings.fuelEconomyUnit.rawValue)")
                                     .bold()

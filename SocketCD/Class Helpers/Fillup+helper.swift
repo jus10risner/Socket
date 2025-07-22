@@ -71,32 +71,67 @@ extension Fillup {
     }
     
     // Calculates fuel economy between the current fill-up and the one before, if appropriate
-    var fuelEconomy: Double {
-        let settings = AppSettings()
-        guard let fillupsArray = vehicle?.sortedFillupsArray else { return 0 }
-        
-        if let index = fillupsArray.firstIndex(of: self) {
-            if fillupsArray.count > 1 && self.fillType != .missedFill {
-                if self != fillupsArray.last {
-                    if self.fillType != .partialFill && fillupsArray[index + 1].fillType != .partialFill {
-                        if settings.fuelEconomyUnit == .L100km {
-                            return ((self.volume) / Double(self.tripDistance)) * 100
-                        } else {
-                            return Double(self.tripDistance) / (self.volume)
-                        }
-                    } else {
-                        return 0
-                    }
-                } else {
-                    return 0
-                }
-            } else {
-                return 0
-            }
-        } else {
+    func fuelEconomy(settings: AppSettings) -> Double {
+        guard let fillups = vehicle?.sortedFillupsArray,
+              let currentIndex = fillups.firstIndex(of: self),
+              fillups.count > 1 else {
             return 0
         }
+
+        // If this is the first fill-up ever logged, return 0 (fuel economy can't be calculated)
+        if currentIndex == fillups.count - 1 { return 0 }
+
+        // Return 0 if current or previous fill-up is partial or missed
+        if fillType == .missedFill || fillType == .partialFill {
+            return 0
+        }
+
+        let previousFillup = fillups[currentIndex + 1]
+        if previousFillup.fillType == .partialFill {
+            return 0
+        }
+
+        let volume = self.volume
+        let distance = self.tripDistance
+        
+        // Make sure the distance isn't somehow less than 0
+        if distance < 0 { return 0 }
+
+        switch settings.fuelEconomyUnit {
+        case .L100km:
+            return (volume / Double(distance)) * 100
+        default:
+            return Double(distance) / volume
+        }
     }
+    
+    // Calculates fuel economy between the current fill-up and the one before, if appropriate
+//    var fuelEconomy: Double {
+//        let settings = AppSettings()
+//        guard let fillupsArray = vehicle?.sortedFillupsArray else { return 0 }
+//        
+//        if let index = fillupsArray.firstIndex(of: self) {
+//            if fillupsArray.count > 1 && self.fillType != .missedFill {
+//                if self != fillupsArray.last {
+//                    if self.fillType != .partialFill && fillupsArray[index + 1].fillType != .partialFill {
+//                        if settings.fuelEconomyUnit == .L100km {
+//                            return ((self.volume) / Double(self.tripDistance)) * 100
+//                        } else {
+//                            return Double(self.tripDistance) / (self.volume)
+//                        }
+//                    } else {
+//                        return 0
+//                    }
+//                } else {
+//                    return 0
+//                }
+//            } else {
+//                return 0
+//            }
+//        } else {
+//            return 0
+//        }
+//    }
     
     // Calculates the total cost of a fill-up
     var totalCost: Double? {

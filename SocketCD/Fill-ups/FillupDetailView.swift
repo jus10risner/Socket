@@ -44,8 +44,8 @@ struct FillupDetailView: View {
                 }
                 
                 LabeledContent {
-                    if fillup.fuelEconomy != 0 {
-                        Text("\(fillup.fuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                    if fillup.fuelEconomy(settings: settings) != 0 {
+                        Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
                             .foregroundStyle(Color.secondary)
                     } else {
                         switch fillup.fillType {
@@ -63,7 +63,7 @@ struct FillupDetailView: View {
                 } label: {
                     HStack {
                         Text("Fuel Economy")
-                        if fillup.fuelEconomy == 0 {
+                        if fillup.fuelEconomy(settings: settings) == 0 {
                             infoButton
                         }
                     }

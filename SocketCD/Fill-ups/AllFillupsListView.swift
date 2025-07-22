@@ -49,12 +49,12 @@ struct AllFillupsListView: View {
                                     Image(systemName: "fuelpump.circle")
                                         .accessibilityHidden(true)
                                     Text("First Fill")
-                                } else if fillup.fuelEconomy == 0 && fillup.fillType != .partialFill {
+                                } else if fillup.fuelEconomy(settings: settings) == 0 && fillup.fillType != .partialFill {
                                     Image(systemName: "circle.fill")
                                         .accessibilityHidden(true)
                                     Text("Full Tank")
                                 } else {
-                                    Text("\(fillup.fuelEconomy, specifier: "%.1f")")
+                                    Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f")")
                                         .font(.headline)
                                     Text(settings.fuelEconomyUnit.rawValue)
                                         .foregroundStyle(Color.secondary)

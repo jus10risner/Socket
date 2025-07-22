@@ -438,7 +438,7 @@ struct VehicleInfoView: View {
 
         // Append fill-up records to allFillups array
         for fillup in vehicle.sortedFillupsArray {
-            allFillups.append("\(fillup.date.formatted(date: .numeric, time: .omitted)), \(fillup.odometer), \(fillup.volume.formatted()), \((fillup.pricePerUnit ?? 0).formatted()), \"\(fillup.tripDistance)\", \(String(format: "%.1f", fillup.fuelEconomy)), \(String(format: "%.2f", fillup.totalCost ?? 0)), \(fillup.fillType == .partialFill ? "No" : "Yes"), \"\(fillup.note)\"\n")
+            allFillups.append("\(fillup.date.formatted(date: .numeric, time: .omitted)), \(fillup.odometer), \(fillup.volume.formatted()), \((fillup.pricePerUnit ?? 0).formatted()), \"\(fillup.tripDistance)\", \(String(format: "%.1f", fillup.fuelEconomy(settings: settings))), \(String(format: "%.2f", fillup.totalCost ?? 0)), \(fillup.fillType == .partialFill ? "No" : "Yes"), \"\(fillup.note)\"\n")
         }
         
         // Convert String to Date, then append all records to csvHeader

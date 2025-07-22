@@ -14,11 +14,11 @@ struct TrendArrowView: View {
     @State private var animatingTrendArrow = false
     
     private var latestFillupFuelEconomy: Double {
-        fillups.first?.fuelEconomy ?? 0
+        fillups.first?.fuelEconomy(settings: settings) ?? 0
     }
     
     private var previousFillupFuelEconomy: Double {
-        fillups[1].fuelEconomy
+        fillups[1].fuelEconomy(settings: settings)
     }
     
     var body: some View {

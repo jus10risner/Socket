@@ -19,7 +19,7 @@ struct FuelEconomyChartView: View {
     var body: some View {
         VStack(spacing: 15) {
             Chart(data) { fillup in
-                LineMark(x: .value("Date", fillup.date), y: .value("MPG", fillup.fuelEconomy))
+                LineMark(x: .value("Date", fillup.date), y: .value("MPG", fillup.fuelEconomy(settings: settings)))
             }
             .animation(.easeInOut(duration: 0.5), value: visibleRange)
             .chartYScale(domain: yRange)
@@ -48,7 +48,7 @@ struct FuelEconomyChartView: View {
                     if let selectedDate = selectedDate,
                        let selectedFillup = data.min(by: { abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate)) }),
                        let xPosition = proxy.position(forX: selectedFillup.date),
-                       let yPosition = proxy.position(forY: selectedFillup.fuelEconomy)
+                       let yPosition = proxy.position(forY: selectedFillup.fuelEconomy(settings: settings))
                     {
                         // Vertical line
                         Rectangle()
@@ -122,7 +122,7 @@ struct FuelEconomyChartView: View {
     // Determines which data points to plot (excludes those with fuel economy of 0)
     private var data: [Fillup] {
         let dataPoints = fillups.compactMap { fillup in
-            fillup.fuelEconomy != 0 ? fillup : nil
+            fillup.fuelEconomy(settings: settings) != 0 ? fillup : nil
         }
         
         return dataPoints
@@ -136,17 +136,17 @@ struct FuelEconomyChartView: View {
         case .threeMonths:
             guard let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: Date.now) else { return 0 }
             let dataSet = data.filter { $0.date > threeMonthsAgo }
-            return dataSet.reduce(0) { $0 + $1.fuelEconomy } / Double(dataSet.count)
+            return dataSet.reduce(0) { $0 + $1.fuelEconomy(settings: settings) } / Double(dataSet.count)
         case .sixMonths:
             guard let sixMonthsAgo = Calendar.current.date(byAdding: .month, value: -6, to: Date.now) else { return 0 }
             let dataSet = data.filter { $0.date > sixMonthsAgo }
-            return dataSet.reduce(0) { $0 + $1.fuelEconomy } / Double(dataSet.count)
+            return dataSet.reduce(0) { $0 + $1.fuelEconomy(settings: settings) } / Double(dataSet.count)
         case .year:
             guard let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: Date.now) else { return 0 }
             let dataSet = data.filter { $0.date > oneYearAgo }
-            return dataSet.reduce(0) { $0 + $1.fuelEconomy } / Double(dataSet.count)
+            return dataSet.reduce(0) { $0 + $1.fuelEconomy(settings: settings) } / Double(dataSet.count)
         case .all:
-            return data.reduce(0) { $0 + $1.fuelEconomy } / Double(data.count)
+            return data.reduce(0) { $0 + $1.fuelEconomy(settings: settings) } / Double(data.count)
         }
     }
     
@@ -171,7 +171,8 @@ struct FuelEconomyChartView: View {
     
     // Determines the vertical scale of the chart
     private var yRange: ClosedRange<Double> {
-        let sortedArray = data.map(\.fuelEconomy)
+//        let sortedArray = data.map(\.fuelEconomy)
+        let sortedArray = data.map { $0.fuelEconomy(settings: settings) }
         guard let minValue = sortedArray.min(), let maxValue = sortedArray.max() else { return 0...1 } // default to 0...1 if sortedArray is empty
         
         let padding = (maxValue - minValue) * 0.1 // Used to give LineMark some breathing room on the y-axis
