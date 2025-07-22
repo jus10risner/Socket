@@ -114,7 +114,7 @@ struct FuelEconomyChartView: View {
             Divider()
             
             LabeledContent("Average") {
-                Text("\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                Text(averageFuelEconomy == 0 ? "No Data" : "\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
             }
         }
     }
@@ -130,23 +130,29 @@ struct FuelEconomyChartView: View {
     
     // Calculates the average fuel economy for a given date range
     private var averageFuelEconomy: Double {
-//        return data.reduce(0) { $0 + $1.fuelEconomy } / Double(data.count)
+        let now = Date()
+
+        func computeAverage(from startDate: Date) -> Double {
+            let dataSet = data.filter { $0.date > startDate }
+            guard !dataSet.isEmpty else { return 0 }
+            let total = dataSet.reduce(0) { $0 + $1.fuelEconomy(settings: settings) }
+            return total / Double(dataSet.count)
+        }
         
         switch selectedDateRange {
         case .threeMonths:
-            guard let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: Date.now) else { return 0 }
-            let dataSet = data.filter { $0.date > threeMonthsAgo }
-            return dataSet.reduce(0) { $0 + $1.fuelEconomy(settings: settings) } / Double(dataSet.count)
+            guard let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: now) else { return 0 }
+            return computeAverage(from: threeMonthsAgo)
         case .sixMonths:
-            guard let sixMonthsAgo = Calendar.current.date(byAdding: .month, value: -6, to: Date.now) else { return 0 }
-            let dataSet = data.filter { $0.date > sixMonthsAgo }
-            return dataSet.reduce(0) { $0 + $1.fuelEconomy(settings: settings) } / Double(dataSet.count)
+            guard let sixMonthsAgo = Calendar.current.date(byAdding: .month, value: -6, to: now) else { return 0 }
+            return computeAverage(from: sixMonthsAgo)
         case .year:
-            guard let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: Date.now) else { return 0 }
-            let dataSet = data.filter { $0.date > oneYearAgo }
-            return dataSet.reduce(0) { $0 + $1.fuelEconomy(settings: settings) } / Double(dataSet.count)
+            guard let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: now) else { return 0 }
+            return computeAverage(from: oneYearAgo)
         case .all:
-            return data.reduce(0) { $0 + $1.fuelEconomy(settings: settings) } / Double(data.count)
+            guard !data.isEmpty else { return 0 }
+            let total = data.reduce(0) { $0 + $1.fuelEconomy(settings: settings) }
+            return total / Double(data.count)
         }
     }
     
