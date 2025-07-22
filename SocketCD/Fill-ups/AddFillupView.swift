@@ -13,8 +13,6 @@ struct AddFillupView: View {
     let vehicle: Vehicle
     let quickFill: Bool
     
-    @State private var showingFillTypeInfo = false
-    
     init(vehicle: Vehicle, quickFill: Bool) {
         self.vehicle = vehicle
         self.quickFill = quickFill
@@ -32,7 +30,7 @@ struct AddFillupView: View {
                         .foregroundStyle(Color.secondary)
                 }
                 
-                DraftFillupView(draftFillup: draftFillup, isEditView: false, showingFillTypeInfo: $showingFillTypeInfo)
+                DraftFillupView(draftFillup: draftFillup, isEditView: false)
                     
             }
             .background(Color(.systemGroupedBackground))
@@ -53,13 +51,6 @@ struct AddFillupView: View {
                 }
             }
         }
-        .overlay(
-            Group {
-                if showingFillTypeInfo {
-                    FillTypeInfoView(showingFillTypeInfo: $showingFillTypeInfo)
-                }
-            }
-        )
     }
 }
 

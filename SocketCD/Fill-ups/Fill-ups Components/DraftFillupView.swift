@@ -12,7 +12,7 @@ struct DraftFillupView: View {
     @ObservedObject var draftFillup: DraftFillup
 //    let vehicle: Vehicle
     let isEditView: Bool
-    @Binding var showingFillTypeInfo: Bool
+    @State var showingFillTypeInfo = false
     
     @FocusState var isInputActive: Bool
     @FocusState var fieldInFocus: Bool
@@ -94,10 +94,11 @@ struct DraftFillupView: View {
             }
         }
         .scrollDismissesKeyboard(.interactively)
+        .sheet(isPresented: $showingFillTypeInfo, content: { FillTypeInfoView() })
     }
 }
 
 #Preview {
-    DraftFillupView(draftFillup: DraftFillup(), isEditView: true, showingFillTypeInfo: .constant(false))
+    DraftFillupView(draftFillup: DraftFillup(), isEditView: true)
         .environmentObject(AppSettings())
 }

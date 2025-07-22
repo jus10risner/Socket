@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct FillTypeInfoView: View {
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var settings: AppSettings
-    @Binding var showingFillTypeInfo: Bool
     
     var body: some View {
         fillTypeInfo
@@ -87,9 +87,7 @@ struct FillTypeInfoView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        withAnimation {
-                            showingFillTypeInfo = false
-                        }
+                        dismiss()
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.title2)
@@ -109,6 +107,6 @@ struct FillTypeInfoView: View {
 }
 
 #Preview {
-    FillTypeInfoView(showingFillTypeInfo: .constant(true))
+    FillTypeInfoView()
         .environmentObject(AppSettings())
 }

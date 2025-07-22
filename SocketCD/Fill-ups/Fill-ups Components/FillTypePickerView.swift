@@ -18,9 +18,7 @@ struct FillTypePicker: View {
                 Text("Fill Type")
                 
                 Button {
-                    withAnimation {
-                        showingFillTypeInfo = true
-                    }
+                    showingFillTypeInfo = true
                 } label: {
                     Image(systemName: "info.circle")
                         .foregroundStyle(settings.accentColor(for: .fillupsTheme))

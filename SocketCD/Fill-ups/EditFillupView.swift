@@ -13,8 +13,6 @@ struct EditFillupView: View {
 //    @ObservedObject var vehicle: Vehicle
     var fillup: Fillup
     
-    @State private var showingFillTypeInfo = false
-    
     init(fillup: Fillup) {
         self.fillup = fillup
         
@@ -23,7 +21,7 @@ struct EditFillupView: View {
     
     var body: some View {
         NavigationStack {
-            DraftFillupView(draftFillup: draftFillup, isEditView: true, showingFillTypeInfo: $showingFillTypeInfo)
+            DraftFillupView(draftFillup: draftFillup, isEditView: true)
                 .navigationTitle("Edit Fill-up")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -41,13 +39,6 @@ struct EditFillupView: View {
                     }
                 }
         }
-        .overlay(
-            Group {
-                if showingFillTypeInfo {
-                    FillTypeInfoView(showingFillTypeInfo: $showingFillTypeInfo)
-                }
-            }
-        )
     }
 }
 
