@@ -73,7 +73,7 @@ struct DraftFillupView: View {
                                 .accessibilityHidden(true)
                         }
                         
-                        TextField(settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit.lowercased())" : "Total Cost", value: $draftFillup.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD").precision(.fractionLength(2...)))
+                        TextField(settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit.lowercased())" : "Total Cost", value: $draftFillup.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                             .keyboardType(.decimalPad)
                     }
                     .padding(.leading, 10)
