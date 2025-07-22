@@ -105,4 +105,16 @@ class DataController: ObservableObject {
             }
         }
     }
+    
+    // Deletes a managed object and saves the context
+    func delete(_ object: NSManagedObject) {
+        let context = container.viewContext
+        context.delete(object)
+
+        do {
+            try context.save()
+        } catch {
+            print("Failed to delete object: \(error.localizedDescription)")
+        }
+    }
 }

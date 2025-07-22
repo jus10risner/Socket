@@ -68,11 +68,11 @@ extension ServiceRecord {
         try? context.save()
     }
     
-    func delete(for service: Service) {
-        let context = DataController.shared.container.viewContext
-        
-        service.cancelPendingNotifications()
-        context.delete(self)
-        try? context.save()
-    }
+//    func delete(for service: Service) {
+//        let context = DataController.shared.container.viewContext
+//        
+//        service.cancelPendingNotifications()
+//        context.delete(self)
+//        try? context.save()
+//    }
 }

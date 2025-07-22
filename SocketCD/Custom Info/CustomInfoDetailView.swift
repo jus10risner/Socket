@@ -54,7 +54,7 @@ struct CustomInfoDetailView: View {
         .sheet(isPresented: $showingEditCustomInfo) { EditCustomInfoView(customInfo: customInfo) }
         .alert("Delete Vehicle Info", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
-                customInfo.delete()
+                DataController.shared.delete(customInfo)
                 dismiss()
             }
             Button("Cancel", role: .cancel) { }

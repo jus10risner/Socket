@@ -83,12 +83,12 @@ extension Vehicle {
         try? context.save()
     }
     
-    func delete() {
-        let context = DataController.shared.container.viewContext
-        
-        context.delete(self)
-        try? context.save()
-    }
+//    func delete() {
+//        let context = DataController.shared.container.viewContext
+//        
+//        context.delete(self)
+//        try? context.save()
+//    }
     
     func addNewService(draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
         let context = DataController.shared.container.viewContext

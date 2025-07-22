@@ -72,7 +72,8 @@ struct RecordDetailView: View {
         }
         .alert("Delete Record", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
-                record.delete(for: service)
+//                record.delete(for: service)
+                DataController.shared.delete(record)
                 
                 dismiss()
             }

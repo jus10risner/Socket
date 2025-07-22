@@ -74,7 +74,7 @@ struct RepairDetailView: View {
         }
         .alert("Delete Repair", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
-                repair.delete()
+                DataController.shared.delete(repair)
                 dismiss()
             }
             Button("Cancel", role: .cancel) { }

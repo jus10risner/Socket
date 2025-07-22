@@ -90,7 +90,7 @@ struct FillupDetailView: View {
         }
         .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
-                fillup.delete()
+                DataController.shared.delete(fillup)
                 dismiss()
             }
             Button("Cancel", role: .cancel) { }

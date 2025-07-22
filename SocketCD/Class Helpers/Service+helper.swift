@@ -255,13 +255,13 @@ extension Service {
         try? context.save()
     }
     
-    func delete() {
-        let context = DataController.shared.container.viewContext
-        
-        self.cancelPendingNotifications()
-        context.delete(self)
-        try? context.save()
-    }
+//    func delete() {
+//        let context = DataController.shared.container.viewContext
+//        
+//        self.cancelPendingNotifications()
+//        context.delete(self)
+//        try? context.save()
+//    }
     
     func addNewServiceRecord(vehicle: Vehicle, draftServiceRecord: DraftServiceRecord) {
         let context = DataController.shared.container.viewContext

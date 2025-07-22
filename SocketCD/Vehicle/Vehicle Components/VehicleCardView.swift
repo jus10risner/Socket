@@ -129,7 +129,7 @@ struct VehicleCardView: View {
             Button("Delete", role: .destructive) {
                 withAnimation {
                     if let vehicleToDelete {
-                        delete(vehicle: vehicleToDelete)
+                        DataController.shared.delete(vehicleToDelete)
                     }
                     
                     vehicleToDelete = nil
@@ -285,12 +285,6 @@ struct VehicleCardView: View {
         } else {
             return false
         }
-    }
-    
-    // Deletes a given vehicle from Core Data
-    func delete(vehicle: Vehicle) {
-        context.delete(vehicle)
-        try? context.save()
     }
 }
 

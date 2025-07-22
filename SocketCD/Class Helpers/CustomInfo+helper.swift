@@ -46,10 +46,10 @@ extension CustomInfo {
         try? context.save()
     }
     
-    func delete() {
-        let context = DataController.shared.container.viewContext
-        
-        context.delete(self)
-        try? context.save()
-    }
+//    func delete() {
+//        let context = DataController.shared.container.viewContext
+//        
+//        context.delete(self)
+//        try? context.save()
+//    }
 }

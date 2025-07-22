@@ -30,7 +30,7 @@ struct EditablePhotoGridView: View {
                         
                         
                         Button {
-                            delete(photo: photo)
+                            DataController.shared.delete(photo)
                         } label: {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.largeTitle)
@@ -53,9 +53,9 @@ struct EditablePhotoGridView: View {
     // MARK: - Methods
     
     // Deletes a given photo from the photos array
-    func delete(photo: Photo) {
-        if let index = photos.firstIndex(of: photo) {
-            photos.remove(at: index)
-        }
-    }
+//    func delete(photo: Photo) {
+//        if let index = photos.firstIndex(of: photo) {
+//            photos.remove(at: index)
+//        }
+//    }
 }
