@@ -274,10 +274,8 @@ extension Service {
         newServiceRecord.note = draftServiceRecord.note
         newServiceRecord.photos = NSSet(array: draftServiceRecord.photos)
         
-        if let odometer = draftServiceRecord.odometer {
-            if odometer > vehicle.odometer {
-                vehicle.odometer = odometer
-            }
+        if let odometer = draftServiceRecord.odometer, odometer > vehicle.odometer {
+            vehicle.odometer = odometer
         }
         
         // Cancels any notifications that have been scheduled for this service, so they can be rescheduled, if appropriate

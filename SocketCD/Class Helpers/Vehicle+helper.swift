@@ -125,10 +125,8 @@ extension Vehicle {
         newRepair.note = draftRepair.note
         newRepair.photos = NSSet(array: draftRepair.photos)
         
-        if let odometer = draftRepair.odometer {
-            if odometer > self.odometer {
-                self.odometer = odometer
-            }
+        if let odometer = draftRepair.odometer, odometer > self.odometer {
+            self.odometer = odometer
         }
         
         try? context.save()
@@ -147,10 +145,8 @@ extension Vehicle {
         newFillup.note = draftFillup.note
         newFillup.photos = NSSet(array: draftFillup.photos)
         
-        if let odometer = draftFillup.odometer {
-            if odometer > self.odometer {
-                self.odometer = odometer
-            }
+        if let odometer = draftFillup.odometer, odometer > self.odometer {
+            self.odometer = odometer
         }
         
         self.updateOdometerBasedNotifications()
