@@ -16,6 +16,7 @@ class DraftService: ObservableObject {
     @Published var monthsInterval: Bool = true
     @Published var serviceNote: String = ""
     
+    // Used when editing an existing service
     init(service: Service) {
         id = service.id
         name = service.name
@@ -25,19 +26,11 @@ class DraftService: ObservableObject {
         serviceNote = service.note
     }
     
-    init() {
-        self.name = name
-        self.distanceInterval = distanceInterval
-        self.timeInterval = timeInterval
-        self.monthsInterval = monthsInterval
-        self.serviceNote = serviceNote
-    }
+    // Used when creating a new service
+    init() { }
     
+    // Determines whether the required information is present
     var canBeSaved: Bool {
-        if name != "" && (distanceInterval != nil || timeInterval != nil) {
-            return true
-        } else {
-            return false
-        }
+        name != "" && (distanceInterval != nil || timeInterval != nil)
     }
 }

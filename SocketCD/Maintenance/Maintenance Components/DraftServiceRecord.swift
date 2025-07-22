@@ -16,6 +16,7 @@ class DraftServiceRecord: ObservableObject {
     @Published var note: String = ""
     @Published var photos: [Photo] = []
     
+    // Used when editing an existing service record
     init(record: ServiceRecord) {
         id = record.id
         date = record.date
@@ -25,19 +26,11 @@ class DraftServiceRecord: ObservableObject {
         photos = record.sortedPhotosArray
     }
     
-    init() {
-        self.date = date
-        self.odometer = odometer
-        self.cost = cost
-        self.note = note
-        self.photos = photos
-    }
+    // Used when adding a new service record
+    init() { }
     
+    // Determines whether the required information is present
     var canBeSaved: Bool {
-        if odometer != nil {
-            return true
-        } else {
-            return false
-        }
+        odometer != nil
     }
 }

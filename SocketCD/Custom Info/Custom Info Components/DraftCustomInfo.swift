@@ -15,6 +15,7 @@ class DraftCustomInfo: ObservableObject {
     @Published var note: String = ""
     @Published var photos: [Photo] = []
     
+    // Used when editing existing custom info
     init(customInfo: CustomInfo) {
         id = customInfo.id
         label = customInfo.label
@@ -23,18 +24,11 @@ class DraftCustomInfo: ObservableObject {
         photos = customInfo.sortedPhotosArray
     }
     
-    init() {
-        self.label = label
-        self.detail = detail
-        self.note = note
-        self.photos = photos
-    }
+    // Used when adding new custom info
+    init() { }
     
+    // Determines whether the required information is present
     var canBeSaved: Bool {
-        if label != "" && (detail != "" || !photos.isEmpty) {
-            return true
-        } else {
-            return false
-        }
+        label != "" && (detail != "" || !photos.isEmpty)
     }
 }

@@ -8,6 +8,7 @@
 import Foundation
 
 class DraftFillup: ObservableObject {
+    private let settings: AppSettings
     var id: UUID? = nil
     
     @Published var date: Date = Date.now
@@ -18,7 +19,10 @@ class DraftFillup: ObservableObject {
     @Published var note: String = ""
     @Published var photos: [Photo] = []
     
-    init(fillup: Fillup) {
+    // Used when editing an existin fill-up record
+    init(fillup: Fillup, settings: AppSettings = AppSettings()) {
+        self.settings = settings
+        
         id = fillup.id
         date = fillup.date
         odometer = fillup.odometer
@@ -29,27 +33,18 @@ class DraftFillup: ObservableObject {
         photos = fillup.sortedPhotosArray
     }
     
-    init() {
-        self.date = date
-        self.odometer = odometer
-        self.volume = volume
-        self.cost = cost
-        self.fillType = fillType
-        self.note = note
-        self.photos = photos
+    // Used when adding a new fill-up
+    init(settings: AppSettings = AppSettings()) {
+        self.settings = settings
     }
     
+    // Determines whether the required information is present
     var canBeSaved: Bool {
-        if odometer != nil && volume != nil {
-            return true
-        } else {
-            return false
-        }
+        odometer != nil && volume != nil
     }
     
+    // Returns either the price per volume unit, or the total cost of the fill-up, based on the user's selection in Settings
     var fillupCostPerUnit: Double {
-        let settings = AppSettings()
-        
         guard let volume = self.volume else { return 0 }
         guard let cost = self.cost else { return 0 }
         
