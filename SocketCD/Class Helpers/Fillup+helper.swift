@@ -173,16 +173,4 @@ extension Fillup {
         context.delete(self)
         try? context.save()
     }
-        
-    // Populates either the price per unit or the total cost in the edit view, based on the user selection in settings
-    func populateCorrectCost(draftFillup: DraftFillup) {
-        let settings = AppSettings()
-        
-        switch settings.fillupCostType {
-        case .perUnit:
-            draftFillup.cost = self.pricePerUnit ?? 0
-        case .total:
-            draftFillup.cost = self.totalCost ?? 0
-        }
-    }
 }

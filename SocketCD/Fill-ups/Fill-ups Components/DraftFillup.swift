@@ -27,10 +27,16 @@ class DraftFillup: ObservableObject {
         date = fillup.date
         odometer = fillup.odometer
         volume = fillup.volume
-        cost = fillup.pricePerUnit
         fillType = fillup.fillType
         note = fillup.note
         photos = fillup.sortedPhotosArray
+        
+        switch settings.fillupCostType {
+        case .perUnit:
+            cost = fillup.pricePerUnit ?? 0
+        case .total:
+            cost = fillup.totalCost ?? 0
+        }
     }
     
     // Used when adding a new fill-up

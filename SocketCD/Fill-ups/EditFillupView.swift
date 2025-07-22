@@ -26,7 +26,6 @@ struct EditFillupView: View {
             DraftFillupView(draftFillup: draftFillup, isEditView: true, showingFillTypeInfo: $showingFillTypeInfo)
                 .navigationTitle("Edit Fill-up")
                 .navigationBarTitleDisplayMode(.inline)
-                .onAppear { fillup.populateCorrectCost(draftFillup: draftFillup) }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         Button("Cancel", role: .cancel) { dismiss() }
