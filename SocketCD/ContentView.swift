@@ -29,8 +29,8 @@ struct ContentView: View {
 //                    UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)
 //                }
         } detail: {
-            if let selectedVehicle {
-                VehicleDashboardView(vehicle: selectedVehicle)
+            if let vehicle = selectedVehicle {
+                VehicleDashboardView(vehicle: vehicle, selectedVehicle: $selectedVehicle)
             } else {
                 Text("Please select a vehicle")
             }

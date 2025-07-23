@@ -10,11 +10,13 @@ import SwiftUI
 struct VehicleDashboardView: View {
     @EnvironmentObject var settings: AppSettings
     let vehicle: Vehicle
+    @Binding var selectedVehicle: Vehicle?
     
     @FetchRequest var fillups: FetchedResults<Fillup>
     
-    init(vehicle: Vehicle) {
+    init(vehicle: Vehicle, selectedVehicle: Binding<Vehicle?>) {
         self.vehicle = vehicle
+        self._selectedVehicle = selectedVehicle
         self._fillups = FetchRequest(
             entity: Fillup.entity(),
             sortDescriptors: [NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)],
@@ -23,9 +25,8 @@ struct VehicleDashboardView: View {
     }
     
     @State private var selectedSection: AppSection?
-    @State private var showingAddService = false
-    @State private var showingAddRepair = false
-    @State private var showingAddFillup = false
+    @State private var activeSheet: ActiveSheet?
+    @State private var showingDeleteAlert = false
 //    @State private var showingFuelEconomyInfo = false
     
     let columns: [GridItem] = {
@@ -73,18 +74,26 @@ struct VehicleDashboardView: View {
                     .ignoresSafeArea()
             }
             .navigationTitle(vehicle.name)
-            .sheet(isPresented: $showingAddService) {
-                AddServiceView(vehicle: vehicle)
-//                    .tint(settings.accentColor(for: .maintenanceTheme))
-                    .tint(settings.accentColor(for: .maintenanceTheme))
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                case .addService:
+                    AddServiceView(vehicle: vehicle)
+                case .addRepair:
+                    AddRepairView(vehicle: vehicle)
+                case .addFillup:
+                    AddFillupView(vehicle: vehicle, quickFill: false)
+                case .editVehicle:
+                    EditVehicleView(vehicle: vehicle)
+                
+                }
             }
-            .sheet(isPresented: $showingAddRepair) {
-                AddRepairView(vehicle: vehicle)
-                    .tint(settings.accentColor(for: .repairsTheme))
-            }
-            .sheet(isPresented: $showingAddFillup) {
-                AddFillupView(vehicle: vehicle, quickFill: false)
-                    .tint(settings.accentColor(for: .fillupsTheme))
+            .confirmationDialog("Permanently delete \(vehicle.name) and all of its records? \nThis action cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
+                Button("Delete", role: .destructive) {
+                    DataController.shared.delete(vehicle)
+                    selectedVehicle = nil
+                }
+                
+                Button("Cancel", role: .cancel) { }
             }
 //            .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
 //            .toolbar {
@@ -289,12 +298,25 @@ struct QuickAddButton<Label: View>: View {
     }
 }
 
+enum ActiveSheet: Identifiable {
+    case addService, addRepair, addFillup, editVehicle
+    
+    var id: String {
+        switch self {
+        case .addService: return "addService"
+        case .addRepair: return "addRepair"
+        case .addFillup: return "addFillup"
+        case .editVehicle: return "editVehicle"
+        }
+    }
+}
+
 #Preview {
     let context = DataController.preview.container.viewContext
     let vehicle = Vehicle(context: context)
     vehicle.name = "My Car"
     vehicle.odometer = 12345
     
-    return VehicleDashboardView(vehicle: vehicle)
+    return VehicleDashboardView(vehicle: vehicle, selectedVehicle: .constant(vehicle))
         .environmentObject(AppSettings())
 }
