@@ -50,27 +50,34 @@ struct FuelEconomyChartView: View {
                        let xPosition = proxy.position(forX: selectedFillup.date),
                        let yPosition = proxy.position(forY: selectedFillup.fuelEconomy(settings: settings))
                     {
-                        // Vertical line
-                        Rectangle()
-                            .fill(Color.secondary)
-                            .frame(width: 1, height: geo.size.height)
-                            .position(x: xPosition, y: geo.size.height / 2)
-                        
-                        Circle()
-                            .fill(Color.defaultFillupsAccent)
-                            .frame(width: 10, height: 10)
-                            .position(x: xPosition, y: yPosition)
-//
-//                            // Tooltip
-//                            Text(String(format: "%.1f", selectedFillup.fuelEconomy))
-//                                .font(.caption)
-//                                .padding(5)
-//                                .background(.regularMaterial)
-//                                .cornerRadius(5)
-//                                .overlay(
-//                                    RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 0.5)
-//                                )
+                        Group {
+                            let plotSize = proxy.plotSize
+                            let labelWidth: CGFloat = 40
+                            let clampedX = min(max(xPosition, labelWidth / 2), plotSize.width - labelWidth / 2)
+                            
+                            // Vertical line
+                            Rectangle()
+                                .fill(Color.secondary)
+                                .frame(width: 1, height: plotSize.height)
+                                .position(x: xPosition, y: plotSize.height / 2)
+                            
+//                            Circle()
+//                                .fill(settings.accentColor(for: .fillupsTheme))
+//                                .frame(width: 10, height: 10)
 //                                .position(x: xPosition, y: yPosition)
+                            
+                            // Tooltip
+                            Text(String(format: "%.1f", selectedFillup.fuelEconomy(settings: settings)))
+                                .font(.caption)
+//                                .padding(5)
+                                .frame(width: labelWidth, height: 30)
+                                .background(.regularMaterial)
+                                .cornerRadius(5)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 0.5)
+                                )
+                                .position(x: clampedX, y: yPosition)
+                        }
                     }
                     
                     // Average fuel economy line
@@ -175,14 +182,15 @@ struct FuelEconomyChartView: View {
         return start...end
     }
     
-    // Determines the vertical scale of the chart
+    // Determines the vertical scale of the chart, rounding up and down to make sure horizontal lines denote the upper and lower bounds of the chart
     private var yRange: ClosedRange<Double> {
-//        let sortedArray = data.map(\.fuelEconomy)
-        let sortedArray = data.map { $0.fuelEconomy(settings: settings) }
-        guard let minValue = sortedArray.min(), let maxValue = sortedArray.max() else { return 0...1 } // default to 0...1 if sortedArray is empty
+        let values = data.map { $0.fuelEconomy(settings: settings) }
+        guard let minValue = values.min(), let maxValue = values.max() else { return 0...1 } // default to 0...1 if values is empty
         
-        let padding = (maxValue - minValue) * 0.1 // Used to give LineMark some breathing room on the y-axis
-        return max(minValue - padding, 0)...(maxValue + padding) // max() ensures that the y-axis value never goes below 0
+        let step: Double = 5 // The number to round by
+        let lowerBound = max(floor(minValue / step) * step, 0)
+        let upperBound = ceil(maxValue / step) * step
+        return lowerBound...upperBound
     }
     
     private func nearestDate(to target: Date) -> Date? {
