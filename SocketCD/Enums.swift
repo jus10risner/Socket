@@ -16,7 +16,7 @@ enum FocusedField {
 // MARK: - VehicleDashboardView
 
 enum AppSection: String, CaseIterable {
-    case maintenance, repairs, fillups, vehicle
+    case maintenance, repairs, fillups
     
     var symbol: String {
         switch self {
@@ -26,8 +26,6 @@ enum AppSection: String, CaseIterable {
             return "wrench.fill"
         case .fillups:
             return "fuelpump.fill"
-        case .vehicle:
-            return "car.fill"
         }
     }
     
@@ -36,7 +34,6 @@ enum AppSection: String, CaseIterable {
         case .maintenance: return .maintenanceTheme
         case .repairs: return .repairsTheme
         case .fillups: return .fillupsTheme
-        case .vehicle: return .appTheme
         }
     }
 }

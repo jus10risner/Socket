@@ -274,9 +274,6 @@ struct VehicleDashboardView: View {
         case .fillups:
             FillupsDashboardView(vehicle: vehicle)
                 .tint(settings.accentColor(for: section.theme))
-        case .vehicle:
-            VehicleInfoView(vehicle: vehicle)
-                .tint(settings.accentColor(for: section.theme))
         }
     }
 }
