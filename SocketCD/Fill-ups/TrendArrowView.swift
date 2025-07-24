@@ -24,7 +24,7 @@ struct TrendArrowView: View {
     var body: some View {
         ZStack {
             Circle()
-                .frame(width: 40, height: 40)
+                .frame(width: 35)
                 .foregroundStyle(Color(.tertiarySystemGroupedBackground))
             
             if latestFillupFuelEconomy > previousFillupFuelEconomy {
@@ -36,12 +36,12 @@ struct TrendArrowView: View {
             }
         }
         .foregroundStyle(settings.accentColor(for: .fillupsTheme))
-        .font(.title.bold())
+        .font(.title2.bold())
         .animation(.bouncy, value: animatingTrendArrow)
         .onAppear { animateTrendArrow(shouldReset: false) }
         .mask {
             Circle()
-                .frame(width: 40, height: 40)
+                .frame(width: 35)
         }
         .onChange(of: Array(fillups)) {
             animateTrendArrow(shouldReset: true)
@@ -52,7 +52,7 @@ struct TrendArrowView: View {
     private var upArrow: some View {
         Image(systemName: "chevron.up")
 //            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .red : .green)
-            .offset(y: animatingTrendArrow ? 0 : 40)
+            .offset(y: animatingTrendArrow ? 0 : 35)
             .accessibilityLabel("Fuel economy is up since your last fill-up")
     }
     
@@ -60,7 +60,7 @@ struct TrendArrowView: View {
     private var downArrow: some View {
         Image(systemName: "chevron.down")
 //            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .green : .red)
-            .offset(y: animatingTrendArrow ? 0 : -40)
+            .offset(y: animatingTrendArrow ? 0 : -35)
             .accessibilityLabel("Fuel economy is down since your last fill-up")
     }
     
