@@ -170,6 +170,32 @@ extension Vehicle {
     
     // MARK: - Other Methods
     
+    // Returns the next service due (or the most overdue service)
+    func nextServiceDue() -> Service? {
+        let prioritized = sortedServicesArray.compactMap { service -> (service: Service, priority: Int)? in
+            let context = ServiceContext(service: service, currentOdometer: odometer)
+            guard let priority = priority(context: context) else { return nil }
+            
+            return (service: service, priority: priority)
+        }
+
+        return prioritized.min { $0.priority < $1.priority }?.service
+    }
+    
+    // Calculates the miles or days left until service is due
+    private func priority(context: ServiceContext) -> Int? {
+        switch (context.daysUntilDue, context.milesUntilDue) {
+        case let (d?, m?):
+            return min(d, m)
+        case let (d?, nil):
+            return d
+        case let (nil, m?):
+            return m
+        default:
+            return nil
+        }
+    }
+    
     // Checks to see when all notifications are due for this vehicle, and schedules them for the correct times
     func updateAllNotifications() {
         let context = DataController.shared.container.viewContext
