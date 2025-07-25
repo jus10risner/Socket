@@ -19,27 +19,29 @@ struct ServiceIndicatorView: View {
             .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
             .frame(width: 30)
             .overlay {
-                switch service.serviceStatus {
-                case .overDue:
-                    ZStack {
+                if progress > 0 {
+                    switch service.serviceStatus {
+                    case .overDue:
+                        ZStack {
+                            Circle()
+                                .stroke(Color.red, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                            
+                            Image(systemName: "exclamationmark")
+                                .font(.title3.bold())
+                                .foregroundStyle(Color.red)
+                                .symbolEffect(.bounce, value: remainingValue)
+                        }
+                    default:
                         Circle()
-                            .stroke(Color.red, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                        
-                        Image(systemName: "exclamationmark")
-                            .font(.title3.bold())
-                            .foregroundStyle(Color.red)
-                            .symbolEffect(.bounce, value: remainingValue)
+                            .trim(from: remainingValue, to: 1.0)
+                            .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                            .rotationEffect(.degrees(-90))
                     }
-                default:
-                    Circle()
-                        .trim(from: remainingValue, to: 1.0)
-                        .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                        .rotationEffect(.degrees(-90))
                 }
             }
             .animation(.easeInOut(duration: 0.5), value: remainingValue)
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     remainingValue = 1.0 - progress
                     
                 }
