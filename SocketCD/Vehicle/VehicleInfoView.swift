@@ -48,7 +48,7 @@ struct VehicleInfoView: View {
             customInfoSection
         }
         .navigationTitle("Vehicle")
-        .sheet(isPresented: $showingEditVehicle) { EditVehicleView(vehicle: vehicle) }
+//        .sheet(isPresented: $showingEditVehicle) { EditVehicleView(vehicle: vehicle) }
         
       // Sheet wasn't loading the url on first launch of ActivityView, so I manually added a getter/setter. This seems to have resolved the issue.
         .sheet(isPresented: Binding(
