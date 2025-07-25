@@ -9,12 +9,14 @@ import SwiftUI
 
 struct VehicleDashboardView: View {
     @EnvironmentObject var settings: AppSettings
-    let vehicle: Vehicle
-    @Binding var selectedVehicle: Vehicle?
+    @StateObject var draftVehicle = DraftVehicle()
+    @ObservedObject var vehicle: Vehicle
+    @Binding var selectedVehicle: Vehicle? // Used primarily to dismiss this view if the vehicle is deleted
     
     @FetchRequest var fillups: FetchedResults<Fillup>
     
     init(vehicle: Vehicle, selectedVehicle: Binding<Vehicle?>) {
+        _draftVehicle = StateObject(wrappedValue: DraftVehicle(vehicle: vehicle))
         self.vehicle = vehicle
         self._selectedVehicle = selectedVehicle
         self._fillups = FetchRequest(
@@ -26,8 +28,10 @@ struct VehicleDashboardView: View {
     
     @State private var selectedSection: AppSection?
     @State private var activeSheet: ActiveSheet?
+    @State private var showingUpdateOdometerAlert = false
     @State private var showingDeleteAlert = false
-//    @State private var showingFuelEconomyInfo = false
+    
+    @State private var odometerValue = ""
     
     let columns: [GridItem] = {
         [GridItem(.adaptive(minimum: 300), spacing: 5)]
@@ -38,19 +42,16 @@ struct VehicleDashboardView: View {
             List {
                 Section {
                     LazyVGrid(columns: columns, spacing: 5) {
-                        maintenanceDashboardCard(vehicle: vehicle)
+                        maintenanceDashboardCard
                         
-                        HStack(spacing: 5) {
-                            odometerDashboardCard(vehicle: vehicle)
-                            
-                            fuelEconomyDashboardCard(vehicle: vehicle)
-                        }
+                        fuelEconomyDashboardCard
                         
-                        quickActionButtons
+                        quickAddDashboardCard
                     }
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
                 
                 Section("Records") {
                     ForEach(AppSection.allCases, id: \.self) { section in
@@ -62,8 +63,10 @@ struct VehicleDashboardView: View {
                     }
                 }
                 .headerProminence(.increased)
+                
+                vehicleInfo
             }
-            .listRowSpacing(5)
+//            .listRowSpacing(5)
 //            .listStyle(.insetGrouped)
             //            }
             //            .background(Color(.systemGroupedBackground))
@@ -78,15 +81,33 @@ struct VehicleDashboardView: View {
                 switch sheet {
                 case .addService:
                     AddServiceView(vehicle: vehicle)
+                        .tint(settings.accentColor(for: .maintenanceTheme))
                 case .addRepair:
                     AddRepairView(vehicle: vehicle)
+                        .tint(settings.accentColor(for: .repairsTheme))
                 case .addFillup:
                     AddFillupView(vehicle: vehicle, quickFill: false)
+                        .tint(settings.accentColor(for: .fillupsTheme))
+                case .addCustomInfo:
+                    AddCustomInfoView(vehicle: vehicle)
+                        .tint(settings.accentColor(for: .appTheme))
                 case .editVehicle:
                     EditVehicleView(vehicle: vehicle)
+                        .tint(settings.accentColor(for: .appTheme))
                 
                 }
             }
+            .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
+                TextField("New Odometer Reading", value: $draftVehicle.odometer, format: .number.decimalSeparator(strategy: .automatic))
+                    .multilineTextAlignment(.center)
+                    .keyboardType(.numberPad)
+                Button("Cancel", role: .cancel) { }
+                Button("OK") {
+                    vehicle.updateAndSave(draftVehicle: draftVehicle)
+                }
+            }, message: {
+                Text("Enter the current odometer reading for \(vehicle.name).")
+            })
             .confirmationDialog("Permanently delete \(vehicle.name) and all of its records? \nThis action cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
                 Button("Delete", role: .destructive) {
                     DataController.shared.delete(vehicle)
@@ -95,171 +116,260 @@ struct VehicleDashboardView: View {
                 
                 Button("Cancel", role: .cancel) { }
             }
-//            .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
-//            .toolbar {
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    Button {
-//                        // Vehicle Settings
-//                    } label: {
-//                        Label("Settings", systemImage: "ellipsis.circle")
-//                    }
-//                }
-//            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button {
+                            activeSheet = .editVehicle
+                        } label: {
+                            Label("Edit Vehicle", systemImage: "pencil")
+                        }
+                        
+                        exportMenu
+                        
+                        Section {
+                            Button(role: .destructive) {
+                                showingDeleteAlert = true
+                            } label: {
+                                Label("Delete Vehicle", systemImage: "trash")
+                            }
+                        }
+                    } label: {
+                        Label("Vehicle Options", systemImage: "ellipsis.circle")
+                    }
+                }
+            }
         }
     }
     
-    func odometerDashboardCard(vehicle: Vehicle) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label("Odometer", systemImage: "road.lanes")
-                .labelStyle(.titleOnly)
-                .font(.headline)
-                .foregroundStyle(settings.accentColor(for: .appTheme))
-            
-            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text("\(vehicle.odometer)")
-                    .font(.title3.bold())
-                
-                Text(settings.distanceUnit.abbreviated)
-                    .foregroundStyle(Color.secondary)
+    var vehicleInfo: some View {
+        Section {
+            if vehicle.sortedCustomInfoArray.isEmpty {
+                VStack(spacing: 20) {
+                    Text("Add things like your vehicle's VIN or license plate number here, for easy reference.")
+                        .foregroundStyle(Color.secondary)
+                    
+                    //                            HStack(spacing: 3) {
+                    //                                Text("Tap")
+                    //
+                    //                                addInfoButton
+                    //
+                    //                                Text("to add vehicle info")
+                    //                            }
+                    //                            .frame(maxWidth: .infinity)
+                }
+                .font(.subheadline)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 20)
+            } else {
+                ForEach(vehicle.sortedCustomInfoArray, id: \.id) { customInfo in
+                    NavigationLink {
+                        CustomInfoDetailView(customInfo: customInfo)
+                    } label: {
+                        Text(customInfo.label)
+                    }
+                }
+            }
+        } header: {
+            HStack {
+                Text("Custom Info")
                 
                 Spacer()
                 
-                Image(systemName: "pencil")
-                    .font(.title2.bold())
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(settings.accentColor(for: .appTheme))
+                Button {
+                    activeSheet = .addCustomInfo
+                } label: {
+                    Label("Add Custom Info", systemImage: "plus.circle.fill")
+                        .labelStyle(.iconOnly)
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.white, settings.accentColor(for: .appTheme))
+                }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding()
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
+        .headerProminence(.increased)
     }
     
-    func fuelEconomyDashboardCard(vehicle: Vehicle) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label("Latest Fill-up", systemImage: "fuelpump.fill")
-                .labelStyle(.titleOnly)
-                .font(.headline)
-                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
-            
-            if let fillup = vehicle.sortedFillupsArray.first {
-                HStack(spacing: 3) {
-                    TrendArrowView(fillups: fillups)
-                        .scaleEffect(0.75)
-                        .frame(width: 30)
-                    
-                    HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        Text(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1)))
-                            .font(.title3.bold())
+    var maintenanceDashboardCard: some View {
+        DashboardCardView(title: "Next Service Due", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme)) {
+            Group {
+                if let service = vehicle.nextServiceDue() {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text(service.name)
+                                .font(.title3.bold())
+                            
+                            Text(service.nextDueDescription(context: ServiceContext(service: service, currentOdometer: vehicle.odometer)))
+                                .font(.footnote)
+                                .foregroundStyle(Color.secondary)
+                        }
                         
-                        Text(settings.fuelEconomyUnit.rawValue)
-                            .foregroundStyle(Color.secondary)
+                        Spacer()
+                        
+                        ServiceIndicatorView(vehicle: vehicle, service: service)
                     }
-                }
-            } else {
-                Text("No Fuel Economy")
+                } else {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Nothing to see here...")
+                            .font(.title3)
+                        
+                        Text("Log a maintenance service to see when it's due next.")
+                            .font(.footnote)
+                            
+                    }
                     .foregroundStyle(Color.secondary)
+                }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .padding()
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
     }
     
-    func maintenanceDashboardCard(vehicle: Vehicle) -> some View {
-        return VStack(alignment: .leading, spacing: 10) {
-            Label("Next Service Due", systemImage: "book.and.wrench.fill")
-                .labelStyle(.titleOnly)
-                .font(.headline)
-                .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
-            
-            if let service = nextDueService(from: vehicle.sortedServicesArray, currentOdometer: vehicle.odometer) {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(service.name)
-                            .font(.title3.bold())
+    var fuelEconomyDashboardCard: some View {
+        DashboardCardView(title: "Latest Fill-up", systemImage: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme)) {
+            Group {
+                if let fillup = vehicle.sortedFillupsArray.first {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            HStack(alignment: .firstTextBaseline, spacing: 3) {
+                                Text("\(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
+                                    .font(.title3.bold())
+                            }
+                            
+                            Text(fillup.date.formatted(date: .numeric, time: .omitted))
+                                .font(.footnote)
+                                .foregroundStyle(Color.secondary)
+                        }
                         
-                        Text(service.nextDueDescription(context: ServiceContext(service: service, currentOdometer: vehicle.odometer)))
-                            .font(.subheadline)
-                            .foregroundStyle(Color.secondary)
+                        Spacer()
+                        
+                        if fillups.count > 1 {
+                            TrendArrowView(fillups: fillups)
+                        }
                     }
-                    
-                    Spacer()
-                    
-                    ServiceIndicatorView(vehicle: vehicle, service: service)
-                }
-            } else {
-                Text("No Services Scheduled")
+                } else {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Not Enough Info")
+                            .font(.title3)
+                        
+                        Text("Add some fill-ups to see your latest fuel economy.")
+                            .font(.footnote)
+                            
+                    }
                     .foregroundStyle(Color.secondary)
+                }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .padding()
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
+    }
+    
+    var quickAddDashboardCard: some View {
+        DashboardCardView(title: "Quick Actions", systemImage: "road.lanes", accentColor: settings.accentColor(for: .appTheme)) {
+            quickActionButtons
+        }
+    }
+    
+    // Menu, including buttons for exporting/sharing vehicle records. iOS 15 doesn't display section headers in menus, so there's some conditional logic for showing the appropriate header style
+    private var exportMenu: some View {
+        Menu {
+            Section {
+                Button {
+//                    showingPageSizeSelector = true
+                } label: {
+                    Label("PDF", systemImage: "doc")
+                }
+                
+                Button {
+//                    createMaintenanceRepairsCSV()
+//                    showingActivityView = true
+                } label: {
+                    Label("CSV", systemImage: "tablecells")
+                }
+            } header: {
+                Text("Maintenance & Repairs")
+            }
+            .accessibilityHint("Export maintenance and repair records for this vehicle")
+            
+            Section {
+                Button {
+//                    createFillupsCSV()
+//                    showingActivityView = true
+                } label: {
+                    Label("CSV", systemImage: "tablecells")
+                }
+            } header: {
+                Text("Fill-ups")
+            }
+            .accessibilityHint("Export fill-up records for this vehicle")
+        } label: {
+            Label("Export Records", systemImage: "square.and.arrow.up")
+        }
     }
     
     private func sectionLabel(section: AppSection) -> some View {
-        Label {
+//        Label {
             Text(section.rawValue.capitalized)
-                .foregroundStyle(Color.primary)
-        } icon: {
-            Image(systemName: section.symbol)
-        }
-        .foregroundStyle(settings.accentColor(for: section.theme))
-        .listRowSeparator(.hidden)
+//                .foregroundStyle(Color.primary)
+//        } icon: {
+//            Image(systemName: section.symbol)
+//        }
+//        .foregroundStyle(settings.accentColor(for: section.theme))
     }
     
     private var quickActionButtons: some View {
-        HStack(spacing: 5) {
-            QuickAddButton {
-                showingAddService = true
+        let columns: [GridItem] = {[GridItem(.adaptive(minimum: 150), spacing: 10)]}()
+        
+        return LazyVGrid(columns: columns, spacing: 10) {
+            QuickAddButton(accent: settings.accentColor(for: .maintenanceTheme)) {
+                activeSheet = .addService
             } label: {
-                Label("Log Maintenance", image: "book.and.wrench.fill.badge.plus")
-                    .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
+                HStack(spacing: 5) {
+                    Image(systemName: "plus")
+                        .font(.headline)
+                        .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
+                    
+                    Text("Maintenance")
+                }
+                .accessibilityLabel("Add Maintenance Service")
             }
 
-            QuickAddButton {
-                showingAddRepair = true
+            QuickAddButton(accent: settings.accentColor(for: .repairsTheme)) {
+                activeSheet = .addRepair
             } label: {
-                Label("Add Repair", image: "wrench.adjustable.fill.badge.plus")
-                    .foregroundStyle(settings.accentColor(for: .repairsTheme))
+                HStack(spacing: 5) {
+                    Image(systemName: "plus")
+                        .font(.headline)
+                        .foregroundStyle(settings.accentColor(for: .repairsTheme))
+                    
+                    Text("Repair")
+                }
+                .accessibilityLabel("Add Repair")
             }
 
-            QuickAddButton {
-                showingAddFillup = true
+            QuickAddButton(accent: settings.accentColor(for: .fillupsTheme)) {
+                activeSheet = .addFillup
             } label: {
-                Label("Add Fill-up", image: "fuelpump.fill.badge.plus")
-                    .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                HStack(spacing: 5) {
+                    Image(systemName: "plus")
+                        .font(.headline)
+                        .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                    
+                    Text("Fill-up")
+                }
+                .accessibilityLabel("Add Fill-up")
+            }
+            
+            QuickAddButton(accent: settings.accentColor(for: .appTheme)) {
+                showingUpdateOdometerAlert = true
+            } label: {
+                HStack(spacing: 5) {
+                    Image(systemName: "pencil")
+                        .font(.headline)
+                        .foregroundStyle(settings.accentColor(for: .appTheme))
+                    
+                    Text("Odometer")
+                }
+                .accessibilityLabel("Update Odometer")
             }
         }
         .buttonStyle(.plain)
         .listRowBackground(Color.clear)
-    }
-    
-    // Returns the next service due (or the most overdue service)
-    func nextDueService(from services: [Service], currentOdometer: Int) -> Service? {
-        let prioritized = services.compactMap { service -> (service: Service, priority: Int)? in
-            let context = ServiceContext(service: service, currentOdometer: currentOdometer)
-            guard let priority = priority(context: context) else { return nil }
-            
-            return (service: service, priority: priority)
-        }
-
-        return prioritized.min { $0.priority < $1.priority }?.service
-    }
-    
-    // Calculates the miles or days left until service is due
-    func priority(context: ServiceContext) -> Int? {
-        switch (context.daysUntilDue, context.milesUntilDue) {
-        case let (d?, m?):
-            return min(d, m)
-        case let (d?, nil):
-            return d
-        case let (nil, m?):
-            return m
-        default:
-            return nil
-        }
     }
     
     @ViewBuilder
@@ -278,31 +388,59 @@ struct VehicleDashboardView: View {
     }
 }
 
+struct DashboardCardView<Content: View>: View {
+    let title: String
+    let systemImage: String
+    let accentColor: Color
+    let content: () -> Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label(title, systemImage: systemImage)
+                .labelStyle(.titleOnly)
+                .font(.headline)
+                .foregroundStyle(accentColor)
+
+            content()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding()
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
+    }
+}
+
 struct QuickAddButton<Label: View>: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
+    let accent: Color
     let action: () -> Void
     let label: () -> Label
 
     var body: some View {
         Button(action: action) {
             label()
-                .symbolRenderingMode(.hierarchical)
-                .labelStyle(.iconOnly)
-                .padding(10)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .contentShape(RoundedRectangle(cornerRadius: 15))
+//                .foregroundStyle(accent)
+                .padding(.vertical, 10)
+                .frame(maxWidth: .infinity)
+                .contentShape(Capsule())
         }
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 15))
+        .background {
+            Capsule()
+                .fill(Color(.tertiarySystemGroupedBackground))
+//                .stroke(accent, lineWidth: 1)
+        }
     }
 }
 
 enum ActiveSheet: Identifiable {
-    case addService, addRepair, addFillup, editVehicle
+    case addService, addRepair, addFillup, addCustomInfo, editVehicle
     
     var id: String {
         switch self {
         case .addService: return "addService"
         case .addRepair: return "addRepair"
         case .addFillup: return "addFillup"
+        case .addCustomInfo : return "addCustomInfo"
         case .editVehicle: return "editVehicle"
         }
     }
