@@ -20,9 +20,23 @@ extension Vehicle {
         set { odometer_ = Int64(newValue) }
     }
     
+//    var colorComponents: [CGFloat]? {
+//        get { colorComponents_ ?? [0.3060232996940613, 0.2939836084842682, 0.4549291133880615, 1.0] }
+//        set { colorComponents_ = newValue }
+//    }
     var colorComponents: [CGFloat]? {
-        get { colorComponents_ ?? [0.3060232996940613, 0.2939836084842682, 0.4549291133880615, 1.0] }
-        set { colorComponents_ = newValue }
+        get {
+            guard let nsArray = colorComponents_ else {
+                return [0.306, 0.294, 0.455, 1.0]
+            }
+            
+            return nsArray.compactMap { element in
+                (element as? NSNumber).map { CGFloat(truncating: $0) }
+            }
+        }
+        set {
+            colorComponents_ = newValue?.map { NSNumber(value: Double($0)) } as NSArray?
+        }
     }
     
     var backgroundColor: Color {
