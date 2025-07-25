@@ -11,9 +11,13 @@ struct VehiclePhotoView: View {
     let carPhoto: Photo
     
     var body: some View {
-        Image(uiImage: carPhoto.converted)
-            .resizable()
-            .scaledToFill()
-            .accessibilityLabel("Vehicle Photo")
+        GeometryReader { geo in
+            Image(uiImage: carPhoto.converted)
+                .resizable()
+                .scaledToFill()
+                .frame(width: geo.size.width, height: geo.size.height) // Forces the image to obey the parent view's constraints
+                .clipped()
+                .accessibilityLabel("Vehicle Photo")
+        }
     }
 }

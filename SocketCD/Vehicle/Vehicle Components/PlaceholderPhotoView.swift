@@ -19,7 +19,6 @@ struct PlaceholderPhotoView: View {
                 .foregroundStyle(.ultraThickMaterial)
         }
         .environment(\.colorScheme, .light)
-        .frame(maxWidth: .infinity)
         .accessibilityLabel("Car symbol on a solid-color background")
     }
 }

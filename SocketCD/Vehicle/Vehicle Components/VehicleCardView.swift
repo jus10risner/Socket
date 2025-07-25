@@ -39,24 +39,7 @@ struct VehicleCardView: View {
     
     private var alternateCardView: some View {
         VStack(spacing: 10) {
-            RoundedRectangle(cornerRadius: cornerRadius - 5)
-                .aspectRatio(2, contentMode: .fit)
-                .overlay(
-                    Group {
-                        if let carPhoto = vehicle.photo {
-                            VehiclePhotoView(carPhoto: carPhoto)
-                        } else {
-                            PlaceholderPhotoView(backgroundColor: vehicle.backgroundColor)
-                        }
-                    }
-                )
-                .clipShape(RoundedRectangle(cornerRadius: cornerRadius - 5))
-                .overlay {
-                    RoundedRectangle(cornerRadius: cornerRadius - 5)
-                        .stroke(.black.opacity(0.3), lineWidth: 0.25)
-                }
-//                .padding([.horizontal, .top], 5)
-                .accessibilityHidden(true)
+            vehicleImageCard
             
             HStack {
                 VStack(alignment: .leading, spacing: 0) {
@@ -198,6 +181,25 @@ struct VehicleCardView: View {
         .fixedSize(horizontal: false, vertical: true)
     }
     // MARK: - Views
+    
+    var vehicleImageCard: some View {
+        ZStack {
+            Group {
+                if let carPhoto = vehicle.photo {
+                    VehiclePhotoView(carPhoto: carPhoto)
+                } else {
+                    PlaceholderPhotoView(backgroundColor: vehicle.backgroundColor)
+                }
+            }
+            .clipped()
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius - 5))
+        }
+        .overlay(
+            RoundedRectangle(cornerRadius: cornerRadius - 5)
+                .stroke(Color.black.opacity(0.3), lineWidth: 0.5)
+        )
+        .aspectRatio(2, contentMode: .fit)
+    }
     
     // Animated symbol, to draw user attention to a vehicle that is due for service
     var maintenanceAlert: some View {
