@@ -39,30 +39,43 @@ struct AllFillupsListView: View {
                     FillupDetailView(fillup: fillup)
                 } label: {
                     LabeledContent {
-                        HStack(alignment: .firstTextBaseline, spacing: 3) {
-                            if fillup.fillType == .partialFill {
-                                Image(systemName: "circle.bottomhalf.filled")
-                                    .accessibilityHidden(true)
-                                Text("Partial Fill")
+                        Text(fillup.date.formatted(date: .numeric, time: .omitted))
+                    } label: {
+                        switch fillup.fillType {
+                        case .partialFill:
+                            listRowLabel(symbol: "circle.bottomhalf.filled", text: "Partial Fill")
+                            
+                        case .missedFill:
+                            listRowLabel(symbol: "fuelpump.circle", text: "Full Tank (Reset)")
+                            
+                        case .fullTank:
+                            if fillup == fillups.last {
+                                listRowLabel(symbol: "fuelpump.circle", text: "First Fill")
                             } else {
-                                if fillup == fillups.last {
-                                    Image(systemName: "fuelpump.circle")
-                                        .accessibilityHidden(true)
-                                    Text("First Fill")
-                                } else if fillup.fuelEconomy(settings: settings) == 0 && fillup.fillType != .partialFill {
-                                    Image(systemName: "circle.fill")
-                                        .accessibilityHidden(true)
-                                    Text("Full Tank")
-                                } else {
-                                    Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f")")
-                                        .font(.headline)
-                                    Text(settings.fuelEconomyUnit.rawValue)
-                                        .foregroundStyle(Color.secondary)
-                                }
+                                Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
                             }
                         }
-                    } label: {
-                        Text(fillup.date.formatted(date: .numeric, time: .omitted))
+                        
+//                            if fillup.fillType == .partialFill {
+//                                Image(systemName: "circle.bottomhalf.filled")
+//                                    .accessibilityHidden(true)
+//                                Text("Partial Fill")
+//                            } else {
+//                                if fillup == fillups.last {
+//                                    Image(systemName: "fuelpump.circle")
+//                                        .accessibilityHidden(true)
+//                                    Text("First Fill")
+//                                } else if fillup.fuelEconomy(settings: settings) == 0 && fillup.fillType != .partialFill {
+//                                    Image(systemName: "circle.fill")
+//                                        .accessibilityHidden(true)
+//                                    Text("Full Tank")
+//                                } else {
+//                                    Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f")")
+//                                        .font(.headline)
+//                                    Text(settings.fuelEconomyUnit.rawValue)
+//                                        .foregroundStyle(Color.secondary)
+//                                }
+//                            }
                     }
 
                     
@@ -102,6 +115,15 @@ struct AllFillupsListView: View {
         .navigationTitle("Fill-up History")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { if fillups.isEmpty { dismiss() }  }
+    }
+    
+    private func listRowLabel(symbol: String, text: String) -> some View {
+        HStack(spacing: 5) {
+            Image(systemName: symbol)
+            
+            Text(text)
+        }
+        .accessibilityLabel(text)
     }
 }
 
