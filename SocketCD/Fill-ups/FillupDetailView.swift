@@ -46,18 +46,14 @@ struct FillupDetailView: View {
                 LabeledContent {
                     if fillup.fuelEconomy(settings: settings) != 0 {
                         Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                            .foregroundStyle(Color.secondary)
                     } else {
                         switch fillup.fillType {
                         case .fullTank:
                             Text("First Fill")
-                                .foregroundStyle(Color.secondary)
                         case .partialFill:
                             Text("Partial Fill")
-                                .foregroundStyle(Color.secondary)
                         case .missedFill:
                             Text("Missed Fill-up")
-                                .foregroundStyle(Color.secondary)
                         }
                     }
                 } label: {
@@ -100,7 +96,7 @@ struct FillupDetailView: View {
         .alert("Why no fuel economy?", isPresented: $showingMoreInfo) {
             Button("OK") { }
         } message: {
-            Text("\nFuel economy is calculated only between consecutive Full Tanks of fuel. The information on this screen may still be used to estimate average fuel economy for this vehicle.")
+            Text("Fuel economy is calculated only between full tanks of fuel. Calculation will resume after your next Full Tank fill-up.")
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
