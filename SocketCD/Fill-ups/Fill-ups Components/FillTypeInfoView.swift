@@ -45,7 +45,7 @@ struct FillTypeInfoView: View {
                             
                             Text("Select this fill type if fuel was added, but the fuel tank is not completely full.")
                             
-                            Text("This fill type is used only to estimate average fuel economy for this vehicle.")
+                            Text("This fill type helps estimate your average fuel economy. To resume detailed fuel economy tracking, add a Full Tank fill-up.")
                                 .font(.caption)
                                 .foregroundStyle(Color.secondary)
                         }

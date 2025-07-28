@@ -24,7 +24,7 @@ struct FuelEconomyInfoView: View {
                 Section {
                     VStack(alignment: .leading) {
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("Fuel economy is only calculated between consecutive **Full Tank** fill-ups. It looks like one of your most recent fill-ups was a **Partial Fill** or **Missed Fill-up**.")
+                            Text("Fuel economy is only calculated between **Full Tank** fill-ups. It looks like your most recent fill-up was marked as **Partial Fill** or **Missed Fill-up**.")
                             
                             Text("See below, to learn about fuel economy calculation for different fill types.")
                         }
@@ -37,22 +37,22 @@ struct FuelEconomyInfoView: View {
                                 .font(.headline)
                                 .foregroundStyle(settings.accentColor(for: .fillupsTheme))
                             
-                            Text("This fill type is used only to estimate average fuel economy for this vehicle.")
+                            Text("This fill type helps estimate your average fuel economy.")
                             
-                            Text("Fuel economy calculation will resume after two consecutive Full Tank fill-ups have been added.")
+                            Text("Detailed fuel economy tracking will resume after your next Full Tank fill-up.")
                         }
                         .padding()
                         
                         Divider()
                         
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("Missed Fill-up")
+                            Text("Missed Fill-up (Full Tank)")
                                 .font(.headline)
                                 .foregroundStyle(settings.accentColor(for: .fillupsTheme))
                             
-                            Text("This fill type is treated like your very first fill-up, and fuel economy is not calculated.")
+                            Text("This fill type resets fuel economy tracking and is treated as a new starting point.")
                             
-                            Text("Fuel economy calculation will resume after one more Full Tank fill-up has been added.")
+                            Text("Fuel economy will be calculated again after your next Full Tank fill-up.")
                             
                             Text("**Note:** This fill type should only be selected when your fuel tank is full. If the fuel tank was not full when this fill-up was added, your fuel economy may be inaccurate when it is calculated again.")
                                 .font(.caption)
