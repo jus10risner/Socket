@@ -18,98 +18,101 @@ struct FuelEconomyChartView: View {
     
     var body: some View {
         VStack(spacing: 15) {
-            Chart(data) { fillup in
-                LineMark(x: .value("Date", fillup.date), y: .value("MPG", fillup.fuelEconomy(settings: settings)))
-            }
-            .animation(.easeInOut(duration: 0.5), value: visibleRange)
-            .chartYScale(domain: yRange)
-            .chartXScale(domain: visibleRange)
-            .chartOverlay { proxy in
-                GeometryReader { geo in
-                    Rectangle().fill(Color.clear).contentShape(Rectangle())
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    // Only select a date if it lies within the visible bounds of the chart
-                                    if value.location.x >= 0 && value.location.x <= geo.size.width {
-                                        if let date: Date = proxy.value(atX: value.location.x) {
-                                            selectedDate = nearestDate(to: date)
+            ZStack(alignment: .topLeading) {
+                Chart(data) { fillup in
+                    LineMark(x: .value("Date", fillup.date), y: .value("MPG", fillup.fuelEconomy(settings: settings)))
+                }
+                .animation(.easeInOut(duration: 0.5), value: visibleRange)
+                .chartYScale(domain: yRange)
+                .chartXScale(domain: visibleRange)
+                .chartOverlay { proxy in
+                    GeometryReader { geo in
+                        Rectangle().fill(Color.clear).contentShape(Rectangle())
+                            .gesture(
+                                DragGesture()
+                                    .onChanged { value in
+                                        // Only select a date if it lies within the visible bounds of the chart
+                                        if value.location.x >= 0 && value.location.x <= geo.size.width {
+                                            if let date: Date = proxy.value(atX: value.location.x) {
+                                                selectedDate = nearestDate(to: date)
+                                            }
+                                        } else {
+                                            // If drag gesture moves out of bounds, clear selection
+                                            selectedDate = nil
                                         }
-                                    } else {
-                                        // If drag gesture moves out of bounds, clear selection
+                                    }
+                                    .onEnded { _ in
                                         selectedDate = nil
                                     }
-                                }
-                                .onEnded { _ in
-                                    selectedDate = nil
-                                }
-                        )
-                    
-                    if let selectedDate = selectedDate,
-                       let selectedFillup = data.min(by: { abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate)) }),
-                       let xPosition = proxy.position(forX: selectedFillup.date),
-                       let yPosition = proxy.position(forY: selectedFillup.fuelEconomy(settings: settings))
-                    {
-                        Group {
-                            let plotSize = proxy.plotSize
-                            let labelWidth: CGFloat = 40
-                            let clampedX = min(max(xPosition, labelWidth / 2), plotSize.width - labelWidth / 2)
-                            
-                            // Vertical line
-                            Rectangle()
-                                .fill(Color.secondary)
-                                .frame(width: 1, height: plotSize.height)
-                                .position(x: xPosition, y: plotSize.height / 2)
-                            
-//                            Circle()
-//                                .fill(settings.accentColor(for: .fillupsTheme))
-//                                .frame(width: 10, height: 10)
-//                                .position(x: xPosition, y: yPosition)
-                            
-                            // Tooltip
-                            Text(String(format: "%.1f", selectedFillup.fuelEconomy(settings: settings)))
-                                .font(.caption)
-//                                .padding(5)
-                                .frame(width: labelWidth, height: 30)
-                                .background(.regularMaterial)
-                                .cornerRadius(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 0.5)
-                                )
-                                .position(x: clampedX, y: yPosition)
-                        }
-                    }
-                    
-                    // Average fuel economy line
-                    if let plotFrameAnchor = proxy.plotFrame,
-                        let yPos = proxy.position(forY: averageFuelEconomy) {
-                        let plotFrame = geo[plotFrameAnchor]
+                            )
                         
-                        Path { path in
-                            path.move(to: CGPoint(x: plotFrame.minX, y: yPos))
-                            path.addLine(to: CGPoint(x: plotFrame.maxX, y: yPos))
+                        // Average fuel economy line
+                        if let plotFrameAnchor = proxy.plotFrame,
+                           let yPos = proxy.position(forY: averageFuelEconomy) {
+                            let plotFrame = geo[plotFrameAnchor]
+                            
+                            Path { path in
+                                path.move(to: CGPoint(x: plotFrame.minX, y: yPos))
+                                path.addLine(to: CGPoint(x: plotFrame.maxX, y: yPos))
+                            }
+                            .stroke(Color.secondary, style: StrokeStyle(lineWidth: 1, dash: [5]))
                         }
-                        .stroke(Color.secondary, style: StrokeStyle(lineWidth: 1, dash: [5]))
+                        
+                        if let selectedDate = selectedDate,
+                           let selectedFillup = data.min(by: { abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate)) }),
+                           let xPosition = proxy.position(forX: selectedFillup.date),
+                           let yPosition = proxy.position(forY: selectedFillup.fuelEconomy(settings: settings))
+                        {
+                            Group {
+                                let plotSize = proxy.plotSize
+                                //                            let labelWidth: CGFloat = 40
+                                //                            let clampedX = min(max(xPosition, labelWidth / 2), plotSize.width - labelWidth / 2)
+                                
+                                // Vertical line
+                                Rectangle()
+                                    .fill(Color.secondary.opacity(0.5))
+                                    .frame(width: 1, height: plotSize.height) // Keeps the rectangle within the vertical bounds of the chart
+                                    .position(x: xPosition, y: plotSize.height / 2)
+                                
+                                Circle()
+                                    .fill(settings.accentColor(for: .fillupsTheme))
+                                    .frame(width: 10, height: 10)
+                                    .position(x: xPosition, y: yPosition)
+                                
+                                // Tooltip
+                                //                            Text(String(format: "%.1f", selectedFillup.fuelEconomy(settings: settings)))
+                                //                                .font(.caption)
+                                ////                                .padding(5)
+                                //                                .frame(width: labelWidth, height: 30)
+                                //                                .background(.regularMaterial)
+                                //                                .cornerRadius(5)
+                                //                                .overlay(
+                                //                                    RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 0.5)
+                                //                                )
+                                //                                .position(x: clampedX, y: yPosition)
+                            }
+                        }
                     }
                 }
+                .frame(minHeight: 200)
+                //            .aspectRatio(2, contentMode: .fit)
+                .padding(5)
+                .clipShape(Rectangle())
+                .tint(settings.accentColor(for: .fillupsTheme).gradient)
+                
+                Group {
+                    if let highlightedFillup {
+                        Text("\(highlightedFillup.fuelEconomy(settings: settings), specifier: "%.1f")")
+                            .font(.headline)
+                            .frame(width: 60, height: 30)
+                            .background(.thinMaterial, in: Capsule())
+                            .overlay(
+                                Capsule().stroke(Color.gray, lineWidth: 0.5)
+                            )
+                    }
+                }
+                .padding([.leading, .top], 10)
             }
-            .frame(minHeight: 200)
-//            .aspectRatio(2, contentMode: .fit)
-            .padding(5)
-            .clipShape(Rectangle())
-            .tint(settings.accentColor(for: .fillupsTheme).gradient)
-//            .overlay {
-//                VStack {
-//                    if let selectedDate,
-//                       let selectedFillup = data.first(where: { $0.date == selectedDate }) {
-//                        Text(String(format: "%.1f mpg", selectedFillup.fuelEconomy))
-//                            .font(.headline)
-//                            .padding(.bottom, 4)
-//                    }
-//                    
-//                    Spacer()
-//                }
-//            }
             
             Picker("Date Range", selection: $selectedDateRange) {
                 ForEach(DateRange.allCases, id: \.self) {
@@ -123,6 +126,14 @@ struct FuelEconomyChartView: View {
             LabeledContent("Average") {
                 Text(averageFuelEconomy == 0 ? "No Data" : "\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
             }
+        }
+    }
+    
+    private var highlightedFillup: Fillup? {
+        if let selectedDate {
+            return data.min(by: { abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate)) })
+        } else {
+            return nil
         }
     }
     
