@@ -69,7 +69,7 @@ extension Fillup {
         return odometer - previousOdometer
     }
     
-    // Calculates fuel economy between the current fill-up and the one before, if appropriate
+    // Calculates fuel economy, when appropriate (returns 0 otherwise)
     func fuelEconomy(settings: AppSettings) -> Double {
         guard let fillups = vehicle?.sortedFillupsArray,
               let currentIndex = fillups.firstIndex(of: self),
@@ -77,30 +77,39 @@ extension Fillup {
             return 0
         }
 
-        // If this is the first fill-up ever logged, return 0 (fuel economy can't be calculated)
-        if currentIndex == fillups.count - 1 { return 0 }
-
-        // Return 0 if current or previous fill-up is partial or missed
-        if fillType == .missedFill || fillType == .partialFill {
-            return 0
-        }
-
-        let previousFillup = fillups[currentIndex + 1]
-        if previousFillup.fillType == .partialFill {
-            return 0
-        }
-
-        let volume = self.volume
-        let distance = self.tripDistance
+        if currentIndex == fillups.count - 1 { return 0 } // If this is the first fill-up ever logged, return 0 (fuel economy can't be calculated)
         
-        // Make sure the distance isn't somehow less than 0
-        if distance < 0 { return 0 }
+        guard fillType == .fullTank else { return 0 } // If this isn't a full tank fill-up, fuel economy cannot be reliably calculated
+        
+        var totalVolume = self.volume
+        var totalDistance = self.tripDistance
+        
+        for i in (currentIndex + 1)..<fillups.count {
+            let previousFillup = fillups[i]
+
+            if previousFillup.fillType == .missedFill {
+                // Stop at last missed fill (reset point for calculation window)
+                break
+            }
+
+            if previousFillup.fillType == .fullTank {
+                // Stop at last full fill (excluding missed fills)
+                break
+            }
+
+            if previousFillup.fillType == .partialFill {
+                totalVolume += previousFillup.volume
+                totalDistance += previousFillup.tripDistance
+            }
+        }
+        
+        guard totalDistance > 0, totalVolume > 0 else { return 0 }
 
         switch settings.fuelEconomyUnit {
         case .L100km:
-            return (volume / Double(distance)) * 100
+            return (totalVolume / Double(totalDistance)) * 100
         default:
-            return Double(distance) / volume
+            return Double(totalDistance) / totalVolume
         }
     }
     
