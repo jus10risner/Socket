@@ -11,7 +11,6 @@ struct ImageDetailView: View {
     @Environment(\.dismiss) var dismiss
     let image: UIImage
     
-    @State private var showingActivityView = false
     @State private var imageURL: URL?
     
     var body: some View {
@@ -30,17 +29,8 @@ struct ImageDetailView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    if #available(iOS 16, *) {
-                        if let imageURL {
-                            ShareLink(item: imageURL)
-                        }
-                    } else {
-                        Button {
-                            showingActivityView = true
-                        } label: {
-                            Image(systemName: "square.and.arrow.up")
-                                .accessibilityLabel("Share Image")
-                        }
+                    if let imageURL {
+                        ShareLink("Share Image", item: imageURL)
                     }
                 }
                 
@@ -58,7 +48,6 @@ struct ImageDetailView: View {
         .task {
             await createImageURL()
         }
-        .sheet(isPresented: $showingActivityView) { ActivityView(activityItems: [imageURL as Any], applicationActivities: nil) }
     }
     
     // MARK: - Methods

@@ -14,7 +14,6 @@ struct AppSettingsView: View {
     let appStoreURL: URL = URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009")!
     
     @State private var showingMailError = false
-    @State private var showingActivityView = false
     
     var body: some View {
         settingsView
@@ -47,7 +46,9 @@ struct AppSettingsView: View {
                     
                     rateButton
                     
-                    shareAppButton
+                    ShareLink(item: appStoreURL) {
+                        Label("Share Socket", systemImage: "square.and.arrow.up")
+                    }
                 }
                 .buttonStyle(.plain)
                 
@@ -59,7 +60,6 @@ struct AppSettingsView: View {
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
-            .sheet(isPresented: $showingActivityView) { ActivityView(activityItems: [appStoreURL as Any], applicationActivities: nil) }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
@@ -205,23 +205,6 @@ struct AppSettingsView: View {
         Link(destination: URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009?action=write-review")!, label: {
             Label("Rate on the App Store", systemImage: "star")
         })
-    }
-    
-    // Shares a link to Socket on the App Store
-    private var shareAppButton: some View {
-        Group {
-            if #available(iOS 16, *) {
-                ShareLink(item: appStoreURL) {
-                    Label("Share Socket", systemImage: "square.and.arrow.up")
-                }
-            } else {
-                Button {
-                    showingActivityView = true
-                } label: {
-                    Label("Share Socket", systemImage: "square.and.arrow.up")
-                }
-            }
-        }
     }
 }
 
