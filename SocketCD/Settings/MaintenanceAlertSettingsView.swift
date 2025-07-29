@@ -12,9 +12,6 @@ struct MaintenanceAlertSettingsView: View {
     
     @FocusState var isInputActive: Bool
     
-    @State private var distanceBeforeMaintenance = Int("")
-    @State private var daysBeforeMaintenance = Int("")
-    
     var body: some View {
         List {
             Section(footer: Text("Specifies how far in advance Socket should alert you of upcoming maintenance services.")) {
@@ -29,14 +26,6 @@ struct MaintenanceAlertSettingsView: View {
         }
         .navigationTitle("Alerts")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            distanceBeforeMaintenance = settings.distanceBeforeMaintenance
-            daysBeforeMaintenance = settings.daysBeforeMaintenance
-        }
-        .onDisappear {
-            settings.distanceBeforeMaintenance = distanceBeforeMaintenance ?? 500
-            settings.daysBeforeMaintenance = daysBeforeMaintenance ?? 14
-        }
     }
     
     
@@ -49,7 +38,7 @@ struct MaintenanceAlertSettingsView: View {
             
             Spacer()
             
-            TextField("\(settings.distanceUnit.rawValue.capitalized)", value: $distanceBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
+            TextField("\(settings.distanceUnit.rawValue.capitalized)", value: $settings.distanceBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
                 .keyboardType(.numberPad)
                 .fixedSize()
                 .textFieldStyle(.roundedBorder)
@@ -64,7 +53,7 @@ struct MaintenanceAlertSettingsView: View {
             
             Spacer()
             
-            TextField("Days", value: $daysBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
+            TextField("Days", value: $settings.daysBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
                 .keyboardType(.numberPad)
                 .fixedSize()
                 .textFieldStyle(.roundedBorder)
