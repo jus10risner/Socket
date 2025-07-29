@@ -63,7 +63,7 @@ struct VehicleListView: View {
 //                showingOnboardingText = true
 //            }
 //        }
-        .sheet(isPresented: $showingSettings) { AppSettingsView() }
+        .sheet(isPresented: $showingSettings, onDismiss: updateNotifications) { AppSettingsView() }
         .sheet(isPresented: $showingAddVehicle) { AddVehicleView() }
         .toolbar {
             ToolbarItem {
@@ -112,6 +112,12 @@ struct VehicleListView: View {
     }
     
     // MARK: - Methods
+    
+    func updateNotifications() {
+        for vehicle in vehicles {
+            vehicle.updateAllServiceNotifications()
+        }
+    }
     
     // Persists the order of vehicles, after moving
     func move(from source: IndexSet, to destination: Int) {
