@@ -96,10 +96,10 @@ struct ServiceDetailView: View {
         }
         .alert("Delete Service", isPresented: $showingAlert) {
             Button("Delete", role: .destructive) {
-                DataController.shared.delete(service)
-                
                 // Cancels any pending notifications
                 service.cancelPendingNotifications()
+                
+                DataController.shared.delete(service)
                 
                 dismiss()
             }
