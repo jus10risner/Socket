@@ -92,7 +92,7 @@ extension Vehicle {
         self.colorComponents = colorComponents
         self.photo = draftVehicle.photo
         
-        self.updateOdometerBasedNotifications()
+        self.updateAllServiceNotifications()
         
         try? context.save()
     }
@@ -141,6 +141,7 @@ extension Vehicle {
         
         if let odometer = draftRepair.odometer, odometer > self.odometer {
             self.odometer = odometer
+            self.updateAllServiceNotifications()
         }
         
         try? context.save()
@@ -161,9 +162,8 @@ extension Vehicle {
         
         if let odometer = draftFillup.odometer, odometer > self.odometer {
             self.odometer = odometer
+            self.updateAllServiceNotifications()
         }
-        
-        self.updateOdometerBasedNotifications()
         
         try? context.save()
     }
@@ -210,67 +210,81 @@ extension Vehicle {
         }
     }
     
-    // Checks to see when all notifications are due for this vehicle, and schedules them for the correct times
-    func updateAllNotifications() {
-        let context = DataController.shared.container.viewContext
-        let settings = AppSettings()
-        
+    // Checks to see when all notifications are due for this vehicle, and schedules them if necessary
+    func updateAllServiceNotifications() {
         UNUserNotificationCenter.current().getNotificationSettings { permissions in
             guard permissions.authorizationStatus == .authorized else {
-                print("Push notifications have not been authorized")
+                print("Notifications not authorized.")
                 return
             }
-            
+
             for service in self.sortedServicesArray {
-                if let dateDue = service.dateDue {
-                    if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
-                        if dateDue > Date.now && alertDate > Date.now {
-                            service.scheduleNotificationOnDate(alertDate, for: self)
-                        }
-                    }
-                }
-                
-                // Only schedule an odometer-based notification if one isn't already pending
-                if service.notificationScheduled == false {
-                    if let odometerDue = service.odometerDue {
-                        let distanceToNextService = odometerDue - self.odometer
-                        
-                        if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
-                            service.scheduleNotificationForTomorrow(for: self)
-                        }
-                    }
-                }
+                service.updateNotifications(vehicle: self)
             }
         }
-        
-        try? context.save()
     }
     
-    // Schedules only the odometer-dependent notifications for this vehicle, when appropriate
-    func updateOdometerBasedNotifications() {
-        let context = DataController.shared.container.viewContext
-        let settings = AppSettings()
-        
-        UNUserNotificationCenter.current().getNotificationSettings { permissions in
-            guard permissions.authorizationStatus == .authorized else {
-                print("Push notifications have not been authorized")
-                return
-            }
-            
-            for service in self.sortedServicesArray {
-                // Only schedule an odometer-based notification if one isn't already pending
-                if service.notificationScheduled == false {
-                    if let odometerDue = service.odometerDue {
-                        let distanceToNextService = odometerDue - self.odometer
-                        
-                        if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
-                            service.scheduleNotificationForTomorrow(for: self)
-                        }
-                    }
-                }
-            }
-        }
-        
-        try? context.save()
-    }
+//    // Checks to see when all notifications are due for this vehicle, and schedules them for the correct times
+//    func updateAllNotifications() {
+//        let context = DataController.shared.container.viewContext
+//        let settings = AppSettings()
+//        
+//        UNUserNotificationCenter.current().getNotificationSettings { permissions in
+//            guard permissions.authorizationStatus == .authorized else {
+//                print("Push notifications have not been authorized")
+//                return
+//            }
+//            
+//            for service in self.sortedServicesArray {
+//                if let dateDue = service.dateDue {
+//                    if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
+//                        if dateDue > Date.now && alertDate > Date.now {
+//                            service.scheduleNotificationOnDate(alertDate, for: self)
+//                        }
+//                    }
+//                }
+//                
+//                // Only schedule an odometer-based notification if one isn't already pending
+//                if service.notificationScheduled == false {
+//                    if let odometerDue = service.odometerDue {
+//                        let distanceToNextService = odometerDue - self.odometer
+//                        
+//                        if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
+//                            service.scheduleNotificationMomentarily(for: self)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        
+//        try? context.save()
+//    }
+//    
+//    // Schedules only the odometer-dependent notifications for this vehicle, when appropriate
+//    func updateOdometerBasedNotifications() {
+//        let context = DataController.shared.container.viewContext
+//        let settings = AppSettings()
+//        
+//        UNUserNotificationCenter.current().getNotificationSettings { permissions in
+//            guard permissions.authorizationStatus == .authorized else {
+//                print("Push notifications have not been authorized")
+//                return
+//            }
+//            
+//            for service in self.sortedServicesArray {
+//                // Only schedule an odometer-based notification if one isn't already pending
+//                if service.notificationScheduled == false {
+//                    if let odometerDue = service.odometerDue {
+//                        let distanceToNextService = odometerDue - self.odometer
+//                        
+//                        if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
+//                            service.scheduleNotificationMomentarily(for: self)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        
+//        try? context.save()
+//    }
 }

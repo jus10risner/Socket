@@ -51,6 +51,7 @@ extension ServiceRecord {
         
         if let vehicle = service.vehicle, let draftOdometer = draftServiceRecord.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer
+            service.updateNotifications(vehicle: vehicle)
         }
 
 //        if let odometer = draftServiceRecord.odometer {
@@ -59,11 +60,9 @@ extension ServiceRecord {
 //            }
 //        }
         
-        // Cancels any notifications that have been scheduled for this service, so they can be rescheduled, if appropriate
-        service.cancelPendingNotifications()
-        if let vehicle = service.vehicle {
-            service.updateNotificationsForService(vehicle: vehicle)
-        }
+//        if let vehicle = service.vehicle {
+//            service.updateNotifications(vehicle: vehicle)
+//        }
         
         try? context.save()
     }

@@ -68,7 +68,7 @@ struct MaintenanceListView: View {
         }
         .onAppear { checkForNotificationPermission() }
         .onChange(of: Array(services)) { checkForNotificationPermission() }
-        .onChange(of: vehicle.odometer) { vehicle.updateOdometerBasedNotifications() }
+//        .onChange(of: vehicle.odometer) { vehicle.updateAllServiceNotifications() }
         .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
             AddServiceView(vehicle: vehicle)
         }

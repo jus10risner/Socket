@@ -165,6 +165,7 @@ extension Fillup {
         
         if let vehicle = self.vehicle, let draftOdometer = draftFillup.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer
+            vehicle.updateAllServiceNotifications()
         }
         
 //        if let odometer = draftFillup.odometer {

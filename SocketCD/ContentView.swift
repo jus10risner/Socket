@@ -24,10 +24,10 @@ struct ContentView: View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             VehicleListView(selectedVehicle: $selectedVehicle, showingOnboardingText: $showingOnboardingText)
                 .toolbar(removing: .sidebarToggle)
-//                .onChange(of: notificationBadgeNumber) {
-//                    // Sets the app icon's notification badge number
-//                    UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)
-//                }
+                .onChange(of: notificationBadgeNumber) {
+                    // Sets the app icon's notification badge number
+                    UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)
+                }
         } detail: {
             if let vehicle = selectedVehicle {
                 VehicleDashboardView(vehicle: vehicle, selectedVehicle: $selectedVehicle)
@@ -38,8 +38,15 @@ struct ContentView: View {
         .tint(.primary)
         .navigationSplitViewStyle(.balanced)
         .onAppear {
-            if let firstVehicle = vehicles.first {
+            for vehicle in vehicles {
+                vehicle.updateAllServiceNotifications()
+            }
+            
+            // If on iPad, select the first vehicle in the list
+            if UIDevice.current.userInterfaceIdiom == .pad, let firstVehicle = vehicles.first {
+//                if let firstVehicle = vehicles.first {
                 selectedVehicle = firstVehicle
+//                }
             }
         }
     }
@@ -140,17 +147,22 @@ struct ContentView: View {
     
     // Badge number for the app icon
     private var notificationBadgeNumber: Int {
-        var count = 0
-
-        for vehicle in vehicles {
-            for service in vehicle.sortedServicesArray {
-                if service.serviceStatus == .due || service.serviceStatus == .overDue {
-                    count += 1
-                }
-            }
-        }
+        let allServices = vehicles.flatMap { $0.sortedServicesArray }
+        let servicesDue = allServices.filter { $0.serviceStatus == .due || $0.serviceStatus == .overDue }
         
-        return count
+        return servicesDue.count
+        
+//        var count = 0
+//
+//        for vehicle in vehicles {
+//            for service in vehicle.sortedServicesArray {
+//                if service.serviceStatus == .due || service.serviceStatus == .overDue {
+//                    count += 1
+//                }
+//            }
+//        }
+//        
+//        return count
     }
     
     
@@ -194,17 +206,17 @@ struct ContentView: View {
     }
     
     // Schedules local notifications, if appropriate
-    func setUpNotifications(cancelPending: Bool) {
-        for vehicle in vehicles {
-            if cancelPending == true {
-                for service in vehicle.sortedServicesArray {
-                    service.cancelPendingNotifications()
-                }
-            }
-            
-            vehicle.updateAllNotifications()
-        }
-    }
+//    func setUpNotifications(cancelPending: Bool) {
+//        for vehicle in vehicles {
+//            if cancelPending == true {
+//                for service in vehicle.sortedServicesArray {
+//                    service.cancelPendingNotifications()
+//                }
+//            }
+//            
+//            vehicle.updateAllNotifications()
+//        }
+//    }
 }
 
 #Preview {
