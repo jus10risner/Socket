@@ -46,7 +46,7 @@ struct AddCustomInfoView: View {
                 .alert("That label has already been used.", isPresented: $showingDuplicateLabelError) {
                     Button("OK", role: .cancel) { }
                 } message: {
-                    Text("\nPlease choose a different label.")
+                    Text("Please choose a different label.")
                 }
         }
     }

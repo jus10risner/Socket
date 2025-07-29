@@ -79,7 +79,7 @@ struct RepairDetailView: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("\nPermanently delete this repair record? This cannot be undone.")
+            Text("Permanently delete this repair record? This cannot be undone.")
         }
     }
 }

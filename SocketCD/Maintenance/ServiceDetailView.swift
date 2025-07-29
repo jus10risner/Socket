@@ -106,7 +106,7 @@ struct ServiceDetailView: View {
             
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("\nPermanently delete this service and all of its records? This cannot be undone.")
+            Text("Permanently delete this service and all of its records? This cannot be undone.")
         }
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {

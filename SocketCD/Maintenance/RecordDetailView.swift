@@ -79,7 +79,7 @@ struct RecordDetailView: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("\nPermanently delete this service record? This cannot be undone.")
+            Text("Permanently delete this service record? This cannot be undone.")
         }
     }
 }

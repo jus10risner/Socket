@@ -57,7 +57,7 @@ struct AddPhotoButton: View {
         .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("\nThis device does not appear to have a functioning camera.")
+            Text("This device does not appear to have a functioning camera.")
         }
         .alert("No Camera Access", isPresented: $cameraViewModel.showingCameraAccessAlert) {
             Button("Go to Settings") {
@@ -67,12 +67,12 @@ struct AddPhotoButton: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("\nTo use the camera, you will need to turn on camera access for Socket, in the Settings app.")
+            Text("To use the camera, you will need to turn on camera access for Socket, in the Settings app.")
         }
         .alert("Image Error", isPresented: $showingPhotoError) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text("\nThere was a problem saving that image. Please try another image.")
+            Text("There was a problem saving that image. Please try another image.")
         }
         .textCase(nil)
     }

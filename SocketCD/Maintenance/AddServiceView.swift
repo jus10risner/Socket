@@ -48,7 +48,7 @@ struct AddServiceView: View {
                 .alert("This vehicle already has a service with that name", isPresented: $showingDuplicateNameError) {
                     Button("OK", role: .cancel) { }
                 } message: {
-                    Text("\nPlease choose a different name.")
+                    Text("Please choose a different name.")
                 }
         }
     }

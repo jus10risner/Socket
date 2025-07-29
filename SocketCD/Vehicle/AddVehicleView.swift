@@ -82,7 +82,7 @@ struct AddVehicleView: View {
             .alert("You already have a vehicle with that name", isPresented: $showingDuplicateNameError) {
                 Button("OK", role: .cancel) { }
             } message: {
-                Text("\nPlease choose a different name.")
+                Text("Please choose a different name.")
             }
         }
         .tint(settings.accentColor(for: .appTheme))
@@ -193,4 +193,5 @@ struct AddVehicleView: View {
 
 #Preview {
     AddVehicleView()
+        .environmentObject(AppSettings())
 }

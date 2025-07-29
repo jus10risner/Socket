@@ -72,7 +72,7 @@ struct AppSettingsView: View {
         .alert("Could not send mail", isPresented: $showingMailError) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("\nPlease make sure email has been set up on this device, then try again.")
+            Text("Please make sure email has been set up on this device, then try again.")
         }
     }
     

@@ -59,7 +59,7 @@ struct CustomInfoDetailView: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("\nPermanently delete \(customInfo.label)? This cannot be undone.")
+            Text("Permanently delete \(customInfo.label)? This cannot be undone.")
         }
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {

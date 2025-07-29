@@ -91,7 +91,7 @@ struct FillupDetailView: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("\nDeleting fill-up records may cause inaccurate fuel economy calculation. Delete this record anyway?")
+            Text("Deleting fill-up records may cause inaccurate fuel economy calculation. Delete this record anyway?")
         }
         .alert("Why no fuel economy?", isPresented: $showingMoreInfo) {
             Button("OK") { }
