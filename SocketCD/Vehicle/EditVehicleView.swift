@@ -20,9 +20,6 @@ struct EditVehicleView: View {
     
     @FetchRequest(sortDescriptors: []) var vehicles: FetchedResults<Vehicle>
     
-    @State private var inputImage: UIImage?
-    @State private var image: Image?
-    
     @FocusState var isInputActive: Bool
     @FocusState var fieldInFocus: Bool
     
@@ -40,7 +37,7 @@ struct EditVehicleView: View {
                     VStack {
                         AddEditVehicleImageView(draftVehicle: draftVehicle)
                         
-                        VehiclePhotoCustomizationButtons(inputImage: $inputImage, image: $image, carPhoto: $draftVehicle.photo, selectedColor: $draftVehicle.selectedColor)
+                        VehiclePhotoCustomizationButtons(carPhoto: $draftVehicle.photo, selectedColor: $draftVehicle.selectedColor)
                     }
                     
                     VStack {

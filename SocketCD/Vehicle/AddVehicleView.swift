@@ -23,8 +23,6 @@ struct AddVehicleView: View {
     
     @State private var selectedTab = 1
     @State private var showingDuplicateNameError = false
-    @State private var inputImage: UIImage?
-    @State private var image: Image?
     
     var body: some View {
         addVehicleFlow
@@ -140,7 +138,7 @@ struct AddVehicleView: View {
                 AddEditVehicleImageView(draftVehicle: draftVehicle)
                     .padding(.horizontal, 5)
                 
-                VehiclePhotoCustomizationButtons(inputImage: $inputImage, image: $image, carPhoto: $draftVehicle.photo, selectedColor: $draftVehicle.selectedColor)
+                VehiclePhotoCustomizationButtons(carPhoto: $draftVehicle.photo, selectedColor: $draftVehicle.selectedColor)
             }
             
             Spacer()

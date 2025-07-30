@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import PhotosUI
 import SwiftUI
 
 struct AddPhotoButton: View {
@@ -13,11 +14,13 @@ struct AddPhotoButton: View {
     @StateObject private var cameraViewModel = CameraViewModel()
     let cameraManager = CameraManager()
     
-    @State private var showingImagePicker = false
+    @Binding var photos: [Photo]
+    
+    @State private var showingPhotosPicker = false
     @State private var showingPhotoError = false
     
-    @State private var uiImage: UIImage?
-    @Binding var photos: [Photo]
+    @State private var capturedImage: UIImage?
+    @State private var selectedImages: [PhotosPickerItem] = []
     
     var body: some View {
         HStack {
@@ -25,8 +28,8 @@ struct AddPhotoButton: View {
             
             Menu {
                 Button {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    showingImagePicker = true
+//                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    showingPhotosPicker = true
                 } label: {
                     Label("Choose Photo", systemImage: "photo.on.rectangle")
                 }
@@ -45,13 +48,10 @@ struct AddPhotoButton: View {
             
             Spacer()
         }
-        .onChange(of: uiImage) { verifyAndAppend() }
-        .sheet(isPresented: $showingImagePicker) {
-            ImagePicker(image: $uiImage)
-                .ignoresSafeArea()
-        }
-        .fullScreenCover(isPresented: $cameraViewModel.showingCamera) {
-            CameraCapture(image: $uiImage)
+        .onChange(of: selectedImages) { loadSelectedImages() }
+        .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImages, matching: .images)
+        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: verifyAndAppend) {
+            CameraCapture(image: $capturedImage)
                 .ignoresSafeArea()
         }
         .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
@@ -79,16 +79,30 @@ struct AddPhotoButton: View {
     
     // MARK: - Methods
     
-    // Verifies that an image exists, then creates a new photo object and appends it to the photos array, to be passed to EditablePhotoGridView
-    func verifyAndAppend() {
-        if let selectedImage = uiImage {
-            if let imageData = selectedImage.jpegData(compressionQuality: 0.8) {
-                let newPhoto = Photo(context: context)
-                newPhoto.id = UUID()
-                newPhoto.timeStamp = Date.now
-                newPhoto.imageData = imageData
+    // Verifies an image captured via the camera, then appends it to the photos array
+    private func verifyAndAppend() {
+        Task {
+            if let selectedImage = capturedImage, let newPhoto = Photo.create(from: selectedImage, in: context) {
                 photos.append(newPhoto)
             }
         }
+    }
+    
+    // Verifies images captured via the PhotosPicker, then appends them to the photos array
+    private func loadSelectedImages() {
+        for item in selectedImages {
+            Task {
+                guard let data = try? await item.loadTransferable(type: Data.self),
+                      let uiImage = UIImage(data: data),
+                      let newPhoto = Photo.create(from: uiImage, in: context) else {
+                    return
+                }
+
+                photos.append(newPhoto)
+            }
+        }
+
+        // Clear selection after loading
+        selectedImages.removeAll()
     }
 }

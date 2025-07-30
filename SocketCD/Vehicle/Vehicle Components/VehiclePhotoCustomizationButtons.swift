@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import PhotosUI
 import SwiftUI
 
 struct VehiclePhotoCustomizationButtons: View {
@@ -14,13 +15,14 @@ struct VehiclePhotoCustomizationButtons: View {
     @StateObject private var cameraViewModel = CameraViewModel()
     let cameraManager = CameraManager()
     
-    @Binding var inputImage: UIImage?
-    @Binding var image: Image?
     @Binding var carPhoto: Photo?
     @Binding var selectedColor: Color
     
-    @State private var showingImagePicker = false
+    @State private var showingPhotosPicker = false
     @State private var showingPhotoError = false
+    
+    @State var capturedImage: UIImage?
+    @State private var selectedImage: PhotosPickerItem?
     
     var body: some View {
         imageAndColorSelectButtons
@@ -45,15 +47,12 @@ struct VehiclePhotoCustomizationButtons: View {
         }
         .padding(.top, 5)
         .animation(.default, value: carPhoto)
-        .sheet(isPresented: $showingImagePicker, onDismiss: { loadImage() }, content: {
-            ImagePicker(image: $inputImage)
-                .ignoresSafeArea()
-        })
-        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: { loadImage() }) {
-            CameraCapture(image: $inputImage)
+        .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImage, matching: .images)
+        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: verifyAndAdd) {
+            CameraCapture(image: $capturedImage)
                 .ignoresSafeArea()
         }
-        .onChange(of: inputImage) { verifyAndAdd() }
+        .onChange(of: selectedImage) { loadSelectedImage() }
         .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -80,8 +79,8 @@ struct VehiclePhotoCustomizationButtons: View {
     private var imageSelectButton: some View {
         Menu {
             Button {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                showingImagePicker = true
+//                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                showingPhotosPicker = true
             } label: {
                 Label("Choose Photo", systemImage: "photo.on.rectangle")
             }
@@ -138,21 +137,27 @@ struct VehiclePhotoCustomizationButtons: View {
     
     // MARK: - Methods
     
-    // Loads the UIImage as a SwiftUI Image
-    func loadImage() {
-        guard let inputImage = inputImage else { return }
-        image = Image(uiImage: inputImage)
+    // Verifies that a valid image has been captured via the camera, then converts it to binary data
+    private func verifyAndAdd() {
+        Task {
+            if let capturedImage {
+                let newPhoto = Photo.create(from: capturedImage, in: context)
+                
+                withAnimation {
+                    carPhoto = newPhoto
+                }
+            }
+        }
     }
     
-    // Verifies that an image has been selected, then converts it to binary data and saves to Core Data
-    func verifyAndAdd() {
-        if let selectedImage = inputImage {
-            if let imageData = selectedImage.jpegData(compressionQuality: 0.8) {
-                let newPhoto = Photo(context: context)
-                newPhoto.timeStamp_ = Date()
-                newPhoto.imageData = imageData
-                
-                try? context.save()
+    // Verifies that a valid image has been selected via the PhotosPicker, then converts it to binary data
+    private func loadSelectedImage() {
+        Task {
+            guard let selectedImage else { return }
+            
+            if let data = try await selectedImage.loadTransferable(type: Data.self),
+                let uiImage = UIImage(data: data) {
+                let newPhoto = Photo.create(from: uiImage, in: context)
                 
                 withAnimation {
                     carPhoto = newPhoto
