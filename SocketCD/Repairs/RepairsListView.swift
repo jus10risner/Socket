@@ -51,7 +51,7 @@ struct RepairsListView: View {
             }
         }
         .sheet(isPresented: $showingAddRepair) {
-            AddRepairView(vehicle: vehicle)
+            AddEditRepairView(vehicle: vehicle)
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

@@ -77,7 +77,6 @@
 		9EEAC4F32BA379FE0053C65E /* RepairsStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4F22BA379FE0053C65E /* RepairsStartView.swift */; };
 		9EEAC4F52BA37A270053C65E /* RepairsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4F42BA37A270053C65E /* RepairsListView.swift */; };
 		9EEAC4F72BA37A5C0053C65E /* Repair+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4F62BA37A5C0053C65E /* Repair+helper.swift */; };
-		9EEAC4F92BA37D040053C65E /* AddRepairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4F82BA37D040053C65E /* AddRepairView.swift */; };
 		9EEAC4FB2BA37FDB0053C65E /* RepairDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4FA2BA37FDB0053C65E /* RepairDetailView.swift */; };
 		9EEAC4FD2BA380BA0053C65E /* EditRepairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4FC2BA380BA0053C65E /* EditRepairView.swift */; };
 		9EEAC4FF2BA388D50053C65E /* Fillup+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4FE2BA388D50053C65E /* Fillup+helper.swift */; };
@@ -187,7 +186,6 @@
 		9EEAC4F22BA379FE0053C65E /* RepairsStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairsStartView.swift; sourceTree = "<group>"; };
 		9EEAC4F42BA37A270053C65E /* RepairsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairsListView.swift; sourceTree = "<group>"; };
 		9EEAC4F62BA37A5C0053C65E /* Repair+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Repair+helper.swift"; sourceTree = "<group>"; };
-		9EEAC4F82BA37D040053C65E /* AddRepairView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRepairView.swift; sourceTree = "<group>"; };
 		9EEAC4FA2BA37FDB0053C65E /* RepairDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairDetailView.swift; sourceTree = "<group>"; };
 		9EEAC4FC2BA380BA0053C65E /* EditRepairView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepairView.swift; sourceTree = "<group>"; };
 		9EEAC4FE2BA388D50053C65E /* Fillup+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Fillup+helper.swift"; sourceTree = "<group>"; };
@@ -441,7 +439,6 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC4F42BA37A270053C65E /* RepairsListView.swift */,
-				9EEAC4F82BA37D040053C65E /* AddRepairView.swift */,
 				9EEAC4FC2BA380BA0053C65E /* EditRepairView.swift */,
 				9EEAC4FA2BA37FDB0053C65E /* RepairDetailView.swift */,
 				9EEAC4F22BA379FE0053C65E /* RepairsStartView.swift */,
@@ -658,7 +655,6 @@
 				9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */,
 				9EE5620D2BD9706600F5BE7E /* VehicleCardView.swift in Sources */,
 				9E620C092BC08194005E16DD /* AddEditVehicleImageView.swift in Sources */,
-				9EEAC4F92BA37D040053C65E /* AddRepairView.swift in Sources */,
 				9EEAC4EE2BA374D70053C65E /* CustomInfoDetailView.swift in Sources */,
 				9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */,
 				9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */,
