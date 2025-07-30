@@ -28,7 +28,7 @@ struct MaintenanceListView: View {
     }
     
     @State private var showingAddService = false
-    @State private var isAnimating: Bool = false
+//    @State private var isAnimating: Bool = false
     @State private var showingFirstServiceInfo = false
     
     var body: some View {
@@ -66,8 +66,8 @@ struct MaintenanceListView: View {
                 MaintenanceStartView(showingAddService: $showingAddService)
             }
         }
-        .onAppear { checkForNotificationPermission() }
-        .onChange(of: Array(services)) { checkForNotificationPermission() }
+        .onAppear { requestNotificationPermission() }
+        .onChange(of: Array(services)) { requestNotificationPermission() }
 //        .onChange(of: vehicle.odometer) { vehicle.updateAllServiceNotifications() }
         .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
             AddServiceView(vehicle: vehicle)
@@ -156,24 +156,31 @@ struct MaintenanceListView: View {
     // MARK: - Methods
     
     // Asks the user for permission to display notifications, when appropriate
-    func checkForNotificationPermission() {
+    func requestNotificationPermission() {
         let center = UNUserNotificationCenter.current()
         
         if settings.notificationPermissionRequested == false && services.count > 0 {
-            center.getNotificationSettings { permissions in
-                if permissions.authorizationStatus == .notDetermined {
-                    print("Requesting permission for notifications")
-                    center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                        if success {
-                            print("Success!")
-                        } else if let error = error {
-                            print(error.localizedDescription)
-                        }
-                    }
-                } else {
-                    print("Notification permission has already been requested")
+            center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                if success {
+                    print("Success!")
+                } else if let error = error {
+                    print(error.localizedDescription)
                 }
             }
+//            center.getNotificationSettings { permissions in
+//                if permissions.authorizationStatus == .notDetermined {
+//                    print("Requesting permission for notifications")
+//                    center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+//                        if success {
+//                            print("Success!")
+//                        } else if let error = error {
+//                            print(error.localizedDescription)
+//                        }
+//                    }
+//                } else {
+//                    print("Notification permission has already been requested")
+//                }
+//            }
             
             settings.notificationPermissionRequested = true
         }
