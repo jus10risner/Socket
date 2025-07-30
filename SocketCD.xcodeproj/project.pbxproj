@@ -94,9 +94,8 @@
 		9EEAC51C2BA4A1E70053C65E /* MaintenanceStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC51B2BA4A1E70053C65E /* MaintenanceStartView.swift */; };
 		9EEAC51E2BA4A2280053C65E /* MaintenanceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC51D2BA4A2280053C65E /* MaintenanceListView.swift */; };
 		9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */; };
-		9EEAC5222BA4B18A0053C65E /* AddServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5212BA4B18A0053C65E /* AddServiceView.swift */; };
 		9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5232BA4B4700053C65E /* ServiceDetailView.swift */; };
-		9EEAC5262BA4C5060053C65E /* EditServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5252BA4C5060053C65E /* EditServiceView.swift */; };
+		9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */; };
 		9EEAC5282BA4C9720053C65E /* AddRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5272BA4C9720053C65E /* AddRecordView.swift */; };
 		9EEAC52A2BA4CBB40053C65E /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */; };
 		9EEAC52C2BA4CD150053C65E /* EditRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC52B2BA4CD150053C65E /* EditRecordView.swift */; };
@@ -203,9 +202,8 @@
 		9EEAC51B2BA4A1E70053C65E /* MaintenanceStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceStartView.swift; sourceTree = "<group>"; };
 		9EEAC51D2BA4A2280053C65E /* MaintenanceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceListView.swift; sourceTree = "<group>"; };
 		9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthsYearsToggle.swift; sourceTree = "<group>"; };
-		9EEAC5212BA4B18A0053C65E /* AddServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddServiceView.swift; sourceTree = "<group>"; };
 		9EEAC5232BA4B4700053C65E /* ServiceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceDetailView.swift; sourceTree = "<group>"; };
-		9EEAC5252BA4C5060053C65E /* EditServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditServiceView.swift; sourceTree = "<group>"; };
+		9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditServiceView.swift; sourceTree = "<group>"; };
 		9EEAC5272BA4C9720053C65E /* AddRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecordView.swift; sourceTree = "<group>"; };
 		9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailView.swift; sourceTree = "<group>"; };
 		9EEAC52B2BA4CD150053C65E /* EditRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRecordView.swift; sourceTree = "<group>"; };
@@ -479,8 +477,7 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC51D2BA4A2280053C65E /* MaintenanceListView.swift */,
-				9EEAC5212BA4B18A0053C65E /* AddServiceView.swift */,
-				9EEAC5252BA4C5060053C65E /* EditServiceView.swift */,
+				9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */,
 				9EEAC5232BA4B4700053C65E /* ServiceDetailView.swift */,
 				9EEAC5272BA4C9720053C65E /* AddRecordView.swift */,
 				9EEAC52B2BA4CD150053C65E /* EditRecordView.swift */,
@@ -633,7 +630,7 @@
 				9EEAC5082BA38BC20053C65E /* FillupsStartView.swift in Sources */,
 				9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */,
 				9EEAC4EC2BA3749E0053C65E /* PhotoGridView.swift in Sources */,
-				9EEAC5262BA4C5060053C65E /* EditServiceView.swift in Sources */,
+				9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */,
 				9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */,
 				9EEAC4902BA1036F0053C65E /* DataController.swift in Sources */,
 				9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */,
@@ -683,7 +680,6 @@
 				9EEAC4D32BA258960053C65E /* Photo+helper.swift in Sources */,
 				9E620C0D2BC5D4FC005E16DD /* MailComposeViewController.swift in Sources */,
 				9EEAC4F02BA376380053C65E /* EditCustomInfoView.swift in Sources */,
-				9EEAC5222BA4B18A0053C65E /* AddServiceView.swift in Sources */,
 				9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */,
 				9EEAC4E62BA364AA0053C65E /* CustomInfo+helper.swift in Sources */,
 				9EEAC5192BA48D720053C65E /* EditFillupView.swift in Sources */,

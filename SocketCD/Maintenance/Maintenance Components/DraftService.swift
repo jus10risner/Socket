@@ -17,13 +17,15 @@ class DraftService: ObservableObject {
     @Published var serviceNote: String = ""
     
     // Used when editing an existing service
-    init(service: Service) {
-        id = service.id
-        name = service.name
-        distanceInterval = service.distanceInterval
-        timeInterval = service.timeInterval
-        monthsInterval = service.monthsInterval
-        serviceNote = service.note
+    init(service: Service? = nil) {
+        if let service {
+            id = service.id
+            name = service.name
+            distanceInterval = service.distanceInterval
+            timeInterval = service.timeInterval
+            monthsInterval = service.monthsInterval
+            serviceNote = service.note
+        }
     }
     
     // Used when creating a new service

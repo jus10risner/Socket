@@ -92,7 +92,7 @@ struct ServiceDetailView: View {
             AddRecordView(vehicle: vehicle, service: service)
         }
         .sheet(isPresented: $showingEditService) {
-            EditServiceView(vehicle: vehicle, service: service)
+            AddEditServiceView(vehicle: vehicle, service: service)
         }
         .alert("Delete Service", isPresented: $showingAlert) {
             Button("Delete", role: .destructive) {

@@ -70,7 +70,7 @@ struct MaintenanceListView: View {
         .onChange(of: Array(services)) { requestNotificationPermission() }
 //        .onChange(of: vehicle.odometer) { vehicle.updateAllServiceNotifications() }
         .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
-            AddServiceView(vehicle: vehicle)
+            AddEditServiceView(vehicle: vehicle)
         }
         .toolbar {
 //                ToolbarItem(placement: .principal) {

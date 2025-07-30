@@ -80,7 +80,7 @@ struct VehicleDashboardView: View {
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
                 case .addService:
-                    AddServiceView(vehicle: vehicle)
+                    AddEditServiceView(vehicle: vehicle)
                         .tint(settings.accentColor(for: .maintenanceTheme))
                 case .addRepair:
                     AddEditRepairView(vehicle: vehicle)
