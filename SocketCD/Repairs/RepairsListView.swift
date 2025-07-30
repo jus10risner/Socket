@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct RepairsListView: View {
-    @EnvironmentObject var settings: AppSettings
-    @Environment(\.dismiss) var dismiss
+//    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
     
     @FetchRequest var repairs: FetchedResults<Repair>
@@ -24,53 +23,27 @@ struct RepairsListView: View {
     }
     
     @State private var showingAddRepair = false
-    @State private var showingContent = false
     
     var body: some View {
-        repairsList
-    }
-    
-    
-    // MARK: - Views
-    
-    var repairsList: some View {
         List {
             ForEach(repairs, id: \.id) { repair in
-                ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(.secondarySystemGroupedBackground))
-                    
-                    NavigationLink {
-                        RepairDetailView(vehicle: vehicle, repair: repair)
-                    } label: {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(repair.name)
-                                    .font(.headline)
-                                
-                                Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
-                                    .font(.subheadline)
-                                    .foregroundStyle(Color.secondary)
-                            }
+                NavigationLink {
+                    RepairDetailView(vehicle: vehicle, repair: repair)
+                } label: {
+                    HStack {
+                        Text(repair.name)
+                        
+                        Spacer()
+                        
+                        Text(repair.date.formatted(date: .numeric, time: .omitted))
+                            .font(.subheadline)
+                            .foregroundStyle(Color.secondary)
                             
-                            Spacer()
-                            
-                            Text(repair.date.formatted(date: .numeric, time: .omitted))
-                                .font(.subheadline)
-                                .foregroundStyle(Color.secondary)
-                        }
-                        .padding(.vertical, 5)
+//                                Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 10)
                 }
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color(.systemGroupedBackground))
-                .listRowInsets(EdgeInsets(top: 2.5, leading: 20, bottom: 2.5, trailing: 20))
             }
         }
-        .listStyle(.plain)
-        .background(Color(.systemGroupedBackground))
         .navigationTitle("Repairs")
         .overlay {
             if vehicle.sortedRepairsArray.isEmpty {
@@ -81,40 +54,17 @@ struct RepairsListView: View {
             AddRepairView(vehicle: vehicle)
         }
         .toolbar {
-//                ToolbarItem(placement: .principal) {
-//                    VStack {
-//                        Spacer()
-//                        Text(vehicle.name)
-//                            .font(.headline)
-//                            .lineLimit(1)
-//                            .fixedSize(horizontal: false, vertical: true)
-//                        Spacer()
-//                    }
-//                }
-//
-//                ToolbarItem(placement: .topBarLeading) {
-//                    Button {
-//                        dismiss()
-//                    } label: {
-//                        Image(systemName: "xmark.circle.fill")
-//                            .font(.title2)
-//                            .symbolRenderingMode(.hierarchical)
-//                            .foregroundStyle(Color.secondary)
-//                            .accessibilityLabel("Back to all vehicles")
-//                    }
-//                }
-            
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     showingAddRepair = true
                 } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.title2)
-                        .symbolRenderingMode(.hierarchical)
-                        .accessibilityLabel("Add New Repair")
+                    Label("Add New Repair", systemImage: "plus")
+                    
+//                    Image(systemName: "plus.circle.fill")
+//                        .font(.title2)
+//                        .symbolRenderingMode(.hierarchical)
+//                        .accessibilityLabel("Add New Repair")
                 }
-                // iOS 16 workaround, where button could't be clicked again after sheet was dismissed - iOS 15 and 17 work fine without this
-//                    .id(UUID())
             }
         }
     }
