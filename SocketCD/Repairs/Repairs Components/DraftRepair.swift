@@ -17,19 +17,18 @@ class DraftRepair: ObservableObject {
     @Published var note: String = ""
     @Published var photos: [Photo] = []
     
-    // Used when editing an existing repair record
-    init(repair: Repair) {
-        id = repair.id
-        date = repair.date
-        name = repair.name
-        odometer = repair.odometer
-        cost = repair.cost
-        note = repair.note
-        photos = repair.sortedPhotosArray
+    // Initializes with an optional Repair, for use in add/edit context
+    init(repair: Repair? = nil) {
+        if let repair {
+            id = repair.id
+            date = repair.date
+            name = repair.name
+            odometer = repair.odometer
+            cost = repair.cost
+            note = repair.note
+            photos = repair.sortedPhotosArray
+        }
     }
-    
-    // Used when creating a new repair record
-    init() { }
     
     // Determines whether the required information is present
     var canBeSaved: Bool {
