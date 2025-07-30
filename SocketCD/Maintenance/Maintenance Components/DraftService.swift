@@ -16,7 +16,7 @@ class DraftService: ObservableObject {
     @Published var monthsInterval: Bool = true
     @Published var serviceNote: String = ""
     
-    // Used when editing an existing service
+    // Initializes with an optional Service, for use in add/edit context
     init(service: Service? = nil) {
         if let service {
             id = service.id
@@ -27,9 +27,6 @@ class DraftService: ObservableObject {
             serviceNote = service.note
         }
     }
-    
-    // Used when creating a new service
-    init() { }
     
     // Determines whether the required information is present
     var canBeSaved: Bool {

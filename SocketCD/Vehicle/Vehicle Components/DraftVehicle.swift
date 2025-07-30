@@ -15,17 +15,16 @@ class DraftVehicle: ObservableObject {
     @Published var selectedColor: Color = Color(.socketPurple)
     @Published var photo: Photo?
     
-    // Used when editing an existing vehicle
-    init(vehicle: Vehicle) {
-        id = vehicle.id
-        name = vehicle.name
-        odometer = vehicle.odometer
-        selectedColor = vehicle.backgroundColor
-        photo = vehicle.photo
+    // Initializes with an optional Vehicle, for use in add/edit context
+    init(vehicle: Vehicle? = nil) {
+        if let vehicle {
+            id = vehicle.id
+            name = vehicle.name
+            odometer = vehicle.odometer
+            selectedColor = vehicle.backgroundColor
+            photo = vehicle.photo
+        }
     }
-    
-    // Used when adding a new vehicle
-    init() { }
     
     // Determines whether the required information is present
     var canBeSaved: Bool {

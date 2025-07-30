@@ -19,29 +19,26 @@ class DraftFillup: ObservableObject {
     @Published var note: String = ""
     @Published var photos: [Photo] = []
     
-    // Used when editing an existin fill-up record
-    init(fillup: Fillup, settings: AppSettings = AppSettings()) {
+    // Initializes with an optional Fillup, for use in add/edit context
+    init(fillup: Fillup? = nil, settings: AppSettings = AppSettings()) {
         self.settings = settings
         
-        id = fillup.id
-        date = fillup.date
-        odometer = fillup.odometer
-        volume = fillup.volume
-        fillType = fillup.fillType
-        note = fillup.note
-        photos = fillup.sortedPhotosArray
-        
-        switch settings.fillupCostType {
-        case .perUnit:
-            cost = fillup.pricePerUnit ?? 0
-        case .total:
-            cost = fillup.totalCost ?? 0
+        if let fillup {
+            id = fillup.id
+            date = fillup.date
+            odometer = fillup.odometer
+            volume = fillup.volume
+            fillType = fillup.fillType
+            note = fillup.note
+            photos = fillup.sortedPhotosArray
+            
+            switch settings.fillupCostType {
+            case .perUnit:
+                cost = fillup.pricePerUnit ?? 0
+            case .total:
+                cost = fillup.totalCost ?? 0
+            }
         }
-    }
-    
-    // Used when adding a new fill-up
-    init(settings: AppSettings = AppSettings()) {
-        self.settings = settings
     }
     
     // Determines whether the required information is present
