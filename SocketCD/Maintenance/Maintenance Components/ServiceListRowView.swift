@@ -27,7 +27,7 @@ struct ServiceListRowView: View {
         }
         .listRowSeparator(.hidden)
         .sheet(item: $selectedService) { service in
-            AddRecordView(vehicle: vehicle, service: service)
+            AddEditRecordView(vehicle: vehicle, service: service)
         }
         .swipeActions(edge: .leading) {
             Button {

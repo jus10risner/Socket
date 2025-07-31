@@ -96,9 +96,8 @@
 		9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */; };
 		9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5232BA4B4700053C65E /* ServiceDetailView.swift */; };
 		9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */; };
-		9EEAC5282BA4C9720053C65E /* AddRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5272BA4C9720053C65E /* AddRecordView.swift */; };
 		9EEAC52A2BA4CBB40053C65E /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */; };
-		9EEAC52C2BA4CD150053C65E /* EditRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC52B2BA4CD150053C65E /* EditRecordView.swift */; };
+		9EEAC52C2BA4CD150053C65E /* AddEditRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC52B2BA4CD150053C65E /* AddEditRecordView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -204,9 +203,8 @@
 		9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthsYearsToggle.swift; sourceTree = "<group>"; };
 		9EEAC5232BA4B4700053C65E /* ServiceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceDetailView.swift; sourceTree = "<group>"; };
 		9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditServiceView.swift; sourceTree = "<group>"; };
-		9EEAC5272BA4C9720053C65E /* AddRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecordView.swift; sourceTree = "<group>"; };
 		9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailView.swift; sourceTree = "<group>"; };
-		9EEAC52B2BA4CD150053C65E /* EditRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRecordView.swift; sourceTree = "<group>"; };
+		9EEAC52B2BA4CD150053C65E /* AddEditRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditRecordView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -479,8 +477,7 @@
 				9EEAC51D2BA4A2280053C65E /* MaintenanceListView.swift */,
 				9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */,
 				9EEAC5232BA4B4700053C65E /* ServiceDetailView.swift */,
-				9EEAC5272BA4C9720053C65E /* AddRecordView.swift */,
-				9EEAC52B2BA4CD150053C65E /* EditRecordView.swift */,
+				9EEAC52B2BA4CD150053C65E /* AddEditRecordView.swift */,
 				9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */,
 				9EEAC51B2BA4A1E70053C65E /* MaintenanceStartView.swift */,
 				9E189E2A2BD009A000095EC2 /* Maintenance Components */,
@@ -617,7 +614,7 @@
 				9EEAC4812BA0F9C20053C65E /* ContentView.swift in Sources */,
 				9EEAC4FF2BA388D50053C65E /* Fillup+helper.swift in Sources */,
 				9EEAC52A2BA4CBB40053C65E /* RecordDetailView.swift in Sources */,
-				9EEAC52C2BA4CD150053C65E /* EditRecordView.swift in Sources */,
+				9EEAC52C2BA4CD150053C65E /* AddEditRecordView.swift in Sources */,
 				9E9ED3A62E12E7BF00EB89F8 /* FuelEconomyChartView.swift in Sources */,
 				9E620C002BC06853005E16DD /* DraftServiceRecordView.swift in Sources */,
 				9EEAC4E12BA360E80053C65E /* VehicleInfoView.swift in Sources */,
@@ -688,7 +685,6 @@
 				9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */,
 				9EEAC4EA2BA369920053C65E /* EditablePhotoGridView.swift in Sources */,
 				9E35034C2E1FE3300032F845 /* VehicleDashboardView.swift in Sources */,
-				9EEAC5282BA4C9720053C65E /* AddRecordView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -89,7 +89,7 @@ struct ServiceDetailView: View {
         .navigationTitle("Service Details")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingAddRecord) {
-            AddRecordView(vehicle: vehicle, service: service)
+            AddEditRecordView(vehicle: vehicle, service: service)
         }
         .sheet(isPresented: $showingEditService) {
             AddEditServiceView(vehicle: vehicle, service: service)
