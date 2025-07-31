@@ -25,9 +25,9 @@ struct AddEditVehicleImageView: View {
             .overlay(
                 ZStack {
                     if let photo = draftVehicle.photo {
-                        VehiclePhotoView(carPhoto: photo)
+                        VehicleImageView(carPhoto: photo)
                     } else {
-                        PlaceholderPhotoView(backgroundColor: draftVehicle.selectedColor)
+                        VehicleImageView(backgroundColor: draftVehicle.selectedColor)
                     }
                 }
             )

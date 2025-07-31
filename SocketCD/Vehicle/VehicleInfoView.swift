@@ -181,9 +181,9 @@ struct VehicleInfoView: View {
                     .overlay(
                         ZStack {
                             if let carPhoto = vehicle.photo {
-                                VehiclePhotoView(carPhoto: carPhoto)
+                                VehicleImageView(carPhoto: carPhoto)
                             } else {
-                                PlaceholderPhotoView(backgroundColor: vehicle.backgroundColor)
+                                VehicleImageView(backgroundColor: vehicle.backgroundColor)
                             }
                         }
                         .imageScale(.small)

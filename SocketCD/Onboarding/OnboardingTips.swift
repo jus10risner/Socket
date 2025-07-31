@@ -79,9 +79,9 @@ struct OnboardingTips: View {
                                 .overlay(
                                     ZStack {
                                         if let carPhoto = vehicle.photo {
-                                            VehiclePhotoView(carPhoto: carPhoto)
+                                            VehicleImageView(carPhoto: carPhoto)
                                         } else {
-                                            PlaceholderPhotoView(backgroundColor: vehicle.backgroundColor)
+                                            VehicleImageView(backgroundColor: vehicle.backgroundColor)
                                         }
                                         
                                         RoundedRectangle(cornerRadius: 10)

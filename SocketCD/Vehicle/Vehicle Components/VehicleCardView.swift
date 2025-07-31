@@ -187,9 +187,9 @@ struct VehicleCardView: View {
         ZStack {
             Group {
                 if let carPhoto = vehicle.photo {
-                    VehiclePhotoView(carPhoto: carPhoto)
+                    VehicleImageView(carPhoto: carPhoto)
                 } else {
-                    PlaceholderPhotoView(backgroundColor: vehicle.backgroundColor)
+                    VehicleImageView(backgroundColor: vehicle.backgroundColor)
                 }
             }
             .clipped()
