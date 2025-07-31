@@ -11,62 +11,39 @@ struct AddEditVehicleImageView: View {
     @ObservedObject var draftVehicle: DraftVehicle
     
     var body: some View {
-        vehicleRepresentation
-    }
-    
-    
-    // MARK: - Views
-    
-    // Either the selected photo for this vehicle, or a vehicle graphic, with the selected background color
-    private var vehicleRepresentation: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .foregroundStyle(Color.clear)
-            .aspectRatio(2, contentMode: .fit)
-            .overlay(
-                ZStack {
-                    if let photo = draftVehicle.photo {
-                        VehicleImageView(carPhoto: photo)
-                    } else {
-                        VehicleImageView(backgroundColor: draftVehicle.selectedColor)
-                    }
-                }
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .overlay {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(.black.opacity(0.3), lineWidth: 0.25)
-                    .foregroundStyle(Color.clear)
-                
-                draftVehicle.photo == nil ? nil : deletePhotoButton
+        Group {
+            if let carPhoto = draftVehicle.photo {
+                VehicleImageView(carPhoto: carPhoto)
+            } else {
+                VehicleImageView(backgroundColor: draftVehicle.selectedColor)
             }
-            .transaction { transaction in
-                transaction.animation = nil
-            }
-    }
-    
-    // Button component that sets the selected vehicle photo to nil
-    private var deletePhotoButton: some View {
-        VStack {
-            HStack {
-                Spacer()
-                
-                Button {
-                    withAnimation {
-                        draftVehicle.photo = nil
-                    }
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.title2)
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.white, .gray)
-                        .accessibilityLabel("Delete Photo")
-                }
-                .padding(10)
-                .buttonStyle(.plain)
-            }
-            
-            Spacer()
         }
+        .clipped()
+        .clipShape(RoundedRectangle(cornerRadius: 15))
+        .overlay {
+            ZStack(alignment: .topTrailing) {
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
+                
+                if draftVehicle.photo != nil {
+                    Button {
+                        withAnimation {
+                            draftVehicle.photo = nil
+                        }
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title2)
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, .gray)
+                            .accessibilityLabel("Delete Photo")
+                    }
+                    .padding(10)
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .aspectRatio(2, contentMode: .fit)
+        .animation(nil, value: draftVehicle.photo)
     }
 }
 
