@@ -57,7 +57,7 @@ struct VehicleInfoView: View {
         )) {
             ActivityView(activityItems: [documentURL as Any], applicationActivities: nil)
         }
-        .sheet(isPresented: $showingAddCustomInfo) { AddCustomInfoView(vehicle: vehicle) }
+//        .sheet(isPresented: $showingAddCustomInfo) { AddEditCustomInfoView(vehicle: vehicle) }
         .confirmationDialog("Permanently delete \(vehicle.name) and all of its records? \nThis action cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 DataController.shared.delete(vehicle)

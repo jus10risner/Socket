@@ -51,7 +51,7 @@ struct CustomInfoDetailView: View {
         }
         .navigationTitle(customInfo.label)
 //        .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showingEditCustomInfo) { EditCustomInfoView(customInfo: customInfo) }
+        .sheet(isPresented: $showingEditCustomInfo) { AddEditCustomInfoView(customInfo: customInfo) }
         .alert("Delete Vehicle Info", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
                 DataController.shared.delete(customInfo)
