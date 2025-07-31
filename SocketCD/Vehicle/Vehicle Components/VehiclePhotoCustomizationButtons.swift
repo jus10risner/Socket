@@ -162,6 +162,8 @@ struct VehiclePhotoCustomizationButtons: View {
                 withAnimation {
                     carPhoto = newPhoto
                 }
+                
+                self.selectedImage = nil
             }
         }
     }
