@@ -82,7 +82,7 @@ struct FillupDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingEditFillup) {
 //            EditFillupView(vehicle: vehicle, fillup: fillup)
-            EditFillupView(fillup: fillup)
+            AddEditFillupView(fillup: fillup)
         }
         .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {

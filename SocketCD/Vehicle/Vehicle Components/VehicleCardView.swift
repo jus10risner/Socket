@@ -101,7 +101,8 @@ struct VehicleCardView: View {
 //            .tint(Color.defaultAppAccent)
 //        }
         .sheet(item: $quickFillupVehicle) { vehicle in
-            AddFillupView(vehicle: vehicle, quickFill: true)
+//            AddFillupView(vehicle: vehicle, quickFill: true)
+            AddEditFillupView(vehicle: vehicle)
                 .tint(settings.accentColor(for: .fillupsTheme))
         }
 //        .sheet(item: $quickEditVehicle) { vehicle in

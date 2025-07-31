@@ -86,7 +86,8 @@ struct FillupsDashboardView: View {
             }
         }
         .sheet(isPresented: $showingAddFillup) {
-            AddFillupView(vehicle: vehicle, quickFill: false)
+//            AddFillupView(vehicle: vehicle, quickFill: false)
+            AddEditFillupView(vehicle: vehicle)
         }
         .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
         .toolbar {

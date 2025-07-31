@@ -86,11 +86,10 @@
 		9EEAC5082BA38BC20053C65E /* FillupsStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5072BA38BC20053C65E /* FillupsStartView.swift */; };
 		9EEAC50A2BA482840053C65E /* FuelEconomyInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5092BA482840053C65E /* FuelEconomyInfoView.swift */; };
 		9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */; };
-		9EEAC50E2BA483290053C65E /* AddFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC50D2BA483290053C65E /* AddFillupView.swift */; };
 		9EEAC5112BA4852C0053C65E /* FillTypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5102BA4852C0053C65E /* FillTypePickerView.swift */; };
 		9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5142BA489D30053C65E /* AllFillupsListView.swift */; };
 		9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5162BA48A7E0053C65E /* FillupDetailView.swift */; };
-		9EEAC5192BA48D720053C65E /* EditFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5182BA48D720053C65E /* EditFillupView.swift */; };
+		9EEAC5192BA48D720053C65E /* AddEditFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5182BA48D720053C65E /* AddEditFillupView.swift */; };
 		9EEAC51C2BA4A1E70053C65E /* MaintenanceStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC51B2BA4A1E70053C65E /* MaintenanceStartView.swift */; };
 		9EEAC51E2BA4A2280053C65E /* MaintenanceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC51D2BA4A2280053C65E /* MaintenanceListView.swift */; };
 		9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */; };
@@ -193,11 +192,10 @@
 		9EEAC5072BA38BC20053C65E /* FillupsStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupsStartView.swift; sourceTree = "<group>"; };
 		9EEAC5092BA482840053C65E /* FuelEconomyInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyInfoView.swift; sourceTree = "<group>"; };
 		9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillTypeInfoView.swift; sourceTree = "<group>"; };
-		9EEAC50D2BA483290053C65E /* AddFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFillupView.swift; sourceTree = "<group>"; };
 		9EEAC5102BA4852C0053C65E /* FillTypePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillTypePickerView.swift; sourceTree = "<group>"; };
 		9EEAC5142BA489D30053C65E /* AllFillupsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFillupsListView.swift; sourceTree = "<group>"; };
 		9EEAC5162BA48A7E0053C65E /* FillupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupDetailView.swift; sourceTree = "<group>"; };
-		9EEAC5182BA48D720053C65E /* EditFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFillupView.swift; sourceTree = "<group>"; };
+		9EEAC5182BA48D720053C65E /* AddEditFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditFillupView.swift; sourceTree = "<group>"; };
 		9EEAC51B2BA4A1E70053C65E /* MaintenanceStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceStartView.swift; sourceTree = "<group>"; };
 		9EEAC51D2BA4A2280053C65E /* MaintenanceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceListView.swift; sourceTree = "<group>"; };
 		9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthsYearsToggle.swift; sourceTree = "<group>"; };
@@ -447,8 +445,7 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC5052BA38B8E0053C65E /* FillupsDashboardView.swift */,
-				9EEAC50D2BA483290053C65E /* AddFillupView.swift */,
-				9EEAC5182BA48D720053C65E /* EditFillupView.swift */,
+				9EEAC5182BA48D720053C65E /* AddEditFillupView.swift */,
 				9EEAC5142BA489D30053C65E /* AllFillupsListView.swift */,
 				9EEAC5162BA48A7E0053C65E /* FillupDetailView.swift */,
 				9EEAC5072BA38BC20053C65E /* FillupsStartView.swift */,
@@ -620,7 +617,6 @@
 				9EEAC4E12BA360E80053C65E /* VehicleInfoView.swift in Sources */,
 				9EEAC4C62BA253950053C65E /* WelcomeView.swift in Sources */,
 				9EEAC4DF2BA343B00053C65E /* EditVehicleView.swift in Sources */,
-				9EEAC50E2BA483290053C65E /* AddFillupView.swift in Sources */,
 				9EEAC4F72BA37A5C0053C65E /* Repair+helper.swift in Sources */,
 				9EEAC4A72BA1EF720053C65E /* ActivityView.swift in Sources */,
 				9E620BF82BC0477E005E16DD /* DraftFillupView.swift in Sources */,
@@ -679,7 +675,7 @@
 				9EEAC4F02BA376380053C65E /* EditCustomInfoView.swift in Sources */,
 				9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */,
 				9EEAC4E62BA364AA0053C65E /* CustomInfo+helper.swift in Sources */,
-				9EEAC5192BA48D720053C65E /* EditFillupView.swift in Sources */,
+				9EEAC5192BA48D720053C65E /* AddEditFillupView.swift in Sources */,
 				9EEAC5112BA4852C0053C65E /* FillTypePickerView.swift in Sources */,
 				9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */,
 				9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */,

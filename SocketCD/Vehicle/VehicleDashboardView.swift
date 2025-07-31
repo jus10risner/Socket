@@ -86,7 +86,8 @@ struct VehicleDashboardView: View {
                     AddEditRepairView(vehicle: vehicle)
                         .tint(settings.accentColor(for: .repairsTheme))
                 case .addFillup:
-                    AddFillupView(vehicle: vehicle, quickFill: false)
+//                    AddFillupView(vehicle: vehicle, quickFill: false)
+                    AddEditFillupView(vehicle: vehicle)
                         .tint(settings.accentColor(for: .fillupsTheme))
                 case .addCustomInfo:
                     AddCustomInfoView(vehicle: vehicle)
