@@ -25,12 +25,9 @@ struct VehicleCardView: View {
     }
     
     @State private var isAnimating = false
-    @State private var cornerRadius: CGFloat = 20
+    let cornerRadius: CGFloat = 20
     
     @State private var quickFillupVehicle: Vehicle?
-//    @State private var quickEditVehicle: Vehicle?
-//    @State private var vehicleToDelete: Vehicle?
-//    @State private var showingDeleteAlert = false
     
     var body: some View {
 //        cardView
@@ -61,8 +58,6 @@ struct VehicleCardView: View {
                             animateMaintenanceAlert()
                         }
                 }
-                
-//                vehicleMenu
             }
             .padding(.horizontal)
         }
@@ -82,46 +77,10 @@ struct VehicleCardView: View {
             }
             .tint(Color.defaultFillupsAccent)
         }
-//        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-//            Button {
-//                vehicleToDelete = vehicle
-//                showingDeleteAlert = true
-//            } label: {
-//                Label("Delete Vehicle", systemImage: "trash")
-//                    .labelStyle(.iconOnly)
-//            }
-//            .tint(Color.red)
-//            
-//            Button {
-//                quickEditVehicle = vehicle
-//            } label: {
-//                Label("Edit Vehicle", systemImage: "pencil")
-//                    .labelStyle(.iconOnly)
-//            }
-//            .tint(Color.defaultAppAccent)
-//        }
         .sheet(item: $quickFillupVehicle) { vehicle in
-//            AddFillupView(vehicle: vehicle, quickFill: true)
             AddEditFillupView(vehicle: vehicle)
                 .tint(settings.accentColor(for: .fillupsTheme))
         }
-//        .sheet(item: $quickEditVehicle) { vehicle in
-//            EditVehicleView(vehicle: vehicle)
-//                .tint(settings.accentColor(for: .appTheme))
-//        }
-//        .confirmationDialog("Permanently delete \(vehicleToDelete?.name ?? "this vehicle") and all of its records? \nThis cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
-//            Button("Delete", role: .destructive) {
-//                withAnimation {
-//                    if let vehicleToDelete {
-//                        DataController.shared.delete(vehicleToDelete)
-//                    }
-//                    
-//                    vehicleToDelete = nil
-//                }
-//            }
-//            
-//            Button("Cancel", role: .cancel) { vehicleToDelete = nil }
-//        }
     }
     
 //    private var cardView: some View {
@@ -184,20 +143,18 @@ struct VehicleCardView: View {
     // MARK: - Views
     
     var vehicleImageCard: some View {
-        ZStack {
-            Group {
-                if let carPhoto = vehicle.photo {
-                    VehicleImageView(carPhoto: carPhoto)
-                } else {
-                    VehicleImageView(backgroundColor: vehicle.backgroundColor)
-                }
+        Group {
+            if let carPhoto = vehicle.photo {
+                VehicleImageView(carPhoto: carPhoto)
+            } else {
+                VehicleImageView(backgroundColor: vehicle.backgroundColor)
             }
-            .clipped()
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius - 5))
         }
+        .clipped()
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius - 5))
         .overlay(
             RoundedRectangle(cornerRadius: cornerRadius - 5)
-                .stroke(Color.black.opacity(0.3), lineWidth: 0.5)
+                .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
         )
         .aspectRatio(2, contentMode: .fit)
     }
@@ -220,38 +177,6 @@ struct VehicleCardView: View {
             .onAppear { animateMaintenanceAlert() }
             .accessibilityLabel("Maintenance Due")
     }
-    
-//    var vehicleMenu: some View {
-//        Menu {
-//            Button {
-//                quickFillupVehicle = vehicle
-//            } label: {
-//                Label("Add Fill-up", systemImage: "fuelpump")
-//            }
-//                
-//            Section {
-//                Button {
-//                    quickEditVehicle = vehicle
-//                } label: {
-//                    Label("Edit Vehicle", systemImage: "pencil")
-//                }
-//                
-//                Button(role: .destructive) {
-//                    vehicleToDelete = vehicle
-//                    showingDeleteAlert = true
-//                } label: {
-//                    Label("Delete Vehicle", systemImage: "trash")
-//                }
-//            }
-//        } label: {
-//            Image(systemName: "ellipsis")
-//                .foregroundStyle(Color.secondary)
-//                .frame(width: 20, height: 20)
-//        }
-//        .highPriorityGesture(TapGesture())
-//        .buttonStyle(.plain)
-//        .padding(.leading, 5)
-//    }
     
     
     // MARK: - Methods
