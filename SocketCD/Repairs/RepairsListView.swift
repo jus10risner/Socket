@@ -28,7 +28,7 @@ struct RepairsListView: View {
         List {
             ForEach(repairs, id: \.id) { repair in
                 NavigationLink {
-                    RepairDetailView(vehicle: vehicle, repair: repair)
+                    RepairDetailView(repair: repair)
                 } label: {
                     HStack {
                         Text(repair.name)

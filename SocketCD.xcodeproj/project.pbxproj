@@ -14,7 +14,6 @@
 		9E328E122E3CF7A600FF25B5 /* LabeledInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */; };
 		9E35034C2E1FE3300032F845 /* VehicleDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */; };
 		9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */; };
-		9E620BF42BBF2DED005E16DD /* DraftRepairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF32BBF2DED005E16DD /* DraftRepairView.swift */; };
 		9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF52BC04531005E16DD /* DraftFillup.swift */; };
 		9E620BF82BC0477E005E16DD /* DraftFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF72BC0477E005E16DD /* DraftFillupView.swift */; };
 		9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF92BC05754005E16DD /* DraftService.swift */; };
@@ -117,7 +116,6 @@
 		9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDashboardView.swift; sourceTree = "<group>"; };
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepair.swift; sourceTree = "<group>"; };
-		9E620BF32BBF2DED005E16DD /* DraftRepairView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepairView.swift; sourceTree = "<group>"; };
 		9E620BF52BC04531005E16DD /* DraftFillup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftFillup.swift; sourceTree = "<group>"; };
 		9E620BF72BC0477E005E16DD /* DraftFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftFillupView.swift; sourceTree = "<group>"; };
 		9E620BF92BC05754005E16DD /* DraftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftService.swift; sourceTree = "<group>"; };
@@ -260,7 +258,6 @@
 			isa = PBXGroup;
 			children = (
 				9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */,
-				9E620BF32BBF2DED005E16DD /* DraftRepairView.swift */,
 			);
 			path = "Repairs Components";
 			sourceTree = "<group>";
@@ -660,7 +657,6 @@
 				9E312D772BF2924B0069CBFF /* MaintenanceOnboardingView.swift in Sources */,
 				9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */,
 				9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */,
-				9E620BF42BBF2DED005E16DD /* DraftRepairView.swift in Sources */,
 				9E620C052BC0713F005E16DD /* DraftCustomInfoView.swift in Sources */,
 				9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */,
 				9EEAC48E2BA0FA280053C65E /* SocketDataModel.xcdatamodeld in Sources */,
