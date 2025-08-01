@@ -11,6 +11,7 @@
 		9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E235B912DFB58CA008F7327 /* CameraViewModel.swift */; };
 		9E312D772BF2924B0069CBFF /* MaintenanceOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */; };
 		9E328E102E33B99600FF25B5 /* PDFExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */; };
+		9E328E122E3CF7A600FF25B5 /* LabeledInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */; };
 		9E35034C2E1FE3300032F845 /* VehicleDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */; };
 		9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */; };
 		9E620BF42BBF2DED005E16DD /* DraftRepairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF32BBF2DED005E16DD /* DraftRepairView.swift */; };
@@ -112,6 +113,7 @@
 		9E235B912DFB58CA008F7327 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceOnboardingView.swift; sourceTree = "<group>"; };
 		9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExporter.swift; sourceTree = "<group>"; };
+		9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInput.swift; sourceTree = "<group>"; };
 		9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDashboardView.swift; sourceTree = "<group>"; };
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepair.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				9EEAC4992BA1ED8C0053C65E /* AppearanceController.swift */,
 				9E6A53452BADD68A00F75D49 /* AppInfo.swift */,
 				9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */,
+				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
 				9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */,
 			);
@@ -608,6 +611,7 @@
 				9E9ED3A62E12E7BF00EB89F8 /* FuelEconomyChartView.swift in Sources */,
 				9E620C002BC06853005E16DD /* DraftServiceRecordView.swift in Sources */,
 				9EEAC4E12BA360E80053C65E /* VehicleInfoView.swift in Sources */,
+				9E328E122E3CF7A600FF25B5 /* LabeledInput.swift in Sources */,
 				9EEAC4C62BA253950053C65E /* WelcomeView.swift in Sources */,
 				9EEAC4DF2BA343B00053C65E /* EditVehicleView.swift in Sources */,
 				9EEAC4F72BA37A5C0053C65E /* Repair+helper.swift in Sources */,

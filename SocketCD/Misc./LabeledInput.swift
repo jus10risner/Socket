@@ -5,4 +5,18 @@
 //  Created by Justin Risner on 8/1/25.
 //
 
-import Foundation
+import SwiftUI
+
+// Standardizes the look of input form fields
+struct LabeledInput<Content: View>: View {
+    var label: String
+    let content: () -> Content
+    
+    var body: some View {
+        LabeledContent(label) {
+            content()
+                .foregroundStyle(Color.primary)
+        }
+        .foregroundStyle(Color.secondary)
+    }
+}
