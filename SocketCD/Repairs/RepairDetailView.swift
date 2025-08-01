@@ -10,20 +10,11 @@ import SwiftUI
 struct RepairDetailView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var settings: AppSettings
-    @ObservedObject var vehicle: Vehicle
     @ObservedObject var repair: Repair
     
     @State private var showingEditRepair = false
-    @State private var showingDeleteAlert = false
     
     var body: some View {
-        repairDetail
-    }
-    
-    
-    // MARK: - Views
-    
-    private var repairDetail: some View {
         List {
             Section {
                 LabeledContent("Date", value: repair.date.formatted(date: .numeric, time: .omitted))
@@ -51,40 +42,22 @@ struct RepairDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Menu {
-                    Button {
-                        showingEditRepair = true
-                    } label: {
-                        Label("Edit Repair", systemImage: "pencil")
-                    }
-                    
-                    Button(role: .destructive) {
-                        showingDeleteAlert = true
-                    } label: {
-                        Label("Delete Repair", systemImage: "trash")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .accessibilityLabel("Repair Options")
+                Button("Edit") {
+                    showingEditRepair = true
                 }
             }
         }
         .sheet(isPresented: $showingEditRepair) {
-            AddEditRepairView(vehicle: vehicle, repair: repair)
-        }
-        .alert("Delete Repair", isPresented: $showingDeleteAlert) {
-            Button("Delete", role: .destructive) {
-                DataController.shared.delete(repair)
+            AddEditRepairView(repair: repair, onDelete: {
                 dismiss()
-            }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Permanently delete this repair record? This cannot be undone.")
+            })
         }
     }
 }
 
 #Preview {
-    RepairDetailView(vehicle: Vehicle(context: DataController.preview.container.viewContext), repair: Repair(context: DataController.preview.container.viewContext))
+    let context = DataController.preview.container.viewContext
+    
+    RepairDetailView(repair: Repair(context: context))
         .environmentObject(AppSettings())
 }
