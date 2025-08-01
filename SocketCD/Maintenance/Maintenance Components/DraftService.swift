@@ -11,8 +11,8 @@ class DraftService: ObservableObject {
     var id: UUID? = nil
     
     @Published var name: String = ""
-    @Published var distanceInterval: Int? = Int("")
-    @Published var timeInterval: Int? = Int("")
+    @Published var distanceInterval: Int? = nil
+    @Published var timeInterval: Int? = nil
     @Published var monthsInterval: Bool = true
     @Published var serviceNote: String = ""
     

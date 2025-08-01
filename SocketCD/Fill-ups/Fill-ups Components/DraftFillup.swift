@@ -12,9 +12,9 @@ class DraftFillup: ObservableObject {
     var id: UUID? = nil
     
     @Published var date: Date = Date.now
-    @Published var odometer: Int? = Int("")
-    @Published var volume: Double? = Double("")
-    @Published var cost: Double? = Double("")
+    @Published var odometer: Int? = nil
+    @Published var volume: Double? = nil
+    @Published var cost: Double? = nil
     @Published var fillType: FillType = .fullTank
     @Published var note: String = ""
     @Published var photos: [Photo] = []

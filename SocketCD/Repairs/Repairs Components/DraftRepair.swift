@@ -12,8 +12,8 @@ class DraftRepair: ObservableObject {
     
     @Published var date: Date = Date.now
     @Published var name: String = ""
-    @Published var odometer: Int? = Int("")
-    @Published var cost: Double? = Double("")
+    @Published var odometer: Int? = nil
+    @Published var cost: Double? = nil
     @Published var note: String = ""
     @Published var photos: [Photo] = []
     

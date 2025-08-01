@@ -11,8 +11,8 @@ class DraftServiceRecord: ObservableObject {
     var id: UUID? = nil
     
     @Published var date: Date = Date.now
-    @Published var odometer: Int? = Int("")
-    @Published var cost: Double? = Double("")
+    @Published var odometer: Int? = nil
+    @Published var cost: Double? = nil
     @Published var note: String = ""
     @Published var photos: [Photo] = []
     

@@ -11,7 +11,7 @@ class DraftVehicle: ObservableObject {
     var id: UUID? = nil
     
     @Published var name: String = ""
-    @Published var odometer: Int? = Int("")
+    @Published var odometer: Int? = nil
     @Published var selectedColor: Color = Color(.socketPurple)
     @Published var photo: Photo?
     
