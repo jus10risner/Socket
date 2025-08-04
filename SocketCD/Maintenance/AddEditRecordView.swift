@@ -40,7 +40,7 @@ struct AddEditRecordView: View {
                         if let record {
                             record.updateAndSave(service: service, draftServiceRecord: draftServiceRecord)
                         } else {
-                            service.addNewServiceRecord(vehicle: vehicle, draftServiceRecord: draftServiceRecord)
+                            service.addNewServiceRecord(draftServiceRecord: draftServiceRecord)
                         }
                         
                         dismiss()

@@ -233,7 +233,7 @@ extension Service {
     
     // MARK: - CRUD Methods
     
-    func updateAndSave(vehicle: Vehicle, draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
+    func updateAndSave(draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
         let context = DataController.shared.container.viewContext
         
         if selectedInterval == .distance {
@@ -248,7 +248,9 @@ extension Service {
         self.monthsInterval = draftService.monthsInterval
         self.note = draftService.serviceNote
         
-        self.updateNotifications(vehicle: vehicle)
+        if let vehicle = self.vehicle {
+            self.updateNotifications(vehicle: vehicle)
+        }
         
         try? context.save()
     }
@@ -261,7 +263,7 @@ extension Service {
 //        try? context.save()
 //    }
     
-    func addNewServiceRecord(vehicle: Vehicle, draftServiceRecord: DraftServiceRecord) {
+    func addNewServiceRecord(draftServiceRecord: DraftServiceRecord) {
         let context = DataController.shared.container.viewContext
         let newServiceRecord = ServiceRecord(context: context)
         newServiceRecord.service = self
@@ -272,11 +274,13 @@ extension Service {
         newServiceRecord.note = draftServiceRecord.note
         newServiceRecord.photos = NSSet(array: draftServiceRecord.photos)
         
-        if let odometer = draftServiceRecord.odometer, odometer > vehicle.odometer {
-            vehicle.odometer = odometer
+        if let vehicle = self.vehicle, let odometer = draftServiceRecord.odometer {
+            if odometer > vehicle.odometer {
+                vehicle.odometer = odometer
+            }
+            
+            self.updateNotifications(vehicle: vehicle)
         }
-      
-        self.updateNotifications(vehicle: vehicle)
         
         try? context.save()
     }
