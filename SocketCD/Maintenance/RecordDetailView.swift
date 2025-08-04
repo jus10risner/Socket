@@ -15,15 +15,8 @@ struct RecordDetailView: View {
     let service: Service
     
     @State private var showingEditRecord = false
-    @State private var showingDeleteAlert = false
     
     var body: some View {
-        recordDetails
-    }
-    
-    // MARK: - Views
-    
-    private var recordDetails: some View {
         List {
             Section {
                 LabeledContent("Date", value: record.date.formatted(date: .numeric, time: .omitted))
@@ -49,37 +42,15 @@ struct RecordDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    Button {
-                        showingEditRecord = true
-                    } label: {
-                        Label("Edit Record", systemImage: "pencil")
-                    }
-                    
-                    Button(role: .destructive) {
-                        showingDeleteAlert = true
-                    } label: {
-                        Label("Delete Record", systemImage: "trash")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .accessibilityLabel("Service Record Options")
+                Button("Edit") {
+                    showingEditRecord = true
                 }
             }
         }
         .sheet(isPresented: $showingEditRecord) {
-            AddEditRecordView(service: service, record: record)
-        }
-        .alert("Delete Record", isPresented: $showingDeleteAlert) {
-            Button("Delete", role: .destructive) {
-//                record.delete(for: service)
-                DataController.shared.delete(record)
-                
+            AddEditRecordView(service: service, record: record) {
                 dismiss()
             }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Permanently delete this service record? This cannot be undone.")
         }
     }
 }

@@ -13,13 +13,17 @@ struct AddEditRecordView: View {
     @StateObject var draftServiceRecord = DraftServiceRecord()
     @ObservedObject var service: Service
     let record: ServiceRecord?
+    var onDelete: (() -> Void)?
     
-    init(service: Service, record: ServiceRecord? = nil) {
+    init(service: Service, record: ServiceRecord? = nil, onDelete: (() -> Void)? = nil) {
         self.service = service
         self.record = record
+        self.onDelete = onDelete
         
         _draftServiceRecord = StateObject(wrappedValue: DraftServiceRecord(record: record))
     }
+    
+    @State private var showingDeleteAlert = false
     
     @FocusState var isInputActive: Bool
     @FocusState var fieldInFocus: Bool
@@ -67,6 +71,12 @@ struct AddEditRecordView: View {
                     Section(header: AddPhotoButton(photos: $draftServiceRecord.photos)) {
                         EditablePhotoGridView(photos: $draftServiceRecord.photos)
                     }
+                    
+                    if onDelete != nil {
+                        Button("Delete", role: .destructive) {
+                            showingDeleteAlert = true
+                        }
+                    }
                 }
                 .scrollDismissesKeyboard(.interactively)
             }
@@ -89,6 +99,19 @@ struct AddEditRecordView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) { dismiss() }
                 }
+            }
+            .alert("Delete Record", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    if let record {
+                        DataController.shared.delete(record)
+                    }
+                    
+                    dismiss()
+                    onDelete?()
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Permanently delete this service record? This cannot be undone.")
             }
         }
     }
