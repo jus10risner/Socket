@@ -16,6 +16,7 @@ struct FillTypePicker: View {
         HStack(alignment: .center, spacing: 3) {
             Group {
                 Text("Fill Type")
+                    .foregroundStyle(Color.secondary)
                 
                 Button {
                     showingFillTypeInfo = true
@@ -42,7 +43,7 @@ struct FillTypePicker: View {
                         .font(.caption)
                         .accessibilityHidden(true)
                 }
-                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+//                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             }
             .transaction { transaction in
                 transaction.animation = nil
