@@ -99,10 +99,11 @@ struct AddEditServiceView: View {
                 }
                 .focused($isInputActive)
                
-                Section(header: Text("Service Note (optional)"), footer: Text("Add info that you want to reference each time this service is performed (e.g. oil type, filter number)")) {
-                    TextEditor(text: $draftService.serviceNote)
-                        .frame(minHeight: 50)
-                        .focused($isInputActive)
+                Section(header: Text("Service Note"), footer: Text("Add info that you want to reference each time this service is performed (e.g. oil type, filter number)")) {
+                    TextField("Optional", text: $draftService.serviceNote, axis: .vertical)
+//                    TextEditor(text: $draftService.serviceNote)
+//                        .frame(minHeight: 50)
+//                        .focused($isInputActive)
                 }
                 
             }

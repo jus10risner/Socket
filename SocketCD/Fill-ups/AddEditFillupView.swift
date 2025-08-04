@@ -56,7 +56,8 @@ struct AddEditFillupView: View {
                 }
                 
                 Section("Note") {
-                    TextEditor(text: $draftFillup.note)
+//                    TextEditor(text: $draftFillup.note)
+                    TextField("Optional", text: $draftFillup.note, axis: .vertical)
                 }
                 
                 Section(header: AddPhotoButton(photos: $draftFillup.photos)) {

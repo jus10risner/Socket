@@ -60,9 +60,10 @@ struct AddEditRepairView: View {
                 .focused($isInputActive)
                 
                 Section("Note") {
-                    TextEditor(text: $draftRepair.note)
-                        .frame(minHeight: 50)
-                        .focused($isInputActive)
+                    TextField("Optional", text: $draftRepair.note, axis: .vertical)
+//                    TextEditor(text: $draftRepair.note)
+//                        .frame(minHeight: 50)
+//                        .focused($isInputActive)
                 }
                 
                 Section(header: AddPhotoButton(photos: $draftRepair.photos)) {

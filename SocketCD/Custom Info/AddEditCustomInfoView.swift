@@ -46,7 +46,8 @@ struct AddEditCustomInfoView: View {
                 }
                 
                 Section("Note") {
-                    TextEditor(text: $draftCustomInfo.note)
+//                    TextEditor(text: $draftCustomInfo.note)
+                    TextField("Optional", text: $draftCustomInfo.note, axis: .vertical)
                 }
                 
                 Section(header: AddPhotoButton(photos: $draftCustomInfo.photos)) {

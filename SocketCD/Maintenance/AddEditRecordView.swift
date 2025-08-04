@@ -60,9 +60,10 @@ struct AddEditRecordView: View {
                     .focused($isInputActive)
                     
                     Section("Note") {
-                        TextEditor(text: $draftServiceRecord.note)
-                            .frame(minHeight: 50)
-                            .focused($isInputActive)
+                        TextField("Optional", text: $draftServiceRecord.note, axis: .vertical)
+//                        TextEditor(text: $draftServiceRecord.note)
+//                            .frame(minHeight: 50)
+//                            .focused($isInputActive)
                     }
                     
                     Section(header: AddPhotoButton(photos: $draftServiceRecord.photos)) {
