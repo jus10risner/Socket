@@ -13,10 +13,12 @@ struct AddEditFillupView: View {
     @StateObject var draftFillup = DraftFillup()
     let vehicle: Vehicle?
     let fillup: Fillup?
+    var onDelete: (() -> Void)?
     
-    init(vehicle: Vehicle? = nil, fillup: Fillup? = nil) {
+    init(vehicle: Vehicle? = nil, fillup: Fillup? = nil, onDelete: (() -> Void)? = nil) {
         self.vehicle = vehicle
         self.fillup = fillup
+        self.onDelete = onDelete
         
         if let fillup {
             _draftFillup = StateObject(wrappedValue: DraftFillup(fillup: fillup))
@@ -26,6 +28,7 @@ struct AddEditFillupView: View {
     }
     
     @State var showingFillTypeInfo = false
+    @State private var showingDeleteAlert = false
     
     @FocusState var isInputActive: Bool
     
@@ -63,6 +66,12 @@ struct AddEditFillupView: View {
                 Section(header: AddPhotoButton(photos: $draftFillup.photos)) {
                     EditablePhotoGridView(photos: $draftFillup.photos)
                 }
+                
+                if onDelete != nil {
+                    Button("Delete", role: .destructive) {
+                        showingDeleteAlert = true
+                    }
+                }
             }
             .scrollDismissesKeyboard(.interactively)
             .sheet(isPresented: $showingFillTypeInfo) { FillTypeInfoView() }
@@ -92,6 +101,20 @@ struct AddEditFillupView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) { dismiss() }
                 }
+            }
+            .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    if let fillup {
+                        DataController.shared.delete(fillup)
+                    }
+                    
+                    dismiss()
+                    onDelete?()
+                }
+                
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Deleting fill-up records may cause inaccurate fuel economy calculation. Delete this record anyway?")
             }
         }
     }

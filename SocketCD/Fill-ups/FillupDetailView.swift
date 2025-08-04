@@ -10,21 +10,12 @@ import SwiftUI
 struct FillupDetailView: View {
     @EnvironmentObject var settings: AppSettings
     @Environment(\.dismiss) var dismiss
-//    @ObservedObject var vehicle: Vehicle
     @ObservedObject var fillup: Fillup
     
     @State private var showingEditFillup = false
     @State private var showingMoreInfo = false
-    @State private var showingDeleteAlert = false
     
     var body: some View {
-        fillupDetails
-    }
-    
-    
-    // MARK: - Views
-    
-    private var fillupDetails: some View {
         List {
             Section {
                 LabeledContent("Fill-up Date", value: fillup.date.formatted(date: .numeric, time: .omitted))
@@ -82,16 +73,9 @@ struct FillupDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingEditFillup) {
 //            EditFillupView(vehicle: vehicle, fillup: fillup)
-            AddEditFillupView(fillup: fillup)
-        }
-        .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {
-            Button("Delete", role: .destructive) {
-                DataController.shared.delete(fillup)
+            AddEditFillupView(fillup: fillup) {
                 dismiss()
             }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Deleting fill-up records may cause inaccurate fuel economy calculation. Delete this record anyway?")
         }
         .alert("Why no fuel economy?", isPresented: $showingMoreInfo) {
             Button("OK") { }
@@ -100,21 +84,8 @@ struct FillupDetailView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    Button {
-                        showingEditFillup = true
-                    } label: {
-                        Label("Edit Fill-up", systemImage: "pencil")
-                    }
-                    
-                    Button(role: .destructive) {
-                        showingDeleteAlert = true
-                    } label: {
-                        Label("Delete Fill-up", systemImage: "trash")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .accessibilityLabel("Fill-up Options")
+                Button("Edit") {
+                    showingEditFillup = true
                 }
             }
         }
@@ -131,18 +102,6 @@ struct FillupDetailView: View {
         .buttonStyle(.plain)
         .foregroundStyle(settings.accentColor(for: .fillupsTheme))
     }
-    
-    
-    // MARK: - Computed Properties
-    
-    // Returns the appropriate volume unit, based on the fuel economy units selected in Settings
-//    private var volumeUnit: String {
-//        if settings.fuelEconomyUnit == .mpg {
-//            return "Gallon"
-//        } else {
-//            return "Liter"
-//        }
-//    }
 }
 
 #Preview {
