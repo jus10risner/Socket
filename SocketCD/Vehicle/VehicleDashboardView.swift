@@ -192,7 +192,7 @@ struct VehicleDashboardView: View {
     var maintenanceDashboardCard: some View {
         DashboardCardView(title: "Next Service Due", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme)) {
             Group {
-                if let service = vehicle.nextServiceDue() {
+                if let service = vehicle.sortedServicesArray.first {
                     HStack {
                         VStack(alignment: .leading, spacing: 0) {
                             Text(service.name)

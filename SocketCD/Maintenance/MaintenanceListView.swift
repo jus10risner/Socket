@@ -40,15 +40,18 @@ struct MaintenanceListView: View {
     
     private var maintenanceList: some View {
         List {
-            servicesWithStatus(.overDue)
-            
-            servicesWithStatus(.due)
-            
-            servicesWithStatus(.notDue)
-        
-            if serviceTipDue == true {
-                firstServiceInfo
+            ForEach(vehicle.sortedServicesArray) { service in
+                ServiceListRowView(service: service, vehicle: vehicle)
             }
+//            servicesWithStatus(.overDue)
+//            
+//            servicesWithStatus(.due)
+//            
+//            servicesWithStatus(.notDue)
+//        
+//            if serviceTipDue == true {
+//                firstServiceInfo
+//            }
         }
         .navigationTitle("Maintenance")
 //            .listStyle(.plain)
@@ -73,29 +76,6 @@ struct MaintenanceListView: View {
             AddEditServiceView(vehicle: vehicle)
         }
         .toolbar {
-//                ToolbarItem(placement: .principal) {
-//                    VStack {
-//                        Spacer()
-//                        Text(vehicle.name)
-//                            .font(.headline)
-//                            .lineLimit(1)
-//                            .fixedSize(horizontal: false, vertical: true)
-//                        Spacer()
-//                    }
-//                }
-//
-//                ToolbarItem(placement: .topBarLeading) {
-//                    Button {
-//                        dismiss()
-//                    } label: {
-//                        Image(systemName: "xmark.circle.fill")
-//                            .font(.title2)
-//                            .symbolRenderingMode(.hierarchical)
-//                            .foregroundStyle(Color.secondary)
-//                            .accessibilityLabel("Back to all vehicles")
-//                    }
-//                }
-            
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     showingAddService = true

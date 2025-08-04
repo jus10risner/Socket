@@ -74,8 +74,23 @@ extension Vehicle {
     var sortedServicesArray: [Service] {
         let set = services as? Set<Service> ?? []
         
-        return set.sorted {
-            $0.name < $1.name
+        return set.sorted { service1, service2 in
+            let context1 = ServiceContext(service: service1, currentOdometer: odometer)
+            let context2 = ServiceContext(service: service2, currentOdometer: odometer)
+            
+            let priority1 = priority(context: context1)
+            let priority2 = priority(context: context2)
+            
+            switch(priority1, priority2) {
+            case let (p1?, p2?):
+                return p1 < p2 // Lower value means higher priority
+            case (nil, _?):
+                return false
+            case (_?, nil):
+                return true
+            case (nil, nil):
+                return service1.name < service2.name
+            }
         }
     }
     
@@ -96,13 +111,6 @@ extension Vehicle {
         
         try? context.save()
     }
-    
-//    func delete() {
-//        let context = DataController.shared.container.viewContext
-//        
-//        context.delete(self)
-//        try? context.save()
-//    }
     
     func addNewService(draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
         let context = DataController.shared.container.viewContext
@@ -183,18 +191,6 @@ extension Vehicle {
     
     
     // MARK: - Other Methods
-    
-    // Returns the next service due (or the most overdue service)
-    func nextServiceDue() -> Service? {
-        let prioritized = sortedServicesArray.compactMap { service -> (service: Service, priority: Int)? in
-            let context = ServiceContext(service: service, currentOdometer: odometer)
-            guard let priority = priority(context: context) else { return nil }
-            
-            return (service: service, priority: priority)
-        }
-
-        return prioritized.min { $0.priority < $1.priority }?.service
-    }
     
     // Calculates the miles or days left until service is due
     private func priority(context: ServiceContext) -> Int? {
