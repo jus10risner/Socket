@@ -12,15 +12,18 @@ struct AddEditCustomInfoView: View {
     @StateObject var draftCustomInfo = DraftCustomInfo()
     let vehicle: Vehicle?
     let customInfo: CustomInfo?
+    var onDelete: (() -> Void)?
     
-    init(vehicle: Vehicle? = nil, customInfo: CustomInfo? = nil) {
+    init(vehicle: Vehicle? = nil, customInfo: CustomInfo? = nil, onDelete: (() -> Void)? = nil) {
         self.vehicle = vehicle
         self.customInfo = customInfo
+        self.onDelete = onDelete
         
         _draftCustomInfo = StateObject(wrappedValue: DraftCustomInfo(customInfo: customInfo))
     }
     
     @State private var showingDuplicateLabelError = false
+    @State private var showingDeleteAlert = false
     
     @FocusState var isInputActive: Bool
     
@@ -53,6 +56,12 @@ struct AddEditCustomInfoView: View {
                 Section(header: AddPhotoButton(photos: $draftCustomInfo.photos)) {
                     EditablePhotoGridView(photos: $draftCustomInfo.photos)
                 }
+                
+                if onDelete != nil {
+                    Button("Delete", role: .destructive) {
+                        showingDeleteAlert = true
+                    }
+                }
             }
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle(customInfo != nil ? "Edit Info" : "New Info")
@@ -78,6 +87,19 @@ struct AddEditCustomInfoView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) { dismiss() }
                 }
+            }
+            .alert("Delete Vehicle Info", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    if let customInfo {
+                        DataController.shared.delete(customInfo)
+                    }
+                    
+                    dismiss()
+                    onDelete?()
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Permanently delete this info? This cannot be undone.")
             }
             .alert("That label has already been used.", isPresented: $showingDuplicateLabelError) {
                 Button("OK", role: .cancel) { }

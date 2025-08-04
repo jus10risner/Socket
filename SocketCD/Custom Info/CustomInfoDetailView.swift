@@ -12,18 +12,9 @@ struct CustomInfoDetailView: View {
     @ObservedObject var customInfo: CustomInfo
     
     @State private var copyHint = "Tap to copy"
-    
     @State private var showingEditCustomInfo = false
-    @State private var showingDeleteAlert = false
     
     var body: some View {
-        customInfoDetails
-    }
-    
-    
-    // MARK: - Views
-    
-    private var customInfoDetails: some View {
         List {
             if !customInfo.detail.isEmpty {
                 Section(footer: Text(copyHint)) {
@@ -51,32 +42,15 @@ struct CustomInfoDetailView: View {
         }
         .navigationTitle(customInfo.label)
 //        .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showingEditCustomInfo) { AddEditCustomInfoView(customInfo: customInfo) }
-        .alert("Delete Vehicle Info", isPresented: $showingDeleteAlert) {
-            Button("Delete", role: .destructive) {
-                DataController.shared.delete(customInfo)
+        .sheet(isPresented: $showingEditCustomInfo) {
+            AddEditCustomInfoView(customInfo: customInfo) {
                 dismiss()
             }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Permanently delete \(customInfo.label)? This cannot be undone.")
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    Button {
-                        showingEditCustomInfo = true
-                    } label: {
-                        Label("Edit Info", systemImage: "pencil")
-                    }
-                    
-                    Button(role: .destructive) {
-                        showingDeleteAlert = true
-                    } label: {
-                        Label("Delete Info", systemImage: "trash")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
+                Button("Edit") {
+                    showingEditCustomInfo = true
                 }
             }
         }
