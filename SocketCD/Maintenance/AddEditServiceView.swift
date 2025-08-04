@@ -9,48 +9,130 @@ import SwiftUI
 
 struct AddEditServiceView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var settings: AppSettings
     @StateObject var draftService = DraftService()
-    @ObservedObject var vehicle: Vehicle
-    var service: Service?
+    let vehicle: Vehicle?
+    let service: Service?
     
-    init(vehicle: Vehicle, service: Service? = nil) {
+    init(vehicle: Vehicle? = nil, service: Service? = nil) {
         self.vehicle = vehicle
         self.service = service
         
         _draftService = StateObject(wrappedValue: DraftService(service: service))
     }
     
+    @FocusState var isInputActive: Bool
+    @FocusState var fieldInFocus: Bool
+    
     @State private var showingDuplicateNameError = false
     @State private var selectedInterval: ServiceIntervalTypes = .distance
     
     var body: some View {
         NavigationStack {
-            DraftServiceView(draftService: draftService, selectedInterval: $selectedInterval, isEditView: true)
-                .navigationTitle(service != nil ? "Edit Service" : "New Maintenance Service")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("Done") {
-                            if let service {
-                                service.updateAndSave(vehicle: vehicle, draftService: draftService, selectedInterval: selectedInterval)
-                            } else {
-                                if vehicle.sortedServicesArray.contains(where: { service in service.name == draftService.name }) {
-                                    showingDuplicateNameError = true
-                                } else {
-                                    vehicle.addNewService(draftService: draftService, selectedInterval: selectedInterval)
+            Form {
+                Section {
+                    TextField("Service Name (e.g. Oil Change)", text: $draftService.name)
+                        .textInputAutocapitalization(.words)
+                        .focused($fieldInFocus)
+                        .onAppear {
+                            if service == nil {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                    fieldInFocus = true
                                 }
                             }
-                            
-                            dismiss()
                         }
-                        .disabled(draftService.canBeSaved ? false : true)
-                    }
-                    
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Cancel", role: .cancel) { dismiss() }
-                    }
                 }
-                .onAppear {
+                .focused($isInputActive)
+                
+                Section(footer: Text("Check your owner's manual for recommended service intervals.")) {
+                    VStack(alignment: .leading, spacing: 15) {
+                        Text("What determines when this service is due?")
+                            .font(.subheadline.bold())
+                        
+                        Picker("Track service by", selection: $selectedInterval) {
+                            ForEach(ServiceIntervalTypes.allCases, id: \.self) {
+                                Text($0.rawValue)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                    .padding(.vertical, 5)
+                    
+                    VStack(alignment: .leading, spacing: 15) {
+                        Text("This service should be performed every:")
+                            .font(.subheadline.bold())
+                        
+                        Group {
+                            switch selectedInterval {
+                            case .distance:
+                                HStack {
+                                    TextField("5,000", value: $draftService.distanceInterval, format: .number.decimalSeparator(strategy: .automatic))
+                                        .fixedSize()
+                                    Text(settings.distanceUnit.abbreviated)
+                                }
+                            case .time:
+                                HStack {
+                                    TextField("6", value: $draftService.timeInterval, format: .number)
+                                        .fixedSize()
+                                    
+                                    MonthsYearsToggle(monthsInterval: $draftService.monthsInterval, timeInterval: Int(draftService.timeInterval ?? 0))
+                                }
+                            case .both:
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        TextField("5,000", value: $draftService.distanceInterval, format: .number.decimalSeparator(strategy: .automatic))
+                                            .fixedSize()
+                                        Text("\(settings.distanceUnit.abbreviated) or")
+                                        TextField("6", value: $draftService.timeInterval, format: .number)
+                                            .fixedSize()
+                                        
+                                        MonthsYearsToggle(monthsInterval: $draftService.monthsInterval, timeInterval: Int(draftService.timeInterval ?? 0))
+                                    }
+                                }
+                            }
+                        }
+                        .textFieldStyle(.roundedBorder)
+                        .multilineTextAlignment(.center)
+                        .keyboardType(.numberPad)
+                    }
+                    .padding(.vertical, 5)
+                }
+                .focused($isInputActive)
+               
+                Section(header: Text("Service Note (optional)"), footer: Text("Add info that you want to reference each time this service is performed (e.g. oil type, filter number)")) {
+                    TextEditor(text: $draftService.serviceNote)
+                        .frame(minHeight: 50)
+                        .focused($isInputActive)
+                }
+                
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .navigationTitle(service != nil ? "Edit Service" : "New Maintenance Service")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        if let service {
+                            service.updateAndSave(draftService: draftService, selectedInterval: selectedInterval)
+                        } else if let vehicle {
+                            if vehicle.sortedServicesArray.contains(where: { service in service.name == draftService.name }) {
+                                showingDuplicateNameError = true
+                            } else {
+                                vehicle.addNewService(draftService: draftService, selectedInterval: selectedInterval)
+                            }
+                        }
+                        
+                        dismiss()
+                    }
+                    .disabled(draftService.canBeSaved ? false : true)
+                }
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel", role: .cancel) { dismiss() }
+                }
+            }
+            .onAppear {
+                if service != nil {
                     if draftService.distanceInterval != 0 && draftService.timeInterval == 0 {
                         selectedInterval = .distance
                     } else if draftService.timeInterval != 0 && draftService.distanceInterval == 0 {
@@ -59,15 +141,19 @@ struct AddEditServiceView: View {
                         selectedInterval = .both
                     }
                 }
-                .alert("This vehicle already has a service with that name", isPresented: $showingDuplicateNameError) {
-                    Button("OK", role: .cancel) { }
-                } message: {
-                    Text("Please choose a different name.")
-                }
+            }
+            .alert("This vehicle already has a service with that name", isPresented: $showingDuplicateNameError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please choose a different name.")
+            }
         }
     }
 }
 
 #Preview {
-    AddEditServiceView(vehicle: Vehicle(context: DataController.preview.container.viewContext), service: Service(context: DataController.preview.container.viewContext))
+    let context = DataController.preview.container.viewContext
+    
+    AddEditServiceView(vehicle: Vehicle(context: context), service: Service(context: context))
+        .environmentObject(AppSettings())
 }
