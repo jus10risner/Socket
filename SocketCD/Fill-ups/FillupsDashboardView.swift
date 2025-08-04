@@ -86,7 +86,6 @@ struct FillupsDashboardView: View {
             }
         }
         .sheet(isPresented: $showingAddFillup) {
-//            AddFillupView(vehicle: vehicle, quickFill: false)
             AddEditFillupView(vehicle: vehicle)
         }
         .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
@@ -95,13 +94,8 @@ struct FillupsDashboardView: View {
                 Button {
                     showingAddFillup = true
                 } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.title2)
-                        .symbolRenderingMode(.hierarchical)
-                        .accessibilityLabel("Add New Fill-up")
+                    Label("Add Fill-up", systemImage: "plus")
                 }
-                // iOS 16 workaround, where button could't be clicked again after sheet was dismissed - iOS 15 and 17 work fine without this
-//                    .id(UUID())
             }
         }
     }
