@@ -11,12 +11,10 @@ struct AddEditRecordView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var settings: AppSettings
     @StateObject var draftServiceRecord = DraftServiceRecord()
-    @ObservedObject var vehicle: Vehicle
     @ObservedObject var service: Service
     let record: ServiceRecord?
     
-    init(vehicle: Vehicle, service: Service, record: ServiceRecord? = nil) {
-        self.vehicle = vehicle
+    init(service: Service, record: ServiceRecord? = nil) {
         self.service = service
         self.record = record
         
@@ -99,6 +97,6 @@ struct AddEditRecordView: View {
 #Preview {
     let context = DataController.preview.container.viewContext
     
-    return AddEditRecordView(vehicle: Vehicle(context: context), service: Service(context: context), record: ServiceRecord(context: context))
+    return AddEditRecordView(service: Service(context: context), record: ServiceRecord(context: context))
         .environmentObject(AppSettings())
 }
