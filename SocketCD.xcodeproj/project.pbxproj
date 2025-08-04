@@ -17,7 +17,6 @@
 		9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF52BC04531005E16DD /* DraftFillup.swift */; };
 		9E620BF82BC0477E005E16DD /* DraftFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF72BC0477E005E16DD /* DraftFillupView.swift */; };
 		9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF92BC05754005E16DD /* DraftService.swift */; };
-		9E620BFC2BC05971005E16DD /* DraftServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BFB2BC05971005E16DD /* DraftServiceView.swift */; };
 		9E620BFE2BC06721005E16DD /* DraftServiceRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BFD2BC06721005E16DD /* DraftServiceRecord.swift */; };
 		9E620C002BC06853005E16DD /* DraftServiceRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BFF2BC06853005E16DD /* DraftServiceRecordView.swift */; };
 		9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C022BC06FE9005E16DD /* DraftCustomInfo.swift */; };
@@ -119,7 +118,6 @@
 		9E620BF52BC04531005E16DD /* DraftFillup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftFillup.swift; sourceTree = "<group>"; };
 		9E620BF72BC0477E005E16DD /* DraftFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftFillupView.swift; sourceTree = "<group>"; };
 		9E620BF92BC05754005E16DD /* DraftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftService.swift; sourceTree = "<group>"; };
-		9E620BFB2BC05971005E16DD /* DraftServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftServiceView.swift; sourceTree = "<group>"; };
 		9E620BFD2BC06721005E16DD /* DraftServiceRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftServiceRecord.swift; sourceTree = "<group>"; };
 		9E620BFF2BC06853005E16DD /* DraftServiceRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftServiceRecordView.swift; sourceTree = "<group>"; };
 		9E620C022BC06FE9005E16DD /* DraftCustomInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftCustomInfo.swift; sourceTree = "<group>"; };
@@ -223,7 +221,6 @@
 			isa = PBXGroup;
 			children = (
 				9E620BF92BC05754005E16DD /* DraftService.swift */,
-				9E620BFB2BC05971005E16DD /* DraftServiceView.swift */,
 				9E620BFD2BC06721005E16DD /* DraftServiceRecord.swift */,
 				9E620BFF2BC06853005E16DD /* DraftServiceRecordView.swift */,
 				9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */,
@@ -660,7 +657,6 @@
 				9E620C052BC0713F005E16DD /* DraftCustomInfoView.swift in Sources */,
 				9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */,
 				9EEAC48E2BA0FA280053C65E /* SocketDataModel.xcdatamodeld in Sources */,
-				9E620BFC2BC05971005E16DD /* DraftServiceView.swift in Sources */,
 				9EEAC4F32BA379FE0053C65E /* RepairsStartView.swift in Sources */,
 				9EEAC4D32BA258960053C65E /* Photo+helper.swift in Sources */,
 				9E620C0D2BC5D4FC005E16DD /* MailComposeViewController.swift in Sources */,
