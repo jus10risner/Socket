@@ -32,31 +32,17 @@ struct MaintenanceListView: View {
     @State private var showingFirstServiceInfo = false
     
     var body: some View {
-        maintenanceList
-    }
-    
-    
-    // MARK: - Views
-    
-    private var maintenanceList: some View {
         List {
             ForEach(vehicle.sortedServicesArray) { service in
                 ServiceListRowView(service: service, vehicle: vehicle)
             }
-//            servicesWithStatus(.overDue)
-//            
-//            servicesWithStatus(.due)
-//            
-//            servicesWithStatus(.notDue)
-//        
-//            if serviceTipDue == true {
-//                firstServiceInfo
-//            }
+            
+            if serviceTipDue == true {
+                firstServiceInfo
+            }
         }
         .navigationTitle("Maintenance")
-//            .listStyle(.plain)
         .listRowSpacing(5)
-        .background(Color(.systemGroupedBackground))
         .overlay {
             if showingFirstServiceInfo == true {
                 if let firstService = services.first {
@@ -80,16 +66,14 @@ struct MaintenanceListView: View {
                 Button {
                     showingAddService = true
                 } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.title2)
-                        .symbolRenderingMode(.hierarchical)
-                        .accessibilityLabel("Add New Maintenance Service")
+                    Label("Add New Maintenance Service", systemImage: "plus")
                 }
-                // iOS 16 workaround, where button could't be clicked again after sheet was dismissed - iOS 15 and 17 work fine without this
-//                    .id(UUID())
             }
         }
     }
+    
+    
+    // MARK: - Views
     
     // Determines whether to show firstServiceInfo tip
     private var serviceTipDue: Bool {
@@ -167,13 +151,13 @@ struct MaintenanceListView: View {
     }
     
     // Groups services with a given service status (not due, due, overdue) together, in a list
-    func servicesWithStatus(_ serviceStatus: ServiceStatus) -> some View {
-        ForEach(services, id: \.id) { service in
-            if service.serviceStatus == serviceStatus {
-                ServiceListRowView(service: service, vehicle: vehicle)
-            }
-        }
-    }
+//    func servicesWithStatus(_ serviceStatus: ServiceStatus) -> some View {
+//        ForEach(services, id: \.id) { service in
+//            if service.serviceStatus == serviceStatus {
+//                ServiceListRowView(service: service, vehicle: vehicle)
+//            }
+//        }
+//    }
     
     // Determines whether to show MaintenanceOnboardingView
     func determineIfFirstServiceInfoDue() {
