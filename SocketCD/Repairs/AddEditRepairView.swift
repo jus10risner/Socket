@@ -58,7 +58,6 @@ struct AddEditRepairView: View {
                     }
                 }
                 .focused($isInputActive)
-                .multilineTextAlignment(.trailing)
                 
                 Section("Note") {
                     TextEditor(text: $draftRepair.note)

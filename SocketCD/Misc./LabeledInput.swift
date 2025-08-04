@@ -16,6 +16,7 @@ struct LabeledInput<Content: View>: View {
         LabeledContent(label) {
             content()
                 .foregroundStyle(Color.primary)
+                .multilineTextAlignment(.trailing)
         }
         .foregroundStyle(Color.secondary)
     }
