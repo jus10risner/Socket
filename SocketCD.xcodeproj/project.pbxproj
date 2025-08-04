@@ -15,7 +15,6 @@
 		9E35034C2E1FE3300032F845 /* VehicleDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */; };
 		9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */; };
 		9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF52BC04531005E16DD /* DraftFillup.swift */; };
-		9E620BF82BC0477E005E16DD /* DraftFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF72BC0477E005E16DD /* DraftFillupView.swift */; };
 		9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF92BC05754005E16DD /* DraftService.swift */; };
 		9E620BFE2BC06721005E16DD /* DraftServiceRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BFD2BC06721005E16DD /* DraftServiceRecord.swift */; };
 		9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C022BC06FE9005E16DD /* DraftCustomInfo.swift */; };
@@ -115,7 +114,6 @@
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepair.swift; sourceTree = "<group>"; };
 		9E620BF52BC04531005E16DD /* DraftFillup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftFillup.swift; sourceTree = "<group>"; };
-		9E620BF72BC0477E005E16DD /* DraftFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftFillupView.swift; sourceTree = "<group>"; };
 		9E620BF92BC05754005E16DD /* DraftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftService.swift; sourceTree = "<group>"; };
 		9E620BFD2BC06721005E16DD /* DraftServiceRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftServiceRecord.swift; sourceTree = "<group>"; };
 		9E620C022BC06FE9005E16DD /* DraftCustomInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftCustomInfo.swift; sourceTree = "<group>"; };
@@ -446,7 +444,6 @@
 			isa = PBXGroup;
 			children = (
 				9E620BF52BC04531005E16DD /* DraftFillup.swift */,
-				9E620BF72BC0477E005E16DD /* DraftFillupView.swift */,
 				9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */,
 				9EEAC5102BA4852C0053C65E /* FillTypePickerView.swift */,
 				9EEAC5092BA482840053C65E /* FuelEconomyInfoView.swift */,
@@ -606,7 +603,6 @@
 				9EEAC4DF2BA343B00053C65E /* EditVehicleView.swift in Sources */,
 				9EEAC4F72BA37A5C0053C65E /* Repair+helper.swift in Sources */,
 				9EEAC4A72BA1EF720053C65E /* ActivityView.swift in Sources */,
-				9E620BF82BC0477E005E16DD /* DraftFillupView.swift in Sources */,
 				9EEAC5082BA38BC20053C65E /* FillupsStartView.swift in Sources */,
 				9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */,
 				9EEAC4EC2BA3749E0053C65E /* PhotoGridView.swift in Sources */,

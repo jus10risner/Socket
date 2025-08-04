@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddEditFillupView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var settings: AppSettings
     @StateObject var draftFillup = DraftFillup()
     let vehicle: Vehicle?
     let fillup: Fillup?
@@ -24,29 +25,73 @@ struct AddEditFillupView: View {
         }
     }
     
+    @State var showingFillTypeInfo = false
+    
+    @FocusState var isInputActive: Bool
+    
     var body: some View {
         NavigationStack {
-            DraftFillupView(draftFillup: draftFillup, isEditView: true)
-                .navigationTitle(fillup != nil ? "Edit Fill-up" : "New Fill-up")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("Done") {
-                            if let fillup {
-                                fillup.updateAndSave(draftFillup: draftFillup)
-                            } else if let vehicle {
-                                vehicle.addNewFillup(draftFillup: draftFillup)
-                            }
-                            
-                            dismiss()
-                        }
-                        .disabled(draftFillup.canBeSaved ? false : true)
+            Form {
+                Section {
+                    DatePicker("Fill-up Date", selection: $draftFillup.date, displayedComponents: .date)
+                        .foregroundStyle(Color.secondary)
+                    
+                    LabeledInput(label: "Odometer") {
+                        TextField("Required", value: $draftFillup.odometer, format: .number.decimalSeparator(strategy: .automatic))
+                            .keyboardType(.numberPad)
+                            .focused($isInputActive)
                     }
                     
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Cancel", role: .cancel) { dismiss() }
+                    LabeledInput(label: "\(settings.fuelEconomyUnit.volumeUnit)s of Fuel") {
+                        TextField("Required", value: $draftFillup.volume, format: .number.decimalSeparator(strategy: .automatic))
+                            .keyboardType(.decimalPad)
+                    }
+                    
+                    LabeledInput(label: settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost") {
+                        TextField("Optional", value: $draftFillup.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                            .keyboardType(.decimalPad)
+                    }
+                    
+                    FillTypePicker(fillType: $draftFillup.fillType, showingFillTypeInfo: $showingFillTypeInfo)
+                }
+                
+                Section("Note") {
+                    TextEditor(text: $draftFillup.note)
+                }
+                
+                Section(header: AddPhotoButton(photos: $draftFillup.photos)) {
+                    EditablePhotoGridView(photos: $draftFillup.photos)
+                }
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .sheet(isPresented: $showingFillTypeInfo) { FillTypeInfoView() }
+            .navigationTitle(fillup != nil ? "Edit Fill-up" : "New Fill-up")
+            .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                if fillup == nil {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                        isInputActive = true
                     }
                 }
+            }
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        if let fillup {
+                            fillup.updateAndSave(draftFillup: draftFillup)
+                        } else if let vehicle {
+                            vehicle.addNewFillup(draftFillup: draftFillup)
+                        }
+                        
+                        dismiss()
+                    }
+                    .disabled(draftFillup.canBeSaved ? false : true)
+                }
+                
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) { dismiss() }
+                }
+            }
         }
     }
 }
@@ -55,4 +100,5 @@ struct AddEditFillupView: View {
     let context = DataController.preview.container.viewContext
     
     AddEditFillupView(vehicle: Vehicle(context: context), fillup: Fillup(context: context))
+        .environmentObject(AppSettings())
 }
