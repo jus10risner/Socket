@@ -18,7 +18,6 @@
 		9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF92BC05754005E16DD /* DraftService.swift */; };
 		9E620BFE2BC06721005E16DD /* DraftServiceRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BFD2BC06721005E16DD /* DraftServiceRecord.swift */; };
 		9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C022BC06FE9005E16DD /* DraftCustomInfo.swift */; };
-		9E620C052BC0713F005E16DD /* DraftCustomInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C042BC0713F005E16DD /* DraftCustomInfoView.swift */; };
 		9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C062BC07B6F005E16DD /* DraftVehicle.swift */; };
 		9E620C092BC08194005E16DD /* AddEditVehicleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */; };
 		9E620C0D2BC5D4FC005E16DD /* MailComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */; };
@@ -117,7 +116,6 @@
 		9E620BF92BC05754005E16DD /* DraftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftService.swift; sourceTree = "<group>"; };
 		9E620BFD2BC06721005E16DD /* DraftServiceRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftServiceRecord.swift; sourceTree = "<group>"; };
 		9E620C022BC06FE9005E16DD /* DraftCustomInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftCustomInfo.swift; sourceTree = "<group>"; };
-		9E620C042BC0713F005E16DD /* DraftCustomInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftCustomInfoView.swift; sourceTree = "<group>"; };
 		9E620C062BC07B6F005E16DD /* DraftVehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftVehicle.swift; sourceTree = "<group>"; };
 		9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditVehicleImageView.swift; sourceTree = "<group>"; };
 		9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailComposeViewController.swift; sourceTree = "<group>"; };
@@ -258,7 +256,6 @@
 			isa = PBXGroup;
 			children = (
 				9E620C022BC06FE9005E16DD /* DraftCustomInfo.swift */,
-				9E620C042BC0713F005E16DD /* DraftCustomInfoView.swift */,
 			);
 			path = "Custom Info Components";
 			sourceTree = "<group>";
@@ -646,7 +643,6 @@
 				9E312D772BF2924B0069CBFF /* MaintenanceOnboardingView.swift in Sources */,
 				9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */,
 				9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */,
-				9E620C052BC0713F005E16DD /* DraftCustomInfoView.swift in Sources */,
 				9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */,
 				9EEAC48E2BA0FA280053C65E /* SocketDataModel.xcdatamodeld in Sources */,
 				9EEAC4F32BA379FE0053C65E /* RepairsStartView.swift in Sources */,

@@ -22,38 +22,67 @@ struct AddEditCustomInfoView: View {
     
     @State private var showingDuplicateLabelError = false
     
+    @FocusState var isInputActive: Bool
+    
     var body: some View {
         NavigationStack {
-            DraftCustomInfoView(draftCustomInfo: draftCustomInfo, isEditView: true)
-                .navigationTitle(customInfo != nil ? "Edit Info" : "New Info")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Done") {
-                            if let customInfo {
-                                customInfo.updateAndSave(draftCustomInfo: draftCustomInfo)
-                            } else if let vehicle {
-                                if vehicle.sortedCustomInfoArray.contains(where: { $0.label == draftCustomInfo.label }) {
-                                    showingDuplicateLabelError = true
-                                } else {
-                                    vehicle.addNewInfo(draftCustomInfo: draftCustomInfo)
+            Form {
+                Section {
+                    LabeledInput(label: "Label") {
+                        TextField("License Plate", text: $draftCustomInfo.label)
+                            .focused($isInputActive)
+                            .onAppear {
+                                if customInfo == nil {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                        isInputActive = true
+                                    }
                                 }
                             }
-                            
-                            dismiss()
-                        }
-                        .disabled(draftCustomInfo.canBeSaved ? false : true)
                     }
                     
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel", role: .cancel) { dismiss() }
+                    LabeledInput(label: "Detail") {
+                        TextField("ABC 123", text: $draftCustomInfo.detail)
                     }
                 }
-                .alert("That label has already been used.", isPresented: $showingDuplicateLabelError) {
-                    Button("OK", role: .cancel) { }
-                } message: {
-                    Text("Please choose a different label.")
+                
+                Section("Note") {
+                    TextEditor(text: $draftCustomInfo.note)
                 }
+                
+                Section(header: AddPhotoButton(photos: $draftCustomInfo.photos)) {
+                    EditablePhotoGridView(photos: $draftCustomInfo.photos)
+                }
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .navigationTitle(customInfo != nil ? "Edit Info" : "New Info")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        if let customInfo {
+                            customInfo.updateAndSave(draftCustomInfo: draftCustomInfo)
+                        } else if let vehicle {
+                            if vehicle.sortedCustomInfoArray.contains(where: { $0.label == draftCustomInfo.label }) {
+                                showingDuplicateLabelError = true
+                            } else {
+                                vehicle.addNewInfo(draftCustomInfo: draftCustomInfo)
+                            }
+                        }
+                        
+                        dismiss()
+                    }
+                    .disabled(draftCustomInfo.canBeSaved ? false : true)
+                }
+                
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) { dismiss() }
+                }
+            }
+            .alert("That label has already been used.", isPresented: $showingDuplicateLabelError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please choose a different label.")
+            }
         }
     }
 }
