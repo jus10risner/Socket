@@ -15,16 +15,8 @@ struct ServiceDetailView: View {
     
     @State private var showingAddRecord = false
     @State private var showingEditService = false
-    @State private var showingAlert = false
     
     var body: some View {
-        serviceDetails
-    }
-    
-    
-    // MARK: - Views
-    
-    private var serviceDetails: some View {
         List {
             Section {
                 VStack(alignment: .leading, spacing: 10) {
@@ -92,21 +84,9 @@ struct ServiceDetailView: View {
             AddEditRecordView(service: service)
         }
         .sheet(isPresented: $showingEditService) {
-            AddEditServiceView(vehicle: vehicle, service: service)
-        }
-        .alert("Delete Service", isPresented: $showingAlert) {
-            Button("Delete", role: .destructive) {
-                // Cancels any pending notifications
-                service.cancelPendingNotifications()
-                
-                DataController.shared.delete(service)
-                
+            AddEditServiceView(vehicle: vehicle, service: service) {
                 dismiss()
             }
-            
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Permanently delete this service and all of its records? This cannot be undone.")
         }
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
@@ -117,32 +97,15 @@ struct ServiceDetailView: View {
                         .accessibilityLabel("Add a Service Record")
                 }
                 
-                serviceMenu
+                Button("Edit") {
+                    showingEditService = true
+                }
             }
         }
     }
     
-    // Menu, with options to edit or delete a service
-    private var serviceMenu: some View {
-        Menu {
-            Button {
-                showingEditService = true
-            } label: {
-                Label("Edit Service Info", systemImage: "pencil")
-            }
-            
-            Button(role: .destructive) {
-                showingAlert = true
-            } label: {
-                Label("Delete Service", systemImage: "trash")
-            }
-        } label: {
-            Image(systemName: "ellipsis.circle.fill")
-                .symbolRenderingMode(.hierarchical)
-                .font(.title3)
-                .accessibilityLabel("Service Options")
-        }
-    }
+    
+    // MARK: - Views
     
     // String, describing when a service is due next (includes odometerSymbol, which is why this doesn't return a String)
     private var serviceNextDueInfo: some View {

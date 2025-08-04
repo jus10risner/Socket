@@ -13,10 +13,12 @@ struct AddEditServiceView: View {
     @StateObject var draftService = DraftService()
     let vehicle: Vehicle?
     let service: Service?
+    var onDelete: (() -> Void)?
     
-    init(vehicle: Vehicle? = nil, service: Service? = nil) {
+    init(vehicle: Vehicle? = nil, service: Service? = nil, onDelete: (() -> Void)? = nil) {
         self.vehicle = vehicle
         self.service = service
+        self.onDelete = onDelete
         
         _draftService = StateObject(wrappedValue: DraftService(service: service))
     }
@@ -26,6 +28,7 @@ struct AddEditServiceView: View {
     
     @State private var showingDuplicateNameError = false
     @State private var selectedInterval: ServiceIntervalTypes = .distance
+    @State private var showingDeleteAlert = false
     
     var body: some View {
         NavigationStack {
@@ -106,6 +109,12 @@ struct AddEditServiceView: View {
 //                        .focused($isInputActive)
                 }
                 
+                if onDelete != nil {
+                    Button("Delete", role: .destructive) {
+                        showingDeleteAlert = true
+                    }
+                }
+                
             }
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle(service != nil ? "Edit Service" : "New Maintenance Service")
@@ -142,6 +151,21 @@ struct AddEditServiceView: View {
                         selectedInterval = .both
                     }
                 }
+            }
+            .alert("Delete Service", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    if let service {
+                        service.cancelPendingNotifications()
+                        DataController.shared.delete(service)
+                    }
+                    
+                    dismiss()
+                    onDelete?()
+                }
+                
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Permanently delete this service and all of its records? This cannot be undone.")
             }
             .alert("This vehicle already has a service with that name", isPresented: $showingDuplicateNameError) {
                 Button("OK", role: .cancel) { }
