@@ -60,7 +60,7 @@ struct EditVehicleView: View {
             .navigationTitle("Edit Vehicle")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         vehicle.updateAndSave(draftVehicle: draftVehicle)
                         dismiss()
@@ -68,7 +68,7 @@ struct EditVehicleView: View {
                     .disabled(draftVehicle.canBeSaved ? false : true)
                 }
                 
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) { dismiss() }
                 }
             }

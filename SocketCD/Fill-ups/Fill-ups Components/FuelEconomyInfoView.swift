@@ -70,7 +70,7 @@ struct FuelEconomyInfoView: View {
             .font(.subheadline)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .confirmationAction) {
                     Button {
                         dismiss()
                     } label: {

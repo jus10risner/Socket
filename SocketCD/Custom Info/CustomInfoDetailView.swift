@@ -62,7 +62,7 @@ struct CustomInfoDetailView: View {
             Text("Permanently delete \(customInfo.label)? This cannot be undone.")
         }
         .toolbar {
-            ToolbarItemGroup(placement: .topBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 Menu {
                     Button {
                         showingEditCustomInfo = true

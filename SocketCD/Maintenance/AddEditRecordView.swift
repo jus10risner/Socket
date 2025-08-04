@@ -74,7 +74,7 @@ struct AddEditRecordView: View {
             .navigationTitle(record != nil ? "Edit Service Record" : "New Service Record")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         if let record {
                             record.updateAndSave(service: service, draftServiceRecord: draftServiceRecord)
@@ -87,7 +87,7 @@ struct AddEditRecordView: View {
                     .disabled(draftServiceRecord.canBeSaved ? false : true)
                 }
                 
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) { dismiss() }
                 }
             }

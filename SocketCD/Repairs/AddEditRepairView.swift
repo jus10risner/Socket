@@ -79,7 +79,7 @@ struct AddEditRepairView: View {
             .navigationTitle(repair != nil ? "Edit Repair" : "New Repair")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         if let repair {
                             repair.updateAndSave(draftRepair: draftRepair)
@@ -92,7 +92,7 @@ struct AddEditRepairView: View {
                     .disabled(draftRepair.canBeSaved ? false : true)
                 }
                 
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) { dismiss() }
                 }
             }

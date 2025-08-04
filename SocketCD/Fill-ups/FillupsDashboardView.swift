@@ -91,7 +91,7 @@ struct FillupsDashboardView: View {
         }
         .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 Button {
                     showingAddFillup = true
                 } label: {

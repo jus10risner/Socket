@@ -54,7 +54,7 @@ struct RepairsListView: View {
             AddEditRepairView(vehicle: vehicle)
         }
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 Button {
                     showingAddRepair = true
                 } label: {

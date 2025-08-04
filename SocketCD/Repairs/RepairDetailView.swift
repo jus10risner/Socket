@@ -41,7 +41,7 @@ struct RepairDetailView: View {
         .navigationTitle("Repair Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 Button("Edit") {
                     showingEditRepair = true
                 }

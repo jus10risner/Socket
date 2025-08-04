@@ -99,7 +99,7 @@ struct FillupDetailView: View {
             Text("Fuel economy is calculated only between full tanks of fuel. Calculation will resume after your next Full Tank fill-up.")
         }
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 Menu {
                     Button {
                         showingEditFillup = true

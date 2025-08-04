@@ -117,7 +117,7 @@ struct VehicleDashboardView: View {
                 Button("Cancel", role: .cancel) { }
             }
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Menu {
                         Button {
                             activeSheet = .editVehicle

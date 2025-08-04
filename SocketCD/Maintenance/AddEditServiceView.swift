@@ -110,7 +110,7 @@ struct AddEditServiceView: View {
             .navigationTitle(service != nil ? "Edit Service" : "New Maintenance Service")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         if let service {
                             service.updateAndSave(draftService: draftService, selectedInterval: selectedInterval)
@@ -127,7 +127,7 @@ struct AddEditServiceView: View {
                     .disabled(draftService.canBeSaved ? false : true)
                 }
                 
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) { dismiss() }
                 }
             }

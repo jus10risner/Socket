@@ -28,7 +28,7 @@ struct AddEditCustomInfoView: View {
                 .navigationTitle(customInfo != nil ? "Edit Info" : "New Info")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .confirmationAction) {
                         Button("Done") {
                             if let customInfo {
                                 customInfo.updateAndSave(draftCustomInfo: draftCustomInfo)
@@ -45,7 +45,7 @@ struct AddEditCustomInfoView: View {
                         .disabled(draftCustomInfo.canBeSaved ? false : true)
                     }
                     
-                    ToolbarItem(placement: .topBarLeading) {
+                    ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel", role: .cancel) { dismiss() }
                     }
                 }

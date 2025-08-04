@@ -96,7 +96,7 @@ struct MaintenanceListView: View {
 //                    }
 //                }
             
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 Button {
                     showingAddService = true
                 } label: {

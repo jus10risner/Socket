@@ -44,7 +44,7 @@ struct AddVehicleView: View {
             .navigationTitle("New Vehicle")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     if selectedTab == 1 {
                         Button("Cancel", role: .cancel) { dismiss() }
                     } else {
@@ -58,7 +58,7 @@ struct AddVehicleView: View {
                     }
                 }
                 
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .confirmationAction) {
                     if selectedTab == 1 {
                         Button("Continue") {
                             if vehicles.contains(where: { vehicle in vehicle.name == draftVehicle.name }) {
