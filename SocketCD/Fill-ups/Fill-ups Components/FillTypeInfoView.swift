@@ -12,13 +12,6 @@ struct FillTypeInfoView: View {
     @EnvironmentObject var settings: AppSettings
     
     var body: some View {
-        fillTypeInfo
-    }
-    
-    
-    // MARK: - Views
-    
-    private var fillTypeInfo: some View {
         NavigationStack {
             Form {
                 Section {

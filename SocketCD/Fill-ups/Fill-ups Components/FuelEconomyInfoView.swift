@@ -12,13 +12,6 @@ struct FuelEconomyInfoView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        fuelEconomyInfo
-    }
-    
-    
-    // MARK: - Views
-    
-    private var fuelEconomyInfo: some View {
         NavigationStack {
             Form {
                 Section {
