@@ -8,13 +8,22 @@
 import SwiftUI
 
 struct AddEditFillupView: View {
+    // MARK: - Environment
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var settings: AppSettings
-    @StateObject var draftFillup = DraftFillup()
-    let vehicle: Vehicle?
-    let fillup: Fillup?
-    var onDelete: (() -> Void)?
     
+    // MARK: - State
+    @StateObject var draftFillup = DraftFillup()
+    @FocusState var isInputActive: Bool
+    @State var showingFillTypeInfo = false
+    @State private var showingDeleteAlert = false
+    
+    // MARK: - Input
+    private let vehicle: Vehicle?
+    private let fillup: Fillup?
+    private let onDelete: (() -> Void)?
+    
+    // MARK: - Init
     init(vehicle: Vehicle? = nil, fillup: Fillup? = nil, onDelete: (() -> Void)? = nil) {
         self.vehicle = vehicle
         self.fillup = fillup
@@ -27,11 +36,7 @@ struct AddEditFillupView: View {
         }
     }
     
-    @State var showingFillTypeInfo = false
-    @State private var showingDeleteAlert = false
-    
-    @FocusState var isInputActive: Bool
-    
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             Form {

@@ -8,12 +8,21 @@
 import SwiftUI
 
 struct AddEditCustomInfoView: View {
+    // MARK: - Environment
     @Environment(\.dismiss) var dismiss
-    @StateObject var draftCustomInfo = DraftCustomInfo()
-    let vehicle: Vehicle?
-    let customInfo: CustomInfo?
-    var onDelete: (() -> Void)?
     
+    // MARK: - State
+    @StateObject var draftCustomInfo = DraftCustomInfo()
+    @FocusState var isInputActive: Bool
+    @State private var showingDuplicateLabelError = false
+    @State private var showingDeleteAlert = false
+    
+    // MARK: - Input
+    private let vehicle: Vehicle?
+    private let customInfo: CustomInfo?
+    private let onDelete: (() -> Void)?
+    
+    // MARK: - Init
     init(vehicle: Vehicle? = nil, customInfo: CustomInfo? = nil, onDelete: (() -> Void)? = nil) {
         self.vehicle = vehicle
         self.customInfo = customInfo
@@ -22,11 +31,7 @@ struct AddEditCustomInfoView: View {
         _draftCustomInfo = StateObject(wrappedValue: DraftCustomInfo(customInfo: customInfo))
     }
     
-    @State private var showingDuplicateLabelError = false
-    @State private var showingDeleteAlert = false
-    
-    @FocusState var isInputActive: Bool
-    
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             Form {

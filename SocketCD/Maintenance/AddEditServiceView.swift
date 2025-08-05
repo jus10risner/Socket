@@ -8,13 +8,23 @@
 import SwiftUI
 
 struct AddEditServiceView: View {
+    // MARK: - Environment
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var settings: AppSettings
-    @StateObject var draftService = DraftService()
-    let vehicle: Vehicle?
-    let service: Service?
-    var onDelete: (() -> Void)?
     
+    // MARK: - State
+    @StateObject var draftService = DraftService()
+    @FocusState var isInputActive: Bool
+    @State private var showingDuplicateNameError = false
+    @State private var selectedInterval: ServiceIntervalTypes = .distance
+    @State private var showingDeleteAlert = false
+    
+    // MARK: - Input
+    private let vehicle: Vehicle?
+    private let service: Service?
+    private let onDelete: (() -> Void)?
+    
+    // MARK: - Init
     init(vehicle: Vehicle? = nil, service: Service? = nil, onDelete: (() -> Void)? = nil) {
         self.vehicle = vehicle
         self.service = service
@@ -23,12 +33,7 @@ struct AddEditServiceView: View {
         _draftService = StateObject(wrappedValue: DraftService(service: service))
     }
     
-    @FocusState var isInputActive: Bool
-    
-    @State private var showingDuplicateNameError = false
-    @State private var selectedInterval: ServiceIntervalTypes = .distance
-    @State private var showingDeleteAlert = false
-    
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             Form {

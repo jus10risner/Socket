@@ -8,13 +8,23 @@
 import SwiftUI
 
 struct AddEditRecordView: View {
+    // MARK: - Environment
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var settings: AppSettings
-    @StateObject var draftServiceRecord = DraftServiceRecord()
-    @ObservedObject var service: Service
-    let record: ServiceRecord?
-    var onDelete: (() -> Void)?
     
+    // MARK: - Observed Objects
+    @ObservedObject var service: Service
+    
+    // MARK: - State
+    @StateObject var draftServiceRecord = DraftServiceRecord()
+    @FocusState var isInputActive: Bool
+    @State private var showingDeleteAlert = false
+    
+    // MARK: - Input
+    private let record: ServiceRecord?
+    private let onDelete: (() -> Void)?
+    
+    // MARK: - Init
     init(service: Service, record: ServiceRecord? = nil, onDelete: (() -> Void)? = nil) {
         self.service = service
         self.record = record
@@ -23,10 +33,7 @@ struct AddEditRecordView: View {
         _draftServiceRecord = StateObject(wrappedValue: DraftServiceRecord(record: record))
     }
     
-    @State private var showingDeleteAlert = false
-    
-    @FocusState var isInputActive: Bool
-    
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             Form {
