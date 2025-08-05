@@ -180,6 +180,27 @@ extension Service {
         return count == 1 ? "\(count.formatted()) \(unit)" : "\(count.formatted()) \(unit)s"
     }
     
+    // A String describing the service interval for a given service
+    var intervalDescription: String {
+        let settings = AppSettings()
+        var components: [String] = []
+
+        if distanceInterval != 0 {
+            let distance = "\(distanceInterval.formatted()) \(settings.distanceUnit.abbreviated)"
+            components.append(distance)
+        }
+        
+        if timeInterval != 0 {
+            if monthsInterval == true {
+                components.append(pluralize(timeInterval, unit: "month"))
+            } else {
+                components.append(pluralize(timeInterval, unit: "year"))
+            }
+        }
+
+        return components.joined(separator: " or ")
+    }
+    
     // Determines when service is next due, and provides a string describing when service is next due (or if it's overdue). Used on MaintenanceListView
 //    var nextServiceDueDescription: String {
 //        let settings = AppSettings()

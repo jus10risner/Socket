@@ -19,66 +19,61 @@ struct ServiceDetailView: View {
     var body: some View {
         List {
             Section {
-                VStack(alignment: .leading, spacing: 10) {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Next Due")
-                            .font(.headline)
-                        
-                        if service.sortedServiceRecordsArray.isEmpty == false {
-                            serviceNextDueInfo
-                                .font(.subheadline)
-                        } else {
-                            Text("Add a service record first!")
-                                .font(.subheadline)
-                                .foregroundStyle(Color.secondary)
-                        }
-                    }
-                    .padding(.vertical, 5)
-                    
-                    if service.note != "" {
-                        Divider()
-                        
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("Service Note")
-                                .font(.headline)
+                LabeledContent("Next Due") {
+                    if !service.sortedServiceRecordsArray.isEmpty {
+                        HStack(spacing: 3) {
+                            if service.odometerDue != nil {
+                                odometerSymbol
+                            }
                             
-                            Text(service.note)
-                                .font(.subheadline)
-                                .foregroundStyle(Color.secondary)
-                                .textSelection(.enabled)
+                            Text(serviceNextDueInfo)
                         }
-                        .padding(.vertical, 5)
+                    } else {
+                        Text("Add a service record first!")
+                    }
+                }
+                
+                if service.note != "" {
+                    LabeledContent("Service Note") {
+                        Text(service.note)
+                            .textSelection(.enabled)
                     }
                 }
             } header: {
-                HStack {
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text(service.name)
-                            .font(.title.bold())
-                            .foregroundStyle(Color.primary)
-                            .multilineTextAlignment(.leading)
-                            .lineLimit(2)
-                            .minimumScaleFactor(0.75)
-                        
-                        Text("Due every \(distanceIntervalText)\(eitherOr)\(timeIntervalText)")
-                            .font(.caption)
-                            .foregroundStyle(Color.secondary)
-                    }
-                    .accessibilityElement(children: .combine)
+                VStack {
+                    Text(service.name)
                     
-                    Spacer()
+                    Text("Due every \(service.intervalDescription)")
+                        .font(.caption)
+                        .foregroundStyle(Color.secondary)
+                    
+                    Button("Edit") {
+                        showingEditService = true
+                    }
+                    .font(.subheadline)
                 }
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 0))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical)
             }
-            .textCase(nil)
+            .headerProminence(.increased)
             
             if !service.sortedServiceRecordsArray.isEmpty {
-                serviceHistory
+                Section {
+                    ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
+                        NavigationLink {
+                            RecordDetailView(record: record, vehicle: vehicle, service: service)
+                        } label: {
+                            LabeledContent("\(record.odometer) \(settings.distanceUnit.abbreviated)", value: record.date.formatted(date: .numeric, time: .omitted))
+                        }
+                    }
+                } header: {
+                    Label("Service History", systemImage: "clock.arrow.circlepath")
+                }
+                .textCase(nil)
             } else {
                 serviceRecordHint
             }
         }
-        .navigationTitle("Service Details")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingAddRecord) {
             AddEditRecordView(service: service)
@@ -89,16 +84,11 @@ struct ServiceDetailView: View {
             }
         }
         .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
+            ToolbarItem(placement: .primaryAction) {
                 Button {
                     showingAddRecord = true
                 } label: {
-                    Image(systemName: "plus.square.on.square")
-                        .accessibilityLabel("Add a Service Record")
-                }
-                
-                Button("Edit") {
-                    showingEditService = true
+                    Label("Add Service Record", systemImage: "plus")
                 }
             }
         }
@@ -107,39 +97,21 @@ struct ServiceDetailView: View {
     
     // MARK: - Views
     
-    // String, describing when a service is due next (includes odometerSymbol, which is why this doesn't return a String)
-    private var serviceNextDueInfo: some View {
-        Group {
-            if service.timeInterval != 0 && service.distanceInterval != 0 {
-                HStack(spacing: 2) {
-                    odometerSymbol
-                    
-                    HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        VStack(spacing: 2) {
-                            Text("\(service.odometerDue?.formatted() ?? "-") \(settings.distanceUnit.abbreviated)")
-                        }
-                        
-                        Text("or")
-                        
-                        VStack(spacing: 2) {
-                            Text("\(service.dateDue?.formatted(date: .numeric, time: .omitted) ?? "-")")
-                        }
-                    }
-                }
-            } else if service.distanceInterval != 0 && service.timeInterval == 0 {
-                HStack(spacing: 2) {
-                    odometerSymbol
-                    
-                    Text("\(service.odometerDue?.formatted() ?? "-") \(settings.distanceUnit.abbreviated)")
-                }
-            } else if service.timeInterval != 0 && service.distanceInterval == 0 {
-                VStack {
-                    Text("\(service.dateDue?.formatted(date: .numeric, time: .omitted) ?? "-")")
-                }
-            }
+    // String describing when a service is due next
+    private var serviceNextDueInfo: String {
+        var components: [String] = []
+
+        if let odometer = service.odometerDue, service.distanceInterval != 0 {
+            let formatted = "\(odometer.formatted()) \(settings.distanceUnit.abbreviated)"
+            components.append(formatted)
         }
-        .foregroundStyle(Color.secondary)
-        .accessibilityElement(children: .combine)
+
+        if let date = service.dateDue, service.timeInterval != 0 {
+            let formatted = date.formatted(date: .numeric, time: .omitted)
+            components.append(formatted)
+        }
+
+        return components.joined(separator: " or ")
     }
     
     // Simple graphic, to precede an odometer reading
@@ -151,28 +123,6 @@ struct ServiceDetailView: View {
             .accessibilityLabel("Odometer")
     }
     
-    // Service History section
-    private var serviceHistory: some View {
-        Section {
-            DisclosureGroup {
-                ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
-                    NavigationLink {
-                        RecordDetailView(record: record, vehicle: vehicle, service: service)
-                    } label: {
-                        LabeledContent("\(record.odometer) \(settings.distanceUnit.abbreviated)", value: record.date.formatted(date: .numeric, time: .omitted))
-                    }
-                }
-            } label: {
-                HStack(spacing: 3) {
-                    Image(systemName: "clock.arrow.circlepath")
-                        .accessibilityHidden(true)
-                    
-                    Text("Service History")
-                }
-            }
-        }
-    }
-    
     // Hint for adding a new service record
     private var serviceRecordHint: some View {
         Section {
@@ -182,7 +132,7 @@ struct ServiceDetailView: View {
                 Button {
                     showingAddRecord = true
                 } label: {
-                    Label("Add Service Record", systemImage: "plus.square.on.square")
+                    Label("Add Service Record", systemImage: "plus")
                         .font(.title3)
                         .labelStyle(.iconOnly)
                 }
@@ -197,44 +147,6 @@ struct ServiceDetailView: View {
             .accessibilityLabel("Tap the Add Service Record button, to add a service record")
         }
         .listRowBackground(Color(.socketPurple))
-    }
-    
-    
-    // MARK: - Computed Properties
-    
-    // Time interval between services (if provided), expressed as string
-    private var timeIntervalText: String {
-        if service.timeInterval != 0 {
-            let timeScale = service.monthsInterval
-            
-            if timeScale == true {
-                return "\(service.timeInterval) months"
-            } else if timeScale == false && service.timeInterval < 2 {
-                return "\(service.timeInterval) year"
-            } else {
-                return "\(service.timeInterval) years"
-            }
-        } else {
-            return ""
-        }
-    }
-    
-    // Distance interval between services (if provided), expressed as a string
-    private var distanceIntervalText: String {
-        if service.distanceInterval != 0 && service.distanceInterval != 0 {
-            return "\(service.distanceInterval.formatted()) \(settings.distanceUnit.abbreviated)"
-        } else {
-            return ""
-        }
-    }
-    
-    // Omit the word "or" when only a time or distance interval (but not both) is specified
-    private var eitherOr: String {
-        if service.timeInterval != 0 && service.distanceInterval != 0 {
-            return " or "
-        } else {
-            return ""
-        }
     }
 }
 
