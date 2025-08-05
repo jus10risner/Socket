@@ -10,11 +10,13 @@ import SwiftUI
 struct FormFooterView: View {
     @Binding var note: String
     @Binding var photos: [Photo]
-    let onDelete: (() -> Void)?
+    private let deleteButtonTitle: String
+    private let onDelete: (() -> Void)?
     
-    init(note: Binding<String>, photos: Binding<[Photo]>, onDelete: (() -> Void)? = nil) {
+    init(note: Binding<String>, photos: Binding<[Photo]>, deleteButtonTitle: String, onDelete: (() -> Void)? = nil) {
         self._note = note
         self._photos = photos
+        self.deleteButtonTitle = deleteButtonTitle
         self.onDelete = onDelete
     }
     
@@ -28,7 +30,7 @@ struct FormFooterView: View {
         }
         
         if onDelete != nil {
-            Button("Delete", role: .destructive) {
+            Button(deleteButtonTitle, role: .destructive) {
                 onDelete?()
             }
         }
@@ -37,5 +39,5 @@ struct FormFooterView: View {
 }
 
 #Preview {
-    FormFooterView(note: .constant(""), photos: .constant([]))
+    FormFooterView(note: .constant(""), photos: .constant([]), deleteButtonTitle: "Delete")
 }

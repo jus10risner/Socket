@@ -56,6 +56,7 @@ struct AddEditCustomInfoView: View {
                 FormFooterView (
                     note: $draftCustomInfo.note,
                     photos: $draftCustomInfo.photos,
+                    deleteButtonTitle: "Delete Info",
                     onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
                 )
             }

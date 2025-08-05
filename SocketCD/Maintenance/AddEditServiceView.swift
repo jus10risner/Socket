@@ -112,7 +112,7 @@ struct AddEditServiceView: View {
                 }
                 
                 if onDelete != nil {
-                    Button("Delete", role: .destructive) {
+                    Button("Delete Service", role: .destructive) {
                         showingDeleteAlert = true
                     }
                 }

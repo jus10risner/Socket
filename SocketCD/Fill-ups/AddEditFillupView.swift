@@ -73,6 +73,7 @@ struct AddEditFillupView: View {
                 FormFooterView (
                     note: $draftFillup.note,
                     photos: $draftFillup.photos,
+                    deleteButtonTitle: "Delete Fill-up",
                     onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
                 )
             }

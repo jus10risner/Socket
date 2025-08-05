@@ -65,6 +65,7 @@ struct AddEditRepairView: View {
                 FormFooterView (
                     note: $draftRepair.note,
                     photos: $draftRepair.photos,
+                    deleteButtonTitle: "Delete Repair",
                     onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
                 )
             }
