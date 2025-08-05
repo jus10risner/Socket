@@ -34,19 +34,19 @@ struct AddEditCustomInfoView: View {
                     LabeledInput(label: "Label") {
                         TextField("License Plate", text: $draftCustomInfo.label)
                             .focused($isInputActive)
-                            .onAppear {
-                                if customInfo == nil {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                                        isInputActive = true
-                                    }
-                                }
-                            }
                     }
                     
                     LabeledInput(label: "Detail") {
                         TextField("ABC 123", text: $draftCustomInfo.detail)
                     }
+                } header: {
+                    if let vehicle {
+                        Text(vehicle.name)
+                            .font(.body)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
+                .headerProminence(.increased)
                 
                 FormFooterView (
                     note: $draftCustomInfo.note,
@@ -57,6 +57,14 @@ struct AddEditCustomInfoView: View {
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle(customInfo != nil ? "Edit Info" : "New Info")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                if customInfo == nil {
+                    // Show keyboard after a short delay, when adding new custom info
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                        isInputActive = true
+                    }
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {

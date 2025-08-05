@@ -24,7 +24,6 @@ struct AddEditServiceView: View {
     }
     
     @FocusState var isInputActive: Bool
-    @FocusState var fieldInFocus: Bool
     
     @State private var showingDuplicateNameError = false
     @State private var selectedInterval: ServiceIntervalTypes = .distance
@@ -36,16 +35,15 @@ struct AddEditServiceView: View {
                 Section {
                     TextField("Service Name (e.g. Oil Change)", text: $draftService.name)
                         .textInputAutocapitalization(.words)
-                        .focused($fieldInFocus)
-                        .onAppear {
-                            if service == nil {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                                    fieldInFocus = true
-                                }
-                            }
-                        }
+                        .focused($isInputActive)
+                } header: {
+                    if let vehicle {
+                        Text(vehicle.name)
+                            .font(.body)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
-                .focused($isInputActive)
+                .headerProminence(.increased)
                 
                 Section(footer: Text("Check your owner's manual for recommended service intervals.")) {
                     VStack(alignment: .leading, spacing: 15) {
@@ -100,7 +98,6 @@ struct AddEditServiceView: View {
                     }
                     .padding(.vertical, 5)
                 }
-                .focused($isInputActive)
                
                 Section(header: Text("Service Note"), footer: Text("Add info that you want to reference each time this service is performed (e.g. oil type, filter number)")) {
                     TextField("Optional", text: $draftService.serviceNote, axis: .vertical)
@@ -119,6 +116,14 @@ struct AddEditServiceView: View {
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle(service != nil ? "Edit Service" : "New Maintenance Service")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                if service == nil {
+                    // Show keyboard after a short delay, when adding a new service
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                        isInputActive = true
+                    }
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {

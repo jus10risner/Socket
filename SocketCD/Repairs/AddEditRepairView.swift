@@ -8,12 +8,20 @@
 import SwiftUI
 
 struct AddEditRepairView: View {
+    // MARK: - Environment
     @Environment(\.dismiss) var dismiss
-    @StateObject var draftRepair = DraftRepair()
-    let vehicle: Vehicle?
-    let repair: Repair?
-    var onDelete: (() -> Void)?
     
+    // MARK: - State
+    @StateObject var draftRepair = DraftRepair()
+    @FocusState var isInputActive: Bool
+    @State private var showingDeleteAlert = false
+    
+    // MARK: - Input
+    private let vehicle: Vehicle?
+    private let repair: Repair?
+    private let onDelete: (() -> Void)?
+    
+    // MARK: - Init
     init(vehicle: Vehicle? = nil, repair: Repair? = nil, onDelete: (() -> Void)? = nil) {
         self.vehicle = vehicle
         self.repair = repair
@@ -22,11 +30,7 @@ struct AddEditRepairView: View {
         _draftRepair = StateObject(wrappedValue: DraftRepair(repair: repair))
     }
     
-    @FocusState var isInputActive: Bool
-    @FocusState var fieldInFocus: Bool
-    
-    @State private var showingDeleteAlert = false
-    
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             Form {
@@ -37,14 +41,7 @@ struct AddEditRepairView: View {
                     LabeledInput(label: "Name") {
                         TextField("Required", text: $draftRepair.name, axis: .vertical)
                             .textInputAutocapitalization(.words)
-                            .focused($fieldInFocus)
-                            .onAppear {
-                                if repair == nil {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                                        fieldInFocus = true
-                                    }
-                                }
-                            }
+                            .focused($isInputActive)
                     }
                     
                     LabeledInput(label: "Odometer") {
@@ -56,8 +53,14 @@ struct AddEditRepairView: View {
                         TextField("Optional", value: $draftRepair.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                             .keyboardType(.decimalPad)
                     }
+                } header: {
+                    if let vehicle {
+                        Text(vehicle.name)
+                            .font(.body)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
-                .focused($isInputActive)
+                .headerProminence(.increased)
                 
                 FormFooterView (
                     note: $draftRepair.note,
@@ -68,6 +71,14 @@ struct AddEditRepairView: View {
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle(repair != nil ? "Edit Repair" : "New Repair")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                if repair == nil {
+                    // Show keyboard after a short delay, when adding a new repair
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                        isInputActive = true
+                    }
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {

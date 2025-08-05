@@ -26,51 +26,48 @@ struct AddEditRecordView: View {
     @State private var showingDeleteAlert = false
     
     @FocusState var isInputActive: Bool
-    @FocusState var fieldInFocus: Bool
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                Text(service.name)
-                    .padding(.horizontal, 10)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.secondary)
-                
-                Form {
-                    Section {
-                        DatePicker("Service Date", selection: $draftServiceRecord.date, displayedComponents: .date)
-                            .foregroundStyle(Color.secondary)
-                        
-                        LabeledInput(label: "Odometer") {
-                            TextField("Required", value: $draftServiceRecord.odometer, format: .number.decimalSeparator(strategy: .automatic))
-                                .keyboardType(.numberPad)
-                                .focused($fieldInFocus)
-                                .onAppear {
-                                    if record == nil {
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                                            fieldInFocus = true
-                                        }
-                                    }
-                                }
-                        }
-                        
-                        LabeledInput(label: "Cost") {
-                            TextField("Optional", value: $draftServiceRecord.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                .keyboardType(.decimalPad)
-                        }
-                    }
-                    .focused($isInputActive)
+            Form {
+                Section {
+                    DatePicker("Service Date", selection: $draftServiceRecord.date, displayedComponents: .date)
+                        .foregroundStyle(Color.secondary)
                     
-                    FormFooterView (
-                        note: $draftServiceRecord.note,
-                        photos: $draftServiceRecord.photos,
-                        onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
-                    )
+                    LabeledInput(label: "Odometer") {
+                        TextField("Required", value: $draftServiceRecord.odometer, format: .number.decimalSeparator(strategy: .automatic))
+                            .keyboardType(.numberPad)
+                            .focused($isInputActive)
+                    }
+                    
+                    LabeledInput(label: "Cost") {
+                        TextField("Optional", value: $draftServiceRecord.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                            .keyboardType(.decimalPad)
+                    }
+                } header: {
+                    Text(service.name)
+                        .font(.body)
+                        .frame(maxWidth: .infinity)
                 }
-                .scrollDismissesKeyboard(.interactively)
+                .headerProminence(.increased)
+                
+                FormFooterView (
+                    note: $draftServiceRecord.note,
+                    photos: $draftServiceRecord.photos,
+                    onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
+                )
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle(record != nil ? "Edit Service Record" : "New Service Record")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                if record == nil {
+                    // Show keyboard after a short delay, when adding a new record
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                        isInputActive = true
+                    }
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {

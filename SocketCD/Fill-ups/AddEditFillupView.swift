@@ -56,7 +56,14 @@ struct AddEditFillupView: View {
                     }
                     
                     FillTypePicker(fillType: $draftFillup.fillType, showingFillTypeInfo: $showingFillTypeInfo)
+                } header: {
+                    if let vehicle {
+                        Text(vehicle.name)
+                            .font(.body)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
+                .headerProminence(.increased)
                 
                 FormFooterView (
                     note: $draftFillup.note,
@@ -70,6 +77,7 @@ struct AddEditFillupView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if fillup == nil {
+                    // Show keyboard after a short delay, when adding a new fill-up
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                         isInputActive = true
                     }
