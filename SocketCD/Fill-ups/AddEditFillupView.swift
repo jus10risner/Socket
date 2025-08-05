@@ -58,20 +58,11 @@ struct AddEditFillupView: View {
                     FillTypePicker(fillType: $draftFillup.fillType, showingFillTypeInfo: $showingFillTypeInfo)
                 }
                 
-                Section("Note") {
-//                    TextEditor(text: $draftFillup.note)
-                    TextField("Optional", text: $draftFillup.note, axis: .vertical)
-                }
-                
-                Section(header: AddPhotoButton(photos: $draftFillup.photos)) {
-                    EditablePhotoGridView(photos: $draftFillup.photos)
-                }
-                
-                if onDelete != nil {
-                    Button("Delete", role: .destructive) {
-                        showingDeleteAlert = true
-                    }
-                }
+                FormFooterView (
+                    note: $draftFillup.note,
+                    photos: $draftFillup.photos,
+                    onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
+                )
             }
             .scrollDismissesKeyboard(.interactively)
             .sheet(isPresented: $showingFillTypeInfo) { FillTypeInfoView() }

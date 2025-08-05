@@ -48,20 +48,11 @@ struct AddEditCustomInfoView: View {
                     }
                 }
                 
-                Section("Note") {
-//                    TextEditor(text: $draftCustomInfo.note)
-                    TextField("Optional", text: $draftCustomInfo.note, axis: .vertical)
-                }
-                
-                Section(header: AddPhotoButton(photos: $draftCustomInfo.photos)) {
-                    EditablePhotoGridView(photos: $draftCustomInfo.photos)
-                }
-                
-                if onDelete != nil {
-                    Button("Delete", role: .destructive) {
-                        showingDeleteAlert = true
-                    }
-                }
+                FormFooterView (
+                    note: $draftCustomInfo.note,
+                    photos: $draftCustomInfo.photos,
+                    onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
+                )
             }
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle(customInfo != nil ? "Edit Info" : "New Info")

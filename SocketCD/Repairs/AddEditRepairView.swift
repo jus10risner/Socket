@@ -59,22 +59,11 @@ struct AddEditRepairView: View {
                 }
                 .focused($isInputActive)
                 
-                Section("Note") {
-                    TextField("Optional", text: $draftRepair.note, axis: .vertical)
-//                    TextEditor(text: $draftRepair.note)
-//                        .frame(minHeight: 50)
-//                        .focused($isInputActive)
-                }
-                
-                Section(header: AddPhotoButton(photos: $draftRepair.photos)) {
-                    EditablePhotoGridView(photos: $draftRepair.photos)
-                }
-                
-                if onDelete != nil {
-                    Button("Delete", role: .destructive) {
-                        showingDeleteAlert = true
-                    }
-                }
+                FormFooterView (
+                    note: $draftRepair.note,
+                    photos: $draftRepair.photos,
+                    onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
+                )
             }
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle(repair != nil ? "Edit Repair" : "New Repair")

@@ -61,22 +61,11 @@ struct AddEditRecordView: View {
                     }
                     .focused($isInputActive)
                     
-                    Section("Note") {
-                        TextField("Optional", text: $draftServiceRecord.note, axis: .vertical)
-//                        TextEditor(text: $draftServiceRecord.note)
-//                            .frame(minHeight: 50)
-//                            .focused($isInputActive)
-                    }
-                    
-                    Section(header: AddPhotoButton(photos: $draftServiceRecord.photos)) {
-                        EditablePhotoGridView(photos: $draftServiceRecord.photos)
-                    }
-                    
-                    if onDelete != nil {
-                        Button("Delete", role: .destructive) {
-                            showingDeleteAlert = true
-                        }
-                    }
+                    FormFooterView (
+                        note: $draftServiceRecord.note,
+                        photos: $draftServiceRecord.photos,
+                        onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
+                    )
                 }
                 .scrollDismissesKeyboard(.interactively)
             }
