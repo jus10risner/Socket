@@ -28,15 +28,7 @@ struct RecordDetailView: View {
                 LabeledContent("Cost", value: (record.cost ?? 0).asCurrency())
             }
             
-            if record.note != "" {
-                Section("Note") {
-                    Text(record.note)
-                }
-            }
-            
-            if !record.sortedPhotosArray.isEmpty {
-                PhotoGridView(photos: record.sortedPhotosArray)
-            }
+            FormFooterView(note: record.note, photos: record.sortedPhotosArray)
         }
         .navigationTitle("Record Details")
         .navigationBarTitleDisplayMode(.inline)

@@ -8,31 +8,56 @@
 import SwiftUI
 
 struct FormFooterView: View {
-    @Binding var note: String
-    @Binding var photos: [Photo]
-    private let deleteButtonTitle: String
+    private let noteBinding: Binding<String>?
+    private let noteValue: String
+    
+    private let photosBinding: Binding<[Photo]>?
+    private let photosValue: [Photo]
+    
+    private let deleteButtonTitle: String?
     private let onDelete: (() -> Void)?
     
+    // MARK: - Editable initializer
     init(note: Binding<String>, photos: Binding<[Photo]>, deleteButtonTitle: String, onDelete: (() -> Void)? = nil) {
-        self._note = note
-        self._photos = photos
+        self.noteBinding = note
+        self.noteValue = note.wrappedValue
+        self.photosBinding = photos
+        self.photosValue = photos.wrappedValue
         self.deleteButtonTitle = deleteButtonTitle
         self.onDelete = onDelete
     }
+
+    // MARK: - Read-only initializer
+    init(note: String, photos: [Photo]) {
+        self.noteBinding = nil
+        self.noteValue = note
+        self.photosBinding = nil
+        self.photosValue = photos
+        self.deleteButtonTitle = nil
+        self.onDelete = nil
+    }
     
     var body: some View {
-        Section("Note") {
-            TextField("Optional", text: $note, axis: .vertical)
+        if let noteBinding {
+            TextField("Note", text: noteBinding, axis: .vertical)
+        } else if noteValue != "" {
+            LabeledContent("Note", value: noteValue)
         }
-        
-        Section(header: AddPhotoButton(photos: $photos)) {
-            PhotoGridView(photos: $photos)
-        }
-        
-        if onDelete != nil {
-            Button(deleteButtonTitle, role: .destructive) {
-                onDelete?()
+
+        if let photosBinding {
+            // Add/Edit View: always show section
+            Section(header: AddPhotoButton(photos: photosBinding)) {
+                PhotoGridView(photos: photosBinding)
             }
+        } else if !photosValue.isEmpty {
+            // DetailView: only show section if photos exist
+            Section {
+                PhotoGridView(photos: photosValue)
+            }
+        }
+
+        if let deleteButtonTitle, let onDelete {
+            Button(deleteButtonTitle, role: .destructive, action: onDelete)
         }
     }
     

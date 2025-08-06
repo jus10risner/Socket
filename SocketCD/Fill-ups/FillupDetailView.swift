@@ -59,15 +59,7 @@ struct FillupDetailView: View {
                 LabeledContent("Total Cost", value: (fillup.totalCost ?? 0).asCurrency())
             }
             
-            if fillup.note != "" {
-                Section("Note") {
-                    Text(fillup.note)
-                }
-            }
-            
-            if !fillup.sortedPhotosArray.isEmpty {
-                PhotoGridView(photos: fillup.sortedPhotosArray)
-            }
+            FormFooterView(note: fillup.note, photos: fillup.sortedPhotosArray)
         }
         .navigationTitle("Fill-up Details")
         .navigationBarTitleDisplayMode(.inline)

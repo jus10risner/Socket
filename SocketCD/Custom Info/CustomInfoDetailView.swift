@@ -30,15 +30,7 @@ struct CustomInfoDetailView: View {
                 .textCase(nil)
             }
             
-            if customInfo.note != "" {
-                Section("Note") {
-                    Text(customInfo.note)
-                }
-            }
-            
-            if !customInfo.sortedPhotosArray.isEmpty {
-                PhotoGridView(photos: customInfo.sortedPhotosArray)
-            }
+            FormFooterView(note: customInfo.note, photos: customInfo.sortedPhotosArray)
         }
         .navigationTitle(customInfo.label)
 //        .navigationBarTitleDisplayMode(.inline)

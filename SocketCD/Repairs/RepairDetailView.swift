@@ -28,15 +28,7 @@ struct RepairDetailView: View {
                 LabeledContent("Cost", value: (repair.cost ?? 0).asCurrency())
             }
             
-            if repair.note != "" {
-                Section("Note") {
-                    Text(repair.note)
-                }
-            }
-            
-            if !repair.sortedPhotosArray.isEmpty {
-                PhotoGridView(photos: repair.sortedPhotosArray)
-            }
+            FormFooterView(note: repair.note, photos: repair.sortedPhotosArray)
         }
         .navigationTitle("Repair Details")
         .navigationBarTitleDisplayMode(.inline)
