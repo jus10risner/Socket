@@ -26,7 +26,7 @@ struct FormFooterView: View {
         }
         
         Section(header: AddPhotoButton(photos: $photos)) {
-            EditablePhotoGridView(photos: $photos)
+            PhotoGridView(photos: $photos)
         }
         
         if onDelete != nil {
