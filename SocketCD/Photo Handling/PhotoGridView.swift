@@ -51,6 +51,10 @@ struct PhotoGridView: View {
                                     .scaledToFill()
                             )
                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
+                            }
                             .onTapGesture {
                                 if !isEditable {
                                     selectedPhoto = photo
