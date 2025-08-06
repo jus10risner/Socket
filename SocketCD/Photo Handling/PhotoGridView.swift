@@ -38,54 +38,56 @@ struct PhotoGridView: View {
     
     // MARK: - Body
     var body: some View {
-//        if !photos.isEmpty {
-            LazyVGrid(columns: columns, spacing: 5) {
-                ForEach(photos, id: \.id) { photo in
-                    ZStack(alignment: .topTrailing) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.clear)
-                            .aspectRatio(1.5, contentMode: .fit)
-                            .overlay(
-                                Image(uiImage: photo.converted)
-                                    .resizable()
-                                    .scaledToFill()
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
-                            }
-                            .onTapGesture {
-                                if !isEditable {
-                                    selectedPhoto = photo
-                                }
-                            }
-                        
-                        if isEditable {
-                            Button {
-                                delete(photo: photo)
-                            } label: {
-                                Label("Delete Image", systemImage: "xmark.circle.fill")
-                                    .labelStyle(.iconOnly)
-                                    .font(.title2)
-                                    .symbolRenderingMode(.palette)
-                                    .foregroundStyle(.white, .gray)
-                                    .opacity(0.7)
-                            }
-                            .buttonStyle(.plain)
-                            .padding(5)
+        LazyVGrid(columns: columns, spacing: 5) {
+            ForEach(photos, id: \.id) { photo in
+                ZStack(alignment: .topTrailing) {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.clear)
+                        .aspectRatio(1.5, contentMode: .fit)
+                        .overlay(
+                            Image(uiImage: photo.converted)
+                                .resizable()
+                                .scaledToFill()
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
                         }
+                        .onTapGesture {
+                            if !isEditable {
+                                selectedPhoto = photo
+                            }
+                        }
+                    
+                    if isEditable {
+                        Button {
+                            delete(photo: photo)
+                        } label: {
+                            Label("Delete Image", systemImage: "xmark.circle.fill")
+                                .labelStyle(.iconOnly)
+                                .font(.title2)
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.white, .gray)
+                                .opacity(0.7)
+                        }
+                        .buttonStyle(.plain)
+                        .padding(5)
                     }
                 }
-                .id(UUID()) // prevents flicker when deleting
             }
-            .fullScreenCover(item: $selectedPhoto) { photo in
-                ImageDetailView(image: photo.converted)
+            .id(UUID()) // prevents flicker when deleting
+            
+            if let editablePhotos {
+                AddPhotoButton(photos: editablePhotos)
             }
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets())
-            .animation(.easeInOut, value: photos)
-//        }
+        }
+        .fullScreenCover(item: $selectedPhoto) { photo in
+            ImageDetailView(image: photo.converted)
+        }
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
+        .animation(.easeInOut, value: photos)
     }
     
     // Deletes a given photo from the photos array

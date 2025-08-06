@@ -23,30 +23,36 @@ struct AddPhotoButton: View {
     @State private var selectedImages: [PhotosPickerItem] = []
     
     var body: some View {
-        HStack {
-            Spacer()
-            
-            Menu {
-                Button {
+        Menu {
+            Button {
 //                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    showingPhotosPicker = true
-                } label: {
-                    Label("Choose Photo", systemImage: "photo.on.rectangle")
-                }
-                
-                Button {
-                    Task {
-                        await cameraViewModel.requestCameraAccessAndAvailability()
-                    }
-                } label: {
-                    Label("Take Photo", systemImage: "camera")
+                showingPhotosPicker = true
+            } label: {
+                Label("Choose Photo", systemImage: "photo.on.rectangle")
+            }
+            
+            Button {
+                Task {
+                    await cameraViewModel.requestCameraAccessAndAvailability()
                 }
             } label: {
-                Label("Add Photo", systemImage: "camera")
+                Label("Take Photo", systemImage: "camera")
             }
-            .font(.body)
-            
-            Spacer()
+        } label: {
+            Label {
+                Text("Add Photo")
+            } icon: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 5]))
+                        .background(Color.clear)
+                    
+                    Image(systemName: "camera")
+                }
+                .aspectRatio(1.5, contentMode: .fit)
+                .frame(maxWidth: .infinity)
+            }
+            .labelStyle(.iconOnly)
         }
         .onChange(of: selectedImages) { loadSelectedImages() }
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImages, matching: .images)
