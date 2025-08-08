@@ -94,6 +94,71 @@ extension Vehicle {
         }
     }
     
+    // Returns all service records and repairs for this vehicle, sorted by date (most recent first)
+    var serviceAndRepairTimeline: [VehicleExportRecord] {
+        let servicesSet = services as? Set<Service> ?? []
+        let serviceEntries = servicesSet
+            .flatMap { $0.sortedServiceRecordsArray }
+            .map { record in
+                VehicleExportRecord(
+                    date: Calendar.current.startOfDay(for: record.date),
+                    odometer: record.odometer,
+                    type: .service(record)
+                )
+            }
+
+        let repairsSet = repairs as? Set<Repair> ?? []
+        let repairEntries = repairsSet
+            .map { record in
+                VehicleExportRecord(
+                    date: Calendar.current.startOfDay(for: record.date),
+                    odometer: record.odometer,
+                    type: .repair(record)
+                )
+            }
+
+        return (serviceEntries + repairEntries)
+            .sorted {
+                if $0.date != $1.date {
+                    return $0.date > $1.date // most recent first
+                } else {
+                    return $0.odometer > $1.odometer
+                }
+            }
+    }
+    
+    // Groups all service records and repairs by date (most recent first) and sorts alphabetically by service/repair name
+    var groupedserviceAndRepairTimeline: [(date: Date, entries: [VehicleExportRecord])] {
+        let allEntries = serviceAndRepairTimeline
+
+        // Group entries by date
+        let grouped = Dictionary(grouping: allEntries) { entry in
+            Calendar.current.startOfDay(for: entry.date)
+        }
+
+        var result: [(date: Date, entries: [VehicleExportRecord])] = []
+
+        for (date, entries) in grouped {
+            let sortedEntries = entries.sorted { a, b in
+                switch (a.type, b.type) {
+                case (.service(let s1), .service(let s2)):
+                    return (s1.service?.name ?? "") < (s2.service?.name ?? "")
+                case (.repair(let r1), .repair(let r2)):
+                    return r1.name < r2.name
+                case (.service, .repair):
+                    return true
+                case (.repair, .service):
+                    return false
+                }
+            }
+
+            result.append((date: date, entries: sortedEntries))
+        }
+
+        // Sort by date
+        return result.sorted { $0.date > $1.date }
+    }
+    
     
     
     // MARK: - CRUD Methods
