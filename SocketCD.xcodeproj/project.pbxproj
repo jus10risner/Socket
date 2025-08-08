@@ -213,6 +213,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E02BAF92E45237C00D45FA3 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */,
+				9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */,
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
 		9E189E2A2BD009A000095EC2 /* Maintenance Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -270,7 +279,7 @@
 				9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */,
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
-				9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */,
+				9E02BAF92E45237C00D45FA3 /* Export */,
 				9E87C5B52E4235CF001BE562 /* FormFooterView.swift */,
 			);
 			path = Misc.;

@@ -32,6 +32,9 @@ struct VehicleDashboardView: View {
     @State private var showingDeleteAlert = false
     
     @State private var odometerValue = ""
+    @State private var exportURL: URL?
+    @State private var showingShareSheet = false
+    @State private var showingPageSizeSelector = false
     
     let columns: [GridItem] = {
         [GridItem(.adaptive(minimum: 300), spacing: 5)]
@@ -60,6 +63,10 @@ struct VehicleDashboardView: View {
                         } label: {
                             sectionLabel(section: section)
                         }
+                    }
+                    
+                    NavigationLink("Export") {
+                        VehicleRecordsSummaryView(vehicle: vehicle)
                     }
                 }
                 .headerProminence(.increased)
@@ -112,6 +119,32 @@ struct VehicleDashboardView: View {
                 Button("Delete", role: .destructive) {
                     DataController.shared.delete(vehicle)
                     selectedVehicle = nil
+                }
+                
+                Button("Cancel", role: .cancel) { }
+            }
+            // Sheet wasn't loading the url on first launch of ActivityView; manual getter/setter resolves the issue
+              .sheet(isPresented: Binding(
+                  get: { showingShareSheet },
+                  set: { showingShareSheet = $0 }
+              )) {
+                  if let exportURL {
+                      ActivityView(activityItems: [exportURL])
+                  }
+              }
+            .confirmationDialog("Which paper size do you prefer?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
+                Button("A4") {
+                    Task {
+                        exportURL = PDFExporter.export(vehicle: vehicle, paperSize: .a4)
+                        showingShareSheet = true
+                    }
+                }
+                
+                Button("US Letter") {
+                    Task {
+                        exportURL = PDFExporter.export(vehicle: vehicle, paperSize: .usLetter)
+                        showingShareSheet = true
+                    }
                 }
                 
                 Button("Cancel", role: .cancel) { }
@@ -270,7 +303,7 @@ struct VehicleDashboardView: View {
         Menu {
             Section {
                 Button {
-//                    showingPageSizeSelector = true
+                    showingPageSizeSelector = true
                 } label: {
                     Label("PDF", systemImage: "doc")
                 }
