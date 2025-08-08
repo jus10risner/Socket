@@ -62,7 +62,9 @@ struct PhotoGridView: View {
                     
                     if isEditable {
                         Button {
-                            delete(photo: photo)
+                            withAnimation {
+                                delete(photo: photo)
+                            }
                         } label: {
                             Label("Delete Image", systemImage: "xmark.circle.fill")
                                 .labelStyle(.iconOnly)
@@ -87,7 +89,6 @@ struct PhotoGridView: View {
         }
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets())
-        .animation(.easeInOut, value: photos)
     }
     
     // Deletes a given photo from the photos array

@@ -64,10 +64,6 @@ struct VehicleDashboardView: View {
                             sectionLabel(section: section)
                         }
                     }
-                    
-                    NavigationLink("Export") {
-                        VehicleRecordsSummaryView(vehicle: vehicle)
-                    }
                 }
                 .headerProminence(.increased)
                 
