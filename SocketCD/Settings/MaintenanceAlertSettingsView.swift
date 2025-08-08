@@ -65,20 +65,8 @@ struct MaintenanceAlertSettingsView: View {
     private var socketSettingsButton: some View {
         Button("Notification Settings") {
             Task {
-                await openSocketSettings()
+                await AppSettings.openSocketSettings()
             }
-        }
-    }
-    
-    // MARK: - Methods
-    
-    @MainActor
-    func openSocketSettings() async {
-        // Creates URL that links to Socket settings in the Settings app
-        if let url = URL(string: UIApplication.openSettingsURLString) {
-            
-            // Takes the user to Socket settings
-            await UIApplication.shared.open(url)
         }
     }
 }

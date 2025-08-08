@@ -57,15 +57,4 @@ struct CameraManager {
 //            cameraAccessAlert = true
 //        }
 //    }
-    
-    // TODO: Decide where to relocate this function, for better organization
-    @MainActor
-    func openSocketSettings() async {
-        // Creates URL that links to Socket settings in the Settings app
-        if let url = URL(string: UIApplication.openSettingsURLString) {
-            
-            // Takes the user to Socket settings
-            await UIApplication.shared.open(url)
-        }
-    }
 }

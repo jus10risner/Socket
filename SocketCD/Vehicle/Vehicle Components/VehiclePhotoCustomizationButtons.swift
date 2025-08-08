@@ -61,7 +61,7 @@ struct VehiclePhotoCustomizationButtons: View {
         .alert("No Camera Access", isPresented: $cameraViewModel.showingCameraAccessAlert) {
             Button("Go to Settings") {
                 Task {
-                    await cameraManager.openSocketSettings()
+                    await AppSettings.openSocketSettings()
                 }
             }
             Button("Cancel", role: .cancel) { }

@@ -102,4 +102,11 @@ class AppSettings: ObservableObject {
             Color.mint
         }
     }
+    
+    // Opens the Settings app and navigates to Socket's system settings (camera access, etc.)
+    static func openSocketSettings() async {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            await UIApplication.shared.open(url)
+        }
+    }
 }
