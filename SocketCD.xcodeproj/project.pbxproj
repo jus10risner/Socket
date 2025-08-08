@@ -28,6 +28,7 @@
 		9E7507572BF50FB9000E25BD /* OnboardingTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7507562BF50FB9000E25BD /* OnboardingTips.swift */; };
 		9E7507592BF68C84000E25BD /* EmptyVehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */; };
 		9E87C5B62E4235CF001BE562 /* FormFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E87C5B52E4235CF001BE562 /* FormFooterView.swift */; };
+		9E916A442E464B7800E10B42 /* CSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E916A432E464B7800E10B42 /* CSVExporter.swift */; };
 		9E97B2752BD2C694002B1E9F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */; };
 		9E97B27D2BD3FBE8002B1E9F /* SocketCDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E97B27C2BD3FBE8002B1E9F /* SocketCDTests.swift */; };
 		9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E97B2852BD40364002B1E9F /* ServiceListRowView.swift */; };
@@ -127,6 +128,7 @@
 		9E7507562BF50FB9000E25BD /* OnboardingTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTips.swift; sourceTree = "<group>"; };
 		9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyVehicleListView.swift; sourceTree = "<group>"; };
 		9E87C5B52E4235CF001BE562 /* FormFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFooterView.swift; sourceTree = "<group>"; };
+		9E916A432E464B7800E10B42 /* CSVExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporter.swift; sourceTree = "<group>"; };
 		9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E97B27A2BD3FBE8002B1E9F /* SocketCDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocketCDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E97B27C2BD3FBE8002B1E9F /* SocketCDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketCDTests.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 			children = (
 				9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */,
 				9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */,
+				9E916A432E464B7800E10B42 /* CSVExporter.swift */,
 			);
 			path = Export;
 			sourceTree = "<group>";
@@ -623,6 +626,7 @@
 				9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */,
 				9E9C05AC2E26984B00E9C0E2 /* CenteredLabelStyle.swift in Sources */,
 				9EEAC4CD2BA2571E0053C65E /* Vehicle+helper.swift in Sources */,
+				9E916A442E464B7800E10B42 /* CSVExporter.swift in Sources */,
 				9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */,
 				9EEAC4CF2BA258290053C65E /* VehicleImageView.swift in Sources */,
 				9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */,

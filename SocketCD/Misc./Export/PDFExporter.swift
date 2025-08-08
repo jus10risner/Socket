@@ -97,7 +97,7 @@ struct PDFExporter {
         fullText.append(NSAttributedString(string: "Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)\n\n—\n\n", attributes: metadataAttributes))
 
         // Loop over grouped timeline
-        for (date, entries) in vehicle.groupedserviceAndRepairTimeline {
+        for (date, entries) in vehicle.groupedServiceAndRepairTimeline {
             let formattedDate = date.formatted(date: .long, time: .omitted)
             let odometer = entries.first?.odometer.formatted() ?? "—"
             

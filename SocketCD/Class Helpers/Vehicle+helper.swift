@@ -128,7 +128,7 @@ extension Vehicle {
     }
     
     // Groups all service records and repairs by date (most recent first) and sorts alphabetically by service/repair name
-    var groupedserviceAndRepairTimeline: [(date: Date, entries: [VehicleExportRecord])] {
+    var groupedServiceAndRepairTimeline: [(date: Date, entries: [VehicleExportRecord])] {
         let allEntries = serviceAndRepairTimeline
 
         // Group entries by date

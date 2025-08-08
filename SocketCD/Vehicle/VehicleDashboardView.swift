@@ -297,7 +297,7 @@ struct VehicleDashboardView: View {
     // Menu, including buttons for exporting/sharing vehicle records. iOS 15 doesn't display section headers in menus, so there's some conditional logic for showing the appropriate header style
     private var exportMenu: some View {
         Menu {
-            Section {
+            Section("Maintenance & Repairs") {
                 Button {
                     showingPageSizeSelector = true
                 } label: {
@@ -305,29 +305,41 @@ struct VehicleDashboardView: View {
                 }
                 
                 Button {
-//                    createMaintenanceRepairsCSV()
-//                    showingActivityView = true
+                    Task {
+                        exportURL = CSVExporter.exportServicesAndRepairs(for: vehicle)
+                        showingShareSheet = true
+                    }
                 } label: {
                     Label("CSV", systemImage: "tablecells")
                 }
-            } header: {
-                Text("Maintenance & Repairs")
             }
             .accessibilityHint("Export maintenance and repair records for this vehicle")
             
-            Section {
+            Section("Fill-ups") {
                 Button {
-//                    createFillupsCSV()
-//                    showingActivityView = true
+                    Task {
+                        exportURL = CSVExporter.exportFillups(for: vehicle)
+                        showingShareSheet = true
+                    }
                 } label: {
                     Label("CSV", systemImage: "tablecells")
                 }
-            } header: {
-                Text("Fill-ups")
             }
             .accessibilityHint("Export fill-up records for this vehicle")
+            
+            Section("All Records") {
+                Button {
+                    Task {
+                        exportURL = CSVExporter.exportAllRecords(for: vehicle)
+                        showingShareSheet = true
+                    }
+                } label: {
+                    Label("CSV", systemImage: "tablecells")
+                }
+            }
+            .accessibilityHint("Export all maintenance, repair, and fill-up records for this vehicle")
         } label: {
-            Label("Export Records", systemImage: "square.and.arrow.up")
+            Label("Export", systemImage: "square.and.arrow.up")
         }
     }
     
