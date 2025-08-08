@@ -61,7 +61,6 @@
 		9EEAC4CD2BA2571E0053C65E /* Vehicle+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4CC2BA2571E0053C65E /* Vehicle+helper.swift */; };
 		9EEAC4CF2BA258290053C65E /* VehicleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4CE2BA258290053C65E /* VehicleImageView.swift */; };
 		9EEAC4D32BA258960053C65E /* Photo+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D22BA258960053C65E /* Photo+helper.swift */; };
-		9EEAC4D52BA259870053C65E /* VehiclePhotoCustomizationButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D42BA259870053C65E /* VehiclePhotoCustomizationButtons.swift */; };
 		9EEAC4D72BA332E50053C65E /* VehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D62BA332E50053C65E /* VehicleListView.swift */; };
 		9EEAC4DF2BA343B00053C65E /* EditVehicleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */; };
 		9EEAC4E12BA360E80053C65E /* VehicleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */; };
@@ -163,7 +162,6 @@
 		9EEAC4CC2BA2571E0053C65E /* Vehicle+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vehicle+helper.swift"; sourceTree = "<group>"; };
 		9EEAC4CE2BA258290053C65E /* VehicleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleImageView.swift; sourceTree = "<group>"; };
 		9EEAC4D22BA258960053C65E /* Photo+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+helper.swift"; sourceTree = "<group>"; };
-		9EEAC4D42BA259870053C65E /* VehiclePhotoCustomizationButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclePhotoCustomizationButtons.swift; sourceTree = "<group>"; };
 		9EEAC4D62BA332E50053C65E /* VehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListView.swift; sourceTree = "<group>"; };
 		9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVehicleView.swift; sourceTree = "<group>"; };
 		9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleInfoView.swift; sourceTree = "<group>"; };
@@ -244,7 +242,6 @@
 				9E620C062BC07B6F005E16DD /* DraftVehicle.swift */,
 				9EEAC4CE2BA258290053C65E /* VehicleImageView.swift */,
 				9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */,
-				9EEAC4D42BA259870053C65E /* VehiclePhotoCustomizationButtons.swift */,
 			);
 			path = "Vehicle Components";
 			sourceTree = "<group>";
@@ -644,7 +641,6 @@
 				9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */,
 				9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */,
 				9EEAC4E82BA367A00053C65E /* AddPhotoButton.swift in Sources */,
-				9EEAC4D52BA259870053C65E /* VehiclePhotoCustomizationButtons.swift in Sources */,
 				9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */,
 				9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */,
 				9EE1DAD22E2A9FB000798D29 /* ServiceContext.swift in Sources */,

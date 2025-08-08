@@ -134,12 +134,7 @@ struct AddVehicleView: View {
             Text("Now select an image or color to represent your vehicle. You can change this later.")
                 .font(.subheadline.bold())
             
-            VStack {
-                AddEditVehicleImageView(draftVehicle: draftVehicle)
-                    .padding(.horizontal, 5)
-                
-                VehiclePhotoCustomizationButtons(carPhoto: $draftVehicle.photo, selectedColor: $draftVehicle.selectedColor)
-            }
+            AddEditVehicleImageView(draftVehicle: draftVehicle)
             
             Spacer()
         }

@@ -12,7 +12,6 @@ import SwiftUI
 struct AddPhotoButton: View {
     @Environment(\.managedObjectContext) var context
     @StateObject private var cameraViewModel = CameraViewModel()
-    let cameraManager = CameraManager()
     
     @Binding var photos: [Photo]
     

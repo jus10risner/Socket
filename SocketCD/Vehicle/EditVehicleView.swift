@@ -34,11 +34,7 @@ struct EditVehicleView: View {
         NavigationStack {
             Form {
                 VStack(spacing: 20) {
-                    VStack {
-                        AddEditVehicleImageView(draftVehicle: draftVehicle)
-                        
-                        VehiclePhotoCustomizationButtons(carPhoto: $draftVehicle.photo, selectedColor: $draftVehicle.selectedColor)
-                    }
+                    AddEditVehicleImageView(draftVehicle: draftVehicle)
                     
                     VStack {
                         TextField("Vehicle Name", text: $draftVehicle.name)
