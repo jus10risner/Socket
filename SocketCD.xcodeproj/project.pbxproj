@@ -108,6 +108,7 @@
 		9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExportRecord.swift; sourceTree = "<group>"; };
 		9E189E362BD1ABE900095EC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9E235B912DFB58CA008F7327 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		9E2F33372E4A42DA00EAB7B9 /* SocketDataModel_V2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SocketDataModel_V2.xcdatamodel; sourceTree = "<group>"; };
 		9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceOnboardingView.swift; sourceTree = "<group>"; };
 		9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExporter.swift; sourceTree = "<group>"; };
 		9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInput.swift; sourceTree = "<group>"; };
@@ -1083,9 +1084,10 @@
 		9EEAC48C2BA0FA280053C65E /* SocketDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				9E2F33372E4A42DA00EAB7B9 /* SocketDataModel_V2.xcdatamodel */,
 				9EEAC48D2BA0FA280053C65E /* SocketDataModel.xcdatamodel */,
 			);
-			currentVersion = 9EEAC48D2BA0FA280053C65E /* SocketDataModel.xcdatamodel */;
+			currentVersion = 9E2F33372E4A42DA00EAB7B9 /* SocketDataModel_V2.xcdatamodel */;
 			name = SocketDataModel.xcdatamodeld;
 			path = "/Users/jrisner/Developer/Personal Projects/SocketCD/SocketCD/SocketDataModel.xcdatamodeld";
 			sourceTree = "<group>";
