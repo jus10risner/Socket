@@ -41,7 +41,11 @@ extension ServiceRecord {
     // MARK: - CRUD Methods
     
     func updateAndSave(service: Service, draftServiceRecord: DraftServiceRecord) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available, skipping update")
+            return
+        }
         
         self.date = draftServiceRecord.date
         self.odometer = draftServiceRecord.odometer ?? 0

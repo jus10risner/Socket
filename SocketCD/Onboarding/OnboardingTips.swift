@@ -227,6 +227,11 @@ struct OnboardingTips: View {
 }
 
 #Preview {
-    OnboardingTips(showingOnboardingTip: .constant(true), vehicle: Vehicle(context: DataController.preview.container.viewContext))
+    let context = DataController.preview.container!.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
+    
+    return OnboardingTips(showingOnboardingTip: .constant(true), vehicle: vehicle)
         .environmentObject(AppSettings())
 }

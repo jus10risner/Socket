@@ -45,7 +45,11 @@ extension Repair {
     // MARK: - CRUD Methods
     
     func updateAndSave(draftRepair: DraftRepair) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available, skipping update")
+            return
+        }
         
         self.date = draftRepair.date
         self.name = draftRepair.name

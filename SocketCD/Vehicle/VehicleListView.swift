@@ -136,5 +136,10 @@ struct VehicleListView: View {
 }
 
 #Preview {
-    VehicleListView(selectedVehicle: .constant(Vehicle(context: DataController.preview.container.viewContext)), showingOnboardingText: .constant(true))
+    let context = DataController.preview.container!.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
+    
+    return VehicleListView(selectedVehicle: .constant(vehicle), showingOnboardingText: .constant(true))
 }

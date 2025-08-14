@@ -48,6 +48,15 @@ struct RecordDetailView: View {
 }
 
 #Preview {
-    RecordDetailView(record: ServiceRecord(context: DataController.preview.container.viewContext), vehicle: Vehicle(context: DataController.preview.container.viewContext), service: Service(context: DataController.preview.container.viewContext))
+    let context = DataController.preview.container!.viewContext
+    let vehicle = Vehicle(context: context)
+    
+    let service = Service(context: context)
+    service.name = "Oil Change"
+    
+    let record = ServiceRecord(context: context)
+    record.odometer = 12345
+    
+    return RecordDetailView(record: record, vehicle: vehicle, service: service)
         .environmentObject(AppSettings())
 }

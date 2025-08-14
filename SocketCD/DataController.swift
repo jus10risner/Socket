@@ -6,115 +6,105 @@
 //
 
 import CoreData
+import CloudKit
 import SwiftUI
 
 class DataController: ObservableObject {
-    // A singleton for the entire app to use
+    // MARK: - Singleton
     static let shared = DataController()
     
-    // Properties to be passed to other views, for toggling
-    var isShowingDataError: Bool = false
-
-    // A test configuration for SwiftUI previews
-    static var preview: DataController = {
-        let controller = DataController(inMemory: true)
-        let viewContext = controller.container.viewContext
-        
-        // Create example vehicle.
-        let vehicle = Vehicle(context: viewContext)
-        vehicle.name = "My Car"
-        vehicle.odometer = Int.random(in: 10000...15000)
-        vehicle.colorComponents = [0.34509801864624023, 0.3372548818588257, 0.8392157554626465, 1.0]
-
-        return controller
-    }()
+    // MARK: - Published container (optional until loaded)
+    @Published private(set) var container: NSPersistentCloudKitContainer?
     
-    // A configuration, specifically for use in unit tests
-    static let unitTest: DataController = {
-        let controller = DataController(inMemory: true)
-        // empty data store
-        return controller
-    }()
+    // MARK: - Preview configuration
+    static let preview: DataController = DataController(inMemory: true)
     
-    // Storage for Core Data. Sets the appropriate persistent container.
-    lazy var container: NSPersistentCloudKitContainer = {
-        container = NSPersistentCloudKitContainer(name: "SocketDataModel")
+    static let unitTest: DataController = DataController(inMemory: true)
+    
+    // MARK: - Initializer
+    init(inMemory: Bool = false) {
+        Task { @MainActor in
+            self.container = await Self.makePersistentContainer(inMemory: inMemory)
+        }
+    }
+    
+    // MARK: - Async container setup
+    @MainActor
+    private static func makePersistentContainer(inMemory: Bool = false) async -> NSPersistentCloudKitContainer {
+        let container = NSPersistentCloudKitContainer(name: "SocketDataModel")
         
         guard let description = container.persistentStoreDescriptions.first else {
-            fatalError("###\(#function): Failed to retrieve a persistent store description.")
+            fatalError("Failed to retrieve persistent store description")
         }
+        
+        if inMemory {
+            description.url = URL(fileURLWithPath: "/dev/null")
+        }
+        
         description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
         
-        if cloudContainerAvailable == true {
-            description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.risner.justin.SocketCD")
+        if FileManager.default.ubiquityIdentityToken != nil {
+            description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
+                containerIdentifier: "iCloud.risner.justin.SocketCD"
+            )
         } else {
             description.cloudKitContainerOptions = nil
+            print("⚠️ CloudKit unavailable — using local store only")
         }
-
-        container.loadPersistentStores { description, error in
-            if let error = error as NSError? {
-                self.isShowingDataError = true
-                print("Unresolved error: \(error.localizedDescription), \(error.userInfo)")
+        
+        await withCheckedContinuation { continuation in
+            container.loadPersistentStores { storeDescription, error in
+                if let error = error as NSError? {
+                    print("❌ Persistent store failed to load:", error)
+                } else {
+                    print("✅ Persistent store loaded:", storeDescription.url?.absoluteString ?? "")
+                }
+                continuation.resume()
             }
         }
         
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.automaticallyMergesChangesFromParent = true
-//        container.viewContext.undoManager = UndoManager()
         
         #if DEBUG
-        do {
-            // Use the container to initialize the development schema.
-            try container.initializeCloudKitSchema(options: [])
-        } catch {
-            // Handle any errors.
-            print("Unable to initialize CloudKit schema: \(error.localizedDescription)")
+        if description.cloudKitContainerOptions != nil {
+            do {
+                try container.initializeCloudKitSchema(options: [])
+            } catch {
+                print("❌ Unable to initialize CloudKit schema:", error)
+            }
         }
         #endif
         
         return container
-    }()
-    
-    // An initializer to load Core Data, optionally able to use an in-memory store.
-    init(inMemory: Bool = false) {
-        if inMemory {
-            container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
-        }
     }
     
-    // Checks to see if an iCloud container is available on the device
-    var cloudContainerAvailable: Bool {
-        if let _ = FileManager.default.ubiquityIdentityToken {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    // If there are any changes, attempt to save
+    // MARK: - Save / Delete
     func save() {
-        let context = container.viewContext
+        guard let context = container?.viewContext else {
+            print("⚠️ Core Data container not ready, skipping save")
+            return
+        }
 
         if context.hasChanges {
             do {
                 try context.save()
-            } catch let error {
-                self.isShowingDataError = true
-                print("Error: \(error.localizedDescription)")
+            } catch {
+                // Log the error for debugging purposes
+                print("⚠️ Failed to save Core Data context: \(error.localizedDescription)")
             }
         }
     }
     
-    // Deletes a managed object and saves the context
     func delete(_ object: NSManagedObject) {
-        let context = container.viewContext
+        guard let context = container?.viewContext else { return }
         context.delete(object)
-
         do {
             try context.save()
         } catch {
-            print("Failed to delete object: \(error.localizedDescription)")
+            print("❌ Failed to delete object:", error)
         }
     }
 }
+

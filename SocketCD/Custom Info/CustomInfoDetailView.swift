@@ -50,5 +50,10 @@ struct CustomInfoDetailView: View {
 }
 
 #Preview {
-    CustomInfoDetailView(customInfo: CustomInfo(context: DataController.preview.container.viewContext))
+    let context = DataController.preview.container!.viewContext
+    let customInfo = CustomInfo(context: context)
+    customInfo.label = "License Plate"
+    customInfo.detail = "ABC 123"
+    
+    return CustomInfoDetailView(customInfo: customInfo)
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var settings: AppSettings
-    @ObservedObject var dataController: DataController
+//    @ObservedObject var dataController: DataController
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
@@ -220,6 +220,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(dataController: DataController())
+    ContentView()
         .environmentObject(AppSettings())
 }

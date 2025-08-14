@@ -116,7 +116,12 @@ struct AddEditRepairView: View {
 }
 
 #Preview {
-    let context = DataController.preview.container.viewContext
+    let context = DataController.preview.container!.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
     
-    AddEditRepairView(vehicle: Vehicle(context: context), repair: Repair(context: context))
+    let repair = Repair(context: context)
+    
+    return AddEditRepairView(vehicle: vehicle, repair: repair)
 }

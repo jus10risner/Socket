@@ -151,6 +151,14 @@ struct ServiceDetailView: View {
 }
 
 #Preview {
-    ServiceDetailView(service: Service(context: DataController.preview.container.viewContext), vehicle: Vehicle(context: DataController.preview.container.viewContext))
+    let context = DataController.preview.container!.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
+    
+    let service = Service(context: context)
+    service.name = "Oil Change"
+    
+    return ServiceDetailView(service: service, vehicle: vehicle)
         .environmentObject(AppSettings())
 }

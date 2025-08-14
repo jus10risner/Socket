@@ -162,6 +162,14 @@ struct MaintenanceOnboardingView: View {
 }
 
 #Preview {
-    MaintenanceOnboardingView(vehicle: Vehicle(context: DataController.preview.container.viewContext), service: Service(context: DataController.preview.container.viewContext), showingServiceRecordTip: .constant(false))
+    let context = DataController.preview.container!.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
+    
+    let service = Service(context: context)
+    service.name = "Oil Change"
+    
+    return MaintenanceOnboardingView(vehicle: vehicle, service: service, showingServiceRecordTip: .constant(false))
         .environmentObject(AppSettings())
 }

@@ -164,7 +164,11 @@ extension Vehicle {
     // MARK: - CRUD Methods
     
     func updateAndSave(draftVehicle: DraftVehicle) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available, skipping update")
+            return
+        }
         let colorComponents = UIColor(draftVehicle.selectedColor).cgColor.components
         
         self.name = draftVehicle.name
@@ -178,7 +182,11 @@ extension Vehicle {
     }
     
     func addNewService(draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available")
+            return
+        }
         
         if selectedInterval == .distance {
             draftService.timeInterval = 0
@@ -201,7 +209,12 @@ extension Vehicle {
     }
     
     func addNewRepair(draftRepair: DraftRepair) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available")
+            return
+        }
+        
         let newRepair = Repair(context: context)
         newRepair.vehicle = self
         newRepair.id = UUID()
@@ -221,7 +234,12 @@ extension Vehicle {
     }
     
     func addNewFillup(draftFillup: DraftFillup) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available")
+            return
+        }
+        
         let newFillup = Fillup(context: context)
         newFillup.vehicle = self
         newFillup.id = UUID()
@@ -242,7 +260,12 @@ extension Vehicle {
     }
     
     func addNewInfo(draftCustomInfo: DraftCustomInfo) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available")
+            return
+        }
+        
         let newCustomInfo = CustomInfo(context: context)
         newCustomInfo.vehicle = self
         newCustomInfo.id = UUID()

@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 3/12/24.
 //
 
+import CloudKit
 import SwiftUI
 
 @main
@@ -15,10 +16,19 @@ struct SocketCDApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(dataController: dataController)
-                .environment(\.managedObjectContext, dataController.container.viewContext)
-                .environmentObject(settings)
-                .task { AppearanceController.shared.setAppearance() }
+            if let container = dataController.container {
+                ContentView()
+                    .environment(\.managedObjectContext, container.viewContext)
+                    .environmentObject(settings)
+                    .task { AppearanceController.shared.setAppearance() }
+            } else {
+                ProgressView("Loading…")
+            }
+            
+//            ContentView()
+//                .environment(\.managedObjectContext, dataController.container.viewContext)
+//                .environmentObject(settings)
+//                .task { AppearanceController.shared.setAppearance() }
         }
         .onChange(of: scenePhase) {
             dataController.save()

@@ -81,7 +81,7 @@ struct ServiceListRowView: View {
 }
 
 #Preview {
-    let context = DataController.preview.container.viewContext
+    let context = DataController.preview.container!.viewContext
     let vehicle = Vehicle(context: context)
     
     let service = Service(context: context)

@@ -255,7 +255,11 @@ extension Service {
     // MARK: - CRUD Methods
     
     func updateAndSave(draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available")
+            return
+        }
         
         if selectedInterval == .distance {
             draftService.timeInterval = 0
@@ -285,7 +289,12 @@ extension Service {
 //    }
     
     func addNewServiceRecord(draftServiceRecord: DraftServiceRecord) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available")
+            return
+        }
+        
         let newServiceRecord = ServiceRecord(context: context)
         newServiceRecord.service = self
         newServiceRecord.id = UUID()
@@ -365,7 +374,12 @@ extension Service {
 //    }
     
     func updateNotifications(vehicle: Vehicle) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available")
+            return
+        }
+        
         let settings = AppSettings()
         let now = Date()
 
@@ -409,7 +423,12 @@ extension Service {
             // If nothing was scheduled and both are no longer valid
             if !didSchedule {
                 DispatchQueue.main.async {
-                    let context = DataController.shared.container.viewContext
+//                    let context = DataController.shared.container.viewContext
+                    guard let context = DataController.shared.container?.viewContext else {
+                        print("Core Data container not available")
+                        return
+                    }
+                    
                     self.notificationScheduled = false
                     try? context.save()
                 }
@@ -420,7 +439,12 @@ extension Service {
     // Cancels any pending notifications for a given service (used before deleting a service)
     func cancelPendingNotifications() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.timeBasedNotificationIdentifier, self.distanceBasedNotificationIdentifier])
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available")
+            return
+        }
+        
         self.notificationScheduled = false
         
         try? context.save()

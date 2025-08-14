@@ -97,6 +97,12 @@ struct FillupDetailView: View {
 }
 
 #Preview {
-    FillupDetailView(fillup: Fillup(context: DataController.preview.container.viewContext))
+    let context = DataController.preview.container!.viewContext
+    let fillup = Fillup(context: context)
+    fillup.odometer = 12345
+    fillup.volume = 7.384
+    fillup.pricePerUnit = 3.569
+    
+    return FillupDetailView(fillup: fillup)
         .environmentObject(AppSettings())
 }

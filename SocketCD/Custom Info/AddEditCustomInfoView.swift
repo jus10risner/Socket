@@ -116,7 +116,14 @@ struct AddEditCustomInfoView: View {
 }
 
 #Preview {
-    let context = DataController.preview.container.viewContext
+    let context = DataController.preview.container!.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
     
-    AddEditCustomInfoView(vehicle: Vehicle(context: context), customInfo: CustomInfo(context: context))
+    let customInfo = CustomInfo(context: context)
+    customInfo.label = "License Plate"
+    customInfo.detail = "ABC 123"
+    
+    return AddEditCustomInfoView(vehicle: vehicle, customInfo: customInfo)
 }

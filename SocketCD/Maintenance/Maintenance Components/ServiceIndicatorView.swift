@@ -77,7 +77,7 @@ struct ServiceIndicatorView: View {
 }
 
 #Preview {
-    let context = DataController.shared.container.viewContext
+    let context = DataController.preview.container!.viewContext
     let vehicle = Vehicle(context: context)
     vehicle.name = "My Car"
     

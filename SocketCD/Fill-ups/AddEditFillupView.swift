@@ -126,8 +126,13 @@ struct AddEditFillupView: View {
 }
 
 #Preview {
-    let context = DataController.preview.container.viewContext
+    let context = DataController.preview.container!.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
     
-    AddEditFillupView(vehicle: Vehicle(context: context), fillup: Fillup(context: context))
+    let fillup = Fillup(context: context)
+    
+    return AddEditFillupView(vehicle: vehicle, fillup: fillup)
         .environmentObject(AppSettings())
 }

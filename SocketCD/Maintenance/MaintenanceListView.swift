@@ -168,6 +168,11 @@ struct MaintenanceListView: View {
 }
 
 #Preview {
-    MaintenanceListView(vehicle: Vehicle(context: DataController.preview.container.viewContext))
+    let context = DataController.preview.container!.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
+    
+    return MaintenanceListView(vehicle: vehicle)
         .environmentObject(AppSettings())
 }

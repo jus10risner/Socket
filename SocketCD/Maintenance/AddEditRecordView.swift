@@ -112,8 +112,13 @@ struct AddEditRecordView: View {
 }
 
 #Preview {
-    let context = DataController.preview.container.viewContext
+    let context = DataController.preview.container!.viewContext
+    let service = Service(context: context)
+    service.name = "Oil Change"
     
-    return AddEditRecordView(service: Service(context: context), record: ServiceRecord(context: context))
+    let record = ServiceRecord(context: context)
+    record.odometer = 12345
+    
+    return AddEditRecordView(service: service, record: record)
         .environmentObject(AppSettings())
 }

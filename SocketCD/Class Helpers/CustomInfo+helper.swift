@@ -36,7 +36,11 @@ extension CustomInfo {
     // MARK: - CRUD Methods
     
     func updateAndSave(draftCustomInfo: DraftCustomInfo) {
-        let context = DataController.shared.container.viewContext
+//        let context = DataController.shared.container.viewContext
+        guard let context = DataController.shared.container?.viewContext else {
+            print("Core Data container not available, skipping update")
+            return
+        }
         
         self.label = draftCustomInfo.label
         self.detail = draftCustomInfo.detail
