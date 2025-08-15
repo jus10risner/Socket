@@ -99,7 +99,7 @@ struct PhotoGridView: View {
 }
 
 #Preview {
-    let context = DataController.preview.container!.viewContext
+    let context = DataController.preview.container.viewContext
     let photo = Photo.create(from: UIImage(imageLiteralResourceName: "example"), in: context)
     
     PhotoGridView(photos: photo.map { [$0] } ?? [])

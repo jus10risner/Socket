@@ -112,7 +112,7 @@ struct AddEditRecordView: View {
 }
 
 #Preview {
-    let context = DataController.preview.container!.viewContext
+    let context = DataController.preview.container.viewContext
     let service = Service(context: context)
     service.name = "Oil Change"
     

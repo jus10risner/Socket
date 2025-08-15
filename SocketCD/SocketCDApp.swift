@@ -16,19 +16,10 @@ struct SocketCDApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if let container = dataController.container {
-                ContentView()
-                    .environment(\.managedObjectContext, container.viewContext)
-                    .environmentObject(settings)
-                    .task { AppearanceController.shared.setAppearance() }
-            } else {
-                ProgressView("Loading…")
-            }
-            
-//            ContentView()
-//                .environment(\.managedObjectContext, dataController.container.viewContext)
-//                .environmentObject(settings)
-//                .task { AppearanceController.shared.setAppearance() }
+            ContentView()
+                .environment(\.managedObjectContext, dataController.container.viewContext)
+                .environmentObject(settings)
+                .task { AppearanceController.shared.setAppearance() }
         }
         .onChange(of: scenePhase) {
             dataController.save()

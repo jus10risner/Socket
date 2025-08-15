@@ -48,7 +48,7 @@ struct RepairDetailView: View {
 }
 
 #Preview {
-    let context = DataController.preview.container!.viewContext
+    let context = DataController.preview.container.viewContext
     let repair = Repair(context: context)
     repair.name = "Tire Puncture Repaired"
     repair.odometer = 12345

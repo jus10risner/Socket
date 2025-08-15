@@ -153,11 +153,7 @@ extension Fillup {
     // MARK: - Methods
     
     func updateAndSave(draftFillup: DraftFillup) {
-//        let context = DataController.shared.container.viewContext
-        guard let context = DataController.shared.container?.viewContext else {
-            print("Core Data container not available, skipping update")
-            return
-        }
+        let context = DataController.shared.container.viewContext
         
         self.date = draftFillup.date
         self.odometer = draftFillup.odometer ?? 0
