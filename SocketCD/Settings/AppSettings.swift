@@ -35,10 +35,6 @@ class AppSettings: ObservableObject {
         willSet { objectWillChange.send() }
     }
     
-    @AppStorage("appIcon") var appIcon: AvailableAppIcons? {
-        willSet { objectWillChange.send() }
-    }
-    
     @AppStorage("appAppearance") var appAppearance: AppearanceOptions = .automatic {
         willSet { objectWillChange.send() }
     }

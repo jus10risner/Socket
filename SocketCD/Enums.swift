@@ -130,6 +130,16 @@ enum FuelEconomyUnits: String, CaseIterable {
     }
 }
 
-enum AvailableAppIcons: String, CaseIterable {
-    case dark = "Dark", light = "Light", darkMonochrome = "Dark Monochrome", lightMonochrome = "Light Monochrome"
+enum AppIcon: String, CaseIterable {
+    case inverted = "Inverted", monochrome = "Monochrome", classic = "Classic", dark = "Dark", light = "Light", darkMonochrome = "Dark Monochrome", lightMonochrome = "Light Monochrome"
+    
+    // Determines whether an icon is a classic variant
+    var isClassic: Bool {
+        switch self {
+        case .classic, .dark, .light, .darkMonochrome, .lightMonochrome:
+            return true
+        default:
+            return false
+        }
+    }
 }

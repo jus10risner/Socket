@@ -36,6 +36,9 @@
 		9E9C05AC2E26984B00E9C0E2 /* CenteredLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */; };
 		9E9ED3A62E12E7BF00EB89F8 /* FuelEconomyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */; };
 		9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */; };
+		9EB025362E4E5CB7008B4AC7 /* Primary.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB025352E4E5CB7008B4AC7 /* Primary.icon */; };
+		9EB0253B2E4E66D3008B4AC7 /* Inverted.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253A2E4E66D3008B4AC7 /* Inverted.icon */; };
+		9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */; };
 		9EE1DAD22E2A9FB000798D29 /* ServiceContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */; };
 		9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */; };
 		9EE5620D2BD9706600F5BE7E /* VehicleCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5620C2BD9706600F5BE7E /* VehicleCardView.swift */; };
@@ -137,6 +140,9 @@
 		9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredLabelStyle.swift; sourceTree = "<group>"; };
 		9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartView.swift; sourceTree = "<group>"; };
 		9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendArrowView.swift; sourceTree = "<group>"; };
+		9EB025352E4E5CB7008B4AC7 /* Primary.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Primary.icon; sourceTree = "<group>"; };
+		9EB0253A2E4E66D3008B4AC7 /* Inverted.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Inverted.icon; sourceTree = "<group>"; };
+		9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Monochrome.icon; sourceTree = "<group>"; };
 		9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceContext.swift; sourceTree = "<group>"; };
 		9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
 		9EE5620C2BD9706600F5BE7E /* VehicleCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleCardView.swift; sourceTree = "<group>"; };
@@ -295,9 +301,20 @@
 			path = SocketCDTests;
 			sourceTree = "<group>";
 		};
+		9EB025372E4E5D30008B4AC7 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				9EB025352E4E5CB7008B4AC7 /* Primary.icon */,
+				9EB0253A2E4E66D3008B4AC7 /* Inverted.icon */,
+				9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */,
+			);
+			path = Icons;
+			sourceTree = "<group>";
+		};
 		9EEAC4722BA0F9C20053C65E = {
 			isa = PBXGroup;
 			children = (
+				9EB025372E4E5D30008B4AC7 /* Icons */,
 				9EEAC47D2BA0F9C20053C65E /* SocketCD */,
 				9E97B27B2BD3FBE8002B1E9F /* SocketCDTests */,
 				9EEAC47C2BA0F9C20053C65E /* Products */,
@@ -524,7 +541,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					9E97B2792BD3FBE8002B1E9F = {
 						CreatedOnToolsVersion = 15.3;
@@ -570,7 +587,10 @@
 			files = (
 				9E97B2752BD2C694002B1E9F /* LaunchScreen.storyboard in Resources */,
 				9E189E372BD1ABE900095EC2 /* Assets.xcassets in Resources */,
+				9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */,
 				9EEAC4862BA0F9C30053C65E /* Preview Assets.xcassets in Resources */,
+				9EB025362E4E5CB7008B4AC7 /* Primary.icon in Resources */,
+				9EB0253B2E4E66D3008B4AC7 /* Inverted.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -736,6 +756,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -897,6 +918,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -954,6 +976,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
