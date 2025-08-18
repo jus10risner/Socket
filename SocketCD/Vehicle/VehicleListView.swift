@@ -28,26 +28,29 @@ struct VehicleListView: View {
     // MARK: - Views
     
     var alternateVehicleCardList: some View {
-        List(selection: $selectedVehicle) {
-            ForEach(vehicles, id: \.id) { vehicle in
-                Button {
-                    selectedVehicle = vehicle
-                } label: {
-                    VehicleCardView(vehicle: vehicle)
+        List(vehicles, selection: $selectedVehicle) { vehicle in
+            Group {
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    NavigationLink(value: vehicle) {
+                        VehicleListRowView(vehicle: vehicle)
+                    }
+                } else {
+                    VehicleListRowView(vehicle: vehicle)
+                        .onTapGesture {
+                            selectedVehicle = vehicle
+                        }
                 }
-                .buttonStyle(.plain) // Allows swipeActions to work
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2))
-                .listRowBackground(Color.clear)
             }
+//                .buttonStyle(.plain) // Allows swipeActions to work
+                .listRowSeparator(.hidden)
 //            .onMove {
 //                move(from: $0, to: $1)
 //                try? context.save()
 //            }
             
-            if showingOnboardingText == true {
-                onboardingTipText
-            }
+//            if showingOnboardingText == true {
+//                onboardingTipText
+//            }
         }
         .overlay {
             if vehicles.isEmpty {
@@ -66,6 +69,15 @@ struct VehicleListView: View {
         .sheet(isPresented: $showingSettings, onDismiss: updateNotifications) { AppSettingsView() }
         .sheet(isPresented: $showingAddVehicle) { AddVehicleView() }
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                if !iCloudContainerAvailable {
+                    Label("iCloud not available", systemImage: "icloud.slash")
+                        .foregroundStyle(Color.secondary)
+                        .labelStyle(.iconOnly)
+                        .imageScale(.small)
+                }
+            }
+            
             ToolbarItem {
                 Menu {
                     Button {
@@ -88,30 +100,35 @@ struct VehicleListView: View {
     }
     
     // Tip that displays immediately after the first vehicle has been added, until another view is shown
-    private var onboardingTipText: some View {
-        Section {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(Color.socketPurple)
-                    .accessibilityElement()
-                
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("You can swipe on a vehicle, to quickly add fill-ups or make changes to that vehicle, right from this screen.")
-                    
-                    Text("When you're ready, tap your vehicle to begin adding maintenance services, repairs, and more.")
-                }
-                .padding(30)
-                .font(.subheadline)
-                .foregroundStyle(Color.white)
-                .accessibilityElement(children: .combine)
-            }
-            .padding(.top, 30)
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.customBackground)
-        }
-    }
+//    private var onboardingTipText: some View {
+//        Section {
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 10)
+//                    .foregroundStyle(Color.socketPurple)
+//                    .accessibilityElement()
+//                
+//                VStack(alignment: .leading, spacing: 20) {
+//                    Text("You can swipe on a vehicle, to quickly add fill-ups or make changes to that vehicle, right from this screen.")
+//                    
+//                    Text("When you're ready, tap your vehicle to begin adding maintenance services, repairs, and more.")
+//                }
+//                .padding(30)
+//                .font(.subheadline)
+//                .foregroundStyle(Color.white)
+//                .accessibilityElement(children: .combine)
+//            }
+//            .padding(.top, 30)
+//            .listRowSeparator(.hidden)
+//            .listRowBackground(Color.customBackground)
+//        }
+//    }
     
     // MARK: - Methods
+    
+    
+    var iCloudContainerAvailable: Bool {
+        FileManager.default.ubiquityIdentityToken != nil
+    }
     
     func updateNotifications() {
         for vehicle in vehicles {

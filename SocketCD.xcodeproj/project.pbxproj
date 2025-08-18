@@ -41,7 +41,7 @@
 		9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */; };
 		9EE1DAD22E2A9FB000798D29 /* ServiceContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */; };
 		9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */; };
-		9EE5620D2BD9706600F5BE7E /* VehicleCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5620C2BD9706600F5BE7E /* VehicleCardView.swift */; };
+		9EE5620D2BD9706600F5BE7E /* VehicleListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */; };
 		9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */; };
 		9EEAC4812BA0F9C20053C65E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4802BA0F9C20053C65E /* ContentView.swift */; };
 		9EEAC4862BA0F9C30053C65E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EEAC4852BA0F9C30053C65E /* Preview Assets.xcassets */; };
@@ -145,7 +145,7 @@
 		9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Monochrome.icon; sourceTree = "<group>"; };
 		9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceContext.swift; sourceTree = "<group>"; };
 		9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
-		9EE5620C2BD9706600F5BE7E /* VehicleCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleCardView.swift; sourceTree = "<group>"; };
+		9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListRowView.swift; sourceTree = "<group>"; };
 		9EEAC47B2BA0F9C20053C65E /* SocketCD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocketCD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketCDApp.swift; sourceTree = "<group>"; };
 		9EEAC4802BA0F9C20053C65E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -245,7 +245,7 @@
 		9E189E2B2BD009D300095EC2 /* Vehicle Components */ = {
 			isa = PBXGroup;
 			children = (
-				9EE5620C2BD9706600F5BE7E /* VehicleCardView.swift */,
+				9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */,
 				9E620C062BC07B6F005E16DD /* DraftVehicle.swift */,
 				9EEAC4CE2BA258290053C65E /* VehicleImageView.swift */,
 				9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */,
@@ -656,7 +656,7 @@
 				9EEAC5032BA389140053C65E /* ServiceRecord+helper.swift in Sources */,
 				9EEAC4B52BA1F0A50053C65E /* CameraManager.swift in Sources */,
 				9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */,
-				9EE5620D2BD9706600F5BE7E /* VehicleCardView.swift in Sources */,
+				9EE5620D2BD9706600F5BE7E /* VehicleListRowView.swift in Sources */,
 				9E620C092BC08194005E16DD /* AddEditVehicleImageView.swift in Sources */,
 				9EEAC4EE2BA374D70053C65E /* CustomInfoDetailView.swift in Sources */,
 				9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */,
