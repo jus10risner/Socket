@@ -9,15 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var settings: AppSettings
-//    @ObservedObject var dataController: DataController
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
-    @State private var selectedVehicle: Vehicle?
+    @AppStorage("lastSelectedVehicleID") var lastSelectedVehicleID: String = ""
     
+    @State private var selectedVehicle: Vehicle?
     @State private var showingOnboardingTip = false
     @State private var showingOnboardingText = false
-    
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
     
     var body: some View {
@@ -42,12 +41,14 @@ struct ContentView: View {
                 vehicle.updateAllServiceNotifications()
             }
             
-            // If on iPad, select the first vehicle in the list
-            if UIDevice.current.userInterfaceIdiom == .pad, let firstVehicle = vehicles.first {
-//                if let firstVehicle = vehicles.first {
-                selectedVehicle = firstVehicle
-//                }
+            if let lastSelectedVehicle {
+                selectedVehicle = lastSelectedVehicle
+            } else if UIDevice.current.userInterfaceIdiom == .pad {
+                selectedVehicle = vehicles.first
             }
+        }
+        .onChange(of: selectedVehicle) { _ , value in
+            lastSelectedVehicleID = value?.id?.uuidString ?? ""
         }
     }
     
@@ -144,6 +145,11 @@ struct ContentView: View {
     
     
     // MARK: - Computed Properties
+    
+    private var lastSelectedVehicle: Vehicle? {
+        guard let uuid = UUID(uuidString: lastSelectedVehicleID) else { return nil }
+        return vehicles.first { $0.id == uuid }
+    }
     
     // Badge number for the app icon
     private var notificationBadgeNumber: Int {
