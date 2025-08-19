@@ -39,7 +39,6 @@
 		9EB025362E4E5CB7008B4AC7 /* Primary.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB025352E4E5CB7008B4AC7 /* Primary.icon */; };
 		9EB0253B2E4E66D3008B4AC7 /* Inverted.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253A2E4E66D3008B4AC7 /* Inverted.icon */; };
 		9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */; };
-		9EE1DAD22E2A9FB000798D29 /* ServiceContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */; };
 		9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */; };
 		9EE5620D2BD9706600F5BE7E /* VehicleListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */; };
 		9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */; };
@@ -143,7 +142,6 @@
 		9EB025352E4E5CB7008B4AC7 /* Primary.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Primary.icon; sourceTree = "<group>"; };
 		9EB0253A2E4E66D3008B4AC7 /* Inverted.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Inverted.icon; sourceTree = "<group>"; };
 		9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Monochrome.icon; sourceTree = "<group>"; };
-		9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceContext.swift; sourceTree = "<group>"; };
 		9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
 		9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListRowView.swift; sourceTree = "<group>"; };
 		9EEAC47B2BA0F9C20053C65E /* SocketCD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocketCD.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -373,7 +371,6 @@
 				9EEAC4D22BA258960053C65E /* Photo+helper.swift */,
 				9EEAC4F62BA37A5C0053C65E /* Repair+helper.swift */,
 				9EEAC5002BA389020053C65E /* Service+helper.swift */,
-				9EE1DAD12E2A9FB000798D29 /* ServiceContext.swift */,
 				9EEAC5022BA389140053C65E /* ServiceRecord+helper.swift */,
 				9EEAC4CC2BA2571E0053C65E /* Vehicle+helper.swift */,
 				9EEAC4AD2BA1F0380053C65E /* View+helper.swift */,
@@ -664,7 +661,6 @@
 				9EEAC4E82BA367A00053C65E /* AddPhotoButton.swift in Sources */,
 				9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */,
 				9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */,
-				9EE1DAD22E2A9FB000798D29 /* ServiceContext.swift in Sources */,
 				9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */,
 				9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */,
 				9EEAC4C12BA24EEC0053C65E /* AppSettings.swift in Sources */,

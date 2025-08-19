@@ -58,6 +58,22 @@ extension Service {
         }
     }
     
+    // Uses a milesPerDay value to estimate how long until a service is due; this helps normalize miles until due and days until due
+    func estimatedDaysUntilDue(currentOdometer: Int, milesPerDay: Int = 30) -> Int? {
+        let now = Date()
+        
+        let daysUntilDue = dateDue.map { Calendar.current.dateComponents([.day], from: now, to: $0).day } ?? nil
+
+        let estimatedDaysUntilOdometerDue = odometerDue.map { max(0, $0 - currentOdometer) / milesPerDay }
+
+        switch (daysUntilDue, estimatedDaysUntilOdometerDue) {
+        case let (d?, e?): return min(d, e)
+        case let (d?, nil): return d
+        case let (nil, e?): return e
+        default: return nil
+        }
+    }
+    
     
     // MARK: - Computed Properties
     
@@ -147,33 +163,120 @@ extension Service {
         }
     }
     
-    // Returns a string that describes when service is next due (or by how much service is overdue). Used on VehicleDashboardView and MaintenanceListView
-    func nextDueDescription(context: ServiceContext) -> String {
-        let settings = AppSettings()
+    func daysUntilDue(from date: Date = .now) -> Int? {
+        guard let dateDue else { return nil }
+        return Calendar.current.dateComponents([.day], from: date, to: dateDue).day
+    }
+
+    func milesUntilDue(currentOdometer: Int) -> Int? {
+        guard let odometerDue else { return nil }
+        return odometerDue - currentOdometer
+    }
+    
+    // Returns progress toward this service as a value between 0 (just reset) and 1 (overdue)
+    func progress(currentOdometer: Int) -> CGFloat {
+       // Distance-based progress
+        let odometerProgress: CGFloat
         
-        switch (context.daysUntilDue, context.milesUntilDue) {
-        case let (d?, m?):
-            if d < 0 && m < 0 {
-                // If both are overdue, pick the one that's *more* overdue
-                return abs(d) >= abs(m) ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
-            } else if d < 0 {
-                return "Overdue by \(pluralize(abs(d), unit: "day"))"
-            } else if m < 0 {
-                return "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
+        if let milesLeft = milesUntilDue(currentOdometer: currentOdometer), distanceInterval > 0 {
+           odometerProgress = max(0, CGFloat(milesLeft) / CGFloat(distanceInterval))
+        } else {
+           odometerProgress = 0
+        }
+
+        // Time-based progress
+        let timeProgress: CGFloat
+        
+        if let daysLeft = daysUntilDue() {
+           let totalDays: CGFloat = monthsInterval ? CGFloat(timeInterval * 30) : CGFloat(timeInterval * 365)
+           timeProgress = max(0, CGFloat(daysLeft) / totalDays)
+        } else {
+           timeProgress = 0
+        }
+
+        // Progress is the greater of the two, capped at 1
+        return min(1, max(odometerProgress, timeProgress))
+    }
+    
+    // Returns a string that describes when service is next due (or by how much service is overdue). Used on VehicleDashboardView and MaintenanceListView
+    func nextDueDescription(currentOdometer: Int) -> String {
+        let settings = AppSettings()
+
+        // Compute values once
+        let days = daysUntilDue() ?? 0
+        let miles = milesUntilDue(currentOdometer: currentOdometer) ?? 0
+
+        // Check if both values exist
+        let hasDays = daysUntilDue() != nil
+        let hasMiles = milesUntilDue(currentOdometer: currentOdometer) != nil
+
+        // Case 1: Both values missing
+        guard hasDays || hasMiles else { return "No Service Logged" }
+
+        // Case 2: Any overdue?
+        if days < 0 && miles < 0 {
+            // Both overdue → pick the larger overdue
+            if abs(days) >= abs(miles) {
+                return "Overdue by \(pluralize(abs(days), unit: "day"))"
             } else {
-                return "Due in \(abs(m).formatted()) \(settings.distanceUnit.abbreviated) or \(pluralize(d, unit: "day"))"
+                return "Overdue by \(abs(miles).formatted()) \(settings.distanceUnit.abbreviated)"
             }
+        } else if days < 0 {
+            return "Overdue by \(pluralize(abs(days), unit: "day"))"
+        } else if miles < 0 {
+            return "Overdue by \(abs(miles).formatted()) \(settings.distanceUnit.abbreviated)"
+        }
 
-        case let (d?, nil):
-            return d < 0 ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Due in \(pluralize(d, unit: "day"))"
-
-        case let (nil, m?):
-            return m < 0 ? "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)" : "Due in \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
-
+        // Case 3: Not overdue
+        switch (hasDays, hasMiles) {
+        case (true, true):
+            return "Due in \(miles.formatted()) \(settings.distanceUnit.abbreviated) or \(pluralize(days, unit: "day"))"
+        case (true, false):
+            return "Due in \(pluralize(days, unit: "day"))"
+        case (false, true):
+            return "Due in \(miles.formatted()) \(settings.distanceUnit.abbreviated)"
         default:
             return "No Service Logged"
         }
     }
+    
+//    func nextDueDescription(currentOdometer: Int) -> String {
+//        let settings = AppSettings()
+//        let currentDate = Date()
+//        
+//        var daysUntilDue: Int? {
+//            guard let dateDue = dateDue else { return nil }
+//            return Calendar.current.dateComponents([.day], from: currentDate, to: dateDue).day
+//        }
+//
+//        var milesUntilDue: Int? {
+//            guard let odometerDue = odometerDue else { return nil }
+//            return odometerDue - currentOdometer
+//        }
+//        
+//        switch (daysUntilDue, milesUntilDue) {
+//        case let (d?, m?):
+//            if d < 0 && m < 0 {
+//                // If both are overdue, pick the one that's *more* overdue
+//                return abs(d) >= abs(m) ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
+//            } else if d < 0 {
+//                return "Overdue by \(pluralize(abs(d), unit: "day"))"
+//            } else if m < 0 {
+//                return "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
+//            } else {
+//                return "Due in \(abs(m).formatted()) \(settings.distanceUnit.abbreviated) or \(pluralize(d, unit: "day"))"
+//            }
+//
+//        case let (d?, nil):
+//            return d < 0 ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Due in \(pluralize(d, unit: "day"))"
+//
+//        case let (nil, m?):
+//            return m < 0 ? "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)" : "Due in \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
+//
+//        default:
+//            return "No Service Logged"
+//        }
+//    }
     
     // Accepts a singular unit type and appends an 's' to make it plural, when appropriate; formats the count, so it displays as users expect
     func pluralize(_ count: Int, unit: String) -> String {

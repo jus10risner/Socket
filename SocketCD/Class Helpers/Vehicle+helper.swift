@@ -71,25 +71,21 @@ extension Vehicle {
         }
     }
     
+    // Returns an array of services, sorted by the order in which they are due (normalized by estimated days until due)
     var sortedServicesArray: [Service] {
         let set = services as? Set<Service> ?? []
         
-        return set.sorted { service1, service2 in
-            let context1 = ServiceContext(service: service1, currentOdometer: odometer)
-            let context2 = ServiceContext(service: service2, currentOdometer: odometer)
-            
-            let priority1 = priority(context: context1)
-            let priority2 = priority(context: context2)
-            
-            switch(priority1, priority2) {
-            case let (p1?, p2?):
-                return p1 < p2 // Lower value means higher priority
+        return set.sorted { s1, s2 in
+            switch (s1.estimatedDaysUntilDue(currentOdometer: odometer),
+                    s2.estimatedDaysUntilDue(currentOdometer: odometer)) {
+            case let (d1?, d2?):
+                return d1 < d2
             case (nil, _?):
                 return false
             case (_?, nil):
                 return true
             case (nil, nil):
-                return service1.name < service2.name
+                return s1.name < s2.name
             }
         }
     }
@@ -258,18 +254,18 @@ extension Vehicle {
     // MARK: - Other Methods
     
     // Calculates the miles or days left until service is due
-    private func priority(context: ServiceContext) -> Int? {
-        switch (context.daysUntilDue, context.milesUntilDue) {
-        case let (d?, m?):
-            return min(d, m)
-        case let (d?, nil):
-            return d
-        case let (nil, m?):
-            return m
-        default:
-            return nil
-        }
-    }
+//    private func priority(context: ServiceContext) -> Int? {
+//        switch (context.daysUntilDue, context.milesUntilDue) {
+//        case let (d?, m?):
+//            return min(d, m)
+//        case let (d?, nil):
+//            return d
+//        case let (nil, m?):
+//            return m
+//        default:
+//            return nil
+//        }
+//    }
     
     // Checks to see when all notifications are due for this vehicle, and schedules them if necessary
     func updateAllServiceNotifications() {

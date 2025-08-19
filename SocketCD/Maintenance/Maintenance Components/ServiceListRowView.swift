@@ -72,7 +72,7 @@ struct ServiceListRowView: View {
                     .font(.subheadline)
                     .foregroundStyle(Color.secondary)
             } else {
-                Text(service.nextDueDescription(context: ServiceContext(service: service, currentOdometer: vehicle.odometer)))
+                Text(service.nextDueDescription(currentOdometer: vehicle.odometer))
                     .font(.subheadline)
                     .foregroundStyle(Color.secondary)
             }
