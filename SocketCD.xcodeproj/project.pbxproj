@@ -309,6 +309,15 @@
 			path = Icons;
 			sourceTree = "<group>";
 		};
+		9EB025402E54C7AC008B4AC7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9EEAC4AD2BA1F0380053C65E /* SwiftUIExtensions.swift */,
+				9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		9EEAC4722BA0F9C20053C65E = {
 			isa = PBXGroup;
 			children = (
@@ -344,6 +353,7 @@
 				9EEAC4942BA1E87D0053C65E /* Class Helpers */,
 				9E189E2D2BD00C3800095EC2 /* UIKit Views */,
 				9E189E302BD0100900095EC2 /* Misc. */,
+				9EB025402E54C7AC008B4AC7 /* Extensions */,
 				9EEAC48F2BA1036F0053C65E /* DataController.swift */,
 				9EEAC4972BA1E99F0053C65E /* Enums.swift */,
 				9EEAC48C2BA0FA280053C65E /* SocketDataModel.xcdatamodeld */,
@@ -373,8 +383,6 @@
 				9EEAC5002BA389020053C65E /* Service+helper.swift */,
 				9EEAC5022BA389140053C65E /* ServiceRecord+helper.swift */,
 				9EEAC4CC2BA2571E0053C65E /* Vehicle+helper.swift */,
-				9EEAC4AD2BA1F0380053C65E /* SwiftUIExtensions.swift */,
-				9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */,
 			);
 			path = "Class Helpers";
 			sourceTree = "<group>";
