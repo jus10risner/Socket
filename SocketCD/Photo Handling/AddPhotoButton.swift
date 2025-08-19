@@ -42,8 +42,8 @@ struct AddPhotoButton: View {
                 Text("Add Photo")
             } icon: {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 5]))
+                    RoundedRectangle.adaptive
+                        .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
                         .background(Color.clear)
                     
                     Image(systemName: "camera")

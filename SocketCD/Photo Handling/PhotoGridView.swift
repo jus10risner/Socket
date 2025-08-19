@@ -41,7 +41,7 @@ struct PhotoGridView: View {
         LazyVGrid(columns: columns, spacing: 5) {
             ForEach(photos, id: \.id) { photo in
                 ZStack(alignment: .topTrailing) {
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle.adaptive
                         .fill(Color.clear)
                         .aspectRatio(1.5, contentMode: .fit)
                         .overlay(
@@ -49,9 +49,9 @@ struct PhotoGridView: View {
                                 .resizable()
                                 .scaledToFill()
                         )
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle.adaptive)
                         .overlay {
-                            RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle.adaptive
                                 .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
                         }
                         .onTapGesture {

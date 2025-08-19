@@ -50,7 +50,7 @@
 		9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4992BA1ED8C0053C65E /* AppearanceController.swift */; };
 		9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC49B2BA1EE440053C65E /* AppSettingsView.swift */; };
 		9EEAC4A72BA1EF720053C65E /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4A62BA1EF720053C65E /* ActivityView.swift */; };
-		9EEAC4AE2BA1F0380053C65E /* View+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4AD2BA1F0380053C65E /* View+helper.swift */; };
+		9EEAC4AE2BA1F0380053C65E /* SwiftUIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4AD2BA1F0380053C65E /* SwiftUIExtensions.swift */; };
 		9EEAC4B32BA1F08F0053C65E /* CameraCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4B22BA1F08F0053C65E /* CameraCapture.swift */; };
 		9EEAC4B52BA1F0A50053C65E /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4B42BA1F0A50053C65E /* CameraManager.swift */; };
 		9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4B62BA1F0CE0053C65E /* ImageViewer.swift */; };
@@ -154,7 +154,7 @@
 		9EEAC4992BA1ED8C0053C65E /* AppearanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceController.swift; sourceTree = "<group>"; };
 		9EEAC49B2BA1EE440053C65E /* AppSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
 		9EEAC4A62BA1EF720053C65E /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
-		9EEAC4AD2BA1F0380053C65E /* View+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+helper.swift"; sourceTree = "<group>"; };
+		9EEAC4AD2BA1F0380053C65E /* SwiftUIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIExtensions.swift; sourceTree = "<group>"; };
 		9EEAC4B22BA1F08F0053C65E /* CameraCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCapture.swift; sourceTree = "<group>"; };
 		9EEAC4B42BA1F0A50053C65E /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		9EEAC4B62BA1F0CE0053C65E /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
@@ -373,7 +373,7 @@
 				9EEAC5002BA389020053C65E /* Service+helper.swift */,
 				9EEAC5022BA389140053C65E /* ServiceRecord+helper.swift */,
 				9EEAC4CC2BA2571E0053C65E /* Vehicle+helper.swift */,
-				9EEAC4AD2BA1F0380053C65E /* View+helper.swift */,
+				9EEAC4AD2BA1F0380053C65E /* SwiftUIExtensions.swift */,
 				9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */,
 			);
 			path = "Class Helpers";
@@ -617,7 +617,7 @@
 				9E7507592BF68C84000E25BD /* EmptyVehicleListView.swift in Sources */,
 				9E9C05AA2E218B2A00E9C0E2 /* ServiceIndicatorView.swift in Sources */,
 				9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */,
-				9EEAC4AE2BA1F0380053C65E /* View+helper.swift in Sources */,
+				9EEAC4AE2BA1F0380053C65E /* SwiftUIExtensions.swift in Sources */,
 				9EEAC4FB2BA37FDB0053C65E /* RepairDetailView.swift in Sources */,
 				9EEAC4812BA0F9C20053C65E /* ContentView.swift in Sources */,
 				9EEAC4FF2BA388D50053C65E /* Fillup+helper.swift in Sources */,
