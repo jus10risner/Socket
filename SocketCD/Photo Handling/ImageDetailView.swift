@@ -54,7 +54,8 @@ struct ImageDetailView: View {
     
     // Creates a URL for the selected image, for sharing
     func createImageURL() async {
-        let fileName = "Image.jpg"
+        let formatter = DateFormatter()
+        let fileName = "image-\(formatter.string(from: Date())).jpg"
         let tempDirectory = NSTemporaryDirectory()
         let fileURL = URL(fileURLWithPath: tempDirectory, isDirectory: true).appendingPathComponent(fileName)
         
@@ -65,7 +66,6 @@ struct ImageDetailView: View {
         
         do {
             try imageData.write(to: fileURL)
-            print(fileURL)
             imageURL = fileURL
         } catch {
             print("Failed to create file: \(error)")
