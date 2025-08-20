@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ServiceIndicatorView: View {
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
     @ObservedObject var service: Service
     
@@ -19,7 +18,7 @@ struct ServiceIndicatorView: View {
             .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
             .frame(width: 30)
             .overlay {
-                if service.progress(currentOdometer: vehicle.odometer) > 0 {
+                if service.sortedServiceRecordsArray.count > 0 {
                     switch service.serviceStatus {
                     case .overDue:
                         ZStack {
@@ -39,39 +38,14 @@ struct ServiceIndicatorView: View {
                     }
                 }
             }
-            .animation(.easeInOut(duration: 0.5), value: remainingValue)
+            .animation(.easeInOut(duration: 0.5).delay(0.5), value: remainingValue)
             .task(id: vehicle.odometer) {
-                try? await Task.sleep(for: .seconds(0.5))
+                remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
+            }
+            .task(id: service.serviceRecords?.count) {
                 remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
             }
     }
-    
-    // Calculates progress toward next maintenance service
-//    private var progress: CGFloat {
-//        var odometerProgress: CGFloat = 0
-//        var timeProgress: CGFloat = 0
-//        
-//        if let odometerDue = service.odometerDue {
-//            let milesLeft = CGFloat(odometerDue - vehicle.odometer)
-//            odometerProgress = max(0, milesLeft / CGFloat(service.distanceInterval))
-//        }
-//        
-//        if let dateDue = service.dateDue {
-//            let daysLeft = CGFloat(Calendar.current.dateComponents([.day], from: Date.now, to: dateDue).day ?? 0)
-//            var totalDays: CGFloat
-//            
-//            if service.monthsInterval == true {
-//                totalDays = CGFloat(service.timeInterval * 30)
-//            } else {
-//                totalDays = CGFloat(service.timeInterval * 365)
-//            }
-//            
-//            timeProgress = max(0, daysLeft / totalDays)
-//        }
-//        
-//        // Returns the greater of odomterProgress or timeProgress, or 1, if service is overdue
-//        return min(1, max(odometerProgress, timeProgress))
-//    }
 }
 
 #Preview {
@@ -83,5 +57,4 @@ struct ServiceIndicatorView: View {
     service.vehicle = vehicle
     
     return ServiceIndicatorView(vehicle: vehicle, service: service)
-        .environmentObject(AppSettings())
 }

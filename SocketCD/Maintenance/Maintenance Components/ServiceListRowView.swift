@@ -10,7 +10,7 @@ import SwiftUI
 struct ServiceListRowView: View {
     @EnvironmentObject var settings: AppSettings
     @ObservedObject var service: Service
-    let vehicle: Vehicle
+    @ObservedObject var vehicle: Vehicle
     
     @State private var selectedService: Service?
     

@@ -22,7 +22,7 @@ struct MaintenanceListView: View {
         self.vehicle = vehicle
         self._services = FetchRequest(
             entity: Service.entity(),
-            sortDescriptors: [NSSortDescriptor(keyPath: \Service.name_, ascending: true)],
+            sortDescriptors: [],
             predicate: NSPredicate(format: "vehicle == %@", vehicle)
         )
     }
