@@ -27,7 +27,7 @@ struct AddPhotoButton: View {
 //                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 showingPhotosPicker = true
             } label: {
-                Label("Choose Photo", systemImage: "photo.on.rectangle")
+                Label("Choose Photos", systemImage: "photo.on.rectangle")
             }
             
             Button {
