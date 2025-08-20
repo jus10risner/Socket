@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ServiceIndicatorView: View {
     @EnvironmentObject var settings: AppSettings
-    let vehicle: Vehicle
+    @ObservedObject var vehicle: Vehicle
     @ObservedObject var service: Service
     
     @State private var remainingValue: CGFloat = 0.0
@@ -40,11 +40,9 @@ struct ServiceIndicatorView: View {
                 }
             }
             .animation(.easeInOut(duration: 0.5), value: remainingValue)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
-                    
-                }
+            .task(id: vehicle.odometer) {
+                try? await Task.sleep(for: .seconds(0.5))
+                remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
             }
     }
     
