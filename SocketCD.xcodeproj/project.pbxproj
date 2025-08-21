@@ -65,7 +65,6 @@
 		9EEAC4D32BA258960053C65E /* Photo+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D22BA258960053C65E /* Photo+helper.swift */; };
 		9EEAC4D72BA332E50053C65E /* VehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D62BA332E50053C65E /* VehicleListView.swift */; };
 		9EEAC4DF2BA343B00053C65E /* EditVehicleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */; };
-		9EEAC4E12BA360E80053C65E /* VehicleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */; };
 		9EEAC4E62BA364AA0053C65E /* CustomInfo+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E52BA364AA0053C65E /* CustomInfo+helper.swift */; };
 		9EEAC4E82BA367A00053C65E /* AddPhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E72BA367A00053C65E /* AddPhotoButton.swift */; };
 		9EEAC4EC2BA3749E0053C65E /* PhotoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4EB2BA3749E0053C65E /* PhotoGridView.swift */; };
@@ -169,7 +168,6 @@
 		9EEAC4D22BA258960053C65E /* Photo+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+helper.swift"; sourceTree = "<group>"; };
 		9EEAC4D62BA332E50053C65E /* VehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListView.swift; sourceTree = "<group>"; };
 		9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVehicleView.swift; sourceTree = "<group>"; };
-		9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleInfoView.swift; sourceTree = "<group>"; };
 		9EEAC4E52BA364AA0053C65E /* CustomInfo+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomInfo+helper.swift"; sourceTree = "<group>"; };
 		9EEAC4E72BA367A00053C65E /* AddPhotoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoButton.swift; sourceTree = "<group>"; };
 		9EEAC4EB2BA3749E0053C65E /* PhotoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridView.swift; sourceTree = "<group>"; };
@@ -427,7 +425,6 @@
 			children = (
 				9EEAC4D62BA332E50053C65E /* VehicleListView.swift */,
 				9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */,
-				9EEAC4E02BA360E80053C65E /* VehicleInfoView.swift */,
 				9EEAC4CA2BA256570053C65E /* AddVehicleView.swift */,
 				9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */,
 				9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */,
@@ -632,7 +629,6 @@
 				9EEAC52A2BA4CBB40053C65E /* RecordDetailView.swift in Sources */,
 				9EEAC52C2BA4CD150053C65E /* AddEditRecordView.swift in Sources */,
 				9E9ED3A62E12E7BF00EB89F8 /* FuelEconomyChartView.swift in Sources */,
-				9EEAC4E12BA360E80053C65E /* VehicleInfoView.swift in Sources */,
 				9E328E122E3CF7A600FF25B5 /* LabeledInput.swift in Sources */,
 				9EEAC4C62BA253950053C65E /* WelcomeView.swift in Sources */,
 				9EEAC4DF2BA343B00053C65E /* EditVehicleView.swift in Sources */,
