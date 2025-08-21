@@ -46,8 +46,6 @@ struct VehicleDashboardView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-//                vehicleInfo
-                
                 LazyVGrid(columns: columns, spacing: 5) {
                     maintenanceDashboardCard
                     
@@ -56,7 +54,7 @@ struct VehicleDashboardView: View {
                     HStack(spacing: 5) {
                         repairsDashboardCard
                         
-                        vehicleDashboardCard
+                        odometerDashboardCard
                     }
                 }
                 .padding(.bottom, 30)
@@ -115,7 +113,7 @@ struct VehicleDashboardView: View {
         }
     }
     
-    private var vehicleDashboardCard: some View {
+    private var odometerDashboardCard: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
                 HStack(spacing: 3) {
@@ -469,18 +467,10 @@ struct ShareItem: Identifiable {
     let url: URL
 }
 
-enum ActiveSheet: Identifiable {
+enum ActiveSheet: String, Identifiable {
     case addService, addRepair, addFillup, addCustomInfo, editVehicle
     
-    var id: String {
-        switch self {
-        case .addService: return "addService"
-        case .addRepair: return "addRepair"
-        case .addFillup: return "addFillup"
-        case .addCustomInfo : return "addCustomInfo"
-        case .editVehicle: return "editVehicle"
-        }
-    }
+    var id: String { rawValue }
 }
 
 #Preview {
