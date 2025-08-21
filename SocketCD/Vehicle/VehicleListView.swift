@@ -60,6 +60,7 @@ struct VehicleListView: View {
 //        .scrollContentBackground(.hidden)
 //        .background(Color(.customBackground))
         .navigationTitle("Vehicles")
+        .navigationBarTitleDisplayMode(.large)
         .listRowSpacing(5)
 //        .onAppear {
 //            if vehicles.count == 1 && settings.onboardingTipsAlreadyPresented == false {
