@@ -14,6 +14,7 @@ struct VehicleDashboardView: View {
     @Binding var selectedVehicle: Vehicle? // Used primarily to dismiss this view if the vehicle is deleted
     
     @FetchRequest var fillups: FetchedResults<Fillup>
+    @FetchRequest var services: FetchedResults<Service>
     
     init(vehicle: Vehicle, selectedVehicle: Binding<Vehicle?>) {
         _draftVehicle = StateObject(wrappedValue: DraftVehicle(vehicle: vehicle))
@@ -24,6 +25,11 @@ struct VehicleDashboardView: View {
             sortDescriptors: [NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)],
             predicate: NSPredicate(format: "vehicle == %@", vehicle)
         )
+        self._services = FetchRequest(
+            entity: Service.entity(),
+            sortDescriptors: [],
+            predicate: NSPredicate(format: "vehicle == %@", vehicle)
+        )
     }
     
     @State private var selectedSection: AppSection?
@@ -31,55 +37,46 @@ struct VehicleDashboardView: View {
     @State private var showingUpdateOdometerAlert = false
     @State private var showingDeleteAlert = false
     
-    @State private var odometerValue = ""
     @State private var exportURL: URL?
-    @State private var showingShareSheet = false
+    @State private var shareItem: ShareItem?
     @State private var showingPageSizeSelector = false
     
-    let columns: [GridItem] = {
-        [GridItem(.adaptive(minimum: 300), spacing: 5)]
-    }()
+    let columns = [GridItem(.adaptive(minimum: 300), spacing: 5)]
     
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    LazyVGrid(columns: columns, spacing: 5) {
-                        maintenanceDashboardCard
+            ScrollView {
+//                vehicleInfo
+                
+                LazyVGrid(columns: columns, spacing: 5) {
+                    maintenanceDashboardCard
+                    
+                    fuelEconomyDashboardCard
+                    
+                    HStack(spacing: 5) {
+                        repairsDashboardCard
                         
-                        fuelEconomyDashboardCard
-                        
-                        quickAddDashboardCard
+                        vehicleDashboardCard
                     }
                 }
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
+                .padding(.bottom, 30)
                 
-                Section("Records") {
-                    ForEach(AppSection.allCases, id: \.self) { section in
-                        NavigationLink {
-                            destinationView(for: section, vehicle: vehicle)
-                        } label: {
-                            sectionLabel(section: section)
-                        }
-                    }
-                }
-                .headerProminence(.increased)
-                
-                vehicleInfo
+                customInfo
             }
-//            .listRowSpacing(5)
-//            .listStyle(.insetGrouped)
-            //            }
-            //            .background(Color(.systemGroupedBackground))
+            .padding(.horizontal)
             .scrollContentBackground(.hidden)
-            .background {
-                LinearGradient(colors: [Color.indigo.opacity(0.5), Color(.systemGroupedBackground), Color(.systemGroupedBackground), Color(.systemGroupedBackground)], startPoint: .top, endPoint: .bottom)
-                    .background(.ultraThinMaterial)
-                    .ignoresSafeArea()
-            }
+            .background(GradientBackground())
             .navigationTitle(vehicle.name)
+            .navigationDestination(item: $selectedSection, destination: { section in
+                switch section {
+                case .maintenance:
+                    destinationView(for: .maintenance, vehicle: vehicle)
+                case .repairs:
+                    destinationView(for: .repairs, vehicle: vehicle)
+                case .fillups:
+                    destinationView(for: .fillups, vehicle: vehicle)
+                }
+            })
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
                 case .addService:
@@ -100,17 +97,207 @@ struct VehicleDashboardView: View {
                 
                 }
             }
+            .sheet(item: $shareItem) { item in
+                ActivityView(activityItems: [item.url])
+            }
             .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
                 TextField("New Odometer Reading", value: $draftVehicle.odometer, format: .number.decimalSeparator(strategy: .automatic))
                     .multilineTextAlignment(.center)
                     .keyboardType(.numberPad)
                 Button("Cancel", role: .cancel) { }
-                Button("OK") {
+                Button("Save") {
                     vehicle.updateAndSave(draftVehicle: draftVehicle)
                 }
-            }, message: {
-                Text("Enter the current odometer reading for \(vehicle.name).")
             })
+            .toolbar {
+                vehicleToolbar
+            }
+        }
+    }
+    
+    private var vehicleDashboardCard: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                HStack(spacing: 3) {
+                    Image(systemName: "car.fill")
+                        .frame(width: 20)
+                    
+                    Text("Odometer")
+                }
+                .foregroundStyle(settings.accentColor(for: .appTheme))
+                .font(.subheadline.bold())
+                .accessibilityLabel("Odometer")
+                
+                Spacer()
+            }
+            
+            HStack {
+                Text("\(vehicle.odometer.formatted())")
+                    .font(.title3.bold())
+                
+                Spacer()
+                
+                Button("Update Odometer", systemImage: "pencil.circle.fill") { showingUpdateOdometerAlert = true }
+                    .symbolRenderingMode(.hierarchical)
+                    .labelStyle(.iconOnly)
+                    .font(.title)
+                    .tint(settings.accentColor(for: .appTheme))
+            }
+        }
+        .padding()
+        .frame(maxHeight: .infinity)
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
+        .contentShape(Rectangle())
+    }
+    
+    private var maintenanceDashboardCard: some View {
+        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log") {
+            activeSheet = .addService
+        } content: {
+            if let service = nextDueService {
+                HStack {
+                    ServiceIndicatorView(vehicle: vehicle, service: service)
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(service.name)
+                            .font(.title3.bold())
+
+                        Text(service.nextDueDescription(currentOdometer: vehicle.odometer))
+                            .font(.footnote)
+                            .foregroundStyle(Color.secondary)
+                    }
+                }
+            }
+        }
+        .onTapGesture {
+            selectedSection = .maintenance
+        }
+    }
+    
+    private var fuelEconomyDashboardCard: some View {
+        DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme), buttonLabel: "Add Fill-up") {
+            activeSheet = .addFillup
+        } content: {
+            if let fillup = vehicle.sortedFillupsArray.first {
+                HStack {
+                    if fillups.count > 1 {
+                        TrendArrowView(fillups: fillups)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Latest Fill-up")
+                            .font(.footnote)
+                            .foregroundStyle(Color.secondary)
+                        
+                        Text("\(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
+                            .font(.title3.bold())
+                    }
+                }
+            }
+        }
+        .onTapGesture {
+            selectedSection = .fillups
+        }
+    }
+    
+    private var repairsDashboardCard: some View {
+        DashboardCard(title: "Repairs", systemImage: "wrench.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair") {
+            activeSheet = .addRepair
+        } content: {
+            EmptyView()
+        }
+        .onTapGesture {
+            selectedSection = .repairs
+        }
+    }
+    
+    private var customInfo: some View {
+        VStack(alignment: .leading) {
+            Text("Custom Info")
+                .font(.headline)
+                .padding(.leading)
+            
+            LazyVGrid(columns: columns, spacing: 5) {
+                if !vehicle.sortedCustomInfoArray.isEmpty {
+                    ForEach(vehicle.sortedCustomInfoArray, id: \.id) { customInfo in
+                        NavigationLink {
+                            CustomInfoDetailView(customInfo: customInfo)
+                        } label: {
+                            HStack {
+                                Text(customInfo.label)
+                                
+                                Spacer()
+                                
+                                Image(systemName: "chevron.right")
+                                    .font(.footnote)
+                                    .foregroundStyle(Color.secondary)
+                            }
+                        }
+                        .padding()
+                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
+                    }
+                } else {
+                    Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.secondary)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
+                }
+                
+                Button {
+                    activeSheet = .addCustomInfo
+                } label: {
+                    Label("Add Info", systemImage: "plus")
+                        .foregroundStyle(settings.accentColor(for: .appTheme))
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background {
+                            RoundedRectangle.adaptive
+                                .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
+                        }
+                }
+            }
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var vehicleToolbar: some ToolbarContent {
+        ToolbarItemGroup(placement: .primaryAction) {
+            Menu {
+                Button("Edit Vehicle", systemImage: "pencil") {
+                    activeSheet = .editVehicle
+                }
+                
+                exportMenu
+                
+                Section {
+                    Button("Delete Vehicle", systemImage: "trash", role: .destructive) {
+                        showingDeleteAlert = true
+                    }
+                }
+            } label: {
+                Label("Vehicle Options", systemImage: "ellipsis")
+            }
+            .confirmationDialog("Which paper size do you prefer?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
+                Button("A4") {
+                    Task {
+                        if let exportURL = PDFExporter.export(vehicle: vehicle, paperSize: .a4) {
+                            shareItem = ShareItem(url: exportURL)
+                        }
+                    }
+                }
+                
+                Button("US Letter") {
+                    Task {
+                        if let exportURL = PDFExporter.export(vehicle: vehicle, paperSize: .usLetter) {
+                            shareItem = ShareItem(url: exportURL)
+                        }
+                    }
+                }
+                
+                Button("Cancel", role: .cancel) { }
+            }
             .confirmationDialog("Permanently delete \(vehicle.name) and all of its records? \nThis action cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
                 Button("Delete", role: .destructive) {
                     DataController.shared.delete(vehicle)
@@ -119,302 +306,47 @@ struct VehicleDashboardView: View {
                 
                 Button("Cancel", role: .cancel) { }
             }
-            // Sheet wasn't loading the url on first launch of ActivityView; manual getter/setter resolves the issue
-              .sheet(isPresented: Binding(
-                  get: { showingShareSheet },
-                  set: { showingShareSheet = $0 }
-              )) {
-                  if let exportURL {
-                      ActivityView(activityItems: [exportURL])
-                  }
-              }
-            .confirmationDialog("Which paper size do you prefer?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
-                Button("A4") {
-                    Task {
-                        exportURL = PDFExporter.export(vehicle: vehicle, paperSize: .a4)
-                        showingShareSheet = true
-                    }
-                }
-                
-                Button("US Letter") {
-                    Task {
-                        exportURL = PDFExporter.export(vehicle: vehicle, paperSize: .usLetter)
-                        showingShareSheet = true
-                    }
-                }
-                
-                Button("Cancel", role: .cancel) { }
-            }
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button {
-                            activeSheet = .editVehicle
-                        } label: {
-                            Label("Edit Vehicle", systemImage: "pencil")
-                        }
-                        
-                        exportMenu
-                        
-                        Section {
-                            Button(role: .destructive) {
-                                showingDeleteAlert = true
-                            } label: {
-                                Label("Delete Vehicle", systemImage: "trash")
-                            }
-                        }
-                    } label: {
-                        Label("Vehicle Options", systemImage: "ellipsis.circle")
-                    }
+        }
+    }
+    
+    private func csvExportButton(_ action: @escaping () async -> URL?) -> some View {
+        Button("CSV", systemImage: "tablecells") {
+            Task {
+                if let exportURL = await action() {
+                    shareItem = ShareItem(url: exportURL)
                 }
             }
         }
     }
     
-    var vehicleInfo: some View {
-        Section {
-            if vehicle.sortedCustomInfoArray.isEmpty {
-                VStack(spacing: 20) {
-                    Text("Add things like your vehicle's VIN or license plate number here, for easy reference.")
-                        .foregroundStyle(Color.secondary)
-                    
-                    //                            HStack(spacing: 3) {
-                    //                                Text("Tap")
-                    //
-                    //                                addInfoButton
-                    //
-                    //                                Text("to add vehicle info")
-                    //                            }
-                    //                            .frame(maxWidth: .infinity)
-                }
-                .font(.subheadline)
-                .padding(.horizontal, 5)
-                .padding(.vertical, 20)
-            } else {
-                ForEach(vehicle.sortedCustomInfoArray, id: \.id) { customInfo in
-                    NavigationLink {
-                        CustomInfoDetailView(customInfo: customInfo)
-                    } label: {
-                        Text(customInfo.label)
-                    }
-                }
-            }
-        } header: {
-            HStack {
-                Text("Custom Info")
-                
-                Spacer()
-                
-                Button {
-                    activeSheet = .addCustomInfo
-                } label: {
-                    Label("Add Custom Info", systemImage: "plus.circle.fill")
-                        .labelStyle(.iconOnly)
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.white, settings.accentColor(for: .appTheme))
-                }
-            }
-        }
-        .headerProminence(.increased)
-    }
-    
-    var maintenanceDashboardCard: some View {
-        DashboardCardView(title: "Next Service Due", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme)) {
-            Group {
-                if let service = vehicle.sortedServicesArray.first {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(service.name)
-                                .font(.title3.bold())
-                            
-                            Text(service.nextDueDescription(context: ServiceContext(service: service, currentOdometer: vehicle.odometer)))
-                                .font(.footnote)
-                                .foregroundStyle(Color.secondary)
-                        }
-                        
-                        Spacer()
-                        
-                        ServiceIndicatorView(vehicle: vehicle, service: service)
-                    }
-                } else {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("Nothing to see here...")
-                            .font(.title3)
-                        
-                        Text("Log a maintenance service to see when it's due next.")
-                            .font(.footnote)
-                            
-                    }
-                    .foregroundStyle(Color.secondary)
-                }
-            }
-        }
-    }
-    
-    var fuelEconomyDashboardCard: some View {
-        DashboardCardView(title: "Latest Fill-up", systemImage: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme)) {
-            Group {
-                if let fillup = vehicle.sortedFillupsArray.first {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                                Text("\(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
-                                    .font(.title3.bold())
-                            }
-                            
-                            Text(fillup.date.formatted(date: .numeric, time: .omitted))
-                                .font(.footnote)
-                                .foregroundStyle(Color.secondary)
-                        }
-                        
-                        Spacer()
-                        
-                        if fillups.count > 1 {
-                            TrendArrowView(fillups: fillups)
-                        }
-                    }
-                } else {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("Not Enough Info")
-                            .font(.title3)
-                        
-                        Text("Add some fill-ups to see your latest fuel economy.")
-                            .font(.footnote)
-                            
-                    }
-                    .foregroundStyle(Color.secondary)
-                }
-            }
-        }
-    }
-    
-    var quickAddDashboardCard: some View {
-        DashboardCardView(title: "Quick Actions", systemImage: "road.lanes", accentColor: settings.accentColor(for: .appTheme)) {
-            quickActionButtons
-        }
-    }
-    
-    // Menu, including buttons for exporting/sharing vehicle records. iOS 15 doesn't display section headers in menus, so there's some conditional logic for showing the appropriate header style
+    // Menu, including buttons for exporting/sharing vehicle records.
     private var exportMenu: some View {
         Menu {
             Section("Maintenance & Repairs") {
-                Button {
+                Button("PDF", systemImage: "doc") {
                     showingPageSizeSelector = true
-                } label: {
-                    Label("PDF", systemImage: "doc")
                 }
                 
-                Button {
-                    Task {
-                        exportURL = CSVExporter.exportServicesAndRepairs(for: vehicle)
-                        showingShareSheet = true
-                    }
-                } label: {
-                    Label("CSV", systemImage: "tablecells")
-                }
+                csvExportButton { CSVExporter.exportServicesAndRepairs(for: vehicle) }
             }
             .accessibilityHint("Export maintenance and repair records for this vehicle")
             
             Section("Fill-ups") {
-                Button {
-                    Task {
-                        exportURL = CSVExporter.exportFillups(for: vehicle)
-                        showingShareSheet = true
-                    }
-                } label: {
-                    Label("CSV", systemImage: "tablecells")
-                }
+                csvExportButton { CSVExporter.exportFillups(for: vehicle) }
             }
             .accessibilityHint("Export fill-up records for this vehicle")
             
             Section("All Records") {
-                Button {
-                    Task {
-                        exportURL = CSVExporter.exportAllRecords(for: vehicle)
-                        showingShareSheet = true
-                    }
-                } label: {
-                    Label("CSV", systemImage: "tablecells")
-                }
+                csvExportButton { CSVExporter.exportAllRecords(for: vehicle) }
             }
             .accessibilityHint("Export all maintenance, repair, and fill-up records for this vehicle")
         } label: {
-            Label("Export", systemImage: "square.and.arrow.up")
+            Label("Export Records", systemImage: "square.and.arrow.up")
         }
-    }
-    
-    private func sectionLabel(section: AppSection) -> some View {
-//        Label {
-            Text(section.rawValue.capitalized)
-//                .foregroundStyle(Color.primary)
-//        } icon: {
-//            Image(systemName: section.symbol)
-//        }
-//        .foregroundStyle(settings.accentColor(for: section.theme))
-    }
-    
-    private var quickActionButtons: some View {
-        let columns: [GridItem] = {[GridItem(.adaptive(minimum: 150), spacing: 10)]}()
-        
-        return LazyVGrid(columns: columns, spacing: 10) {
-            QuickAddButton(accent: settings.accentColor(for: .maintenanceTheme)) {
-                activeSheet = .addService
-            } label: {
-                HStack(spacing: 5) {
-                    Image(systemName: "plus")
-                        .font(.headline)
-                        .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
-                    
-                    Text("Maintenance")
-                }
-                .accessibilityLabel("Add Maintenance Service")
-            }
-
-            QuickAddButton(accent: settings.accentColor(for: .repairsTheme)) {
-                activeSheet = .addRepair
-            } label: {
-                HStack(spacing: 5) {
-                    Image(systemName: "plus")
-                        .font(.headline)
-                        .foregroundStyle(settings.accentColor(for: .repairsTheme))
-                    
-                    Text("Repair")
-                }
-                .accessibilityLabel("Add Repair")
-            }
-
-            QuickAddButton(accent: settings.accentColor(for: .fillupsTheme)) {
-                activeSheet = .addFillup
-            } label: {
-                HStack(spacing: 5) {
-                    Image(systemName: "plus")
-                        .font(.headline)
-                        .foregroundStyle(settings.accentColor(for: .fillupsTheme))
-                    
-                    Text("Fill-up")
-                }
-                .accessibilityLabel("Add Fill-up")
-            }
-            
-            QuickAddButton(accent: settings.accentColor(for: .appTheme)) {
-                showingUpdateOdometerAlert = true
-            } label: {
-                HStack(spacing: 5) {
-                    Image(systemName: "pencil")
-                        .font(.headline)
-                        .foregroundStyle(settings.accentColor(for: .appTheme))
-                    
-                    Text("Odometer")
-                }
-                .accessibilityLabel("Update Odometer")
-            }
-        }
-        .buttonStyle(.plain)
-        .listRowBackground(Color.clear)
     }
     
     @ViewBuilder
-    func destinationView(for section: AppSection, vehicle: Vehicle) -> some View {
+    private func destinationView(for section: AppSection, vehicle: Vehicle) -> some View {
         switch section {
         case .maintenance:
             MaintenanceListView(vehicle: vehicle)
@@ -427,50 +359,114 @@ struct VehicleDashboardView: View {
                 .tint(settings.accentColor(for: section.theme))
         }
     }
+    
+    // Returns the next service due (or most overdue)
+    private var nextDueService: Service? {
+        services.sorted {
+            switch ($0.estimatedDaysUntilDue(currentOdometer: vehicle.odometer),
+                    $1.estimatedDaysUntilDue(currentOdometer: vehicle.odometer)) {
+            case let (d1?, d2?):
+                return d1 < d2
+            case (nil, _?):
+                return false
+            case (_?, nil):
+                return true
+            case (nil, nil):
+                return $0.name < $1.name
+            }
+        }
+        .first
+    }
 }
 
-struct DashboardCardView<Content: View>: View {
+struct DashboardCard<Content: View>: View {
     let title: String
     let systemImage: String
     let accentColor: Color
-    let content: () -> Content
+    let buttonLabel: String
+    let quickAction: () -> Void
+    let content: Content?
+    
+    init(title: String, systemImage: String, accentColor: Color, buttonLabel: String, quickAction: @escaping () -> Void, @ViewBuilder content: () -> Content? = { nil }) {
+        self.title = title
+        self.systemImage = systemImage
+        self.accentColor = accentColor
+        self.buttonLabel = buttonLabel
+        self.quickAction = quickAction
+        self.content = content()
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label(title, systemImage: systemImage)
-                .labelStyle(.titleOnly)
-                .font(.headline)
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                HStack(spacing: 3) {
+                    Image(systemName: systemImage)
+                        .frame(width: 20)
+                    
+                    Text(title)
+                }
                 .foregroundStyle(accentColor)
-
-            content()
+                .font(.subheadline.bold())
+                .accessibilityLabel(title)
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.footnote)
+                    .foregroundStyle(Color.secondary)
+            }
+            
+            HStack(alignment: .bottom) {
+                if let content {
+                    content
+                }
+                
+                Spacer()
+                
+                Button(buttonLabel, systemImage: "plus.circle.fill", action: quickAction)
+                    .symbolRenderingMode(.hierarchical)
+                    .labelStyle(.iconOnly)
+                    .font(.title)
+                    .tint(accentColor)
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
+        .frame(maxHeight: .infinity)
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
+        .contentShape(Rectangle())
     }
 }
 
-struct QuickAddButton<Label: View>: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    let accent: Color
-    let action: () -> Void
-    let label: () -> Label
-
+// Creates a gradient background, with backgroundExtensionEffect applied on iOS 26+ (for iPad use)
+struct GradientBackground: View {
     var body: some View {
-        Button(action: action) {
-            label()
-//                .foregroundStyle(accent)
-                .padding(.vertical, 10)
-                .frame(maxWidth: .infinity)
-                .contentShape(Capsule())
+        let gradient = LinearGradient(
+            colors: [
+                Color.indigo.opacity(0.5),
+                Color(.systemGroupedBackground),
+                Color(.systemGroupedBackground),
+                Color(.systemGroupedBackground)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+
+        Group {
+            if #available(iOS 26, *) {
+                gradient.backgroundExtensionEffect()
+            } else {
+                gradient
+            }
         }
-        .background {
-            Capsule()
-                .fill(Color(.tertiarySystemGroupedBackground))
-//                .stroke(accent, lineWidth: 1)
-        }
+        .background(.ultraThinMaterial)
+        .ignoresSafeArea()
     }
+}
+
+// Allows ActivityView to work with the .sheet(item:) modifier (requires a URL with Identifiable conformance)
+struct ShareItem: Identifiable {
+    let id = UUID()
+    let url: URL
 }
 
 enum ActiveSheet: Identifiable {
