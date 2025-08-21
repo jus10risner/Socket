@@ -18,17 +18,6 @@ enum FocusedField {
 enum AppSection: String, CaseIterable {
     case maintenance, repairs, fillups
     
-    var symbol: String {
-        switch self {
-        case .maintenance:
-            return "book.and.wrench.fill"
-        case .repairs:
-            return "wrench.fill"
-        case .fillups:
-            return "fuelpump.fill"
-        }
-    }
-    
     var theme: AvailableThemes {
         switch self {
         case .maintenance: return .maintenanceTheme
