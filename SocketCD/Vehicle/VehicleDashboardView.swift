@@ -262,37 +262,19 @@ struct VehicleDashboardView: View {
     @ToolbarContentBuilder
     private var vehicleToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .primaryAction) {
-            Menu {
-                Button("Edit Vehicle", systemImage: "pencil") {
-                    activeSheet = .editVehicle
-                }
+            Menu("Vehicle Options", systemImage: "ellipsis") {
+                Button("Edit Vehicle", systemImage: "pencil") { activeSheet = .editVehicle }
                 
                 exportMenu
                 
-                Section {
-                    Button("Delete Vehicle", systemImage: "trash", role: .destructive) {
-                        showingDeleteAlert = true
-                    }
-                }
-            } label: {
-                Label("Vehicle Options", systemImage: "ellipsis")
+                Divider()
+                
+                Button("Delete Vehicle", systemImage: "trash", role: .destructive) { showingDeleteAlert = true }
             }
             .confirmationDialog("Which paper size do you prefer?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
-                Button("A4") {
-                    Task {
-                        if let exportURL = PDFExporter.export(vehicle: vehicle, paperSize: .a4) {
-                            shareItem = ShareItem(url: exportURL)
-                        }
-                    }
-                }
+                Button("A4") { exportPDF(pageSize: .a4) }
                 
-                Button("US Letter") {
-                    Task {
-                        if let exportURL = PDFExporter.export(vehicle: vehicle, paperSize: .usLetter) {
-                            shareItem = ShareItem(url: exportURL)
-                        }
-                    }
-                }
+                Button("US Letter") { exportPDF(pageSize: .usLetter) }
                 
                 Button("Cancel", role: .cancel) { }
             }
@@ -307,8 +289,16 @@ struct VehicleDashboardView: View {
         }
     }
     
-    private func csvExportButton(_ action: @escaping () async -> URL?) -> some View {
-        Button("CSV", systemImage: "tablecells") {
+    private func exportPDF(pageSize: PDFPaperSize) {
+        Task {
+            if let exportURL = PDFExporter.export(vehicle: vehicle, paperSize: pageSize) {
+                shareItem = ShareItem(url: exportURL)
+            }
+        }
+    }
+    
+    private func csvExportButton(title: String, _ action: @escaping () async -> URL?) -> some View {
+        Button(title) {
             Task {
                 if let exportURL = await action() {
                     shareItem = ShareItem(url: exportURL)
@@ -319,28 +309,18 @@ struct VehicleDashboardView: View {
     
     // Menu, including buttons for exporting/sharing vehicle records.
     private var exportMenu: some View {
-        Menu {
-            Section("Maintenance & Repairs") {
-                Button("PDF", systemImage: "doc") {
-                    showingPageSizeSelector = true
-                }
-                
-                csvExportButton { CSVExporter.exportServicesAndRepairs(for: vehicle) }
+        Menu("Export Records", systemImage: "square.and.arrow.up") {
+            Section("Printable Document (PDF)") {
+                Button("Maintenance & Repairs") { showingPageSizeSelector = true }
             }
-            .accessibilityHint("Export maintenance and repair records for this vehicle")
             
-            Section("Fill-ups") {
-                csvExportButton { CSVExporter.exportFillups(for: vehicle) }
+            Section("Spreadsheet (CSV)") {
+                csvExportButton(title: "All Records") { CSVExporter.exportAllRecords(for: vehicle) }
+                csvExportButton(title: "Fill-ups") { CSVExporter.exportFillups(for: vehicle) }
+                csvExportButton(title: "Maintenance & Repairs") { CSVExporter.exportServicesAndRepairs(for: vehicle) }
             }
-            .accessibilityHint("Export fill-up records for this vehicle")
-            
-            Section("All Records") {
-                csvExportButton { CSVExporter.exportAllRecords(for: vehicle) }
-            }
-            .accessibilityHint("Export all maintenance, repair, and fill-up records for this vehicle")
-        } label: {
-            Label("Export Records", systemImage: "square.and.arrow.up")
         }
+        .accessibilityHint("Save or share records for this vehicle")
     }
     
     @ViewBuilder
