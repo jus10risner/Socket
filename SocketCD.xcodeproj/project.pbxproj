@@ -93,6 +93,7 @@
 		9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */; };
 		9EEAC52A2BA4CBB40053C65E /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */; };
 		9EEAC52C2BA4CD150053C65E /* AddEditRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC52B2BA4CD150053C65E /* AddEditRecordView.swift */; };
+		9EF60B602E58C3320039D57A /* DashboardCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF60B5F2E58C3320039D57A /* DashboardCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -196,6 +197,7 @@
 		9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditServiceView.swift; sourceTree = "<group>"; };
 		9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailView.swift; sourceTree = "<group>"; };
 		9EEAC52B2BA4CD150053C65E /* AddEditRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditRecordView.swift; sourceTree = "<group>"; };
+		9EF60B5F2E58C3320039D57A /* DashboardCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,6 +342,7 @@
 			children = (
 				9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */,
 				9EEAC4802BA0F9C20053C65E /* ContentView.swift */,
+				9EF60B612E58C42F0039D57A /* Dashboard */,
 				9EEAC4C92BA256400053C65E /* Vehicle */,
 				9EEAC51A2BA4A1A60053C65E /* Maintenance */,
 				9EEAC4F12BA379DE0053C65E /* Repairs */,
@@ -424,7 +427,6 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC4D62BA332E50053C65E /* VehicleListView.swift */,
-				9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */,
 				9EEAC4CA2BA256570053C65E /* AddVehicleView.swift */,
 				9EEAC4DE2BA343B00053C65E /* EditVehicleView.swift */,
 				9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */,
@@ -493,6 +495,15 @@
 				9E189E2A2BD009A000095EC2 /* Maintenance Components */,
 			);
 			path = Maintenance;
+			sourceTree = "<group>";
+		};
+		9EF60B612E58C42F0039D57A /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */,
+				9EF60B5F2E58C3320039D57A /* DashboardCard.swift */,
+			);
+			path = Dashboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -655,6 +666,7 @@
 				9EEAC50A2BA482840053C65E /* FuelEconomyInfoView.swift in Sources */,
 				9EEAC51C2BA4A1E70053C65E /* MaintenanceStartView.swift in Sources */,
 				9EEAC5032BA389140053C65E /* ServiceRecord+helper.swift in Sources */,
+				9EF60B602E58C3320039D57A /* DashboardCard.swift in Sources */,
 				9EEAC4B52BA1F0A50053C65E /* CameraManager.swift in Sources */,
 				9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */,
 				9EE5620D2BD9706600F5BE7E /* VehicleListRowView.swift in Sources */,
