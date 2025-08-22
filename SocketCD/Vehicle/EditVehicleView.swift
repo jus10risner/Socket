@@ -21,16 +21,8 @@ struct EditVehicleView: View {
     @FetchRequest(sortDescriptors: []) var vehicles: FetchedResults<Vehicle>
     
     @FocusState var isInputActive: Bool
-    @FocusState var fieldInFocus: Bool
     
     var body: some View {
-        editVehicleForm
-    }
-    
-    
-    // MARK: - Views
-    
-    private var editVehicleForm: some View {
         NavigationStack {
             Form {
                 VStack(spacing: 20) {
@@ -41,14 +33,13 @@ struct EditVehicleView: View {
                             .padding(7)
                             .background(RoundedRectangle(cornerRadius: 5).foregroundStyle(Color(.systemGroupedBackground)))
                             .textInputAutocapitalization(.words)
-                            .focused($fieldInFocus)
+                            .focused($isInputActive)
                         
                         TextField("Odometer", value: $draftVehicle.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .padding(7)
                             .background(RoundedRectangle(cornerRadius: 5).foregroundStyle(Color(.systemGroupedBackground)))
                             .keyboardType(.numberPad)
                     }
-                    .focused($isInputActive)
                     .multilineTextAlignment(.center)
                 }
                 .padding(.vertical, 5)
@@ -71,4 +62,13 @@ struct EditVehicleView: View {
             .scrollDismissesKeyboard(.interactively)
         }
     }
+}
+
+#Preview {
+    let context = DataController.preview.container.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
+    
+    return EditVehicleView(vehicle: vehicle)
 }
