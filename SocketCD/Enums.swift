@@ -38,7 +38,7 @@ enum FillType: String, CaseIterable {
 }
 
 enum DateRange: String, CaseIterable {
-    case threeMonths = "3M", sixMonths = "6M", year = "1Y", all = "ALL"
+    case sixMonths = "6M", year = "1Y", all = "ALL"
 }
 
 

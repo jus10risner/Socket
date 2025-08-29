@@ -10,109 +10,55 @@ import SwiftUI
 
 struct FuelEconomyChartView: View {
     @EnvironmentObject private var settings: AppSettings
-//    let fillups: FetchedResults<Fillup>
     let fillups: [Fillup]
     
-    @State private var selectedDateRange: DateRange = .threeMonths
-    @State private var selectedDate: Date? = nil
+    @State private var selectedDateRange: DateRange = .sixMonths
+    @State private var selectedDate: Date?
+    
+    private var selectedFillup: Fillup? { // Used to populate information in the annotation
+        guard let selectedDate else { return nil }
+        
+        return data.min(by: { abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate)) })
+    }
     
     var body: some View {
-        VStack(spacing: 15) {
-            ZStack(alignment: .topLeading) {
-                Chart(data) { fillup in
-                    LineMark(x: .value("Date", fillup.date), y: .value("MPG", fillup.fuelEconomy(settings: settings)))
-                }
-                .animation(.easeInOut(duration: 0.5), value: visibleRange)
-                .chartYScale(domain: yRange)
-                .chartXScale(domain: visibleRange)
-                .chartOverlay { proxy in
-                    GeometryReader { geo in
-                        Rectangle().fill(Color.clear).contentShape(Rectangle())
-                            .gesture(
-                                DragGesture()
-                                    .onChanged { value in
-                                        // Only select a date if it lies within the visible bounds of the chart
-                                        if value.location.x >= 0 && value.location.x <= geo.size.width {
-                                            if let date: Date = proxy.value(atX: value.location.x) {
-                                                selectedDate = nearestDate(to: date)
-                                            }
-                                        } else {
-                                            // If drag gesture moves out of bounds, clear selection
-                                            selectedDate = nil
-                                        }
-                                    }
-                                    .onEnded { _ in
-                                        selectedDate = nil
-                                    }
-                            )
-                        
-                        // Average fuel economy line
-                        if let plotFrameAnchor = proxy.plotFrame,
-                           let yPos = proxy.position(forY: averageFuelEconomy) {
-                            let plotFrame = geo[plotFrameAnchor]
-                            
-                            Path { path in
-                                path.move(to: CGPoint(x: plotFrame.minX, y: yPos))
-                                path.addLine(to: CGPoint(x: plotFrame.maxX, y: yPos))
+        VStack(alignment: .leading) {
+            Chart {
+                if let selectedFillup {
+                    RuleMark(x: .value("Selected Fill-up", selectedFillup.date))
+                        .foregroundStyle(Color.secondary.opacity(0.3))
+                        .annotation(position: .top, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
+                            VStack {
+                                Text(selectedFillup.date.formatted(date: .numeric, time: .omitted))
+                                    .font(.subheadline.bold())
+                                
+                                Text("\(selectedFillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                                    .font(.title3.bold())
                             }
-                            .stroke(Color.secondary, style: StrokeStyle(lineWidth: 1, dash: [5]))
+                            .foregroundStyle(Color.white)
+                            .padding()
+                            .frame(width: 130)
+                            .background(RoundedRectangle.adaptive.fill(settings.accentColor(for: .fillupsTheme).gradient))
                         }
-                        
-                        if let selectedDate = selectedDate,
-                           let selectedFillup = data.min(by: { abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate)) }),
-                           let xPosition = proxy.position(forX: selectedFillup.date),
-                           let yPosition = proxy.position(forY: selectedFillup.fuelEconomy(settings: settings))
-                        {
-                            Group {
-                                let plotSize = proxy.plotSize
-                                //                            let labelWidth: CGFloat = 40
-                                //                            let clampedX = min(max(xPosition, labelWidth / 2), plotSize.width - labelWidth / 2)
-                                
-                                // Vertical line
-                                Rectangle()
-                                    .fill(Color.secondary.opacity(0.5))
-                                    .frame(width: 1, height: plotSize.height) // Keeps the rectangle within the vertical bounds of the chart
-                                    .position(x: xPosition, y: plotSize.height / 2)
-                                
-                                Circle()
-                                    .fill(settings.accentColor(for: .fillupsTheme))
-                                    .frame(width: 10, height: 10)
-                                    .position(x: xPosition, y: yPosition)
-                                
-                                // Tooltip
-                                //                            Text(String(format: "%.1f", selectedFillup.fuelEconomy(settings: settings)))
-                                //                                .font(.caption)
-                                ////                                .padding(5)
-                                //                                .frame(width: labelWidth, height: 30)
-                                //                                .background(.regularMaterial)
-                                //                                .cornerRadius(5)
-                                //                                .overlay(
-                                //                                    RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 0.5)
-                                //                                )
-                                //                                .position(x: clampedX, y: yPosition)
-                            }
-                        }
-                    }
+                    
+                    PointMark(x: .value("Date", selectedFillup.date), y: .value("Fuel Economy", selectedFillup.fuelEconomy(settings: settings)))
                 }
-                .frame(minHeight: 200)
-                //            .aspectRatio(2, contentMode: .fit)
-                .padding(5)
-                .clipShape(Rectangle())
-                .tint(settings.accentColor(for: .fillupsTheme).gradient)
                 
-                Group {
-                    if let highlightedFillup {
-                        Text("\(highlightedFillup.fuelEconomy(settings: settings), specifier: "%.1f")")
-                            .font(.headline)
-                            .frame(width: 60, height: 30)
-                            .background(.thinMaterial, in: Capsule())
-                            .overlay(
-                                Capsule().stroke(Color.gray, lineWidth: 0.5)
-                            )
-                    }
+                ForEach(data) { fillup in
+                    LineMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
+                    
+                    PointMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
+                        .opacity(data.count == 1 ? 1 : 0) // Vislble only when a single data point is available; also serves to make animation between data sets more fluid
                 }
-                .padding([.leading, .top], 10)
+                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             }
+            .animation(.easeInOut, value: selectedDateRange)
+            .chartYScale(domain: yRange)
+            .chartYAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
+            .chartXAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
+            .chartXScale(domain: xRange)
+            .chartXSelection(value: $selectedDate)
+            .frame(minHeight: 200)
             
             Picker("Date Range", selection: $selectedDateRange) {
                 ForEach(DateRange.allCases, id: \.self) {
@@ -120,95 +66,105 @@ struct FuelEconomyChartView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .padding(.vertical)
             
             Divider()
             
             LabeledContent("Average") {
-                Text(averageFuelEconomy == 0 ? "No Data" : "\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                Group {
+                    if let averageFuelEconomy {
+                        Text("\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                    } else {
+                        Text("No Data to Display")
+                    }
+                }
             }
         }
     }
-    
-    private var highlightedFillup: Fillup? {
-        if let selectedDate {
-            return data.min(by: { abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate)) })
-        } else {
-            return nil
-        }
-    }
-    
+
     // Determines which data points to plot (excludes those with fuel economy of 0)
     private var data: [Fillup] {
-        let dataPoints = fillups.compactMap { fillup in
-            fillup.fuelEconomy(settings: settings) != 0 ? fillup : nil
-        }
-        
-        return dataPoints
-    }
-    
-    // Calculates the average fuel economy for a given date range
-    private var averageFuelEconomy: Double {
-        let now = Date()
+        let calendar = Calendar.current
+        guard let latestDate = fillups.compactMap(\.date).max() else { return [] }
 
-        func computeAverage(from startDate: Date) -> Double {
-            let dataSet = data.filter { $0.date > startDate }
-            guard !dataSet.isEmpty else { return 0 }
-            let total = dataSet.reduce(0) { $0 + $1.fuelEconomy(settings: settings) }
-            return total / Double(dataSet.count)
-        }
+        // Start of latest month
+        let startOfLatestMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: latestDate)) ?? latestDate
         
+        let cutoff: Date?
         switch selectedDateRange {
-        case .threeMonths:
-            guard let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: now) else { return 0 }
-            return computeAverage(from: threeMonthsAgo)
         case .sixMonths:
-            guard let sixMonthsAgo = Calendar.current.date(byAdding: .month, value: -6, to: now) else { return 0 }
-            return computeAverage(from: sixMonthsAgo)
+            cutoff = calendar.date(byAdding: .month, value: -5, to: startOfLatestMonth)
         case .year:
-            guard let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: now) else { return 0 }
-            return computeAverage(from: oneYearAgo)
+            cutoff = calendar.date(byAdding: .year, value: -1, to: startOfLatestMonth)
         case .all:
-            guard !data.isEmpty else { return 0 }
-            let total = data.reduce(0) { $0 + $1.fuelEconomy(settings: settings) }
-            return total / Double(data.count)
+            cutoff = nil
         }
+
+        return fillups
+            .filter { fillup in
+                fillup.fuelEconomy(settings: settings) != 0 &&
+                (cutoff.map { fillup.date >= $0 } ?? true)
+            }
+            .sorted(by: { $0.date < $1.date })
     }
     
-    // Determines the visible horizontal area of the chart
-    var visibleRange: ClosedRange<Date> {
-        let end = Date()
+    // Returns the average fuel economy for a given set of fill-ups
+    private var averageFuelEconomy: Double? {
+        guard !data.isEmpty else { return nil }
+        let total = data.map { $0.fuelEconomy(settings: settings) }.reduce(0, +)
+        
+        return total / Double(data.count)
+    }
+    
+    // Determines the horizontal scale of the chart
+    private var xRange: ClosedRange<Date> {
+        let calendar = Calendar.current
+        
+        guard
+            let earliestDate = data.first?.date,
+            let latestDate = data.last?.date
+        else {
+            return Date()...Date()
+        }
+        
+        let startOfLatestMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: latestDate)) ?? latestDate
+        let endOfLatestMonth = calendar.date(byAdding: .month, value: 1, to: startOfLatestMonth) ?? latestDate
+
         let start: Date
-
+        let end: Date = endOfLatestMonth
+        
         switch selectedDateRange {
-        case .threeMonths:
-            start = Calendar.current.date(byAdding: .month, value: -3, to: end) ?? end
         case .sixMonths:
-            start = Calendar.current.date(byAdding: .month, value: -6, to: end) ?? end
+            if let sixMonthsBack = calendar.date(byAdding: .month, value: -5, to: startOfLatestMonth),
+               let earliestMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: earliestDate)) {
+                start = max(sixMonthsBack, earliestMonth)
+            } else {
+                start = earliestDate
+            }
+            
         case .year:
-            start = Calendar.current.date(byAdding: .year, value: -1, to: end) ?? end
+            if let oneYearBack = calendar.date(byAdding: .year, value: -1, to: startOfLatestMonth),
+               let earliestMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: earliestDate)) {
+                start = max(oneYearBack, earliestMonth)
+            } else {
+                start = earliestDate
+            }
+            
         case .all:
-            start = data.last?.date ?? end
+            start = calendar.date(from: calendar.dateComponents([.year, .month], from: earliestDate)) ?? earliestDate
         }
-
+        
         return start...end
     }
     
-    // Determines the vertical scale of the chart, rounding up and down to make sure horizontal lines denote the upper and lower bounds of the chart
+    // Determines the vertical scale of the chart
     private var yRange: ClosedRange<Double> {
         let values = data.map { $0.fuelEconomy(settings: settings) }
-        guard let minValue = values.min(), let maxValue = values.max() else { return 0...1 } // default to 0...1 if values is empty
+        guard let minValue = values.min(), let maxValue = values.max() else { return 0...10 } // default to 0...5 if values is empty
         
-        let step: Double = 5 // The number to round by
-        let lowerBound = max(floor(minValue / step) * step, 0)
+        let step: Double = 10 // The number to round by
+        let lowerBound = floor(minValue / step) * step
         let upperBound = ceil(maxValue / step) * step
         return lowerBound...upperBound
     }
-    
-    private func nearestDate(to target: Date) -> Date? {
-        data.min(by: { abs($0.date.timeIntervalSince(target)) < abs($1.date.timeIntervalSince(target)) })?.date
-    }
 }
-
-//#Preview {
-//    FuelEconomyChartView(data: [23.4, 22.6, 26.4, 30.1, 23.9, 24.2, 28.7], average: 25.6)
-//}
