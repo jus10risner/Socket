@@ -25,7 +25,6 @@ struct VehicleListRowView: View {
     }
     
     @State private var isAnimating = false
-    let cornerRadius: CGFloat = 20
     
     @State private var quickFillupVehicle: Vehicle?
     
@@ -70,11 +69,11 @@ struct VehicleListRowView: View {
         .padding([.horizontal, .top], 5)
         .padding(.bottom, 10)
         .background {
-            RoundedRectangle(cornerRadius: cornerRadius)
+            RoundedRectangle.adaptive
                 .colorSchemeBackground(colorScheme: colorScheme)
                 .shadow(color: .secondary.opacity(0.4), radius: 2)
         }
-        .containerShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .containerShape(RoundedRectangle.adaptive)
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets(top: 3, leading: 3, bottom: 3, trailing: 3))
     }
