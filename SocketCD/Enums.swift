@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-// MARK: - Add Vehicle View
-
-enum FocusedField {
-    case vehicleName, vehicleOdometer
-}
-
 // MARK: - VehicleDashboardView
 
 enum AppSection: String, CaseIterable {

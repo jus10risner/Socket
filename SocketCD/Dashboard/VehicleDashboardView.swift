@@ -90,7 +90,7 @@ struct VehicleDashboardView: View {
                     AddEditCustomInfoView(vehicle: vehicle)
                         .tint(settings.accentColor(for: .appTheme))
                 case .editVehicle:
-                    EditVehicleView(vehicle: vehicle)
+                    AddEditVehicleView(vehicle: vehicle)
                         .tint(settings.accentColor(for: .appTheme))
                 }
             }

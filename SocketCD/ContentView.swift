@@ -93,7 +93,7 @@ struct ContentView: View {
 //                    VehicleTabView(vehicle: vehicle)
 //                }
 //                .sheet(isPresented: $showingSettings) { AppSettingsView() }
-//                .sheet(isPresented: $showingAddVehicle, onDismiss: { checkOnboardingTipsStatus() }) { AddVehicleView() }
+//                .sheet(isPresented: $showingAddVehicle, onDismiss: { checkOnboardingTipsStatus() }) { AddEditVehicleView() }
 //                .sheet(isPresented: $settings.welcomeViewPresented) { WelcomeView() }
 //                .overlay {
 //                    if showingOnboardingTip {

@@ -30,7 +30,7 @@ struct AddEditVehicleImageView: View {
             
             photoMenu
         }
-        .animation(.default, value: draftVehicle.photo)
+//        .animation(.default, value: draftVehicle.photo)
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImage, matching: .images)
         .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: verifyAndAdd) {
             CameraCapture(image: $capturedImage)
@@ -72,22 +72,22 @@ struct AddEditVehicleImageView: View {
                     
                     ColorPicker("Select Color", selection: $draftVehicle.selectedColor, supportsOpacity: false)
                         .labelsHidden()
-                        .padding(10)
+                        .padding()
                 }
             }
         }
         .clipped()
-        .clipShape(RoundedRectangle(cornerRadius: 15))
+        .clipShape(RoundedRectangle.adaptive)
         .overlay {
             ZStack(alignment: .topTrailing) {
-                RoundedRectangle(cornerRadius: 15)
+                RoundedRectangle.adaptive
                     .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
                 
                 if draftVehicle.photo != nil {
                     Button {
-                        withAnimation {
+//                        withAnimation {
                             draftVehicle.photo = nil
-                        }
+//                        }
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.title2)
@@ -102,30 +102,24 @@ struct AddEditVehicleImageView: View {
         }
         .aspectRatio(2, contentMode: .fit)
         .frame(maxWidth: 300)
-        .animation(nil, value: draftVehicle.photo)
+//        .animation(nil, value: draftVehicle.photo)
     }
     
     private var photoMenu: some View {
-        Menu {
-            Button {
+        Menu(draftVehicle.photo != nil ? "Change Photo" : "Add Photo") {
+            Button("Choose Photo", systemImage: "photo.on.rectangle") {
                 showingPhotosPicker = true
-            } label: {
-                Label("Choose Photo", systemImage: "photo.on.rectangle")
             }
             
-            Button {
+            Button("Take Photo", systemImage: "camera") {
                 Task {
                     await cameraViewModel.requestCameraAccessAndAvailability()
                 }
-            } label: {
-                Label("Take Photo", systemImage: "camera")
             }
-        } label: {
-            Label("Vehicle Photo", systemImage: "camera.fill")
-                .foregroundStyle(Color.white)
         }
         .buttonStyle(.borderedProminent)
-        .padding(.top, 5)
+        .foregroundStyle(Color.white)
+        .tint(settings.accentColor(for: .appTheme))
         .frame(maxWidth: .infinity)
     }
     
@@ -137,9 +131,9 @@ struct AddEditVehicleImageView: View {
             if let capturedImage {
                 let newPhoto = Photo.create(from: capturedImage, in: context)
                 
-                withAnimation {
+//                withAnimation {
                     draftVehicle.photo = newPhoto
-                }
+//                }
             }
         }
     }
@@ -153,9 +147,9 @@ struct AddEditVehicleImageView: View {
                 let uiImage = UIImage(data: data) {
                 let newPhoto = Photo.create(from: uiImage, in: context)
                 
-                withAnimation {
+//                withAnimation {
                     draftVehicle.photo = newPhoto
-                }
+//                }
                 
                 self.selectedImage = nil
             }
@@ -165,4 +159,5 @@ struct AddEditVehicleImageView: View {
 
 #Preview {
     AddEditVehicleImageView(draftVehicle: DraftVehicle())
+        .environmentObject(AppSettings())
 }

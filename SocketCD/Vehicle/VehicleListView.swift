@@ -68,7 +68,7 @@ struct VehicleListView: View {
 //            }
 //        }
         .sheet(isPresented: $showingSettings, onDismiss: updateNotifications) { AppSettingsView() }
-        .sheet(isPresented: $showingAddVehicle) { AddVehicleView() }
+        .sheet(isPresented: $showingAddVehicle) { AddEditVehicleView() }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 if !iCloudContainerAvailable {
