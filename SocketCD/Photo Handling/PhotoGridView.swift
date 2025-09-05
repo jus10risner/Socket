@@ -61,19 +61,16 @@ struct PhotoGridView: View {
                         }
                     
                     if isEditable {
-                        Button {
+                        Button("Delete Image", systemImage: "xmark.circle.fill") {
                             withAnimation {
                                 delete(photo: photo)
                             }
-                        } label: {
-                            Label("Delete Image", systemImage: "xmark.circle.fill")
-                                .labelStyle(.iconOnly)
-                                .font(.title2)
-                                .symbolRenderingMode(.palette)
-                                .foregroundStyle(.white, .gray)
-                                .opacity(0.7)
                         }
                         .buttonStyle(.plain)
+                        .labelStyle(.iconOnly)
+                        .font(.title2)
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.white, .gray)
                         .padding(5)
                     }
                 }

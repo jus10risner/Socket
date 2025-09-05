@@ -23,19 +23,15 @@ struct AddPhotoButton: View {
     
     var body: some View {
         Menu {
-            Button {
+            Button("Choose Photos", systemImage: "photo.on.rectangle") {
 //                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 showingPhotosPicker = true
-            } label: {
-                Label("Choose Photos", systemImage: "photo.on.rectangle")
             }
             
-            Button {
+            Button("Take Photo", systemImage: "camera") {
                 Task {
                     await cameraViewModel.requestCameraAccessAndAvailability()
                 }
-            } label: {
-                Label("Take Photo", systemImage: "camera")
             }
         } label: {
             Label {

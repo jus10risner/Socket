@@ -63,10 +63,8 @@ struct MaintenanceListView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button {
+                Button("Add New Maintenance Service", systemImage: "plus") {
                     showingAddService = true
-                } label: {
-                    Label("Add New Maintenance Service", systemImage: "plus")
                 }
             }
         }

@@ -79,13 +79,8 @@ struct FillTypeInfoView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button {
+                    Button("Dismiss", systemImage: "xmark") {
                         dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title2)
-                            .symbolRenderingMode(.hierarchical)
-                            .accessibilityLabel("Dismiss")
                     }
                 }
             }

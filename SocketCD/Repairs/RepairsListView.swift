@@ -55,15 +55,8 @@ struct RepairsListView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button {
+                Button("Add New Repair", systemImage: "plus") {
                     showingAddRepair = true
-                } label: {
-                    Label("Add New Repair", systemImage: "plus")
-                    
-//                    Image(systemName: "plus.circle.fill")
-//                        .font(.title2)
-//                        .symbolRenderingMode(.hierarchical)
-//                        .accessibilityLabel("Add New Repair")
                 }
             }
         }

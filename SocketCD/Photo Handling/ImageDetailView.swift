@@ -35,11 +35,8 @@ struct ImageDetailView: View {
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button {
+                    Button("Dismiss", systemImage: "xmark") {
                         dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
-                            .accessibilityLabel("Dismiss")
                     }
                 }
             }

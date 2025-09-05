@@ -13,40 +13,23 @@ struct FillTypePicker: View {
     @Binding var showingFillTypeInfo: Bool
     
     var body: some View {
-        HStack(alignment: .center, spacing: 3) {
-            Group {
+        LabeledContent {
+            Picker("Select Fill Type", selection: $fillType) {
+                ForEach(FillType.allCases, id: \.self) { fillupType in
+                    Text(fillupType.rawValue)
+                }
+            }
+            .labelsHidden()
+        } label: {
+            HStack {
                 Text("Fill Type")
                     .foregroundStyle(Color.secondary)
                 
-                Button {
+                Button("Learn More", systemImage: "info.circle") {
                     showingFillTypeInfo = true
-                } label: {
-                    Image(systemName: "info.circle")
-                        .foregroundStyle(settings.accentColor(for: .fillupsTheme))
-                        .accessibilityLabel("Learn More")
                 }
-            }
-            
-            Spacer()
-            
-            Menu {
-                Picker("Select Fill Type", selection: $fillType) {
-                    ForEach(FillType.allCases, id: \.self) { fillupType in
-                        Text(fillupType.rawValue)
-                    }
-                }
-                .labelsHidden()
-            } label: {
-                HStack(spacing: 2) {
-                    Text(fillType.rawValue)
-                    Image(systemName: "chevron.up.chevron.down")
-                        .font(.caption)
-                        .accessibilityHidden(true)
-                }
-//                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
-            }
-            .transaction { transaction in
-                transaction.animation = nil
+                .labelStyle(.iconOnly)
+                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             }
         }
         .buttonStyle(.plain)

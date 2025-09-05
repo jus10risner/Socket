@@ -85,12 +85,10 @@ struct FillupDetailView: View {
     
     // Button that launches an alert, describing why no fuel economy exists for this fill-up (if appropriate)
     private var infoButton: some View {
-        Button {
+        Button("Learn More", systemImage: "info.circle") {
             showingMoreInfo = true
-        } label: {
-            Label("Learn More", systemImage: "info.circle")
-                .labelStyle(.iconOnly)
         }
+        .labelStyle(.iconOnly)
         .buttonStyle(.plain)
         .foregroundStyle(settings.accentColor(for: .fillupsTheme))
     }

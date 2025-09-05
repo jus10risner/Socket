@@ -85,10 +85,8 @@ struct ServiceDetailView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button {
+                Button("Add Service Record", systemImage: "plus") {
                     showingAddRecord = true
-                } label: {
-                    Label("Add Service Record", systemImage: "plus")
                 }
             }
         }
@@ -129,13 +127,11 @@ struct ServiceDetailView: View {
             HStack(spacing: 3) {
                 Text("Tap")
                 
-                Button {
+                Button("Add Service Record", systemImage: "plus") {
                     showingAddRecord = true
-                } label: {
-                    Label("Add Service Record", systemImage: "plus")
-                        .font(.title3)
-                        .labelStyle(.iconOnly)
                 }
+                .font(.title3)
+                .labelStyle(.iconOnly)
                 
                 Text("to add a new service record")
             }

@@ -91,10 +91,8 @@ struct FillupsDashboardView: View {
         .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button {
+                Button("Add Fill-up", systemImage: "plus") {
                     showingAddFillup = true
-                } label: {
-                    Label("Add Fill-up", systemImage: "plus")
                 }
             }
         }
@@ -139,12 +137,10 @@ struct FillupsDashboardView: View {
                                     .font(.subheadline.bold())
                                     .foregroundStyle(Color.secondary)
                                 
-                                Button {
+                                Button("Learn More", systemImage: "info.circle") {
                                     showingFuelEconomyInfo = true
-                                } label: {
-                                    Label("Learn More", systemImage: "info.circle")
-                                        .labelStyle(.iconOnly)
                                 }
+                                .labelStyle(.iconOnly)
                             }
                             .padding(.top, 10)
                         }

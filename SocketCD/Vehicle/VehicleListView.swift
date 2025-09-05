@@ -80,20 +80,14 @@ struct VehicleListView: View {
             }
             
             ToolbarItem {
-                Menu {
-                    Button {
+                Menu("Options", systemImage: "ellipsis.circle") {
+                    Button("Add a Vehicle", systemImage: "plus") {
                         showingAddVehicle = true
-                    } label: {
-                        Label("Add a Vehicle", systemImage: "plus")
                     }
                     
-                    Button {
+                    Button("Settings", systemImage: "gearshape") {
                         showingSettings = true
-                    } label: {
-                        Label("Settings", systemImage: "gearshape")
                     }
-                } label: {
-                    Label("Options", systemImage: "ellipsis.circle")
                 }
                 .tint(.primary)
             }

@@ -186,7 +186,7 @@ struct AppSettingsView: View {
     
     // Launches Mail Composer, if email has been set up
     private var contactButton: some View {
-        Button {
+        Button("Contact", systemImage: "envelope") {
             let composeVC = MailComposeViewController.shared
             
             if composeVC.canSendEmail == true {
@@ -195,8 +195,6 @@ struct AppSettingsView: View {
             } else {
                 showingMailError = true
             }
-        } label: {
-            Label("Contact", systemImage: "envelope")
         }
     }
     

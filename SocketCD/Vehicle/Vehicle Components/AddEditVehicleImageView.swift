@@ -84,19 +84,17 @@ struct AddEditVehicleImageView: View {
                     .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
                 
                 if draftVehicle.photo != nil {
-                    Button {
+                    Button("Delete Photo", systemImage: "xmark.circle.fill") {
 //                        withAnimation {
                             draftVehicle.photo = nil
 //                        }
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title2)
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.white, .gray)
-                            .accessibilityLabel("Delete Photo")
                     }
-                    .padding(10)
                     .buttonStyle(.plain)
+                    .labelStyle(.iconOnly)
+                    .font(.title)
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, .gray)
+                    .padding(10)
                 }
             }
         }

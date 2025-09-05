@@ -30,10 +30,8 @@ struct ServiceListRowView: View {
             AddEditRecordView(service: service)
         }
         .swipeActions(edge: .leading) {
-            Button {
+            Button("Add Service Record", systemImage: "plus.square.on.square") {
                 selectedService = service
-            } label: {
-                Label("Add Service Record", systemImage: "plus.square.on.square")
             }
             .tint(settings.accentColor(for: .maintenanceTheme))
         }

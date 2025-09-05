@@ -234,31 +234,27 @@ struct VehicleDashboardView: View {
                         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
                     }
                     
-                    Button {
+                    Button("Add Info", systemImage: "plus") {
                         activeSheet = .addCustomInfo
-                    } label: {
-                        Label("Add Info", systemImage: "plus")
-                            .foregroundStyle(settings.accentColor(for: .appTheme))
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background {
-                                RoundedRectangle.adaptive
-                                    .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
-                            }
+                    }
+                    .foregroundStyle(settings.accentColor(for: .appTheme))
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background {
+                        RoundedRectangle.adaptive
+                            .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
                     }
                 } else {
                     VStack(spacing: 5) {
-                        Button {
+                        Button("Add Info", systemImage: "plus") {
                             activeSheet = .addCustomInfo
-                        } label: {
-                            Label("Add Info", systemImage: "plus")
-                                .foregroundStyle(settings.accentColor(for: .appTheme))
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background {
-                                    RoundedRectangle.adaptive
-                                        .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
-                                }
+                        }
+                        .foregroundStyle(settings.accentColor(for: .appTheme))
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background {
+                            RoundedRectangle.adaptive
+                                .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
                         }
                         
                         Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
