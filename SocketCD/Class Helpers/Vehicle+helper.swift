@@ -173,7 +173,7 @@ extension Vehicle {
         try? context.save()
     }
     
-    func addNewService(draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
+    func addNewService(draftService: DraftService, selectedInterval: ServiceIntervalTypes, initialRecord draftServiceRecord: DraftServiceRecord? = nil) {
         let context = DataController.shared.container.viewContext
         
         if selectedInterval == .distance {
@@ -192,6 +192,16 @@ extension Vehicle {
         newService.note = draftService.serviceNote
         newService.distanceBasedNotificationIdentifier = UUID().uuidString
         newService.timeBasedNotificationIdentifier = UUID().uuidString
+        
+        if let draftServiceRecord {
+            newService.addNewServiceRecord(draftServiceRecord: draftServiceRecord)
+        } else {
+            let serviceRecord = ServiceRecord(context: context)
+            serviceRecord.service = newService
+            serviceRecord.id = UUID()
+            serviceRecord.date = Date()
+            serviceRecord.odometer = 0
+        }
         
         try? context.save()
     }
