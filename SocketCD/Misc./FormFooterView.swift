@@ -41,7 +41,13 @@ struct FormFooterView: View {
         if let noteBinding {
             TextField("Note", text: noteBinding, axis: .vertical)
         } else if noteValue != "" {
-            LabeledContent("Note", value: noteValue)
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Note")
+                
+                Text(noteValue)
+                    .foregroundStyle(Color.secondary)
+                    .textSelection(.enabled)
+            }
         }
 
         if let photosBinding {

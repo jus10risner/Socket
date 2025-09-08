@@ -32,16 +32,10 @@ struct ServiceDetailView: View {
                         Text("Add a service record first!")
                     }
                 }
-                
-                if service.note != "" {
-                    LabeledContent("Service Note") {
-                        Text(service.note)
-                            .textSelection(.enabled)
-                    }
-                }
             } header: {
                 VStack {
                     Text(service.name)
+                        .font(.title2.bold())
                     
                     Text("Due every \(service.intervalDescription)")
                         .font(.caption)
@@ -56,6 +50,16 @@ struct ServiceDetailView: View {
                 .padding(.vertical)
             }
             .headerProminence(.increased)
+            
+            if service.note != "" {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Service Note")
+                    
+                    Text(service.note)
+                        .foregroundStyle(Color.secondary)
+                        .textSelection(.enabled)
+                }
+            }
             
             if !service.sortedServiceRecordsArray.isEmpty {
                 Section {
@@ -154,6 +158,7 @@ struct ServiceDetailView: View {
     
     let service = Service(context: context)
     service.name = "Oil Change"
+    service.note = "Filter: AX204"
     
     return ServiceDetailView(service: service, vehicle: vehicle)
         .environmentObject(AppSettings())
