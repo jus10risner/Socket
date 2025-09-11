@@ -67,6 +67,9 @@ struct AddEditFillupView: View {
                             .font(.body)
                             .frame(maxWidth: .infinity)
                     }
+                } footer: {
+                    Button("About fill types...") { showingFillTypeInfo = true }
+                        .font(.footnote)
                 }
                 .headerProminence(.increased)
                 
