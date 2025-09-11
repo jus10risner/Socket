@@ -19,16 +19,16 @@ struct RecordDetailView: View {
     var body: some View {
         List {
             Section {
-                LabeledContent("Date", value: record.date.formatted(date: .numeric, time: .omitted))
+                LabeledContent("Date", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
                 
                 LabeledContent("Odometer") {
-                    Text("\(record.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                    Text("\(record.effectiveOdometer.formatted()) \(settings.distanceUnit.abbreviated)")
                 }
                 
-                LabeledContent("Cost", value: (record.cost ?? 0).asCurrency())
+                LabeledContent("Cost", value: (record.effectiveCost ?? 0).asCurrency())
             }
             
-            FormFooterView(note: record.note, photos: record.sortedPhotosArray)
+            FormFooterView(note: record.effectiveNote, photos: record.effectivePhotos)
         }
         .navigationTitle("Record Details")
         .navigationBarTitleDisplayMode(.inline)
@@ -40,7 +40,7 @@ struct RecordDetailView: View {
             }
         }
         .sheet(isPresented: $showingEditRecord) {
-            AddEditRecordView(service: service, record: record) {
+            AddEditRecordView(service: service, vehicle: vehicle, record: record) {
                 dismiss()
             }
         }

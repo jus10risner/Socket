@@ -240,44 +240,6 @@ extension Service {
         }
     }
     
-//    func nextDueDescription(currentOdometer: Int) -> String {
-//        let settings = AppSettings()
-//        let currentDate = Date()
-//        
-//        var daysUntilDue: Int? {
-//            guard let dateDue = dateDue else { return nil }
-//            return Calendar.current.dateComponents([.day], from: currentDate, to: dateDue).day
-//        }
-//
-//        var milesUntilDue: Int? {
-//            guard let odometerDue = odometerDue else { return nil }
-//            return odometerDue - currentOdometer
-//        }
-//        
-//        switch (daysUntilDue, milesUntilDue) {
-//        case let (d?, m?):
-//            if d < 0 && m < 0 {
-//                // If both are overdue, pick the one that's *more* overdue
-//                return abs(d) >= abs(m) ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
-//            } else if d < 0 {
-//                return "Overdue by \(pluralize(abs(d), unit: "day"))"
-//            } else if m < 0 {
-//                return "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
-//            } else {
-//                return "Due in \(abs(m).formatted()) \(settings.distanceUnit.abbreviated) or \(pluralize(d, unit: "day"))"
-//            }
-//
-//        case let (d?, nil):
-//            return d < 0 ? "Overdue by \(pluralize(abs(d), unit: "day"))" : "Due in \(pluralize(d, unit: "day"))"
-//
-//        case let (nil, m?):
-//            return m < 0 ? "Overdue by \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)" : "Due in \(abs(m).formatted()) \(settings.distanceUnit.abbreviated)"
-//
-//        default:
-//            return "No Service Logged"
-//        }
-//    }
-    
     // Accepts a singular unit type and appends an 's' to make it plural, when appropriate; formats the count, so it displays as users expect
     func pluralize(_ count: Int, unit: String) -> String {
         return count == 1 ? "\(count.formatted()) \(unit)" : "\(count.formatted()) \(unit)s"
@@ -304,56 +266,6 @@ extension Service {
         return components.joined(separator: " or ")
     }
     
-    // Determines when service is next due, and provides a string describing when service is next due (or if it's overdue). Used on MaintenanceListView
-//    var nextServiceDueDescription: String {
-//        let settings = AppSettings()
-//        var distanceToNextService: Int?
-//        var daysToNextService: Int?
-//        var descriptionString = ""
-//        
-//        if let odometerDue {
-//            if let vehicleOdometer = vehicle?.odometer {
-//                distanceToNextService = odometerDue - vehicleOdometer
-//            }
-//        }
-//        
-//        if let dateDue {
-//            if dateDue != sortedServiceRecordsArray.first?.date {
-//                let dateDifference = Calendar.current.dateComponents([.day], from: Date.now, to: dateDue)
-//                
-//                if let daysRemaining = dateDifference.day {
-//                    daysToNextService = daysRemaining
-//                }
-//            }
-//        }
-//        
-//        if let distanceToNextService {
-//            if distanceToNextService < 0 {
-//                descriptionString = "Overdue by \(abs(distanceToNextService).formatted()) \(settings.distanceUnit.abbreviated)"
-//            } else {
-//                descriptionString = "Due in \(distanceToNextService.formatted()) \(settings.distanceUnit.abbreviated)"
-//                
-//                if daysToNextService != nil {
-//                    descriptionString.append(" or ")
-//                }
-//            }
-//        }
-//        
-//        if let daysToNextService {
-//            if daysToNextService < 0 {
-//                descriptionString = "Overdue by \(abs(daysToNextService).formatted()) \(daysToNextService == 1 ? "day" : "days")"
-//            } else {
-//                if distanceToNextService == nil {
-//                    descriptionString = "Due in "
-//                }
-//                
-//                descriptionString.append("\(daysToNextService.formatted()) \(daysToNextService > 1 ? "days" : "day")")
-//            }
-//        }
-//        
-//        return descriptionString
-//    }
-    
     
     // MARK: - CRUD Methods
     
@@ -379,31 +291,41 @@ extension Service {
         try? context.save()
     }
     
-//    func delete() {
-//        let context = DataController.shared.container.viewContext
-//        
-//        self.cancelPendingNotifications()
-//        context.delete(self)
-//        try? context.save()
-//    }
-    
-    func addNewServiceRecord(draftServiceRecord: DraftServiceRecord) {
+    func addNewServiceRecord(draftServiceLog: DraftServiceLog, allServices: [Service]) {
         let context = DataController.shared.container.viewContext
-        let newServiceRecord = ServiceRecord(context: context)
-        newServiceRecord.service = self
-        newServiceRecord.id = UUID()
-        newServiceRecord.date = draftServiceRecord.date
-        newServiceRecord.odometer = draftServiceRecord.odometer ?? 0
-        newServiceRecord.cost = draftServiceRecord.cost
-        newServiceRecord.note = draftServiceRecord.note
-        newServiceRecord.photos = NSSet(array: draftServiceRecord.photos)
         
-        if let vehicle = self.vehicle, let odometer = draftServiceRecord.odometer {
-            if odometer > vehicle.odometer {
-                vehicle.odometer = odometer
+        // Create a new ServiceLog
+        let log = ServiceLog(context: context)
+        log.id = UUID()
+        log.date = draftServiceLog.date
+        log.odometer = draftServiceLog.odometer ?? 0
+        log.cost = draftServiceLog.cost
+        log.note = draftServiceLog.note
+        log.photos = NSSet(array: draftServiceLog.photos)
+
+        // Resolve selected services from IDs
+        let selectedServices = draftServiceLog.selectedServiceIDs.compactMap { id in
+            allServices.first(where: { $0.id == id })
+        }
+
+        // Create a record for each selected service
+        for svc in selectedServices {
+            let record = ServiceRecord(context: context)
+            record.id = UUID()
+            record.service = svc
+            record.serviceLog = log
+            record.date = draftServiceLog.date
+            record.odometer = draftServiceLog.odometer ?? 0
+        }
+
+        // Update vehicle odometer if needed
+        for svc in selectedServices {
+            if let vehicle = svc.vehicle,
+               let draftOdo = draftServiceLog.odometer,
+               draftOdo > vehicle.odometer {
+                vehicle.odometer = draftOdo
+                svc.updateNotifications(vehicle: vehicle)
             }
-            
-            self.updateNotifications(vehicle: vehicle)
         }
         
         try? context.save()
@@ -411,61 +333,6 @@ extension Service {
     
     
     // MARK: - Notification Scheduling Methods
-    
-//    // Determines when & whether notifications are due, and schedules them, if appropriate
-//    func updateNotificationsForService(vehicle: Vehicle) {
-//        let context = DataController.shared.container.viewContext
-//        let settings = AppSettings()
-//        
-//        cancelPendingNotifications() // Always clean up before rescheduling
-//        
-//        var didSchedule = false
-//        
-//        if let dateDue = self.dateDue {
-//            if let alertDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeMaintenance, to: dateDue),
-//               dateDue > Date.now && alertDate > Date.now {
-//                scheduleNotificationOnDate(alertDate, for: vehicle) {
-//                    didSchedule = true
-//                    self.saveNotificationFlagIfNeeded(didSchedule, context: context)
-//                }
-//            }
-//        }
-//
-//        if let odometerDue = self.odometerDue {
-//            let distanceToNextService = odometerDue - vehicle.odometer
-//            if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
-//                scheduleNotificationMomentarily(for: vehicle) {
-//                    didSchedule = true
-//                    self.saveNotificationFlagIfNeeded(didSchedule, context: context)
-//                }
-//            }
-//        }
-//        
-//        
-////        let context = DataController.shared.container.viewContext
-////        let settings = AppSettings()
-////        
-////        cancelPendingNotifications() // Cleans up before scheduling
-////            
-////        if let dateDue = self.dateDue {
-////            if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue),
-////                dateDue > Date.now && alertDate > Date.now {
-//////                if dateDue > Date.now && alertDate > Date.now {
-////                    self.scheduleNotificationOnDate(alertDate, for: vehicle)
-//////                }
-////            }
-////        }
-////        
-////        if let odometerDue = self.odometerDue {
-////            let distanceToNextService = odometerDue - vehicle.odometer
-////            
-////            if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
-////                self.scheduleNotificationForTomorrow(for: vehicle)
-////            }
-////        }
-////        
-////        try? context.save()
-//    }
     
     func updateNotifications(vehicle: Vehicle) {
         let context = DataController.shared.container.viewContext
@@ -569,33 +436,6 @@ extension Service {
             
             completion()
         }
-//        let content = UNMutableNotificationContent()
-//        content.title = "Time for Maintenance!"
-//        content.body = "\(self.name) due soon for \(vehicle.name)"
-//        content.sound = UNNotificationSound.default
-//        
-//        let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
-//        var dateComponents = DateComponents()
-//        dateComponents.day = components.day
-//        dateComponents.month = components.month
-//        dateComponents.year = components.year
-//        dateComponents.hour = 10
-//        
-//        #if DEBUG
-//        // Temporary notifications, for testing
-//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-//        let request = UNNotificationRequest(identifier: timeBasedNotificationIdentifier, content: content, trigger: trigger)
-//        UNUserNotificationCenter.current().add(request)
-//        #else
-//        // Production notification timelines
-//        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-//        let request = UNNotificationRequest(identifier: timeBasedNotificationIdentifier, content: content, trigger: trigger)
-//        UNUserNotificationCenter.current().add(request)
-//        #endif
-//        
-//        print("Alert Date: \(date.formatted(date: .numeric, time: .omitted))")
-//        
-//        self.notificationScheduled = true
     }
     
     // Schedule notification with 30-second delay, based on distance interval
@@ -625,32 +465,5 @@ extension Service {
             
             completion()
         }
-        
-//        let content = UNMutableNotificationContent()
-//        content.title = "Time for Maintenance!"
-//        content.body = "\(self.name) due soon for \(vehicle.name)"
-//        content.sound = UNNotificationSound.default
-//        
-//        let alertDate = Calendar.current.date(byAdding: .day, value: 1, to: Date.now)!
-//        let components = Calendar.current.dateComponents([.day], from: alertDate)
-//        var dateComponents = DateComponents()
-//        dateComponents.day = components.day
-//        dateComponents.hour = 10
-//        
-//        #if DEBUG
-//        // Temporary notifications, for testing
-//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-//        let request = UNNotificationRequest(identifier: distanceBasedNotificationIdentifier, content: content, trigger: trigger)
-//        UNUserNotificationCenter.current().add(request)
-//        #else
-//        // Production notification timelines
-//        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-//        let request = UNNotificationRequest(identifier: distanceBasedNotificationIdentifier, content: content, trigger: trigger)
-//        UNUserNotificationCenter.current().add(request)
-//        #endif
-//        
-//        print("Notification scheduled for tomorrow!")
-//        
-//        self.notificationScheduled = true
     }
 }

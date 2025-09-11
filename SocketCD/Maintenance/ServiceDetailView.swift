@@ -67,7 +67,7 @@ struct ServiceDetailView: View {
                         NavigationLink {
                             RecordDetailView(record: record, vehicle: vehicle, service: service)
                         } label: {
-                            LabeledContent("\(record.odometer) \(settings.distanceUnit.abbreviated)", value: record.date.formatted(date: .numeric, time: .omitted))
+                            LabeledContent("\(record.effectiveOdometer) \(settings.distanceUnit.abbreviated)", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
                         }
                     }
                 } header: {
@@ -80,7 +80,7 @@ struct ServiceDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingAddRecord) {
-            AddEditRecordView(service: service)
+            AddEditRecordView(service: service, vehicle: vehicle)
         }
         .sheet(isPresented: $showingEditService) {
             AddEditServiceView(vehicle: vehicle, service: service) {

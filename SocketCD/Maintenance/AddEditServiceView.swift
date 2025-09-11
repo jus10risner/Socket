@@ -14,7 +14,7 @@ struct AddEditServiceView: View {
     
     // MARK: - State
     @StateObject var draftService = DraftService()
-    @StateObject var draftServiceRecord = DraftServiceRecord()
+    @StateObject var draftServiceLog = DraftServiceLog()
     @FocusState var isInputActive: Bool
     @State private var showingDuplicateNameError = false
     @State private var selectedInterval: ServiceIntervalTypes = .distance
@@ -33,7 +33,7 @@ struct AddEditServiceView: View {
         self.onDelete = onDelete
         
         _draftService = StateObject(wrappedValue: DraftService(service: service))
-        _draftServiceRecord = StateObject(wrappedValue: DraftServiceRecord())
+        _draftServiceLog = StateObject(wrappedValue: DraftServiceLog())
     }
     
     // MARK: - Body
@@ -111,7 +111,7 @@ struct AddEditServiceView: View {
                 
                 if service == nil {
                     Section {
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 15) {
                             Text("Has this service been performed before?")
                                 .font(.subheadline.bold())
                             
@@ -124,18 +124,20 @@ struct AddEditServiceView: View {
                             }
                             .pickerStyle(.segmented)
                         }
+                        .padding(.vertical, 5)
                         
                         if alreadyPerformed == true {
                             VStack(alignment: .leading, spacing: 15) {
                                 Text("When was it last performed?")
                                     .font(.subheadline.bold())
+                                    .padding(.vertical, 5)
                                 
-                                DatePicker("Date", selection: $draftServiceRecord.date, displayedComponents: .date)
+                                DatePicker("Date", selection: $draftServiceLog.date, displayedComponents: .date)
                                     .foregroundStyle(Color.secondary)
                             }
                             
                             LabeledInput(label: "Odometer") {
-                                TextField("Required", value: $draftServiceRecord.odometer, format: .number.decimalSeparator(strategy: .automatic))
+                                TextField("Required", value: $draftServiceLog.odometer, format: .number.decimalSeparator(strategy: .automatic))
                                     .keyboardType(.numberPad)
                             }
                         }
@@ -173,8 +175,8 @@ struct AddEditServiceView: View {
                             if vehicle.sortedServicesArray.contains(where: { service in service.name == draftService.name }) {
                                 showingDuplicateNameError = true
                             } else {
-                                if alreadyPerformed && draftServiceRecord.odometer != nil {
-                                    vehicle.addNewService(draftService: draftService, selectedInterval: selectedInterval, initialRecord: draftServiceRecord)
+                                if alreadyPerformed && draftServiceLog.odometer != nil {
+                                    vehicle.addNewService(draftService: draftService, selectedInterval: selectedInterval, initialRecord: draftServiceLog)
                                 } else {
                                     vehicle.addNewService(draftService: draftService, selectedInterval: selectedInterval)
                                 }

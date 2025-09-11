@@ -28,6 +28,7 @@ struct MaintenanceListView: View {
     }
     
     @State private var showingAddService = false
+    @State private var showingLogService = false
 //    @State private var isAnimating: Bool = false
     @State private var showingFirstServiceInfo = false
     
@@ -61,9 +62,20 @@ struct MaintenanceListView: View {
         .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
             AddEditServiceView(vehicle: vehicle)
         }
+        .sheet(isPresented: $showingLogService, content: {
+            AddEditRecordView(vehicle: vehicle)
+        })
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button("Add New Maintenance Service", systemImage: "plus") {
+                Menu("Set Up New Service", systemImage: "plus") {
+                    Button("Set Up New Service", systemImage: "plus") {
+                        showingAddService = true
+                    }
+                    
+                    Button("Log Service", systemImage: "plus.rectangle.on.rectangle") {
+                        showingLogService = true
+                    }
+                } primaryAction: {
                     showingAddService = true
                 }
             }

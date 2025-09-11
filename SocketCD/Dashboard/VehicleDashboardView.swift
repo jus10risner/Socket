@@ -47,15 +47,15 @@ struct VehicleDashboardView: View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 5) {
+                    HStack(spacing: 5) {
+                        odometerDashboardCard
+                        
+                        repairsDashboardCard
+                    }
+                    
                     maintenanceDashboardCard
                     
                     fillupsDashboardCard
-                    
-                    HStack(spacing: 5) {
-                        repairsDashboardCard
-                        
-                        odometerDashboardCard
-                    }
                 }
                 
                 customInfo
@@ -77,9 +77,15 @@ struct VehicleDashboardView: View {
             }
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
-                case .addService:
-                    AddEditServiceView(vehicle: vehicle)
-                        .tint(settings.accentColor(for: .maintenanceTheme))
+                case .logService:
+                    Group {
+                        if let nextDueService {
+                            AddEditRecordView(service: nextDueService, vehicle: vehicle)
+                        } else {
+                            AddEditServiceView(vehicle: vehicle)
+                        }
+                    }
+                    .tint(settings.accentColor(for: .maintenanceTheme))
                 case .addRepair:
                     AddEditRepairView(vehicle: vehicle)
                         .tint(settings.accentColor(for: .repairsTheme))
@@ -149,7 +155,7 @@ struct VehicleDashboardView: View {
     
     private var maintenanceDashboardCard: some View {
         DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log") {
-            activeSheet = .addService
+            activeSheet = .logService
         } content: {
             if let service = nextDueService {
                 HStack {
@@ -350,17 +356,40 @@ struct VehicleDashboardView: View {
     
     // Returns the next service due (or most overdue)
     private var nextDueService: Service? {
-        services.sorted {
-            switch ($0.estimatedDaysUntilDue(currentOdometer: vehicle.odometer),
-                    $1.estimatedDaysUntilDue(currentOdometer: vehicle.odometer)) {
+//        services.sorted {
+//            switch ($0.estimatedDaysUntilDue(currentOdometer: vehicle.odometer),
+//                    $1.estimatedDaysUntilDue(currentOdometer: vehicle.odometer)) {
+//            case let (d1?, d2?):
+//                return d1 < d2
+//            case (nil, _?):
+//                return false
+//            case (_?, nil):
+//                return true
+//            case (nil, nil):
+//                return $0.name < $1.name
+//            }
+//        }
+        return services.sorted { s1, s2 in
+            switch (s1.estimatedDaysUntilDue(currentOdometer: vehicle.odometer),
+                    s2.estimatedDaysUntilDue(currentOdometer: vehicle.odometer)) {
             case let (d1?, d2?):
-                return d1 < d2
+                if d1 != d2 {
+                    return d1 < d2
+                } else if s1.name != s2.name {
+                    return s1.name < s2.name
+                } else {
+                    return s1.id < s2.id
+                }
             case (nil, _?):
                 return false
             case (_?, nil):
                 return true
             case (nil, nil):
-                return $0.name < $1.name
+                if s1.name != s2.name {
+                    return s1.name < s2.name
+                } else {
+                    return s1.id < s2.id
+                }
             }
         }
         .first
@@ -400,7 +429,7 @@ struct ShareItem: Identifiable {
 }
 
 enum ActiveSheet: String, Identifiable {
-    case addService, addRepair, addFillup, addCustomInfo, editVehicle
+    case logService, addRepair, addFillup, addCustomInfo, editVehicle
     
     var id: String { rawValue }
 }

@@ -71,7 +71,7 @@ extension Vehicle {
         }
     }
     
-    // Returns an array of services, sorted by the order in which they are due (normalized by estimated days until due)
+    // Returns an array of services, sorted by the order in which they are due (normalized by estimated days until due); uses name and id as fallbacks, if due dates are equal
     var sortedServicesArray: [Service] {
         let set = services as? Set<Service> ?? []
         
@@ -79,16 +79,27 @@ extension Vehicle {
             switch (s1.estimatedDaysUntilDue(currentOdometer: odometer),
                     s2.estimatedDaysUntilDue(currentOdometer: odometer)) {
             case let (d1?, d2?):
-                return d1 < d2
+                if d1 != d2 {
+                    return d1 < d2
+                } else if s1.name != s2.name {
+                    return s1.name < s2.name
+                } else {
+                    return s1.id < s2.id
+                }
             case (nil, _?):
                 return false
             case (_?, nil):
                 return true
             case (nil, nil):
-                return s1.name < s2.name
+                if s1.name != s2.name {
+                    return s1.name < s2.name
+                } else {
+                    return s1.id < s2.id
+                }
             }
         }
     }
+
     
     // Returns all service records and repairs for this vehicle, sorted by date (most recent first)
     var serviceAndRepairTimeline: [VehicleExportRecord] {
@@ -173,7 +184,7 @@ extension Vehicle {
         try? context.save()
     }
     
-    func addNewService(draftService: DraftService, selectedInterval: ServiceIntervalTypes, initialRecord draftServiceRecord: DraftServiceRecord? = nil) {
+    func addNewService(draftService: DraftService, selectedInterval: ServiceIntervalTypes, initialRecord draftServiceLog: DraftServiceLog? = nil) {
         let context = DataController.shared.container.viewContext
         
         if selectedInterval == .distance {
@@ -182,6 +193,7 @@ extension Vehicle {
             draftService.distanceInterval = 0
         }
         
+        // Create Service
         let newService = Service(context: context)
         newService.vehicle = self
         newService.id = UUID()
@@ -193,12 +205,15 @@ extension Vehicle {
         newService.distanceBasedNotificationIdentifier = UUID().uuidString
         newService.timeBasedNotificationIdentifier = UUID().uuidString
         
-        if let draftServiceRecord {
-            newService.addNewServiceRecord(draftServiceRecord: draftServiceRecord)
+        // Add Service Record to Service
+        let serviceRecord = ServiceRecord(context: context)
+        serviceRecord.service = newService
+        serviceRecord.id = UUID()
+        
+        if let draftServiceLog {
+            serviceRecord.date = draftServiceLog.date
+            serviceRecord.odometer = draftServiceLog.odometer ?? 0
         } else {
-            let serviceRecord = ServiceRecord(context: context)
-            serviceRecord.service = newService
-            serviceRecord.id = UUID()
             serviceRecord.date = Date()
             serviceRecord.odometer = 0
         }
@@ -263,20 +278,6 @@ extension Vehicle {
     
     // MARK: - Other Methods
     
-    // Calculates the miles or days left until service is due
-//    private func priority(context: ServiceContext) -> Int? {
-//        switch (context.daysUntilDue, context.milesUntilDue) {
-//        case let (d?, m?):
-//            return min(d, m)
-//        case let (d?, nil):
-//            return d
-//        case let (nil, m?):
-//            return m
-//        default:
-//            return nil
-//        }
-//    }
-    
     // Checks to see when all notifications are due for this vehicle, and schedules them if necessary
     func updateAllServiceNotifications() {
         UNUserNotificationCenter.current().getNotificationSettings { permissions in
@@ -290,68 +291,4 @@ extension Vehicle {
             }
         }
     }
-    
-//    // Checks to see when all notifications are due for this vehicle, and schedules them for the correct times
-//    func updateAllNotifications() {
-//        let context = DataController.shared.container.viewContext
-//        let settings = AppSettings()
-//        
-//        UNUserNotificationCenter.current().getNotificationSettings { permissions in
-//            guard permissions.authorizationStatus == .authorized else {
-//                print("Push notifications have not been authorized")
-//                return
-//            }
-//            
-//            for service in self.sortedServicesArray {
-//                if let dateDue = service.dateDue {
-//                    if let alertDate = Calendar.current.date(byAdding: .day, value: Int(-settings.daysBeforeMaintenance), to: dateDue) {
-//                        if dateDue > Date.now && alertDate > Date.now {
-//                            service.scheduleNotificationOnDate(alertDate, for: self)
-//                        }
-//                    }
-//                }
-//                
-//                // Only schedule an odometer-based notification if one isn't already pending
-//                if service.notificationScheduled == false {
-//                    if let odometerDue = service.odometerDue {
-//                        let distanceToNextService = odometerDue - self.odometer
-//                        
-//                        if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
-//                            service.scheduleNotificationMomentarily(for: self)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        
-//        try? context.save()
-//    }
-//    
-//    // Schedules only the odometer-dependent notifications for this vehicle, when appropriate
-//    func updateOdometerBasedNotifications() {
-//        let context = DataController.shared.container.viewContext
-//        let settings = AppSettings()
-//        
-//        UNUserNotificationCenter.current().getNotificationSettings { permissions in
-//            guard permissions.authorizationStatus == .authorized else {
-//                print("Push notifications have not been authorized")
-//                return
-//            }
-//            
-//            for service in self.sortedServicesArray {
-//                // Only schedule an odometer-based notification if one isn't already pending
-//                if service.notificationScheduled == false {
-//                    if let odometerDue = service.odometerDue {
-//                        let distanceToNextService = odometerDue - self.odometer
-//                        
-//                        if distanceToNextService <= settings.distanceBeforeMaintenance && distanceToNextService >= 0 {
-//                            service.scheduleNotificationMomentarily(for: self)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        
-//        try? context.save()
-//    }
 }

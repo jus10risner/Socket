@@ -27,7 +27,7 @@ struct ServiceListRowView: View {
         }
         .listRowSeparator(.hidden)
         .sheet(item: $selectedService) { service in
-            AddEditRecordView(service: service)
+            AddEditRecordView(service: service, vehicle: vehicle)
         }
         .swipeActions(edge: .leading) {
             Button("Add Service Record", systemImage: "plus.square.on.square") {
@@ -39,25 +39,6 @@ struct ServiceListRowView: View {
     
     
     // MARK: - Views
-    
-    // Vertical capsule shape that changes color and shape, to indicate service status
-//    private var serviceStatusIndicator: some View {
-//        Group {
-//            if service.serviceStatus == .due || service.serviceStatus == .overDue {
-//                VStack(spacing: 5) {
-//                    Capsule()
-//                        .frame(width: 5, height: 30)
-//                    
-//                    Circle()
-//                        .frame(width: 5)
-//                }
-//            } else {
-//                Capsule()
-//                    .frame(width: 5, height: 40)
-//            }
-//        }
-//        .foregroundStyle(service.indicatorColor)
-//    }
     
     // Service name and relevant info
     private var serviceInfo: some View {

@@ -38,40 +38,47 @@ extension ServiceRecord {
         
     }
     
+    // MARK: - Effective values (prefers serviceLog values, but falls back to serviceRecord values for older entries)
+    var effectiveDate: Date {
+        serviceLog?.date ?? date
+    }
+    
+    var effectiveOdometer: Int {
+        serviceLog?.odometer ?? odometer
+    }
+    
+    var effectiveCost: Double? {
+        serviceLog?.cost ?? cost
+    }
+    
+    var effectiveNote: String {
+        serviceLog?.note ?? note
+    }
+    
+    var effectivePhotos: [Photo] {
+        if let log = serviceLog {
+            return log.sortedPhotosArray
+        } else {
+            return sortedPhotosArray
+        }
+    }
+    
     // MARK: - CRUD Methods
     
-    func updateAndSave(service: Service, draftServiceRecord: DraftServiceRecord) {
+    func updateAndSave(service: Service, draftServiceLog: DraftServiceLog) {
         let context = DataController.shared.container.viewContext
         
-        self.date = draftServiceRecord.date
-        self.odometer = draftServiceRecord.odometer ?? 0
-        self.cost = draftServiceRecord.cost
-        self.note = draftServiceRecord.note
-        self.photos = NSSet(array: draftServiceRecord.photos)
-        
-        if let vehicle = service.vehicle, let draftOdometer = draftServiceRecord.odometer, draftOdometer > vehicle.odometer {
+        self.date = draftServiceLog.date
+        self.odometer = draftServiceLog.odometer ?? 0
+        self.cost = draftServiceLog.cost
+        self.note = draftServiceLog.note
+        self.photos = NSSet(array: draftServiceLog.photos)
+
+        if let vehicle = service.vehicle, let draftOdometer = draftServiceLog.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer
             service.updateNotifications(vehicle: vehicle)
         }
-
-//        if let odometer = draftServiceRecord.odometer {
-//            if odometer > vehicle.odometer {
-//                vehicle.odometer = odometer
-//            }
-//        }
-        
-//        if let vehicle = service.vehicle {
-//            service.updateNotifications(vehicle: vehicle)
-//        }
         
         try? context.save()
     }
-    
-//    func delete(for service: Service) {
-//        let context = DataController.shared.container.viewContext
-//        
-//        service.cancelPendingNotifications()
-//        context.delete(self)
-//        try? context.save()
-//    }
 }
