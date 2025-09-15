@@ -10,6 +10,7 @@ import Foundation
 class DraftServiceLog: ObservableObject {
     var id: UUID? = nil
     
+    @Published var isBaseline: Bool = false
     @Published var date: Date = Date.now
     @Published var odometer: Int? = nil
     @Published var cost: Double? = nil

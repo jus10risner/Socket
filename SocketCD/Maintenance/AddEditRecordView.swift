@@ -112,6 +112,7 @@ struct AddEditRecordView: View {
             .alert("Delete Record", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let record {
+                        service.cancelPendingNotifications()
                         DataController.shared.delete(record)
                     }
                     

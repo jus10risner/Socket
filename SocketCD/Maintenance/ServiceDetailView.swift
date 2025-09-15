@@ -29,7 +29,14 @@ struct ServiceDetailView: View {
                             Text(serviceNextDueInfo)
                         }
                     } else {
-                        Text("Add a service record first!")
+                        Text("Unknown")
+                    }
+                }
+                
+                if service.note != "" {
+                    LabeledContent("Service Note") {
+                        Text(service.note)
+                            .textSelection(.enabled)
                     }
                 }
             } header: {
@@ -51,27 +58,26 @@ struct ServiceDetailView: View {
             }
             .headerProminence(.increased)
             
-            if service.note != "" {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Service Note")
-                    
-                    Text(service.note)
-                        .foregroundStyle(Color.secondary)
-                        .textSelection(.enabled)
-                }
-            }
-            
-            if !service.sortedServiceRecordsArray.isEmpty {
-                Section {
+            if !service.sortedServiceRecordsArray.isEmpty && !service.sortedServiceRecordsArray.contains(where: { $0.serviceLog?.isBaseline == true }) {
+                Section("Service History") {
                     ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
                         NavigationLink {
                             RecordDetailView(record: record, vehicle: vehicle, service: service)
                         } label: {
-                            LabeledContent("\(record.effectiveOdometer) \(settings.distanceUnit.abbreviated)", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
+                            LabeledContent {
+                                Text(record.effectiveDate.formatted(date: .numeric, time: .omitted))
+                            } label: {
+                                HStack(spacing: 3) {
+                                    odometerSymbol
+                                    
+                                    Text("\(record.effectiveOdometer) \(settings.distanceUnit.abbreviated)")
+                                }
+                            }
+
+                            
+//                            LabeledContent("\(record.effectiveOdometer) \(settings.distanceUnit.abbreviated)", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
                         }
                     }
-                } header: {
-                    Label("Service History", systemImage: "clock.arrow.circlepath")
                 }
                 .textCase(nil)
             } else {

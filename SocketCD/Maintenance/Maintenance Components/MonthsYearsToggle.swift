@@ -16,30 +16,75 @@ struct MonthsYearsToggle: View {
     @State private var textRotation = 0.0 // ""
     
     var body: some View {
-        monthsYearsToggleButton
+//        monthsYearsToggleButton
+        alternateToggleButton
+//        buttonToggle
     }
     
     
     // MARK: - Views
     
     // Button that toggles between months and years
-    private var monthsYearsToggleButton: some View {
-        ZStack {
+//    private var monthsYearsToggleButton: some View {
+//        ZStack {
+//            if monthsInterval == true {
+//                Text(timeInterval == 1 ? "month" : "months")
+//            } else {
+//                Text(timeInterval == 1 ? "year" : "years")
+//            }
+//        }
+//        .rotation3DEffect(.degrees(textRotation), axis: (x: 0, y: 1, z: 0))
+//        .padding(4)
+//        .overlay(RoundedRectangle(cornerRadius: 5).strokeBorder(settings.accentColor(for: .maintenanceTheme)))
+//        .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
+//        .onTapGesture {
+//            flipButton()
+//        }
+//        .rotation3DEffect(.degrees(boxRotation), axis: (x: 0, y: 1, z: 0))
+//        .accessibilityHint("Tap to toggle between months and years")
+//    }
+    
+    private var buttonToggle: some View {
+        Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                monthsInterval.toggle()
+            }
+        } label: {
+            Group {
+                if monthsInterval == true {
+                    Text(timeInterval == 1 ? "month" : "months")
+                } else {
+                    Text(timeInterval == 1 ? "year" : "years")
+                }
+            }
+//            Text(monthsInterval ? "Months" : "Years")
+//                .font(.headline)
+//                .padding(.horizontal, 16)
+//                .padding(.vertical, 8)
+//                .background(
+//                    Capsule()
+//                        .fill(monthsInterval ? Color.blue : Color.green)
+//                        .shadow(radius: 2)
+//                )
+//                .foregroundColor(.white)
+//                .transition(.scale.combined(with: .opacity))
+        }
+        .buttonStyle(.bordered)
+    }
+    
+    private var alternateToggleButton: some View {
+        Button {
+            flipButton()
+        } label: {
             if monthsInterval == true {
                 Text(timeInterval == 1 ? "month" : "months")
             } else {
                 Text(timeInterval == 1 ? "year" : "years")
             }
         }
+        .buttonStyle(.bordered)
         .rotation3DEffect(.degrees(textRotation), axis: (x: 0, y: 1, z: 0))
-        .padding(4)
-        .overlay(RoundedRectangle(cornerRadius: 5).strokeBorder(settings.accentColor(for: .maintenanceTheme)))
-        .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
-        .onTapGesture {
-            flipButton()
-        }
         .rotation3DEffect(.degrees(boxRotation), axis: (x: 0, y: 1, z: 0))
-        .accessibilityHint("Tap to toggle between months and years")
     }
     
     

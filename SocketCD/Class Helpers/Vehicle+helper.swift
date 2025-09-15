@@ -209,14 +209,21 @@ extension Vehicle {
         let serviceRecord = ServiceRecord(context: context)
         serviceRecord.service = newService
         serviceRecord.id = UUID()
+        serviceRecord.date = draftServiceLog?.date ?? Date()
+        serviceRecord.odometer = draftServiceLog?.odometer ?? self.odometer
         
-        if let draftServiceLog {
-            serviceRecord.date = draftServiceLog.date
-            serviceRecord.odometer = draftServiceLog.odometer ?? 0
-        } else {
-            serviceRecord.date = Date()
-            serviceRecord.odometer = 0
+        // Add a baseline service log, if the user does not add their own service record (allows service alerts to work even for new vehicles where service has not yet been performed)
+        if draftServiceLog?.odometer == nil {
+            let baselineLog = ServiceLog(context: context)
+            baselineLog.id = UUID()
+            baselineLog.date = Date()
+            baselineLog.odometer = self.odometer
+            baselineLog.isBaseline = true
+            
+            serviceRecord.serviceLog = baselineLog
         }
+        
+        self.updateAllServiceNotifications()
         
         try? context.save()
     }

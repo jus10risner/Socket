@@ -294,6 +294,11 @@ extension Service {
     func addNewServiceRecord(draftServiceLog: DraftServiceLog, allServices: [Service]) {
         let context = DataController.shared.container.viewContext
         
+        // Delete baseline service log, if one exists, before adding a user-created service log
+        if let baselineServiceLog = sortedServiceRecordsArray.first(where: { $0.serviceLog?.isBaseline == true }) {
+            context.delete(baselineServiceLog)
+        }
+        
         // Create a new ServiceLog
         let log = ServiceLog(context: context)
         log.id = UUID()

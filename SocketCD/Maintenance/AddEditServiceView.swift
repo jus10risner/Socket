@@ -18,7 +18,7 @@ struct AddEditServiceView: View {
     @FocusState var isInputActive: Bool
     @State private var showingDuplicateNameError = false
     @State private var selectedInterval: ServiceIntervalTypes = .distance
-    @State private var alreadyPerformed = false
+    @State private var loggingService = false
     @State private var showingDeleteAlert = false
     
     // MARK: - Input
@@ -56,10 +56,7 @@ struct AddEditServiceView: View {
                 .headerProminence(.increased)
                 
                 Section(footer: Text("Check your owner's manual for recommended service intervals.")) {
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("What determines when this service is due?")
-                            .font(.subheadline.bold())
-                        
+                    formItem(headline: "What determines when this service is due?") {
                         Picker("Track service by", selection: $selectedInterval) {
                             ForEach(ServiceIntervalTypes.allCases, id: \.self) {
                                 Text($0.rawValue)
@@ -67,12 +64,8 @@ struct AddEditServiceView: View {
                         }
                         .pickerStyle(.segmented)
                     }
-                    .padding(.vertical, 5)
                     
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("This service should be performed every:")
-                            .font(.subheadline.bold())
-                        
+                    formItem(headline: "This service should be performed every:") {
                         Group {
                             switch selectedInterval {
                             case .distance:
@@ -106,16 +99,12 @@ struct AddEditServiceView: View {
                         .multilineTextAlignment(.center)
                         .keyboardType(.numberPad)
                     }
-                    .padding(.vertical, 5)
                 }
                 
                 if service == nil {
-                    Section {
-                        VStack(alignment: .leading, spacing: 15) {
-                            Text("Has this service been performed before?")
-                                .font(.subheadline.bold())
-                            
-                            Picker("", selection: $alreadyPerformed) {
+                    Section(footer: Text("Service will be tracked from today at your current odometer if no service record is added.")) {
+                        formItem(headline: "Add a service record now?") {
+                            Picker("", selection: $loggingService.animation()) {
                                 Text("No")
                                     .tag(false)
                                 
@@ -124,14 +113,9 @@ struct AddEditServiceView: View {
                             }
                             .pickerStyle(.segmented)
                         }
-                        .padding(.vertical, 5)
                         
-                        if alreadyPerformed == true {
-                            VStack(alignment: .leading, spacing: 15) {
-                                Text("When was it last performed?")
-                                    .font(.subheadline.bold())
-                                    .padding(.vertical, 5)
-                                
+                        if loggingService {
+                            formItem(headline: "When was this service last performed?") {
                                 DatePicker("Date", selection: $draftServiceLog.date, displayedComponents: .date)
                                     .foregroundStyle(Color.secondary)
                             }
@@ -142,9 +126,10 @@ struct AddEditServiceView: View {
                             }
                         }
                     }
+                    .textCase(nil)
                 }
                
-                Section(footer: Text("Add info that you want to reference each time this service is performed (e.g. oil type, filter number)")) {
+                Section {
                     TextField("Service Note", text: $draftService.serviceNote, axis: .vertical)
                 }
                 
@@ -175,7 +160,7 @@ struct AddEditServiceView: View {
                             if vehicle.sortedServicesArray.contains(where: { service in service.name == draftService.name }) {
                                 showingDuplicateNameError = true
                             } else {
-                                if alreadyPerformed && draftServiceLog.odometer != nil {
+                                if loggingService && draftServiceLog.odometer != nil {
                                     vehicle.addNewService(draftService: draftService, selectedInterval: selectedInterval, initialRecord: draftServiceLog)
                                 } else {
                                     vehicle.addNewService(draftService: draftService, selectedInterval: selectedInterval)
@@ -224,6 +209,16 @@ struct AddEditServiceView: View {
                 Text("Please choose a different name.")
             }
         }
+    }
+    
+    private func formItem<Content: View>(headline: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 15) {
+            Text(headline)
+                .font(.subheadline.bold())
+            
+            content()
+        }
+        .padding(.vertical, 5)
     }
 }
 
