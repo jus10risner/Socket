@@ -21,13 +21,6 @@ struct VehicleListView: View {
     @Binding var showingOnboardingText: Bool // Unused, for now
     
     var body: some View {
-        alternateVehicleCardList
-    }
-    
-    
-    // MARK: - Views
-    
-    var alternateVehicleCardList: some View {
         List(vehicles, selection: $selectedVehicle) { vehicle in
             Group {
                 if UIDevice.current.userInterfaceIdiom == .pad {
@@ -41,16 +34,16 @@ struct VehicleListView: View {
                         }
                 }
             }
-//                .buttonStyle(.plain) // Allows swipeActions to work
-                .listRowSeparator(.hidden)
-//            .onMove {
-//                move(from: $0, to: $1)
-//                try? context.save()
-//            }
+            //                .buttonStyle(.plain) // Allows swipeActions to work
+            .listRowSeparator(.hidden)
+            //            .onMove {
+            //                move(from: $0, to: $1)
+            //                try? context.save()
+            //            }
             
-//            if showingOnboardingText == true {
-//                onboardingTipText
-//            }
+            //            if showingOnboardingText == true {
+            //                onboardingTipText
+            //            }
         }
         .overlay {
             if vehicles.isEmpty {
@@ -93,6 +86,9 @@ struct VehicleListView: View {
             }
         }
     }
+    
+    
+    // MARK: - Views
     
     // Tip that displays immediately after the first vehicle has been added, until another view is shown
 //    private var onboardingTipText: some View {

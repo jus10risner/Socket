@@ -31,7 +31,7 @@ struct ContentView: View {
             if let vehicle = selectedVehicle {
                 VehicleDashboardView(vehicle: vehicle, selectedVehicle: $selectedVehicle)
             } else {
-                Text("Please select a vehicle")
+                emptyDetailListView
             }
         }
         .tint(.primary)
@@ -54,6 +54,17 @@ struct ContentView: View {
     
     
     // MARK: - Views
+    
+    private var emptyDetailListView: some View {
+        ContentUnavailableView("No Vehicle Selected", systemImage: "car.2.fill", description: Text("Choose a vehicle to see details here."))
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(" ")
+                        .opacity(0)
+                }
+            }
+            .navigationBarTitleDisplayMode(.large)
+    }
     
 //    private var homeView: some View {
 //        NavigationStack {
