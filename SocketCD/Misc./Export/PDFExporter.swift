@@ -107,11 +107,21 @@ struct PDFExporter {
             
             for entry in entries {
                 switch entry.type {
-                case .service(let record):
+                case .serviceRecord(let record):
                     let name = record.service?.name ?? "Service"
                     fullText.append(NSAttributedString(string: "• \(name)\n", attributes: bulletAttributes))
 
                     let note = record.note.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if !note.isEmpty {
+                        fullText.append(NSAttributedString(string: "\(note)\n", attributes: noteAttributes))
+                    }
+                    
+                case .serviceLog(let log):
+                    for service in log.sortedServicesArray {
+                        fullText.append(NSAttributedString(string: "• \(service.name)\n", attributes: bulletAttributes))
+                    }
+                    
+                    let note = log.note.trimmingCharacters(in: .whitespacesAndNewlines)
                     if !note.isEmpty {
                         fullText.append(NSAttributedString(string: "\(note)\n", attributes: noteAttributes))
                     }

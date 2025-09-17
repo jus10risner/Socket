@@ -8,7 +8,8 @@
 import Foundation
 
 enum VehicleRecordType {
-    case service(ServiceRecord)
+    case serviceRecord(ServiceRecord)
+    case serviceLog(ServiceLog)
     case repair(Repair)
 }
 
@@ -20,10 +21,23 @@ struct VehicleExportRecord: Identifiable {
     
     var id: UUID {
         switch self.type {
-        case .service(let record):
+        case .serviceRecord(let record):
             return record.id ?? UUID()
+        case .serviceLog(let log):
+            return log.id ?? UUID()
         case .repair(let record):
             return record.id ?? UUID()
+        }
+    }
+    
+    var displayName: String {
+        switch type {
+        case .serviceRecord(let record):
+            return record.service?.name ?? ""
+        case .serviceLog(let log):
+            return log.sortedServicesArray.map { $0.name }.joined(separator: ", ")
+        case .repair(let repair):
+            return repair.name
         }
     }
 }

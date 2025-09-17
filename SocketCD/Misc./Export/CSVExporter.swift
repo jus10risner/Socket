@@ -24,26 +24,28 @@ struct CSVExporter {
             let date = dateFormatter.string(from: entry.date)
             let odometer = entry.odometer
             
-            let cost: String
-            switch entry.type {
-            case .service(let record):
-                cost = String(format: "%.2f", record.cost ?? 0)
-            case .repair(let repair):
-                cost = String(format: "%.2f", repair.cost ?? 0)
-            }
-
             let name: String
             let note: String
+            let cost: String
             let type: String
 
             switch entry.type {
-            case .service(let record):
+            case .serviceRecord(let record):
                 name = record.service?.name ?? "Service"
                 note = record.note
+                cost = String(format: "%.2f", record.cost ?? 0)
+                type = "Service"
+            case .serviceLog(let log):
+                // ServiceLog: combine all service names into one field
+                let namesArray = log.sortedServicesArray.map { $0.name }
+                name = namesArray.joined(separator: ", ")
+                note = log.note
+                cost = String(format: "%.2f", log.cost ?? 0)
                 type = "Service"
             case .repair(let repair):
                 name = repair.name
                 note = repair.note
+                cost = String(format: "%.2f", repair.cost ?? 0)
                 type = "Repair"
             }
 
@@ -171,20 +173,38 @@ struct CSVExporter {
 
         for record in vehicle.serviceAndRepairTimeline {
             switch record.type {
-            case .service(let serviceRecord):
+            case .serviceRecord(let record):
                 combinedRows.append(
                     ExportRow(
                         type: "Service",
-                        date: serviceRecord.date,
-                        odometer: serviceRecord.odometer,
-                        name: serviceRecord.service?.name,
-                        cost: serviceRecord.cost ?? 0,
+                        date: record.date,
+                        odometer: record.odometer,
+                        name: record.service?.name,
+                        cost: record.cost ?? 0,
                         trip: nil,
                         fuelEconomy: nil,
                         fullTank: nil,
-                        note: serviceRecord.note
+                        note: record.note
                     )
                 )
+            
+            case .serviceLog(let log):
+            // New ServiceLog: all service names in a single field
+            let names = log.sortedServicesArray.map { $0.name }.joined(separator: ", ")
+            combinedRows.append(
+                ExportRow(
+                    type: "Service",
+                    date: log.date,
+                    odometer: log.odometer,
+                    name: names,
+                    cost: log.cost ?? 0,
+                    trip: nil,
+                    fuelEconomy: nil,
+                    fullTank: nil,
+                    note: log.note
+                )
+            )
+            
             case .repair(let repair):
                 combinedRows.append(
                     ExportRow(
