@@ -17,8 +17,7 @@ struct AddEditServiceView: View {
     @StateObject var draftServiceLog = DraftServiceLog()
     @FocusState var isInputActive: Bool
     @State private var showingDuplicateNameError = false
-    @State private var selectedInterval: ServiceIntervalTypes = .distance
-    @State private var loggingService = false
+    @State private var loggingService = true
     @State private var showingDeleteAlert = false
     
     // MARK: - Input
@@ -55,45 +54,18 @@ struct AddEditServiceView: View {
                 }
                 .headerProminence(.increased)
                 
-                Section(footer: Text("Check your owner's manual for recommended service intervals.")) {
-                    formItem(headline: "What determines when this service is due?") {
-                        Picker("Track service by", selection: $selectedInterval) {
-                            ForEach(ServiceIntervalTypes.allCases, id: \.self) {
-                                Text($0.rawValue)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                    }
-                    
+                Section(footer: Text("Track by distance, time, or both — your choice.")) {
                     formItem(headline: "This service should be performed every:") {
-                        Group {
-                            switch selectedInterval {
-                            case .distance:
-                                HStack {
-                                    TextField("5,000", value: $draftService.distanceInterval, format: .number.decimalSeparator(strategy: .automatic))
-                                        .fixedSize()
-                                    Text(settings.distanceUnit.abbreviated)
-                                }
-                            case .time:
-                                HStack {
-                                    TextField("6", value: $draftService.timeInterval, format: .number)
-                                        .fixedSize()
-                                    
-                                    MonthsYearsToggle(monthsInterval: $draftService.monthsInterval, timeInterval: Int(draftService.timeInterval ?? 0))
-                                }
-                            case .both:
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        TextField("5,000", value: $draftService.distanceInterval, format: .number.decimalSeparator(strategy: .automatic))
-                                            .fixedSize()
-                                        Text("\(settings.distanceUnit.abbreviated) or")
-                                        TextField("6", value: $draftService.timeInterval, format: .number)
-                                            .fixedSize()
-                                        
-                                        MonthsYearsToggle(monthsInterval: $draftService.monthsInterval, timeInterval: Int(draftService.timeInterval ?? 0))
-                                    }
-                                }
-                            }
+                        HStack {
+                            TextField("5,000", value: $draftService.distanceInterval, format: .number.decimalSeparator(strategy: .automatic))
+                                .fixedSize()
+                            
+                            Text("\(settings.distanceUnit.abbreviated) or")
+                            
+                            TextField("6", value: $draftService.timeInterval, format: .number)
+                                .fixedSize()
+                            
+                            MonthsYearsToggle(monthsInterval: $draftService.monthsInterval, timeInterval: Int(draftService.timeInterval ?? 0))
                         }
                         .textFieldStyle(.roundedBorder)
                         .multilineTextAlignment(.center)
@@ -102,20 +74,31 @@ struct AddEditServiceView: View {
                 }
                 
                 if service == nil {
-                    Section(footer: Text("Service will be tracked from today at your current odometer if no service record is added.")) {
-                        formItem(headline: "Add a service record now?") {
+                    Section {
+                        formItem(headline: "Start tracking from:") {
                             Picker("", selection: $loggingService.animation()) {
-                                Text("No")
-                                    .tag(false)
-                                
-                                Text("Yes")
+                                Text("Last Service")
                                     .tag(true)
+                                
+                                Text("Custom")
+                                    .tag(false)
                             }
                             .pickerStyle(.segmented)
                         }
-                        
+//                        
                         if loggingService {
-                            formItem(headline: "When was this service last performed?") {
+                            formItem(headline: "When was this service last performed?", subheadline: "This will be added to service history.") {
+                                
+                                DatePicker("Date", selection: $draftServiceLog.date, displayedComponents: .date)
+                                    .foregroundStyle(Color.secondary)
+                            }
+                            
+                            LabeledInput(label: "Odometer") {
+                                TextField("Required", value: $draftServiceLog.odometer, format: .number.decimalSeparator(strategy: .automatic))
+                                    .keyboardType(.numberPad)
+                            }
+                        } else {
+                            formItem(headline: "Define a starting point for this service.", subheadline: "This will not be added to service history.") {
                                 DatePicker("Date", selection: $draftServiceLog.date, displayedComponents: .date)
                                     .foregroundStyle(Color.secondary)
                             }
@@ -127,6 +110,9 @@ struct AddEditServiceView: View {
                         }
                     }
                     .textCase(nil)
+                    .onChange(of: loggingService) {
+                        draftServiceLog.odometer = loggingService ? nil : vehicle?.odometer
+                    }
                 }
                
                 Section {
@@ -155,37 +141,23 @@ struct AddEditServiceView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         if let service {
-                            service.updateAndSave(draftService: draftService, selectedInterval: selectedInterval)
+                            service.updateAndSave(draftService: draftService)
                         } else if let vehicle {
                             if vehicle.sortedServicesArray.contains(where: { service in service.name == draftService.name }) {
                                 showingDuplicateNameError = true
-                            } else {
-                                if loggingService && draftServiceLog.odometer != nil {
-                                    vehicle.addNewService(draftService: draftService, selectedInterval: selectedInterval, initialRecord: draftServiceLog)
-                                } else {
-                                    vehicle.addNewService(draftService: draftService, selectedInterval: selectedInterval)
-                                }
+                            } else if draftServiceLog.odometer != nil {
+                                vehicle.addNewService(draftService: draftService, initialRecord: draftServiceLog, isBaseLine: loggingService ? false : true)
                             }
                         }
                         
                         dismiss()
                     }
                     .disabled(draftService.canBeSaved ? false : true)
+                    .disabled(service == nil && draftServiceLog.odometer == nil ? true : false)
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) { dismiss() }
-                }
-            }
-            .onAppear {
-                if service != nil {
-                    if draftService.distanceInterval != 0 && draftService.timeInterval == 0 {
-                        selectedInterval = .distance
-                    } else if draftService.timeInterval != 0 && draftService.distanceInterval == 0 {
-                        selectedInterval = .time
-                    } else {
-                        selectedInterval = .both
-                    }
                 }
             }
             .alert("Delete Service", isPresented: $showingDeleteAlert) {
@@ -211,10 +183,17 @@ struct AddEditServiceView: View {
         }
     }
     
-    private func formItem<Content: View>(headline: String, @ViewBuilder content: () -> Content) -> some View {
+    private func formItem<Content: View>(headline: String, subheadline: String? = nil, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 15) {
-            Text(headline)
-                .font(.subheadline.bold())
+            VStack(alignment: .leading) {
+                Text(headline)
+                    .font(.subheadline.bold())
+                if let subheadline {
+                    Text(subheadline)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
             
             content()
         }

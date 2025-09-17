@@ -269,14 +269,8 @@ extension Service {
     
     // MARK: - CRUD Methods
     
-    func updateAndSave(draftService: DraftService, selectedInterval: ServiceIntervalTypes) {
+    func updateAndSave(draftService: DraftService) {
         let context = DataController.shared.container.viewContext
-        
-        if selectedInterval == .distance {
-            draftService.timeInterval = 0
-        } else if selectedInterval == .time {
-            draftService.distanceInterval = 0
-        }
         
         self.name = draftService.name
         self.distanceInterval = draftService.distanceInterval ?? 0

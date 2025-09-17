@@ -38,10 +38,6 @@ enum DateRange: String, CaseIterable {
 
 // MARK: - Services
 
-enum ServiceIntervalTypes: String, CaseIterable {
-    case distance = "Distance", time = "Time", both = "Both"
-}
-
 enum ServiceStatus: Int {
     case notDue, due, overDue
 }

@@ -184,14 +184,8 @@ extension Vehicle {
         try? context.save()
     }
     
-    func addNewService(draftService: DraftService, selectedInterval: ServiceIntervalTypes, initialRecord draftServiceLog: DraftServiceLog? = nil) {
+    func addNewService(draftService: DraftService, initialRecord draftServiceLog: DraftServiceLog, isBaseLine: Bool) {
         let context = DataController.shared.container.viewContext
-        
-        if selectedInterval == .distance {
-            draftService.timeInterval = 0
-        } else if selectedInterval == .time {
-            draftService.distanceInterval = 0
-        }
         
         // Create Service
         let newService = Service(context: context)
@@ -209,15 +203,15 @@ extension Vehicle {
         let serviceRecord = ServiceRecord(context: context)
         serviceRecord.service = newService
         serviceRecord.id = UUID()
-        serviceRecord.date = draftServiceLog?.date ?? Date()
-        serviceRecord.odometer = draftServiceLog?.odometer ?? self.odometer
+        serviceRecord.date = draftServiceLog.date
+        serviceRecord.odometer = draftServiceLog.odometer ?? self.odometer
         
         // Add a baseline service log, if the user does not add their own service record (allows service alerts to work even for new vehicles where service has not yet been performed)
-        if draftServiceLog?.odometer == nil {
+        if isBaseLine {
             let baselineLog = ServiceLog(context: context)
             baselineLog.id = UUID()
-            baselineLog.date = Date()
-            baselineLog.odometer = self.odometer
+            baselineLog.date = draftServiceLog.date
+            baselineLog.odometer = draftServiceLog.odometer ?? self.odometer
             baselineLog.isBaseline = true
             
             serviceRecord.serviceLog = baselineLog
