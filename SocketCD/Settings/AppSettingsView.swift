@@ -141,10 +141,7 @@ struct AppSettingsView: View {
     // Navigates to Accent Color settings
     private var accentColorSettingsButton: some View {
         NavigationLink {
-            Form {
-                AccentColorSelectorView()
-            }
-            .navigationTitle("Accent Color")
+            AccentColorSelectorView()
         } label: {
             Label("Accent Color", systemImage: "paintbrush")
         }

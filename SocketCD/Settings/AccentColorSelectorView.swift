@@ -11,22 +11,19 @@ import SwiftUI
 struct AccentColorSelectorView: View {
     @EnvironmentObject var settings: AppSettings
     
-    let columnCount = 5
-    let gridSpacing = 10.0
-    let circleDiameter: CGFloat = 50
+    let columns = [GridItem(.adaptive(minimum: 50), spacing: 10)]
     
     var body: some View {
         List {
-            Section(footer: Text("Choose a color to use on most buttons and elements throughout the app.")) {
-                LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: gridSpacing), count: columnCount), spacing: gridSpacing) {
+            Section(footer: Text("Used for buttons and highlights throughout the app.")) {
+                LazyVGrid(columns: columns, spacing: 10) {
                     
                     defaultAccentButton
                     
                     alternateAccentButtonsGrid
                 }
                 .buttonStyle(.plain)
-                .font(.title2.bold())
-                .foregroundStyle(.white)
+                .font(.largeTitle.bold())
             }
         }
         .navigationTitle("Accent Color")
@@ -41,16 +38,10 @@ struct AccentColorSelectorView: View {
         Button {
             settings.accentColor = nil
         } label: {
-            ZStack {
-                Circle()
-                    .foregroundStyle(LinearGradient(stops: [Gradient.Stop(color: .indigo, location: 0.1), Gradient.Stop(color: .blue, location: 0.4), Gradient.Stop(color: .orange, location: 0.7), Gradient.Stop(color: .mint, location: 1)], startPoint: .leading, endPoint: .trailing))
-                    .frame(width: circleDiameter, height: circleDiameter)
-                    .accessibilityLabel("Default Accent")
-                
-                if settings.accentColor == nil {
-                    Image(systemName: "checkmark")
-                }
-            }
+            Label("Default Accent", systemImage: settings.accentColor == nil ? "circle.fill" : "circle")
+                .labelStyle(.iconOnly)
+                .imageScale(.large)
+                .foregroundStyle(LinearGradient(stops: [Gradient.Stop(color: .indigo, location: 0.1), Gradient.Stop(color: .blue, location: 0.4), Gradient.Stop(color: .orange, location: 0.7), Gradient.Stop(color: .mint, location: 1)], startPoint: .leading, endPoint: .trailing))
         }
     }
     
@@ -60,16 +51,10 @@ struct AccentColorSelectorView: View {
             Button {
                 settings.accentColor = color
             } label: {
-                ZStack {
-                    Circle()
-                        .foregroundStyle(settings.colorValue(for: color))
-                        .frame(width: circleDiameter, height: circleDiameter)
-                        .accessibilityLabel(color.rawValue)
-                    
-                    if settings.accentColor == color {
-                        Image(systemName: "checkmark")
-                    }
-                }
+                Label(color.rawValue, systemImage: settings.accentColor == color ? "circle.fill" : "circle")
+                    .labelStyle(.iconOnly)
+                    .imageScale(.large)
+                    .foregroundStyle(settings.colorValue(for: color))
             }
         }
     }
