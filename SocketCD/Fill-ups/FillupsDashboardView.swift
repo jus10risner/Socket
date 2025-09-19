@@ -39,52 +39,53 @@ struct FillupsDashboardView: View {
     // MARK: - Views
     
     private var fillupsDashboard: some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 15) {
-//                        latestFillupInfo
-                    headlineGroup
+        Group {
+            if vehicle.sortedFillupsArray.isEmpty {
+                FillupsStartView()
+            } else {
+                List {
+                    Section {
+                        VStack(alignment: .leading, spacing: 15) {
+                            //                        latestFillupInfo
+                            headlineGroup
+                            
+                            //                        if fuelEconomyDataPoints.count >= 2 {
+                            //                            Divider()
+                            //
+                            //                            fuelEconomyChart
+                            
+                            FuelEconomyChartView(fillups: Array(fillups))
+                            //                        }  else {
+                            //                            chartHint
+                            //                                .padding(.bottom, 5)
+                            //                        }
+                            
+                            //                        Group {
+                            //                            if fillups.count > 2 {
+                            ////                                fuelEconomyDataPoints.count >= 2 ? Divider() : nil
+                            //
+                            //                                Text("Average")
+                            //                                    .badge("\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                            //                            }
+                            //                        }
+                            //                        .transaction { transaction in
+                            //                            transaction.animation = nil
+                            //                        }
+                        }
+                        .padding(.vertical)
+                    }
+                    .listRowSeparator(.hidden)
                     
-//                        if fuelEconomyDataPoints.count >= 2 {
-//                            Divider()
-//
-//                            fuelEconomyChart
-                        
-                        FuelEconomyChartView(fillups: Array(fillups))
-//                        }  else {
-//                            chartHint
-//                                .padding(.bottom, 5)
-//                        }
-                    
-//                        Group {
-//                            if fillups.count > 2 {
-////                                fuelEconomyDataPoints.count >= 2 ? Divider() : nil
-//
-//                                Text("Average")
-//                                    .badge("\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-//                            }
-//                        }
-//                        .transaction { transaction in
-//                            transaction.animation = nil
-//                        }
+                    NavigationLink {
+                        AllFillupsListView(fillups: Array(fillups))
+                    } label: {
+                        Label("Fill-up History", systemImage: "clock.arrow.circlepath")
+                            .foregroundStyle(Color.primary)
+                    }
                 }
-                .padding(.vertical)
-            }
-            .listRowSeparator(.hidden)
-            
-            NavigationLink {
-                AllFillupsListView(fillups: Array(fillups))
-            } label: {
-                Label("Fill-up History", systemImage: "clock.arrow.circlepath")
-                    .foregroundStyle(Color.primary)
             }
         }
         .navigationTitle("Fill-ups")
-        .overlay {
-            if vehicle.sortedFillupsArray.isEmpty {
-                FillupsStartView(showingAddFillup: $showingAddFillup)
-            }
-        }
         .sheet(isPresented: $showingAddFillup) {
             AddEditFillupView(vehicle: vehicle)
         }

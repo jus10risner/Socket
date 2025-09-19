@@ -33,13 +33,19 @@ struct MaintenanceListView: View {
     @State private var showingFirstServiceInfo = false
     
     var body: some View {
-        List {
-            ForEach(vehicle.sortedServicesArray) { service in
-                ServiceListRowView(service: service, vehicle: vehicle)
-            }
-            
-            if serviceTipDue == true {
-                firstServiceInfo
+        Group {
+            if vehicle.sortedServicesArray.isEmpty {
+                MaintenanceStartView()
+            } else {
+                List {
+                    ForEach(vehicle.sortedServicesArray) { service in
+                        ServiceListRowView(service: service, vehicle: vehicle)
+                    }
+                    
+                    if serviceTipDue == true {
+                        firstServiceInfo
+                    }
+                }
             }
         }
         .navigationTitle("Maintenance")
@@ -49,11 +55,6 @@ struct MaintenanceListView: View {
                 if let firstService = services.first {
                     MaintenanceOnboardingView(vehicle: vehicle, service: firstService, showingServiceRecordTip: $showingFirstServiceInfo)
                 }
-            }
-        }
-        .overlay {
-            if vehicle.sortedServicesArray.isEmpty {
-                MaintenanceStartView(showingAddService: $showingAddService)
             }
         }
         .onAppear { requestNotificationPermission() }

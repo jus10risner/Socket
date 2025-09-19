@@ -25,31 +25,32 @@ struct RepairsListView: View {
     @State private var showingAddRepair = false
     
     var body: some View {
-        List {
-            ForEach(repairs, id: \.id) { repair in
-                NavigationLink {
-                    RepairDetailView(repair: repair)
-                } label: {
-                    HStack {
-                        Text(repair.name)
-                        
-                        Spacer()
-                        
-                        Text(repair.date.formatted(date: .numeric, time: .omitted))
-                            .font(.subheadline)
-                            .foregroundStyle(Color.secondary)
-                            
-//                                Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+        Group {
+            if vehicle.sortedRepairsArray.isEmpty {
+                RepairsStartView()
+            } else {
+                List {
+                    ForEach(repairs, id: \.id) { repair in
+                        NavigationLink {
+                            RepairDetailView(repair: repair)
+                        } label: {
+                            HStack {
+                                Text(repair.name)
+                                
+                                Spacer()
+                                
+                                Text(repair.date.formatted(date: .numeric, time: .omitted))
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.secondary)
+                                
+                                //                                Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                            }
+                        }
                     }
                 }
             }
         }
         .navigationTitle("Repairs")
-        .overlay {
-            if vehicle.sortedRepairsArray.isEmpty {
-                RepairsStartView(showingAddRepair: $showingAddRepair)
-            }
-        }
         .sheet(isPresented: $showingAddRepair) {
             AddEditRepairView(vehicle: vehicle)
         }
