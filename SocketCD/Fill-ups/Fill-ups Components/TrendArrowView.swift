@@ -37,7 +37,6 @@ struct TrendArrowView: View {
         }
         .foregroundStyle(settings.accentColor(for: .fillupsTheme))
         .font(.title2.bold())
-        .animation(.bouncy, value: animatingTrendArrow)
         .onAppear { animateTrendArrow(shouldReset: false) }
         .mask {
             Circle()
@@ -51,7 +50,6 @@ struct TrendArrowView: View {
     // Up arrow Image
     private var upArrow: some View {
         Image(systemName: "chevron.up")
-//            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .red : .green)
             .offset(y: animatingTrendArrow ? 0 : 35)
             .accessibilityLabel("Fuel economy is up since your last fill-up")
     }
@@ -59,7 +57,6 @@ struct TrendArrowView: View {
     // Down arrow Image
     private var downArrow: some View {
         Image(systemName: "chevron.down")
-//            .foregroundStyle(settings.fuelEconomyUnit == .L100km ? .green : .red)
             .offset(y: animatingTrendArrow ? 0 : -35)
             .accessibilityLabel("Fuel economy is down since your last fill-up")
     }
@@ -67,18 +64,21 @@ struct TrendArrowView: View {
     // Equal sign Image
     private var equalSign: some View {
         Image(systemName: "equal")
-//            .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             .accessibilityLabel("Fuel economy is the same as your last fill-up")
     }
     
     // Animates trendArrow into view, with option to reset to it's original position off-screen (for animation after adding new fill-up)
     func animateTrendArrow(shouldReset: Bool) {
         if shouldReset == true {
-            animatingTrendArrow = false
+            withAnimation(nil) {
+                animatingTrendArrow = false
+            }
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            animatingTrendArrow = true
+            withAnimation(.bouncy) {
+                animatingTrendArrow = true
+            }
         }
     }
 }
