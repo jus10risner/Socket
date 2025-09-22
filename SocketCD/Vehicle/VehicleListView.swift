@@ -21,33 +21,28 @@ struct VehicleListView: View {
     @Binding var showingOnboardingText: Bool // Unused, for now
     
     var body: some View {
-        List(vehicles, selection: $selectedVehicle) { vehicle in
-            Group {
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    NavigationLink(value: vehicle) {
-                        VehicleListRowView(vehicle: vehicle)
-                    }
-                } else {
-                    VehicleListRowView(vehicle: vehicle)
-                        .onTapGesture {
-                            selectedVehicle = vehicle
-                        }
-                }
-            }
-            //                .buttonStyle(.plain) // Allows swipeActions to work
-            .listRowSeparator(.hidden)
-            //            .onMove {
-            //                move(from: $0, to: $1)
-            //                try? context.save()
-            //            }
-            
-            //            if showingOnboardingText == true {
-            //                onboardingTipText
-            //            }
-        }
-        .overlay {
+        Group {
             if vehicles.isEmpty {
                 EmptyVehicleListView()
+            } else {
+                List(selection: $selectedVehicle) {
+                    ForEach(vehicles) { vehicle in
+                        VehicleListRowView(vehicle: vehicle, isSelected: selectedVehicle == vehicle)
+                            .onTapGesture {
+                                selectedVehicle = vehicle
+                            }
+                    }
+                    .onMove {
+                        move(from: $0, to: $1)
+                        try? context.save()
+                    }
+                    .listRowSeparator(.hidden)
+                    
+                    
+                    //            if showingOnboardingText == true {
+                    //                onboardingTipText
+                    //            }
+                }
             }
         }
 //        .scrollContentBackground(.hidden)

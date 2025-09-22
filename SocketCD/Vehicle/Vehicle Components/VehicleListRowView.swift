@@ -12,11 +12,13 @@ struct VehicleListRowView: View {
     @EnvironmentObject var settings: AppSettings
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var vehicle: Vehicle
+    let isSelected: Bool
     
     @FetchRequest var services: FetchedResults<Service>
     
-    init(vehicle: Vehicle) {
+    init(vehicle: Vehicle, isSelected: Bool) {
         self.vehicle = vehicle
+        self.isSelected = isSelected
         self._services = FetchRequest(
             entity: Service.entity(),
             sortDescriptors: [],
@@ -26,14 +28,12 @@ struct VehicleListRowView: View {
     
     @State private var isAnimating = false
     
-    @State private var quickFillupVehicle: Vehicle?
-    
     var body: some View {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            sidebarRowView
-        } else {
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            sidebarRowView
+//        } else {
             cardView
-        }
+//        }
     }
     
     private var cardView: some View {
@@ -61,7 +61,7 @@ struct VehicleListRowView: View {
                 Spacer()
                 
                 if serviceDue == true {
-                    alternateMaintenanceAlert
+                    maintenanceAlert
                 }
             }
             .padding(.horizontal)
@@ -70,42 +70,42 @@ struct VehicleListRowView: View {
         .padding(.bottom, 10)
         .background {
             RoundedRectangle.adaptive
-                .colorSchemeBackground(colorScheme: colorScheme)
-                .shadow(color: .secondary.opacity(0.4), radius: 2)
+                .fill(Color(.secondarySystemGroupedBackground))
+                .strokeBorder(Color.secondary.opacity(0.5), lineWidth: UIDevice.current.userInterfaceIdiom == .pad && isSelected ? 2 : colorScheme == .dark ? 0 :  0.5)
         }
         .containerShape(RoundedRectangle.adaptive)
+        .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
-        .listRowInsets(EdgeInsets(top: 3, leading: 3, bottom: 3, trailing: 3))
     }
     
-    private var sidebarRowView: some View {
-        HStack(spacing: 8) {
-            vehicleImage
-                .aspectRatio(1.5, contentMode: .fit)
-                .frame(height: 60)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
-                )
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text(vehicle.name)
-                    .font(.body)
-                    .lineLimit(1)
-                
-                Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            
-            Spacer()
-            
-            if serviceDue {
-                alternateMaintenanceAlert
-            }
-        }
-    }
+//    private var sidebarRowView: some View {
+//        HStack(spacing: 8) {
+//            vehicleImage
+//                .aspectRatio(1.5, contentMode: .fit)
+//                .frame(height: 60)
+//                .clipShape(RoundedRectangle(cornerRadius: 10))
+//                .overlay(
+//                    RoundedRectangle(cornerRadius: 10)
+//                        .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
+//                )
+//            
+//            VStack(alignment: .leading, spacing: 2) {
+//                Text(vehicle.name)
+//                    .font(.body)
+//                    .lineLimit(1)
+//                
+//                Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
+//                    .font(.caption)
+//                    .foregroundStyle(.secondary)
+//            }
+//            
+//            Spacer()
+//            
+//            if serviceDue {
+//                alternateMaintenanceAlert
+//            }
+//        }
+//    }
     
     
     // MARK: - Views
@@ -120,7 +120,7 @@ struct VehicleListRowView: View {
         }
     }
     
-    private var alternateMaintenanceAlert: some View {
+    private var maintenanceAlert: some View {
         Image(systemName: "exclamationmark.circle.fill")
             .symbolEffect(.bounce, value: isAnimating)
             .symbolRenderingMode(.multicolor)
@@ -132,40 +132,6 @@ struct VehicleListRowView: View {
                 }
             }
     }
-    
-    // Animated symbol, to draw user attention to a vehicle that is due for service
-//    var maintenanceAlert: some View {
-//        Image(systemName: "exclamationmark.circle.fill")
-//            .symbolRenderingMode(.multicolor)
-//            .font(.title3)
-//            .foregroundStyle(.red)
-//            .overlay(
-//                Circle()
-//                    .stroke(.red)
-//                    .scaleEffect(isAnimating ? 2 : 0.8)
-//                    .opacity(2 - (isAnimating ? 2 : 0))
-//                    .animation(isAnimating ? .easeInOut(duration: 1.5)
-//                        .delay(2)
-//                        .repeatForever(autoreverses: false) : .easeOut(duration: 0), value: isAnimating)
-//            )
-//            .onAppear { animateMaintenanceAlert() }
-//            .accessibilityLabel("Maintenance Due")
-//    }
-    
-    
-    // MARK: - Methods
-    
-    // Starts or restarts animation of the maintenanceAlert component
-//    func animateMaintenanceAlert() {
-////        if isAnimating {
-////            isAnimating = false
-////        }
-//        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//            isAnimating = true
-//        }
-//    }
-    
     
     // MARK: - Computed Properties
     
@@ -181,6 +147,6 @@ struct VehicleListRowView: View {
     vehicle.name = "My Car"
     vehicle.odometer = 12345
     
-    return VehicleListRowView(vehicle: vehicle)
+    return VehicleListRowView(vehicle: vehicle, isSelected: true)
         .environmentObject(AppSettings())
 }
