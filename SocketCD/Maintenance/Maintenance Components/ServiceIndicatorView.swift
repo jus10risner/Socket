@@ -23,17 +23,17 @@ struct ServiceIndicatorView: View {
                     case .overDue:
                         ZStack {
                             Circle()
-                                .stroke(Color.red, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                             
                             Image(systemName: "exclamationmark")
                                 .font(.title3.bold())
                                 .foregroundStyle(Color.red)
-                                .symbolEffect(.bounce, value: remainingValue)
+                                .symbolEffect(.pulse, options: .nonRepeating)
                         }
                     default:
                         Circle()
                             .trim(from: remainingValue, to: 1.0)
-                            .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                            .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                             .rotationEffect(.degrees(-90))
                     }
                 }
