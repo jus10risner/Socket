@@ -119,7 +119,7 @@ struct VehicleDashboardView: View {
     }
     
     private var odometerDashboardCard: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading) {
             HStack {
                 HStack(spacing: 3) {
                     Image(systemName: "car.fill")
@@ -134,21 +134,23 @@ struct VehicleDashboardView: View {
                 Spacer()
             }
             
+            Spacer()
+            
             HStack {
                 Text("\(vehicle.odometer.formatted())")
                     .font(.title3.bold())
                 
                 Spacer()
                 
-                Button("Update Odometer", systemImage: "pencil.circle.fill") { showingUpdateOdometerAlert = true }
-                    .symbolRenderingMode(.hierarchical)
+                Button("Update Odometer", systemImage: "pencil") { showingUpdateOdometerAlert = true }
+                    .buttonStyle(.bordered)
+                    .buttonBorderShape(.circle)
                     .labelStyle(.iconOnly)
-                    .font(.title)
                     .tint(settings.accentColor(for: .appTheme))
             }
         }
+        .frame(height: 80)
         .padding()
-        .frame(maxHeight: .infinity)
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
         .contentShape(Rectangle())
     }

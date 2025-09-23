@@ -25,7 +25,7 @@ struct DashboardCard<Content: View>: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading) {
             HStack {
                 HStack(spacing: 3) {
                     Image(systemName: systemImage)
@@ -44,6 +44,8 @@ struct DashboardCard<Content: View>: View {
                     .foregroundStyle(Color.secondary)
             }
             
+            Spacer()
+            
             HStack(alignment: .bottom) {
                 if let content {
                     content
@@ -51,15 +53,15 @@ struct DashboardCard<Content: View>: View {
                 
                 Spacer()
                 
-                Button(buttonLabel, systemImage: "plus.circle.fill", action: quickAction)
-                    .symbolRenderingMode(.hierarchical)
+                Button(buttonLabel, systemImage: "plus", action: quickAction)
+                    .buttonStyle(.bordered)
+                    .buttonBorderShape(.circle)
                     .labelStyle(.iconOnly)
-                    .font(.title)
                     .tint(accentColor)
             }
         }
+        .frame(height: 80)
         .padding()
-        .frame(maxHeight: .infinity)
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
         .contentShape(Rectangle())
     }
