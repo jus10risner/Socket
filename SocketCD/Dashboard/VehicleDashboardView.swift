@@ -172,6 +172,10 @@ struct VehicleDashboardView: View {
                             .foregroundStyle(Color.secondary)
                     }
                 }
+            } else {
+                Text("No Maintenance Items")
+                    .font(.title3.bold())
+                    .foregroundStyle(Color.secondary)
             }
         }
         .onTapGesture {
@@ -198,6 +202,10 @@ struct VehicleDashboardView: View {
                             .font(.title3.bold())
                     }
                 }
+            } else {
+                Text("No Fill-ups")
+                    .font(.title3.bold())
+                    .foregroundStyle(Color.secondary)
             }
         }
         .onTapGesture {
@@ -241,37 +249,24 @@ struct VehicleDashboardView: View {
                         .padding()
                         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
                     }
-                    
-                    Button("Add Info", systemImage: "plus") {
-                        activeSheet = .addCustomInfo
-                    }
-                    .foregroundStyle(settings.accentColor(for: .appTheme))
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background {
-                        RoundedRectangle.adaptive
-                            .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
-                    }
                 } else {
-                    VStack(spacing: 5) {
-                        Button("Add Info", systemImage: "plus") {
-                            activeSheet = .addCustomInfo
-                        }
-                        .foregroundStyle(settings.accentColor(for: .appTheme))
+                    Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.secondary)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background {
-                            RoundedRectangle.adaptive
-                                .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
-                        }
-                        
-                        Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
-                            .font(.subheadline)
-                            .foregroundStyle(Color.secondary)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
-                    }
+                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
+                }
+                
+                Button("Add Info", systemImage: "plus") {
+                    activeSheet = .addCustomInfo
+                }
+                .foregroundStyle(settings.accentColor(for: .appTheme))
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background {
+                    RoundedRectangle.adaptive
+                        .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
                 }
             }
         }
@@ -358,19 +353,6 @@ struct VehicleDashboardView: View {
     
     // Returns the next service due (or most overdue)
     private var nextDueService: Service? {
-//        services.sorted {
-//            switch ($0.estimatedDaysUntilDue(currentOdometer: vehicle.odometer),
-//                    $1.estimatedDaysUntilDue(currentOdometer: vehicle.odometer)) {
-//            case let (d1?, d2?):
-//                return d1 < d2
-//            case (nil, _?):
-//                return false
-//            case (_?, nil):
-//                return true
-//            case (nil, nil):
-//                return $0.name < $1.name
-//            }
-//        }
         return services.sorted { s1, s2 in
             switch (s1.estimatedDaysUntilDue(currentOdometer: vehicle.odometer),
                     s2.estimatedDaysUntilDue(currentOdometer: vehicle.odometer)) {
