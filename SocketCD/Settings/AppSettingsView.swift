@@ -10,23 +10,17 @@ import SwiftUI
 struct AppSettingsView: View {
     @EnvironmentObject var settings: AppSettings
     @Environment(\.dismiss) var dismiss
-    @Environment(\.colorScheme) var colorScheme
     let appStoreURL: URL = URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009")!
     
     @State private var showingMailError = false
     
     var body: some View {
-        settingsView
-    }
-    
-    
-    // MARK: - Views
-    
-    private var settingsView: some View {
         NavigationStack {
             Form {
                 Section("General") {
-                    maintenanceAlertsSettingsButton
+                    NavigationLink(destination: MaintenanceAlertSettingsView()) {
+                        Label("Alerts", systemImage: "clock")
+                    }
                     
                     fuelCostSettingsButton
                     
@@ -34,9 +28,13 @@ struct AppSettingsView: View {
                 }
                 
                 Section("Appearance") {
-                    accentColorSettingsButton
+                    NavigationLink(destination: AccentColorSelectorView()) {
+                        Label("Accent Color", systemImage: "paintbrush")
+                    }
                     
-                    appIconSettingsButton
+                    NavigationLink(destination: AppIconSelectorView()) {
+                        Label("App Icon", systemImage: "app.badge")
+                    }
                     
                     themeSettingsButton
                 }
@@ -44,7 +42,9 @@ struct AppSettingsView: View {
                 Section("More") {
                     contactButton
                     
-                    rateButton
+                    Link(destination: URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009?action=write-review")!, label: {
+                        Label("Rate on the App Store", systemImage: "star")
+                    })
                     
                     ShareLink(item: appStoreURL) {
                         Label("Share Socket", systemImage: "square.and.arrow.up")
@@ -58,6 +58,7 @@ struct AppSettingsView: View {
                     .listRowBackground(Color(.systemGroupedBackground))
                     .frame(maxWidth: .infinity)
             }
+            .tint(settings.accentColor(for: .appTheme))
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -67,23 +68,16 @@ struct AppSettingsView: View {
                     }
                 }
             }
-        }
-        .tint(settings.accentColor(for: .appTheme))
-        .alert("Could not send mail", isPresented: $showingMailError) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text("Please make sure email has been set up on this device, then try again.")
+            .alert("Could not send mail", isPresented: $showingMailError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please make sure email has been set up on this device, then try again.")
+            }
         }
     }
     
-    // Navigates to Alerts settings
-    private var maintenanceAlertsSettingsButton: some View {
-        NavigationLink {
-            MaintenanceAlertSettingsView()
-        } label: {
-            Label("Alerts", systemImage: "clock")
-        }
-    }
+    
+    // MARK: - Views
     
     // Navigates to Fuel Cost settings
     private var fuelCostSettingsButton: some View {
@@ -142,24 +136,6 @@ struct AppSettingsView: View {
         }
     }
     
-    // Navigates to Accent Color settings
-    private var accentColorSettingsButton: some View {
-        NavigationLink {
-            AccentColorSelectorView()
-        } label: {
-            Label("Accent Color", systemImage: "paintbrush")
-        }
-    }
-    
-    // Navigates to App Icon settings
-    private var appIconSettingsButton: some View {
-        NavigationLink {
-            AppIconSelectorView()
-        } label: {
-            Label("App Icon", systemImage: "app.badge")
-        }
-    }
-    
     // Navigates to App Theme settings
     private var themeSettingsButton: some View {
         NavigationLink {
@@ -173,7 +149,6 @@ struct AppSettingsView: View {
                     .labelsHidden()
                     .onChange(of: settings.appAppearance) {
                         AppearanceController.shared.setAppearance()
-//                        try? context.save()
                     }
                 }
             }
@@ -190,20 +165,12 @@ struct AppSettingsView: View {
         Button("Contact", systemImage: "envelope") {
             let composeVC = MailComposeViewController.shared
             
-            if composeVC.canSendEmail == true {
-                // Composes an email message, and prefills Socket's address
-                composeVC.sendEmail()
+            if composeVC.canSendEmail {
+                composeVC.sendEmail() // Composes an email message and prefills Socket's address
             } else {
                 showingMailError = true
             }
         }
-    }
-    
-    // Navigates to "Write a Review" for Socket, in the App Store
-    private var rateButton: some View {
-        Link(destination: URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009?action=write-review")!, label: {
-            Label("Rate on the App Store", systemImage: "star")
-        })
     }
 }
 
