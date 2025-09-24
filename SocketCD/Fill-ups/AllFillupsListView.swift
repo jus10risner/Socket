@@ -10,32 +10,23 @@ import SwiftUI
 struct AllFillupsListView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var settings: AppSettings
-    let fillups: [Fillup]
-//    @ObservedObject var vehicle: Vehicle
-//    
-//    @FetchRequest var fillups: FetchedResults<Fillup>
-//    
-//    init(vehicle: Vehicle) {
-//        self.vehicle = vehicle
-//        self._fillups = FetchRequest(
-//            entity: Fillup.entity(),
-//            sortDescriptors: [NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)],
-//            predicate: NSPredicate(format: "vehicle == %@", vehicle)
-//        )
-//    }
+    @ObservedObject var vehicle: Vehicle
     
-    var body: some View {
-        allFillupsList
+    @FetchRequest var fillups: FetchedResults<Fillup>
+    
+    init(vehicle: Vehicle) {
+        self.vehicle = vehicle
+        self._fillups = FetchRequest(
+            entity: Fillup.entity(),
+            sortDescriptors: [NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)],
+            predicate: NSPredicate(format: "vehicle == %@", vehicle)
+        )
     }
     
-    
-    // MARK: - Views
-    
-    var allFillupsList: some View {
+    var body: some View {
         List {
-            ForEach(fillups, id: \.id) { fillup in
+            ForEach(fillups) { fillup in
                 NavigationLink {
-//                    FillupDetailView(vehicle: vehicle, fillup: fillup)
                     FillupDetailView(fillup: fillup)
                 } label: {
                     LabeledContent {
@@ -55,60 +46,7 @@ struct AllFillupsListView: View {
                                 Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
                             }
                         }
-                        
-//                            if fillup.fillType == .partialFill {
-//                                Image(systemName: "circle.bottomhalf.filled")
-//                                    .accessibilityHidden(true)
-//                                Text("Partial Fill")
-//                            } else {
-//                                if fillup == fillups.last {
-//                                    Image(systemName: "fuelpump.circle")
-//                                        .accessibilityHidden(true)
-//                                    Text("First Fill")
-//                                } else if fillup.fuelEconomy(settings: settings) == 0 && fillup.fillType != .partialFill {
-//                                    Image(systemName: "circle.fill")
-//                                        .accessibilityHidden(true)
-//                                    Text("Full Tank")
-//                                } else {
-//                                    Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f")")
-//                                        .font(.headline)
-//                                    Text(settings.fuelEconomyUnit.rawValue)
-//                                        .foregroundStyle(Color.secondary)
-//                                }
-//                            }
                     }
-
-                    
-//                    HStack {
-//                        HStack(alignment: .firstTextBaseline, spacing: 3) {
-//                            if fillup.fillType == .partialFill {
-//                                Image(systemName: "circle.bottomhalf.filled")
-//                                    .accessibilityHidden(true)
-//                                Text("Partial Fill")
-//                            } else {
-//                                if fillup == vehicle.sortedFillupsArray.last {
-//                                    Image(systemName: "fuelpump.circle")
-//                                        .accessibilityHidden(true)
-//                                    Text("First Fill")
-//                                } else if fillup.fuelEconomy == 0 && fillup.fillType != .partialFill {
-//                                    Image(systemName: "circle.fill")
-//                                        .accessibilityHidden(true)
-//                                    Text("Full Tank")
-//                                } else {
-//                                    Text("\(fillup.fuelEconomy, specifier: "%.1f")")
-//                                        .font(.headline)
-//                                    Text(settings.fuelEconomyUnit.rawValue)
-//                                        .foregroundStyle(Color.secondary)
-//                                }
-//                            }
-//                        }
-//                        
-//                        Spacer()
-//                        
-//                        Text(fillup.date.formatted(date: .numeric, time: .omitted))
-//                            .foregroundStyle(Color.secondary)
-//                    }
-//                    .accessibilityElement(children: .combine)
                 }
             }
         }
@@ -116,6 +54,9 @@ struct AllFillupsListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { if fillups.isEmpty { dismiss() }  }
     }
+    
+    
+    // MARK: - Views
     
     private func listRowLabel(symbol: String, text: String) -> some View {
         HStack(spacing: 5) {
@@ -128,6 +69,11 @@ struct AllFillupsListView: View {
 }
 
 #Preview {
-    AllFillupsListView(fillups: [])
+    let context = DataController.preview.container.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
+    
+    return AllFillupsListView(vehicle: vehicle)
         .environmentObject(AppSettings())
 }

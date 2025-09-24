@@ -77,7 +77,7 @@ struct FillupsDashboardView: View {
                     .listRowSeparator(.hidden)
                     
                     NavigationLink {
-                        AllFillupsListView(fillups: Array(fillups))
+                        AllFillupsListView(vehicle: vehicle)
                     } label: {
                         Label("Fill-up History", systemImage: "clock.arrow.circlepath")
                             .foregroundStyle(Color.primary)
