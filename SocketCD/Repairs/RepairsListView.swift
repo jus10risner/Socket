@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RepairsListView: View {
-//    @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
     
     @FetchRequest var repairs: FetchedResults<Repair>
@@ -34,17 +34,19 @@ struct RepairsListView: View {
                         NavigationLink {
                             RepairDetailView(repair: repair)
                         } label: {
-                            HStack {
+                            VStack(alignment: .leading) {
                                 Text(repair.name)
+                                    .font(.headline)
                                 
-                                Spacer()
-                                
-                                Text(repair.date.formatted(date: .numeric, time: .omitted))
-                                    .font(.subheadline)
-                                    .foregroundStyle(Color.secondary)
-                                
-                                //                                Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                                HStack {
+                                    Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                                    
+                                    Text(repair.date.formatted(date: .numeric, time: .omitted))
+                                        .foregroundStyle(Color.secondary)
+                                }
+                                .font(.caption)
                             }
+                            .accessibilityElement(children: .combine)
                         }
                     }
                 }

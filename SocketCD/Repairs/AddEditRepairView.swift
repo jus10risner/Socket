@@ -39,7 +39,7 @@ struct AddEditRepairView: View {
                         .foregroundStyle(Color.secondary)
                     
                     LabeledInput(label: "Name") {
-                        TextField("Required", text: $draftRepair.name, axis: .vertical)
+                        TextField("Required", text: $draftRepair.name)
                             .textInputAutocapitalization(.words)
                             .focused($isInputActive)
                     }
