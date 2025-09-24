@@ -55,10 +55,20 @@ struct AddEditFillupView: View {
                             .keyboardType(.decimalPad)
                     }
                     
-                    LabeledInput(label: settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost") {
+                    LabeledContent {
                         TextField("Optional", value: $draftFillup.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                             .keyboardType(.decimalPad)
+                            .foregroundStyle(Color.primary)
+                            .multilineTextAlignment(.trailing)
+                    } label: {
+                        Text(settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
+                        
+                        if settings.showCalculatedCost {
+                            Text(settings.fillupCostType == .perUnit ? "Total: \(calculatedCost)" : "Per \(settings.fuelEconomyUnit.volumeUnit): \(calculatedCost)")
+                                .font(.caption)
+                        }
                     }
+                    .foregroundStyle(Color.secondary)
                     
                     FillTypePicker(fillType: $draftFillup.fillType, showingFillTypeInfo: $showingFillTypeInfo)
                 } header: {
@@ -124,6 +134,17 @@ struct AddEditFillupView: View {
             } message: {
                 Text("Deleting fill-up records may cause inaccurate fuel economy calculation. Delete this record anyway?")
             }
+        }
+    }
+    
+    // Returns the total or per-unit cost, based on which the user has selected in settings (used to show both costs at once)
+    private var calculatedCost: String {
+        guard let cost = draftFillup.cost else { return 0.0.asCurrency() }
+        
+        if settings.fillupCostType == .perUnit {
+            return (cost * (draftFillup.volume ?? 0)).asCurrency()
+        } else {
+            return (cost / (draftFillup.volume ?? 0)).asCurrency()
         }
     }
 }

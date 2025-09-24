@@ -105,6 +105,10 @@ struct AppSettingsView: View {
                     }
                     .labelsHidden()
                 }
+                
+                Section {
+                    Toggle("Display both costs", isOn: $settings.showCalculatedCost)
+                }
             }
             .navigationTitle("Fuel Cost")
             .navigationBarTitleDisplayMode(.inline)
