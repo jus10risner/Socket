@@ -134,30 +134,18 @@ struct MaintenanceListView: View {
     func requestNotificationPermission() {
         let center = UNUserNotificationCenter.current()
         
-        if settings.notificationPermissionRequested == false && services.count > 0 {
-            center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                if success {
-                    print("Success!")
-                } else if let error = error {
-                    print(error.localizedDescription)
+        center.getNotificationSettings { settings in
+            if settings.authorizationStatus == .notDetermined && services.count > 0 {
+                center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                    if success {
+                        print("Notification permission granted.")
+                    } else if let error = error {
+                        print("Notification permission error: \(error.localizedDescription)")
+                    } else {
+                        print("Notification permission not granted.")
+                    }
                 }
             }
-//            center.getNotificationSettings { permissions in
-//                if permissions.authorizationStatus == .notDetermined {
-//                    print("Requesting permission for notifications")
-//                    center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-//                        if success {
-//                            print("Success!")
-//                        } else if let error = error {
-//                            print(error.localizedDescription)
-//                        }
-//                    }
-//                } else {
-//                    print("Notification permission has already been requested")
-//                }
-//            }
-            
-            settings.notificationPermissionRequested = true
         }
     }
     
