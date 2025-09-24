@@ -39,7 +39,7 @@ struct FillupsDashboardView: View {
     // MARK: - Views
     
     private var fillupsDashboard: some View {
-        Group {
+        ZStack {
             if vehicle.sortedFillupsArray.isEmpty {
                 FillupsStartView()
             } else {

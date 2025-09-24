@@ -25,7 +25,7 @@ struct RepairsListView: View {
     @State private var showingAddRepair = false
     
     var body: some View {
-        Group {
+        ZStack {
             if vehicle.sortedRepairsArray.isEmpty {
                 RepairsStartView()
             } else {

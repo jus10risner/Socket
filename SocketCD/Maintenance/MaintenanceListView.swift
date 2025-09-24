@@ -33,7 +33,7 @@ struct MaintenanceListView: View {
     @State private var showingFirstServiceInfo = false
     
     var body: some View {
-        Group {
+        ZStack {
             if vehicle.sortedServicesArray.isEmpty {
                 MaintenanceStartView()
             } else {
