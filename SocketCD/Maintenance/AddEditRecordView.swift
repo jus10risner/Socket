@@ -74,6 +74,7 @@ struct AddEditRecordView: View {
                 )
             }
             .scrollDismissesKeyboard(.interactively)
+            .listRowSpacing(0) // Added to prevent list row spacing when launched from swipe action on MaintenanceListView
             .navigationTitle(record != nil ? "Edit Service Record" : "Log Service")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
