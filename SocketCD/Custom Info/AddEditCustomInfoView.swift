@@ -44,14 +44,7 @@ struct AddEditCustomInfoView: View {
                     LabeledInput(label: "Detail") {
                         TextField("ABC 123", text: $draftCustomInfo.detail)
                     }
-                } header: {
-                    if let vehicle {
-                        Text(vehicle.name)
-                            .font(.body)
-                            .frame(maxWidth: .infinity)
-                    }
                 }
-                .headerProminence(.increased)
                 
                 FormFooterView (
                     note: $draftCustomInfo.note,

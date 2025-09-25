@@ -45,14 +45,7 @@ struct AddEditServiceView: View {
                             .textInputAutocapitalization(.words)
                             .focused($isInputActive)
                     }
-                } header: {
-                    if let vehicle {
-                        Text(vehicle.name)
-                            .font(.body)
-                            .frame(maxWidth: .infinity)
-                    }
                 }
-                .headerProminence(.increased)
                 
                 Section(footer: Text("Track by distance, time, or both — your choice.")) {
                     formItem(headline: "This service should be performed every:") {

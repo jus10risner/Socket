@@ -53,14 +53,7 @@ struct AddEditRepairView: View {
                         TextField("Optional", value: $draftRepair.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                             .keyboardType(.decimalPad)
                     }
-                } header: {
-                    if let vehicle {
-                        Text(vehicle.name)
-                            .font(.body)
-                            .frame(maxWidth: .infinity)
-                    }
                 }
-                .headerProminence(.increased)
                 
                 FormFooterView (
                     note: $draftRepair.note,

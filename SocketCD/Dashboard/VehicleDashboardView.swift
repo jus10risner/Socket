@@ -341,13 +341,10 @@ struct VehicleDashboardView: View {
         switch section {
         case .maintenance:
             MaintenanceListView(vehicle: vehicle)
-                .tint(settings.accentColor(for: section.theme))
         case .repairs:
             RepairsListView(vehicle: vehicle)
-                .tint(settings.accentColor(for: section.theme))
         case .fillups:
             FillupsDashboardView(vehicle: vehicle)
-                .tint(settings.accentColor(for: section.theme))
         }
     }
     

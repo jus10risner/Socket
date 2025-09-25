@@ -85,13 +85,14 @@ struct FillupsDashboardView: View {
                 }
             }
         }
+        .tint(settings.accentColor(for: .fillupsTheme))
         .navigationTitle("Fill-ups")
         .sheet(isPresented: $showingAddFillup) {
             AddEditFillupView(vehicle: vehicle)
         }
         .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItem(placement: .confirmationAction) {
                 Button("Add Fill-up", systemImage: "plus") {
                     showingAddFillup = true
                 }

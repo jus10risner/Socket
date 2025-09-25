@@ -78,7 +78,7 @@ struct VehicleListView: View {
                         showingSettings = true
                     }
                 }
-                .tint(.primary)
+//                .tint(.primary)
             }
         }
     }

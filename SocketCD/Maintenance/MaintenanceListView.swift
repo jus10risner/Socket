@@ -48,6 +48,7 @@ struct MaintenanceListView: View {
                 }
             }
         }
+        .tint(settings.accentColor(for: .maintenanceTheme))
         .navigationTitle("Maintenance")
         .listRowSpacing(5)
         .overlay {
@@ -67,7 +68,7 @@ struct MaintenanceListView: View {
             AddEditRecordView(vehicle: vehicle)
         })
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItem(placement: .confirmationAction) {
                 Menu("Set Up New Service", systemImage: "plus") {
                     Button("Set Up New Service", systemImage: "plus") {
                         showingAddService = true

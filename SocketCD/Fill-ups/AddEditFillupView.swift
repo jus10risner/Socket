@@ -71,17 +71,10 @@ struct AddEditFillupView: View {
                     .foregroundStyle(Color.secondary)
                     
                     FillTypePicker(fillType: $draftFillup.fillType, showingFillTypeInfo: $showingFillTypeInfo)
-                } header: {
-                    if let vehicle {
-                        Text(vehicle.name)
-                            .font(.body)
-                            .frame(maxWidth: .infinity)
-                    }
                 } footer: {
                     Button("About fill types...") { showingFillTypeInfo = true }
                         .font(.footnote)
                 }
-                .headerProminence(.increased)
                 
                 FormFooterView (
                     note: $draftFillup.note,

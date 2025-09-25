@@ -52,12 +52,13 @@ struct RepairsListView: View {
                 }
             }
         }
+        .tint(settings.accentColor(for: .repairsTheme))
         .navigationTitle("Repairs")
         .sheet(isPresented: $showingAddRepair) {
             AddEditRepairView(vehicle: vehicle)
         }
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItem(placement: .confirmationAction) {
                 Button("Add New Repair", systemImage: "plus") {
                     showingAddRepair = true
                 }
