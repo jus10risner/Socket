@@ -24,6 +24,7 @@
 		9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C062BC07B6F005E16DD /* DraftVehicle.swift */; };
 		9E620C092BC08194005E16DD /* AddEditVehicleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */; };
 		9E620C0D2BC5D4FC005E16DD /* MailComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */; };
+		9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */; };
 		9E6828F32BD452DA00DA09CE /* Service_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6828F22BD452DA00DA09CE /* Service_Tests.swift */; };
 		9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53452BADD68A00F75D49 /* AppInfo.swift */; };
 		9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */; };
@@ -127,6 +128,7 @@
 		9E620C062BC07B6F005E16DD /* DraftVehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftVehicle.swift; sourceTree = "<group>"; };
 		9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditVehicleImageView.swift; sourceTree = "<group>"; };
 		9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailComposeViewController.swift; sourceTree = "<group>"; };
+		9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLabelStyle.swift; sourceTree = "<group>"; };
 		9E6828F22BD452DA00DA09CE /* Service_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service_Tests.swift; sourceTree = SOURCE_ROOT; };
 		9E6A53452BADD68A00F75D49 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectorView.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 			children = (
 				9EEAC4992BA1ED8C0053C65E /* AppearanceController.swift */,
 				9E6A53452BADD68A00F75D49 /* AppInfo.swift */,
+				9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */,
 				9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */,
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
@@ -665,6 +668,7 @@
 				9EEAC4CF2BA258290053C65E /* VehicleImageView.swift in Sources */,
 				9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */,
 				9EEAC4F52BA37A270053C65E /* RepairsListView.swift in Sources */,
+				9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */,
 				9EEAC4B92BA1F1180053C65E /* ImageDetailView.swift in Sources */,
 				9EEAC4FD2BA380BA0053C65E /* AddEditRepairView.swift in Sources */,
 				9EEAC50A2BA482840053C65E /* FuelEconomyInfoView.swift in Sources */,

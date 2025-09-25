@@ -82,7 +82,7 @@ struct AddEditRepairView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button(repair != nil ? "Done" : "Add", systemImage: "checkmark") {
                         if let repair {
                             repair.updateAndSave(draftRepair: draftRepair)
                         } else if let vehicle {
@@ -91,11 +91,13 @@ struct AddEditRepairView: View {
                         
                         dismiss()
                     }
+                    .labelStyle(.adaptive)
                     .disabled(draftRepair.canBeSaved ? false : true)
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                        .labelStyle(.adaptive)
                 }
             }
             .alert("Delete Repair", isPresented: $showingDeleteAlert) {

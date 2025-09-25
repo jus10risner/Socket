@@ -87,7 +87,7 @@ struct AddEditRecordView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button(record != nil ? "Done" : "Add", systemImage: "checkmark") {
                         if let record {
                             if let log = record.serviceLog {
                                 // Edit existing ServiceLog
@@ -103,11 +103,13 @@ struct AddEditRecordView: View {
                         
                         dismiss()
                     }
+                    .labelStyle(.adaptive)
                     .disabled(draftServiceLog.canBeSaved ? false : true)
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                        .labelStyle(.adaptive)
                 }
             }
             .alert("Delete Record", isPresented: $showingDeleteAlert) {

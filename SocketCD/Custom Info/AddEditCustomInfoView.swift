@@ -73,7 +73,7 @@ struct AddEditCustomInfoView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button(customInfo != nil ? "Done" : "Add", systemImage: "checkmark") {
                         if let customInfo {
                             customInfo.updateAndSave(draftCustomInfo: draftCustomInfo)
                         } else if let vehicle {
@@ -86,11 +86,13 @@ struct AddEditCustomInfoView: View {
                         
                         dismiss()
                     }
+                    .labelStyle(.adaptive)
                     .disabled(draftCustomInfo.canBeSaved ? false : true)
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                        .labelStyle(.adaptive)
                 }
             }
             .alert("Delete Vehicle Info", isPresented: $showingDeleteAlert) {

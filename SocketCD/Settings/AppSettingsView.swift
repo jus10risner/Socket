@@ -63,9 +63,8 @@ struct AppSettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        dismiss()
-                    }
+                    Button("Done", systemImage: "xmark") { dismiss() }
+                        .labelStyle(.adaptive)
                 }
             }
             .alert("Could not send mail", isPresented: $showingMailError) {

@@ -104,7 +104,7 @@ struct AddEditFillupView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button(fillup != nil ? "Done" : "Add", systemImage: "checkmark") {
                         if let fillup {
                             fillup.updateAndSave(draftFillup: draftFillup)
                         } else if let vehicle {
@@ -113,11 +113,13 @@ struct AddEditFillupView: View {
                         
                         dismiss()
                     }
+                    .labelStyle(.adaptive)
                     .disabled(draftFillup.canBeSaved ? false : true)
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                        .labelStyle(.adaptive)
                 }
             }
             .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {

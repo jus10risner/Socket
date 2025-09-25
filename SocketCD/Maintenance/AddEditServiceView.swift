@@ -139,7 +139,7 @@ struct AddEditServiceView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button(service != nil ? "Done" : "Add", systemImage: "checkmark") {
                         if let service {
                             service.updateAndSave(draftService: draftService)
                         } else if let vehicle {
@@ -152,12 +152,14 @@ struct AddEditServiceView: View {
                         
                         dismiss()
                     }
+                    .labelStyle(.adaptive)
                     .disabled(draftService.canBeSaved ? false : true)
                     .disabled(service == nil && draftServiceLog.odometer == nil ? true : false)
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                        .labelStyle(.adaptive)
                 }
             }
             .alert("Delete Service", isPresented: $showingDeleteAlert) {

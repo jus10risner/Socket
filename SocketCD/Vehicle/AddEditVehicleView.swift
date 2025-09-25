@@ -59,11 +59,12 @@ struct AddEditVehicleView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                        .labelStyle(.adaptive)
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button(vehicle != nil ? "Done" : "Add", systemImage: "checkmark") {
                         if vehicles.contains(where: { $0.name == draftVehicle.name && $0.id != vehicle?.id }) {
                             showingDuplicateNameError = true
                         } else {
@@ -76,6 +77,7 @@ struct AddEditVehicleView: View {
                             dismiss()
                         }
                     }
+                    .labelStyle(.adaptive)
                     .disabled(draftVehicle.canBeSaved ? false : true)
                 }
             }
