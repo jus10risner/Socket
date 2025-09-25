@@ -40,7 +40,7 @@ struct CustomInfoDetailView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItem {
                 Button("Edit") {
                     showingEditCustomInfo = true
                 }

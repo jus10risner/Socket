@@ -63,11 +63,10 @@ struct FuelEconomyInfoView: View {
             .font(.subheadline)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItem {
                     Button("Dismiss", systemImage: "xmark") {
                         dismiss()
                     }
-                    .symbolRenderingMode(.hierarchical)
                 }
             }
         }

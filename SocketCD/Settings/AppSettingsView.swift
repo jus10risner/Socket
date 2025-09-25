@@ -62,7 +62,7 @@ struct AppSettingsView: View {
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItem {
                     Button("Done", systemImage: "xmark") { dismiss() }
                         .labelStyle(.adaptive)
                 }

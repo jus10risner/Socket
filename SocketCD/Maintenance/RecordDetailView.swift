@@ -33,7 +33,7 @@ struct RecordDetailView: View {
         .navigationTitle("Record Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItem {
                 Button("Edit") {
                     showingEditRecord = true
                 }

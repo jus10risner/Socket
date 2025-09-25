@@ -78,14 +78,13 @@ struct FillTypeInfoView: View {
             .font(.subheadline)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItem {
                     Button("Dismiss", systemImage: "xmark") {
                         dismiss()
                     }
                 }
             }
         }
-        .transition(.move(edge: .bottom))
         .interactiveDismissDisabled()
         .onAppear() {
             // Dismisses keyboard

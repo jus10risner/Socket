@@ -274,7 +274,7 @@ struct VehicleDashboardView: View {
     
     @ToolbarContentBuilder
     private var vehicleToolbar: some ToolbarContent {
-        ToolbarItemGroup(placement: .primaryAction) {
+        ToolbarItemGroup {
             Menu("Vehicle Options", systemImage: "ellipsis") {
                 Button("Edit Vehicle", systemImage: "pencil") { activeSheet = .editVehicle }
                 
