@@ -32,7 +32,7 @@ struct MaintenanceAlertSettingsView: View {
                 }
             }
         }
-        .navigationTitle("Alerts")
+        .navigationTitle("Maintenance Alerts")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

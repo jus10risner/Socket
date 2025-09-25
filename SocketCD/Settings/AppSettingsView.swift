@@ -19,7 +19,7 @@ struct AppSettingsView: View {
             Form {
                 Section("General") {
                     NavigationLink(destination: MaintenanceAlertSettingsView()) {
-                        Label("Alerts", systemImage: "clock")
+                        Label("Maintenance Alerts", systemImage: "clock")
                     }
                     
                     fuelCostSettingsButton
@@ -82,7 +82,7 @@ struct AppSettingsView: View {
     private var fuelCostSettingsButton: some View {
         NavigationLink {
             List {
-                Section(footer: Text("Choose how you prefer to enter fuel costs, when logging fill-ups.")) {
+                Section(footer: Text("Choose how you prefer to enter fuel costs when logging fill-ups.")) {
                     Picker("Fill-up Cost Type", selection: $settings.fillupCostType) {
                         ForEach(FillupCostTypes.allCases, id: \.self) { type in
                             if type == .perUnit {
@@ -99,8 +99,8 @@ struct AppSettingsView: View {
                     .labelsHidden()
                 }
                 
-                Section {
-                    Toggle("Display both costs", isOn: $settings.showCalculatedCost)
+                Section(footer: Text("Shows the \(settings.fillupCostType == .total ? "per-\(settings.fuelEconomyUnit.volumeUnit.lowercased())" : "total") cost, calculated from your input, when logging a fill-up.")) {
+                    Toggle("Verify Cost", isOn: $settings.showCalculatedCost)
                 }
             }
             .navigationTitle("Fuel Cost")
@@ -139,8 +139,8 @@ struct AppSettingsView: View {
     private var themeSettingsButton: some View {
         NavigationLink {
             List {
-                Section(footer: Text("The color scheme used across the entire app.")) {
-                    Picker("App Theme", selection: $settings.appAppearance) {
+                Section(footer: Text("Switch between light and dark, or follow your device.")) {
+                    Picker("Appearance Selection", selection: $settings.appAppearance) {
                         ForEach(AppearanceOptions.allCases, id: \.self) {
                             Text($0.rawValue.capitalized)
                         }
@@ -151,11 +151,11 @@ struct AppSettingsView: View {
                     }
                 }
             }
-            .navigationTitle("Theme")
+            .navigationTitle("Appearance")
             .navigationBarTitleDisplayMode(.inline)
             .pickerStyle(.inline)
         } label: {
-            Label("Theme", systemImage: "circle.lefthalf.filled")
+            Label("Appearance", systemImage: "circle.lefthalf.filled")
         }
     }
     
