@@ -40,21 +40,35 @@ struct ServiceDetailView: View {
                     }
                 }
             } header: {
-                VStack {
+                ContentUnavailableView {
                     Text(service.name)
                         .font(.title2.bold())
-                    
+                } description: {
                     Text("Due every \(service.intervalDescription)")
-                        .font(.caption)
-                        .foregroundStyle(Color.secondary)
-                    
+                } actions: {
                     Button("Edit") {
                         showingEditService = true
                     }
-                    .font(.subheadline)
+                    .buttonStyle(.bordered)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical)
+
+                
+//                VStack {
+//                    Text(service.name)
+//                        .font(.title2.bold())
+//                    
+//                    Text("Due every \(service.intervalDescription)")
+//                        .font(.caption)
+//                        .foregroundStyle(Color.secondary)
+//                    
+//                    Button("Edit") {
+//                        showingEditService = true
+//                    }
+//                    .buttonStyle(.bordered)
+//                    .font(.subheadline)
+//                }
+//                .frame(maxWidth: .infinity)
+//                .padding(.bottom)
             }
             .headerProminence(.increased)
             
