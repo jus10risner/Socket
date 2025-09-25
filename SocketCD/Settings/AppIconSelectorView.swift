@@ -28,7 +28,7 @@ struct AppIconSelectorView: View {
     // MARK: - Views
     
     private var iconOptions: some View {
-        Picker("2.0", selection: $appIcon) {
+        Picker("Icons", selection: $appIcon) {
             iconLabel(title: "Primary", iconName: "Primary Icon")
                 .tag(nil as AppIcon?)
             
@@ -37,11 +37,12 @@ struct AppIconSelectorView: View {
                     .tag(icon) // This connects the row to the selection binding
             }
         }
+        .labelsHidden()
     }
     
     // Icons from the original version of Socket
     private var classicIcons: some View {
-        Picker("1.0", selection: $appIcon) {
+        Picker("Classic Icons", selection: $appIcon) {
             ForEach(AppIcon.allCases.filter({ $0.isClassic }), id: \.self) { icon in
                 iconLabel(title: "\(icon.rawValue)", iconName: "\(icon.rawValue) Icon")
                     .tag(icon)
