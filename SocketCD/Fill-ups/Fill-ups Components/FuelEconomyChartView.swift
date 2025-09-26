@@ -22,60 +22,62 @@ struct FuelEconomyChartView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Chart {
-                if let selectedFillup {
-                    RuleMark(x: .value("Selected Fill-up", selectedFillup.date))
-                        .foregroundStyle(Color.secondary.opacity(0.3))
-                        .annotation(position: .top, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
-                            VStack {
-                                Text(selectedFillup.date.formatted(date: .numeric, time: .omitted))
-                                    .font(.subheadline.bold())
-                                
-                                Text("\(selectedFillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                                    .font(.title3.bold())
-                            }
-                            .foregroundStyle(Color.white)
-                            .padding()
-                            .frame(width: 130)
-                            .background(RoundedRectangle.adaptive.fill(settings.accentColor(for: .fillupsTheme).gradient))
+        ZStack {
+            if data.count == 0 {
+                emptyChartView
+            } else {
+                VStack(alignment: .leading) {
+                    Chart {
+                        if let selectedFillup {
+                            RuleMark(x: .value("Selected Fill-up", selectedFillup.date))
+                                .foregroundStyle(Color.secondary.opacity(0.3))
+                                .annotation(position: .top, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
+                                    VStack {
+                                        Text(selectedFillup.date.formatted(date: .numeric, time: .omitted))
+                                            .font(.subheadline.bold())
+                                        
+                                        Text("\(selectedFillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                                            .font(.title3.bold())
+                                    }
+                                    .foregroundStyle(Color.white)
+                                    .padding()
+                                    .frame(width: 130)
+                                    .background(RoundedRectangle.adaptive.fill(settings.accentColor(for: .fillupsTheme).gradient))
+                                }
+                            
+                            PointMark(x: .value("Date", selectedFillup.date), y: .value("Fuel Economy", selectedFillup.fuelEconomy(settings: settings)))
                         }
+                        
+                        ForEach(data) { fillup in
+                            LineMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
+                            
+                            PointMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
+                                .opacity(data.count == 1 ? 1 : 0) // Vislble only when a single data point is available; also serves to make animation between data sets more fluid
+                        }
+                        .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                    }
+                    .animation(.easeInOut, value: selectedDateRange)
+                    .chartYScale(domain: yRange)
+                    .chartYAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
+                    .chartXAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
+                    .chartXScale(domain: xRange)
+                    .chartXSelection(value: $selectedDate)
+                    .frame(minHeight: 200)
                     
-                    PointMark(x: .value("Date", selectedFillup.date), y: .value("Fuel Economy", selectedFillup.fuelEconomy(settings: settings)))
-                }
-                
-                ForEach(data) { fillup in
-                    LineMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
+                    Picker("Date Range", selection: $selectedDateRange) {
+                        ForEach(DateRange.allCases, id: \.self) {
+                            Text($0.rawValue)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.vertical)
                     
-                    PointMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
-                        .opacity(data.count == 1 ? 1 : 0) // Vislble only when a single data point is available; also serves to make animation between data sets more fluid
-                }
-                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
-            }
-            .animation(.easeInOut, value: selectedDateRange)
-            .chartYScale(domain: yRange)
-            .chartYAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
-            .chartXAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
-            .chartXScale(domain: xRange)
-            .chartXSelection(value: $selectedDate)
-            .frame(minHeight: 200)
-            
-            Picker("Date Range", selection: $selectedDateRange) {
-                ForEach(DateRange.allCases, id: \.self) {
-                    Text($0.rawValue)
-                }
-            }
-            .pickerStyle(.segmented)
-            .padding(.vertical)
-            
-            Divider()
-            
-            LabeledContent("Average") {
-                Group {
-                    if let averageFuelEconomy {
-                        Text("\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                    } else {
-                        Text("No Data to Display")
+                    Divider()
+                    
+                    LabeledContent("Average") {
+                        if let averageFuelEconomy {
+                            Text("\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                        }
                     }
                 }
             }
@@ -166,5 +168,22 @@ struct FuelEconomyChartView: View {
         let lowerBound = floor(minValue / step) * step
         let upperBound = ceil(maxValue / step) * step
         return lowerBound...upperBound
+    }
+    
+    // Displayed when no data points exist to place on the chart
+    private var emptyChartView: some View {
+        ContentUnavailableView {
+            VStack {
+                Image(systemName: "chart.line.uptrend.xyaxis")
+                    .font(.system(size: 40))
+                    .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                
+                Text("One more to go")
+                    .font(.title2.bold())
+                    .foregroundStyle(Color.primary)
+            }
+        } description: {
+            Text("Add another **Full Tank** fill-up to see your fuel economy chart.")
+        }
     }
 }
