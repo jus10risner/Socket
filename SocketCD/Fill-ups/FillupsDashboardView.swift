@@ -108,10 +108,9 @@ struct FillupsDashboardView: View {
                         Text("\(economy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
                             .font(.title2.bold())
                     } else {
-                        HStack(alignment: .firstTextBaseline, spacing: 3) {
-                            Text("No fuel economy to display")
-                                .font(.subheadline.bold())
-                                .foregroundStyle(.secondary)
+                        HStack(spacing: 3) {
+                            Text("— \(settings.fuelEconomyUnit.rawValue)")
+                                .font(.title2.bold())
                             
                             Button("Learn More", systemImage: "info.circle") {
                                 showingFuelEconomyInfo = true
@@ -147,6 +146,7 @@ struct FillupsDashboardView: View {
         } description: {
             Text("Add another **Full Tank** fill-up to see your fuel economy chart.")
         }
+        .frame(height: 200)
     }
     
     // Determines which data points to plot (excludes those with fuel economy of 0)
