@@ -19,7 +19,12 @@ struct AppSettingsView: View {
             Form {
                 Section("General") {
                     NavigationLink(destination: MaintenanceAlertSettingsView()) {
-                        Label("Maintenance Alerts", systemImage: "clock")
+                        Label {
+                            Text("Maintenance Alerts")
+                        } icon: {
+                            Image(systemName: "clock")
+                                .foregroundStyle(settings.accentColor(for: .appTheme))
+                        }
                     }
                     
                     fuelCostSettingsButton
@@ -29,11 +34,21 @@ struct AppSettingsView: View {
                 
                 Section("Appearance") {
                     NavigationLink(destination: AccentColorSelectorView()) {
-                        Label("Accent Color", systemImage: "paintbrush")
+                        Label {
+                            Text("Accent Color")
+                        } icon: {
+                            Image(systemName: "paintbrush")
+                                .foregroundStyle(settings.accentColor(for: .appTheme))
+                        }
                     }
                     
                     NavigationLink(destination: AppIconSelectorView()) {
-                        Label("App Icon", systemImage: "app.badge")
+                        Label {
+                            Text("App Icon")
+                        } icon: {
+                            Image(systemName: "app.badge")
+                                .foregroundStyle(settings.accentColor(for: .appTheme))
+                        }
                     }
                     
                     themeSettingsButton
@@ -43,11 +58,21 @@ struct AppSettingsView: View {
                     contactButton
                     
                     Link(destination: URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009?action=write-review")!, label: {
-                        Label("Rate on the App Store", systemImage: "star")
+                        Label {
+                            Text("Rate on the App Store")
+                        } icon: {
+                            Image(systemName: "star")
+                                .foregroundStyle(settings.accentColor(for: .appTheme))
+                        }
                     })
                     
                     ShareLink(item: appStoreURL) {
-                        Label("Share Socket", systemImage: "square.and.arrow.up")
+                        Label {
+                            Text("Share Socket")
+                        } icon: {
+                            Image(systemName: "square.and.arrow.up")
+                                .foregroundStyle(settings.accentColor(for: .appTheme))
+                        }
                     }
                 }
                 .buttonStyle(.plain)
@@ -58,7 +83,7 @@ struct AppSettingsView: View {
                     .listRowBackground(Color(.systemGroupedBackground))
                     .frame(maxWidth: .infinity)
             }
-            .tint(settings.accentColor(for: .appTheme))
+            .listItemTint(settings.accentColor(for: .appTheme))
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -73,6 +98,7 @@ struct AppSettingsView: View {
                 Text("Please make sure email has been set up on this device, then try again.")
             }
         }
+        .tint(settings.accentColor(for: .appTheme))
     }
     
     
@@ -107,7 +133,12 @@ struct AppSettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .pickerStyle(.inline)
         } label: {
-            Label("Fuel Cost", systemImage: "fuelpump")
+            Label {
+                Text("Fuel Cost")
+            } icon: {
+                Image(systemName: "fuelpump")
+                    .foregroundStyle(settings.accentColor(for: .appTheme))
+            }
         }
     }
     
@@ -131,7 +162,12 @@ struct AppSettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .pickerStyle(.inline)
         } label: {
-            Label("Units of Measure", systemImage: "ruler")
+            Label {
+                Text("Units of Measure")
+            } icon: {
+                Image(systemName: "ruler")
+                    .foregroundStyle(settings.accentColor(for: .appTheme))
+            }
         }
     }
     
@@ -155,19 +191,31 @@ struct AppSettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .pickerStyle(.inline)
         } label: {
-            Label("Appearance", systemImage: "circle.lefthalf.filled")
+            Label {
+                Text("Appearance")
+            } icon: {
+                Image(systemName: "circle.lefthalf.filled")
+                    .foregroundStyle(settings.accentColor(for: .appTheme))
+            }
         }
     }
     
     // Launches Mail Composer, if email has been set up
     private var contactButton: some View {
-        Button("Contact", systemImage: "envelope") {
+        Button {
             let composeVC = MailComposeViewController.shared
             
             if composeVC.canSendEmail {
                 composeVC.sendEmail() // Composes an email message and prefills Socket's address
             } else {
                 showingMailError = true
+            }
+        } label: {
+            Label {
+                Text("Contact")
+            } icon: {
+                Image(systemName: "envelope")
+                    .foregroundStyle(settings.accentColor(for: .appTheme))
             }
         }
     }
