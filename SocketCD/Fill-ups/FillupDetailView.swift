@@ -13,7 +13,7 @@ struct FillupDetailView: View {
     @ObservedObject var fillup: Fillup
     
     @State private var showingEditFillup = false
-    @State private var showingMoreInfo = false
+    @State private var showingFuelEconomyInfo = false
     
     var body: some View {
         List {
@@ -64,15 +64,9 @@ struct FillupDetailView: View {
         .navigationTitle("Fill-up Details")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingEditFillup) {
-//            EditFillupView(vehicle: vehicle, fillup: fillup)
             AddEditFillupView(fillup: fillup) {
                 dismiss()
             }
-        }
-        .alert("Why no fuel economy?", isPresented: $showingMoreInfo) {
-            Button("OK") { }
-        } message: {
-            Text("Fuel economy is calculated only between full tanks of fuel. Calculation will resume after your next Full Tank fill-up.")
         }
         .toolbar {
             ToolbarItem {
@@ -83,14 +77,20 @@ struct FillupDetailView: View {
         }
     }
     
-    // Button that launches an alert, describing why no fuel economy exists for this fill-up (if appropriate)
+    // Button that launches a popover, describing why no fuel economy exists for this fill-up
     private var infoButton: some View {
         Button("Learn More", systemImage: "info.circle") {
-            showingMoreInfo = true
+            showingFuelEconomyInfo = true
         }
         .labelStyle(.iconOnly)
-        .buttonStyle(.plain)
-        .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+        .buttonStyle(.borderless)
+        .popover(isPresented: $showingFuelEconomyInfo) {
+            Text("Fuel economy is calculated only between **Full Tank** fill types.")
+                .font(.subheadline)
+                .padding()
+                .frame(width: 300)
+                .presentationCompactAdaptation(.popover)
+        }
     }
 }
 

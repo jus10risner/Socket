@@ -73,7 +73,6 @@ struct FillupsDashboardView: View {
         .tint(settings.accentColor(for: .fillupsTheme))
         .navigationTitle("Fill-ups")
         .sheet(isPresented: $showingAddFillup) { AddEditFillupView(vehicle: vehicle) }
-        .sheet(isPresented: $showingFuelEconomyInfo) { FuelEconomyInfoView() }
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Add Fill-up", systemImage: "plus") {
@@ -118,6 +117,14 @@ struct FillupsDashboardView: View {
                                 showingFuelEconomyInfo = true
                             }
                             .labelStyle(.iconOnly)
+                            .buttonStyle(.borderless)
+                            .popover(isPresented: $showingFuelEconomyInfo) {
+                                Text("Fuel economy will be calculated after your next **Full Tank** fill-up.")
+                                    .font(.subheadline)
+                                    .padding()
+                                    .frame(width: 300)
+                                    .presentationCompactAdaptation(.popover)
+                            }
                         }
                     }
                 }
