@@ -50,13 +50,19 @@ struct FormFooterView: View {
         if let photosBinding {
             // Add/Edit View: always show section
             Section {
-                PhotoGridView(photos: photosBinding)
+                AddPhotoButton(photos: photosBinding)
+                
+                if !photosBinding.isEmpty {
+                    PhotoGridView(photos: photosBinding)
+                }
             }
         } else if !photosValue.isEmpty {
             // DetailView: only show section if photos exist
             Section {
                 PhotoGridView(photos: photosValue)
             }
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
         }
 
         if let deleteButtonTitle, let onDelete {

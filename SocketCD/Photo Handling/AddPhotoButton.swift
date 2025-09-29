@@ -34,20 +34,8 @@ struct AddPhotoButton: View {
                 }
             }
         } label: {
-            Label {
-                Text("Add Photo")
-            } icon: {
-                ZStack {
-                    RoundedRectangle.adaptive
-                        .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
-                        .background(Color.clear)
-                    
-                    Image(systemName: "camera")
-                }
-                .aspectRatio(1.5, contentMode: .fit)
-                .frame(maxWidth: .infinity)
-            }
-            .labelStyle(.iconOnly)
+            Label("Add Photo", systemImage: "photo")
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .onChange(of: selectedImages) { loadSelectedImages() }
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImages, matching: .images)

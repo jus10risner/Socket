@@ -76,16 +76,10 @@ struct PhotoGridView: View {
                 }
             }
             .id(UUID()) // prevents flicker when deleting
-            
-            if let editablePhotos {
-                AddPhotoButton(photos: editablePhotos)
-            }
         }
         .fullScreenCover(item: $selectedPhoto) { photo in
             ImageDetailView(image: photo.converted)
         }
-        .listRowBackground(Color.clear)
-        .listRowInsets(EdgeInsets())
     }
     
     // Deletes a given photo from the photos array
