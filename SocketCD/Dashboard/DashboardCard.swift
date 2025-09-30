@@ -9,17 +9,19 @@ import SwiftUI
 
 struct DashboardCard<Content: View>: View {
     let title: String
-    let systemImage: String
+    let headerSymbol: String
     let accentColor: Color
     let buttonLabel: String
+    let buttonSymbol: String
     let quickAction: () -> Void
     let content: Content?
     
-    init(title: String, systemImage: String, accentColor: Color, buttonLabel: String, quickAction: @escaping () -> Void, @ViewBuilder content: () -> Content? = { nil }) {
+    init(title: String, systemImage: String, accentColor: Color, buttonLabel: String, buttonSymbol: String, quickAction: @escaping () -> Void, @ViewBuilder content: () -> Content? = { nil }) {
         self.title = title
-        self.systemImage = systemImage
+        self.headerSymbol = systemImage
         self.accentColor = accentColor
         self.buttonLabel = buttonLabel
+        self.buttonSymbol = buttonSymbol
         self.quickAction = quickAction
         self.content = content()
     }
@@ -28,7 +30,7 @@ struct DashboardCard<Content: View>: View {
         VStack(alignment: .leading) {
             HStack {
                 HStack(spacing: 3) {
-                    Image(systemName: systemImage)
+                    Image(systemName: headerSymbol)
                         .frame(width: 20)
                     
                     Text(title)
@@ -39,9 +41,11 @@ struct DashboardCard<Content: View>: View {
                 
                 Spacer()
                 
-                Image(systemName: "chevron.right")
-                    .font(.footnote)
-                    .foregroundStyle(Color.secondary)
+                if buttonSymbol == "plus" {
+                    Image(systemName: "chevron.right")
+                        .font(.footnote)
+                        .foregroundStyle(Color.secondary)
+                }
             }
             
             Spacer()
@@ -53,7 +57,7 @@ struct DashboardCard<Content: View>: View {
                 
                 Spacer()
                 
-                Button(buttonLabel, systemImage: "plus", action: quickAction)
+                Button(buttonLabel, systemImage: buttonSymbol, action: quickAction)
                     .buttonStyle(.bordered)
                     .buttonBorderShape(.circle)
                     .labelStyle(.iconOnly)
@@ -68,5 +72,5 @@ struct DashboardCard<Content: View>: View {
 }
 
 #Preview {
-    DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: .blue, buttonLabel: "Add", quickAction: {}, content: {})
+    DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: .blue, buttonLabel: "Add", buttonSymbol: "plus", quickAction: {}, content: {})
 }
