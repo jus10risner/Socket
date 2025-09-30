@@ -93,7 +93,7 @@ struct FillupsDashboardView: View {
 //            }
             
             VStack(alignment: .leading, spacing: 0) {
-                LabeledContent("Latest Fill-up") {
+                LabeledContent("Latest") {
                     guard let date = fillups.first?.date else { return Text("") }
                         
                     return Text(date.formatted(date: .numeric, time: .omitted))
@@ -109,7 +109,7 @@ struct FillupsDashboardView: View {
                             .font(.title2.bold())
                     } else {
                         HStack(spacing: 3) {
-                            Text("— \(settings.fuelEconomyUnit.rawValue)")
+                            Text("No \(settings.fuelEconomyUnit.rawValue)")
                                 .font(.title2.bold())
                             
                             Button("Learn More", systemImage: "info.circle") {
@@ -133,18 +133,19 @@ struct FillupsDashboardView: View {
     
     // Displayed when no data points exist to place on the chart
     private var emptyChartView: some View {
-        ContentUnavailableView {
-            VStack {
-                Image(systemName: "chart.line.uptrend.xyaxis")
-                    .font(.system(size: 40))
-                    .foregroundStyle(settings.accentColor(for: .fillupsTheme))
-                
-                Text("One more to go")
-                    .font(.title2.bold())
-                    .foregroundStyle(Color.primary)
-            }
-        } description: {
+        VStack {
+            Image(systemName: "chart.line.uptrend.xyaxis")
+                .font(.system(size: 40))
+                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+            
+            Text("One more to go")
+                .font(.title2.bold())
+                .foregroundStyle(Color.primary)
+            
             Text("Add another **Full Tank** fill-up to see your fuel economy chart.")
+                .font(.footnote)
+                .foregroundStyle(Color.secondary)
+                .multilineTextAlignment(.center)
         }
         .frame(height: 200)
     }
