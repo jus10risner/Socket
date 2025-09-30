@@ -45,6 +45,9 @@ struct ServiceIndicatorView: View {
             .task(id: service.serviceRecords?.count) {
                 remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
             }
+            .task(id: service.sortedServiceRecordsArray.first) {
+                remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
+            }
     }
 }
 
