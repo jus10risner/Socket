@@ -13,15 +13,17 @@ struct DashboardCard<Content: View>: View {
     let accentColor: Color
     let buttonLabel: String
     let buttonSymbol: String
+    let showingAddButton: Bool
     let quickAction: () -> Void
     let content: Content?
     
-    init(title: String, systemImage: String, accentColor: Color, buttonLabel: String, buttonSymbol: String, quickAction: @escaping () -> Void, @ViewBuilder content: () -> Content? = { nil }) {
+    init(title: String, systemImage: String, accentColor: Color, buttonLabel: String, buttonSymbol: String, showingAddButton: Bool = true, quickAction: @escaping () -> Void, @ViewBuilder content: () -> Content? = { nil }) {
         self.title = title
         self.headerSymbol = systemImage
         self.accentColor = accentColor
         self.buttonLabel = buttonLabel
         self.buttonSymbol = buttonSymbol
+        self.showingAddButton = showingAddButton
         self.quickAction = quickAction
         self.content = content()
     }
@@ -62,6 +64,7 @@ struct DashboardCard<Content: View>: View {
                     .buttonBorderShape(.circle)
                     .labelStyle(.iconOnly)
                     .tint(accentColor)
+                    .opacity(showingAddButton ? 1 : 0)
             }
         }
         .frame(height: 80)
