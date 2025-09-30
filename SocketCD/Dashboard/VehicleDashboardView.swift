@@ -128,7 +128,7 @@ struct VehicleDashboardView: View {
     }
     
     private var maintenanceDashboardCard: some View {
-        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log") {
+        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus") {
             activeSheet = .logService
         } content: {
             if let service = nextDueService {
@@ -156,7 +156,7 @@ struct VehicleDashboardView: View {
     }
     
     private var fillupsDashboardCard: some View {
-        DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme), buttonLabel: "Add Fill-up") {
+        DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme), buttonLabel: "Add Fill-up", buttonSymbol: "plus") {
             activeSheet = .addFillup
         } content: {
             if let fillup = vehicle.sortedFillupsArray.first {
@@ -186,7 +186,7 @@ struct VehicleDashboardView: View {
     }
     
     private var repairsDashboardCard: some View {
-        DashboardCard(title: "Repairs", systemImage: "wrench.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair") {
+        DashboardCard(title: "Repairs", systemImage: "wrench.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus") {
             activeSheet = .addRepair
         } content: {
             EmptyView()
