@@ -14,7 +14,7 @@ struct RepairsStartView: View {
         ContentUnavailableView {
             Label("No Repairs", systemImage: "wrench")
         } description: {
-            Text("Tap the plus button to add one now")
+            Text("Tap the plus button to add one")
         } actions: {
             Button("Learn More") {
                 showingMoreInfo = true

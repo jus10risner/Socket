@@ -12,9 +12,9 @@ struct MaintenanceStartView: View {
     
     var body: some View {
         ContentUnavailableView {
-            Label("No Maintenance Items", systemImage: "book.and.wrench")
+            Label("No Maintenance Services", systemImage: "book.and.wrench")
         } description: {
-            Text("Tap the plus button to set one up now")
+            Text("Tap the plus button to set one up")
         } actions: {
             Button("Learn More") {
                 showingMoreInfo = true

@@ -14,7 +14,7 @@ struct FillupsStartView: View {
         ContentUnavailableView {
             Label("No Fill-ups", systemImage: "fuelpump")
         } description: {
-            Text("Tap the plus button to add one now")
+            Text("Tap the plus button to add one")
         } actions: {
             Button("Learn More") {
                 showingMoreInfo = true
