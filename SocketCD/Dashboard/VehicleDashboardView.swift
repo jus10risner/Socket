@@ -119,40 +119,12 @@ struct VehicleDashboardView: View {
     }
     
     private var odometerDashboardCard: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                HStack(spacing: 3) {
-                    Image(systemName: "car.fill")
-                        .frame(width: 20)
-                    
-                    Text("Odometer")
-                }
-                .foregroundStyle(settings.accentColor(for: .appTheme))
-                .font(.subheadline.bold())
-                .accessibilityLabel("Odometer")
-                
-                Spacer()
-            }
-            
-            Spacer()
-            
-            HStack {
-                Text("\(vehicle.odometer.formatted())")
-                    .font(.title3.bold())
-                
-                Spacer()
-                
-                Button("Update Odometer", systemImage: "pencil") { showingUpdateOdometerAlert = true }
-                    .buttonStyle(.bordered)
-                    .buttonBorderShape(.circle)
-                    .labelStyle(.iconOnly)
-                    .tint(settings.accentColor(for: .appTheme))
-            }
+        DashboardCard(title: "Odometer", systemImage: "car.fill", accentColor: settings.accentColor(for: .appTheme), buttonLabel: "Update Odometer", buttonSymbol: "pencil") {
+            showingUpdateOdometerAlert = true
+        } content: {
+            Text("\(vehicle.odometer.formatted())")
+                .font(.title3.bold())
         }
-        .frame(height: 80)
-        .padding()
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
-        .contentShape(Rectangle())
     }
     
     private var maintenanceDashboardCard: some View {
