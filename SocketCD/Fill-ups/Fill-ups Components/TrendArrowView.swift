@@ -12,6 +12,7 @@ struct TrendArrowView: View {
     let fillups: FetchedResults<Fillup>
     
     @State private var animatingTrendArrow = false
+    @State private var showingFuelEconomyInfo = false
     
     private var latestFillupFuelEconomy: Double {
         fillups.first?.fuelEconomy(settings: settings) ?? 0
@@ -27,12 +28,16 @@ struct TrendArrowView: View {
                 .frame(width: 35)
                 .foregroundStyle(Color(.tertiarySystemGroupedBackground))
             
-            if latestFillupFuelEconomy > previousFillupFuelEconomy {
-                upArrow
-            } else if latestFillupFuelEconomy < previousFillupFuelEconomy {
-                downArrow
+            if latestFillupFuelEconomy != 0 {
+                if latestFillupFuelEconomy > previousFillupFuelEconomy {
+                    upArrow
+                } else if latestFillupFuelEconomy < previousFillupFuelEconomy {
+                    downArrow
+                } else {
+                    equalSign
+                }
             } else {
-                equalSign
+                infoButton
             }
         }
         .foregroundStyle(settings.accentColor(for: .fillupsTheme))
@@ -67,6 +72,22 @@ struct TrendArrowView: View {
             .accessibilityLabel("Fuel economy is the same as your last fill-up")
     }
     
+    private var infoButton: some View {
+        Button("Learn More", systemImage: "info") {
+            showingFuelEconomyInfo = true
+        }
+        .labelStyle(.iconOnly)
+        .buttonStyle(.plain)
+        .popover(isPresented: $showingFuelEconomyInfo) {
+            Text("Fuel economy will be calculated after your next **Full Tank** fill-up.")
+                .font(.subheadline)
+                .foregroundStyle(Color.primary)
+                .padding()
+                .frame(width: 300)
+                .presentationCompactAdaptation(.popover)
+        }
+    }
+    
     // Animates trendArrow into view, with option to reset to it's original position off-screen (for animation after adding new fill-up)
     func animateTrendArrow(shouldReset: Bool) {
         if shouldReset == true {
@@ -82,7 +103,3 @@ struct TrendArrowView: View {
         }
     }
 }
-
-//#Preview {
-//    TrendArrowView()
-//}
