@@ -37,11 +37,11 @@ struct AllFillupsListView: View {
                             listRowLabel(symbol: "circle.bottomhalf.filled", text: "Partial Fill")
                             
                         case .missedFill:
-                            listRowLabel(symbol: "fuelpump.circle", text: "Full Tank (Reset)")
+                            listRowLabel(symbol: "circle.fill", text: "Full Tank (Reset)")
                             
                         case .fullTank:
-                            if fillup == fillups.last {
-                                listRowLabel(symbol: "fuelpump.circle", text: "First Fill")
+                            if fillup == fillups.last(where: { $0.fillType == .fullTank }) {
+                                listRowLabel(symbol: "circle.fill", text: "First Full Tank")
                             } else {
                                 Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
                             }
@@ -61,6 +61,7 @@ struct AllFillupsListView: View {
     private func listRowLabel(symbol: String, text: String) -> some View {
         HStack(spacing: 5) {
             Image(systemName: symbol)
+                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
             
             Text(text)
         }

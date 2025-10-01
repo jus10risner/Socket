@@ -69,37 +69,49 @@ extension Fillup {
         return odometer - previousOdometer
     }
     
+    // Finds the nearest previous full tank fill-up (ignoring partial fills, but stopping at missed fills).
+    func previousFullTank(in fillups: [Fillup]) -> Fillup? {
+        guard let currentIndex = fillups.firstIndex(of: self) else { return nil }
+
+        for i in (currentIndex + 1)..<fillups.count {
+            let candidate = fillups[i]
+
+            if candidate.fillType == .missedFill {
+                // Reset point — fuel economy cannot be calculated across a missed fill
+                break
+            }
+
+            if candidate.fillType == .fullTank {
+                return candidate
+            }
+        }
+
+        return nil
+    }
+    
     // Calculates fuel economy, when appropriate (returns 0 otherwise)
     func fuelEconomy(settings: AppSettings) -> Double {
         guard let fillups = vehicle?.sortedFillupsArray,
-              let currentIndex = fillups.firstIndex(of: self),
-              fillups.count > 1 else {
+              fillups.count > 1,
+              fillType == .fullTank else {
             return 0
         }
 
-        if currentIndex == fillups.count - 1 { return 0 } // If this is the first fill-up ever logged, return 0 (fuel economy can't be calculated)
-        
-        guard fillType == .fullTank else { return 0 } // If this isn't a full tank fill-up, fuel economy cannot be reliably calculated
+        // Find baseline: nearest previous full tank
+        guard let previousFullTank = previousFullTank(in: fillups) else { return 0 }
         
         var totalVolume = self.volume
         var totalDistance = self.tripDistance
         
-        for i in (currentIndex + 1)..<fillups.count {
-            let previousFillup = fillups[i]
-
-            if previousFillup.fillType == .missedFill {
-                // Stop at last missed fill (reset point for calculation window)
-                break
-            }
-
-            if previousFillup.fillType == .fullTank {
-                // Stop at last full fill (excluding missed fills)
-                break
-            }
-
-            if previousFillup.fillType == .partialFill {
-                totalVolume += previousFillup.volume
-                totalDistance += previousFillup.tripDistance
+        // Add any partials between this full tank and the previous full tank
+        if let currentIndex = fillups.firstIndex(of: self),
+           let prevIndex = fillups.firstIndex(of: previousFullTank) {
+            for i in (currentIndex + 1)..<prevIndex {
+                let prev = fillups[i]
+                if prev.fillType == .partialFill {
+                    totalVolume += prev.volume
+                    totalDistance += prev.tripDistance
+                }
             }
         }
         
@@ -112,34 +124,6 @@ extension Fillup {
             return Double(totalDistance) / totalVolume
         }
     }
-    
-    // Calculates fuel economy between the current fill-up and the one before, if appropriate
-//    var fuelEconomy: Double {
-//        let settings = AppSettings()
-//        guard let fillupsArray = vehicle?.sortedFillupsArray else { return 0 }
-//        
-//        if let index = fillupsArray.firstIndex(of: self) {
-//            if fillupsArray.count > 1 && self.fillType != .missedFill {
-//                if self != fillupsArray.last {
-//                    if self.fillType != .partialFill && fillupsArray[index + 1].fillType != .partialFill {
-//                        if settings.fuelEconomyUnit == .L100km {
-//                            return ((self.volume) / Double(self.tripDistance)) * 100
-//                        } else {
-//                            return Double(self.tripDistance) / (self.volume)
-//                        }
-//                    } else {
-//                        return 0
-//                    }
-//                } else {
-//                    return 0
-//                }
-//            } else {
-//                return 0
-//            }
-//        } else {
-//            return 0
-//        }
-//    }
     
     // Calculates the total cost of a fill-up
     var totalCost: Double? {
@@ -170,11 +154,4 @@ extension Fillup {
         
         try? context.save()
     }
-    
-//    func delete() {
-//        let context = DataController.shared.container.viewContext
-//        
-//        context.delete(self)
-//        try? context.save()
-//    }
 }
