@@ -43,7 +43,7 @@ struct OnboardingTips: View {
             ZStack(alignment: .leading) {
                 ZStack {
                     Rectangle()
-                        .foregroundStyle(Color(.defaultFillupsAccent))
+                        .foregroundStyle(Color.mint)
                         .frame(width: swipeActionWidth)
                     
                     Image(systemName: "fuelpump.fill")
@@ -54,7 +54,7 @@ struct OnboardingTips: View {
                 
                 HStack(spacing: 0) {
                     Rectangle()
-                        .foregroundStyle(Color(.defaultAppAccent))
+                        .foregroundStyle(Color.indigo)
                         .frame(width: swipeActionWidth / 4)
                     
                     Rectangle()

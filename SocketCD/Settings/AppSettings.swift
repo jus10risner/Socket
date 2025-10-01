@@ -49,17 +49,17 @@ class AppSettings: ObservableObject {
 
         switch theme {
         case .appTheme:
-            return .defaultAppAccent
+            return .indigo
         case .maintenanceTheme:
-            return .defaultMaintenanceAccent
+            return .blue
         case .repairsTheme:
-            return .defaultRepairsAccent
+            return .orange
         case .fillupsTheme:
-            return .defaultFillupsAccent
+            return .mint
         }
     }
     
-    // Converts AccentColors Strings (from AppSettings) into Color values
+    // Converts AccentColors Strings into Color values; used for the accent color selector in AppSettings
     func colorValue(for accentColor: AccentColors) -> Color {
         switch accentColor {
         case .red:
