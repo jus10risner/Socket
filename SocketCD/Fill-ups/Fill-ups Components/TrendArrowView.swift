@@ -12,7 +12,6 @@ struct TrendArrowView: View {
     let fillups: FetchedResults<Fillup>
     
     @State private var animatingTrendArrow = false
-    @State private var showingFuelEconomyInfo = false
     
     private var latestFillupFuelEconomy: Double {
         fillups.first?.fuelEconomy(settings: settings) ?? 0
@@ -37,7 +36,7 @@ struct TrendArrowView: View {
                     equalSign
                 }
             } else {
-                infoButton
+                economyUnavailableButton
             }
         }
         .foregroundStyle(settings.accentColor(for: .fillupsTheme))
@@ -72,20 +71,9 @@ struct TrendArrowView: View {
             .accessibilityLabel("Fuel economy is the same as your last fill-up")
     }
     
-    private var infoButton: some View {
-        Button("Learn More", systemImage: "info") {
-            showingFuelEconomyInfo = true
-        }
-        .labelStyle(.iconOnly)
-        .buttonStyle(.plain)
-        .popover(isPresented: $showingFuelEconomyInfo) {
-            Text("Fuel economy will be calculated after your next **Full Tank** fill-up.")
-                .font(.subheadline)
-                .foregroundStyle(Color.primary)
-                .padding()
-                .frame(width: 300)
-                .presentationCompactAdaptation(.popover)
-        }
+    private var economyUnavailableButton: some View {
+        Image(systemName: "minus")
+            .accessibilityLabel("Fuel economy is not available for this fill-up")
     }
     
     // Animates trendArrow into view, with option to reset to it's original position off-screen (for animation after adding new fill-up)
