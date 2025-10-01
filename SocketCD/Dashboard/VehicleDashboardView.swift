@@ -78,14 +78,8 @@ struct VehicleDashboardView: View {
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
                 case .logService:
-                    Group {
-                        if let nextDueService {
-                            AddEditRecordView(service: nextDueService, vehicle: vehicle)
-                        } else {
-                            AddEditServiceView(vehicle: vehicle)
-                        }
-                    }
-                    .tint(settings.accentColor(for: .maintenanceTheme))
+                    AddEditRecordView(service: nextDueService, vehicle: vehicle)
+                        .tint(settings.accentColor(for: .maintenanceTheme))
                 case .addRepair:
                     AddEditRepairView(vehicle: vehicle)
                         .tint(settings.accentColor(for: .repairsTheme))
@@ -108,9 +102,8 @@ struct VehicleDashboardView: View {
                     .multilineTextAlignment(.center)
                     .keyboardType(.numberPad)
                 Button("Cancel", role: .cancel) { }
-                Button("Save") {
-                    vehicle.updateAndSave(draftVehicle: draftVehicle)
-                }
+                Button("Save") { vehicle.updateAndSave(draftVehicle: draftVehicle) }
+                    .keyboardShortcut(.defaultAction) // Makes the confirmation button the accent color
             })
             .toolbar {
                 vehicleToolbar
@@ -128,7 +121,7 @@ struct VehicleDashboardView: View {
     }
     
     private var maintenanceDashboardCard: some View {
-        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus") {
+        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus", showingAddButton: vehicle.sortedServicesArray.count > 0) {
             activeSheet = .logService
         } content: {
             if let service = nextDueService {
@@ -140,14 +133,13 @@ struct VehicleDashboardView: View {
                             .font(.title3.bold())
 
                         Text(service.nextDueDescription(currentOdometer: vehicle.odometer))
-                            .font(.footnote)
+                            .font(.footnote.bold())
                             .foregroundStyle(Color.secondary)
                     }
                 }
             } else {
-                Text("No Maintenance Items")
+                Text("Tap to get started")
                     .font(.title3.bold())
-                    .foregroundStyle(Color.secondary)
             }
         }
         .onTapGesture {
@@ -161,23 +153,28 @@ struct VehicleDashboardView: View {
         } content: {
             if let fillup = vehicle.sortedFillupsArray.first {
                 HStack {
-                    if fillups.count > 1 {
+                    if fillups.count > 0 {
                         TrendArrowView(fillups: fillups)
                     }
                     
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("Latest Fill-up")
-                            .font(.footnote)
+                        Text(fillup.date.formatted(date: .numeric, time: .omitted))
+                            .font(.footnote.bold())
                             .foregroundStyle(Color.secondary)
                         
-                        Text("\(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
-                            .font(.title3.bold())
+                        Group {
+                            if fillup.fuelEconomy(settings: settings) > 0 {
+                                Text("\(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
+                            } else {
+                                Text(fillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "– \(settings.fuelEconomyUnit.rawValue)")
+                            }
+                        }
+                        .font(.title3.bold())
                     }
                 }
             } else {
-                Text("No Fill-ups")
+                Text("Add your first fill-up")
                     .font(.title3.bold())
-                    .foregroundStyle(Color.secondary)
             }
         }
         .onTapGesture {
@@ -189,7 +186,14 @@ struct VehicleDashboardView: View {
         DashboardCard(title: "Repairs", systemImage: "wrench.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus") {
             activeSheet = .addRepair
         } content: {
-            EmptyView()
+            HStack(alignment: .firstTextBaseline, spacing: 3) {
+                Text("\(vehicle.sortedRepairsArray.count)")
+                    .font(.title3.bold())
+                
+                Text("Logged")
+                    .font(.footnote.bold())
+                    .foregroundStyle(Color.secondary)
+            }
         }
         .onTapGesture {
             selectedSection = .repairs
@@ -313,10 +317,13 @@ struct VehicleDashboardView: View {
         switch section {
         case .maintenance:
             MaintenanceListView(vehicle: vehicle)
+                .tint(settings.accentColor(for: section.theme))
         case .repairs:
             RepairsListView(vehicle: vehicle)
+                .tint(settings.accentColor(for: section.theme))
         case .fillups:
             FillupsDashboardView(vehicle: vehicle)
+                .tint(settings.accentColor(for: section.theme))
         }
     }
     

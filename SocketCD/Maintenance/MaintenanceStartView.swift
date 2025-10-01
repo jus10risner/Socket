@@ -14,7 +14,7 @@ struct MaintenanceStartView: View {
         ContentUnavailableView {
             Label("No Maintenance Services", systemImage: "book.and.wrench")
         } description: {
-            Text("Tap the plus button to get started")
+            Text("Tap the plus button to set up your first service")
         } actions: {
             Button("Learn More") {
                 showingMoreInfo = true
