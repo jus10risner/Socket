@@ -118,7 +118,7 @@ struct FillupsDashboardView: View {
                             .labelStyle(.iconOnly)
                             .buttonStyle(.borderless)
                             .popover(isPresented: $showingFuelEconomyInfo) {
-                                Text("Fuel economy will be calculated after your next **Full Tank** fill-up.")
+                                Text("Fuel economy is calculated only when there are at least two **Full Tank** fill-ups. Partial or missed fill-ups are not included.")
                                     .font(.subheadline)
                                     .padding()
                                     .frame(width: 300)
