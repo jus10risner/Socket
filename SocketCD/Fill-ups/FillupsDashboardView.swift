@@ -109,7 +109,7 @@ struct FillupsDashboardView: View {
                             .font(.title2.bold())
                     } else {
                         HStack(spacing: 3) {
-                            Text("No \(settings.fuelEconomyUnit.rawValue)")
+                            Text("– \(settings.fuelEconomyUnit.rawValue)")
                                 .font(.title2.bold())
                             
                             Button("Learn More", systemImage: "info.circle") {
