@@ -39,15 +39,18 @@ struct ServiceIndicatorView: View {
                 }
             }
             .animation(.easeInOut(duration: 0.5).delay(0.5), value: remainingValue)
-            .task(id: vehicle.odometer) {
-                remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
-            }
-            .task(id: service.serviceRecords?.count) {
-                remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
+            .task(id: [vehicle.odometer, service.serviceRecords?.count]) {
+                loadRemainingValue()
             }
             .task(id: service.sortedServiceRecordsArray.first) {
-                remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
+                loadRemainingValue()
             }
+    }
+    
+    private func loadRemainingValue() {
+        Task {
+            remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
+        }
     }
 }
 
