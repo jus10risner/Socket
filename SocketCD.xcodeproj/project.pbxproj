@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */; };
 		9E189E372BD1ABE900095EC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E189E362BD1ABE900095EC2 /* Assets.xcassets */; };
+		9E1AD9042E8DAB6000E60184 /* MaintenanceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */; };
+		9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */; };
+		9E1AD9082E8DAF7300E60184 /* RepairsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */; };
+		9E1AD90A2E8DB00900E60184 /* CustomInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9092E8DB00900E60184 /* CustomInfoSection.swift */; };
 		9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E235B912DFB58CA008F7327 /* CameraViewModel.swift */; };
 		9E312D772BF2924B0069CBFF /* MaintenanceOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */; };
 		9E328E102E33B99600FF25B5 /* PDFExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */; };
@@ -112,6 +116,10 @@
 /* Begin PBXFileReference section */
 		9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExportRecord.swift; sourceTree = "<group>"; };
 		9E189E362BD1ABE900095EC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceCard.swift; sourceTree = "<group>"; };
+		9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupsCard.swift; sourceTree = "<group>"; };
+		9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairsCard.swift; sourceTree = "<group>"; };
+		9E1AD9092E8DB00900E60184 /* CustomInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInfoSection.swift; sourceTree = "<group>"; };
 		9E235B912DFB58CA008F7327 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		9E2F33372E4A42DA00EAB7B9 /* SocketDataModel_V2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SocketDataModel_V2.xcdatamodel; sourceTree = "<group>"; };
 		9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceOnboardingView.swift; sourceTree = "<group>"; };
@@ -518,6 +526,10 @@
 			isa = PBXGroup;
 			children = (
 				9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */,
+				9E1AD9092E8DB00900E60184 /* CustomInfoSection.swift */,
+				9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */,
+				9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */,
+				9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */,
 				9EF60B5F2E58C3320039D57A /* DashboardCard.swift */,
 			);
 			path = Dashboard;
@@ -665,9 +677,11 @@
 				9EEAC5082BA38BC20053C65E /* FillupsStartView.swift in Sources */,
 				9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */,
 				9EEAC4EC2BA3749E0053C65E /* PhotoGridView.swift in Sources */,
+				9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */,
 				9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */,
 				9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */,
 				9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */,
+				9E1AD9042E8DAB6000E60184 /* MaintenanceCard.swift in Sources */,
 				9EEAC4902BA1036F0053C65E /* DataController.swift in Sources */,
 				9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */,
 				9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */,
@@ -694,6 +708,7 @@
 				9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */,
 				9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */,
 				9EEAC4E82BA367A00053C65E /* AddPhotoButton.swift in Sources */,
+				9E1AD9082E8DAF7300E60184 /* RepairsCard.swift in Sources */,
 				9E52CCB62E6F569E00B3CB45 /* DraftServiceLog.swift in Sources */,
 				9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */,
 				9E5270E22E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift in Sources */,
@@ -705,6 +720,7 @@
 				9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */,
 				9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */,
 				9EEAC4B32BA1F08F0053C65E /* CameraCapture.swift in Sources */,
+				9E1AD90A2E8DB00900E60184 /* CustomInfoSection.swift in Sources */,
 				9E312D772BF2924B0069CBFF /* MaintenanceOnboardingView.swift in Sources */,
 				9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */,
 				9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */,

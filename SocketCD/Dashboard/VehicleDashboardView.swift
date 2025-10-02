@@ -13,23 +13,10 @@ struct VehicleDashboardView: View {
     @ObservedObject var vehicle: Vehicle
     @Binding var selectedVehicle: Vehicle? // Used primarily to dismiss this view if the vehicle is deleted
     
-    @FetchRequest var fillups: FetchedResults<Fillup>
-    @FetchRequest var services: FetchedResults<Service>
-    
     init(vehicle: Vehicle, selectedVehicle: Binding<Vehicle?>) {
         _draftVehicle = StateObject(wrappedValue: DraftVehicle(vehicle: vehicle))
         self.vehicle = vehicle
         self._selectedVehicle = selectedVehicle
-        self._fillups = FetchRequest(
-            entity: Fillup.entity(),
-            sortDescriptors: [NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)],
-            predicate: NSPredicate(format: "vehicle == %@", vehicle)
-        )
-        self._services = FetchRequest(
-            entity: Service.entity(),
-            sortDescriptors: [],
-            predicate: NSPredicate(format: "vehicle == %@", vehicle)
-        )
     }
     
     @State private var selectedSection: AppSection?
@@ -50,15 +37,15 @@ struct VehicleDashboardView: View {
                     HStack(spacing: 5) {
                         odometerDashboardCard
                         
-                        repairsDashboardCard
+                        RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
                     }
                     
-                    maintenanceDashboardCard
+                    MaintenanceCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
                     
-                    fillupsDashboardCard
+                    FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
                 }
                 
-                customInfo
+                CustomInfoSection(vehicle: vehicle, columns: columns, activeSheet: $activeSheet)
                     .padding(.top, 30)
             }
             .padding(.horizontal)
@@ -78,7 +65,7 @@ struct VehicleDashboardView: View {
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
                 case .logService:
-                    AddEditRecordView(service: nextDueService, vehicle: vehicle)
+                    AddEditRecordView(service: vehicle.sortedServicesArray.first, vehicle: vehicle)
                         .tint(settings.accentColor(for: .maintenanceTheme))
                 case .addRepair:
                     AddEditRepairView(vehicle: vehicle)
@@ -117,134 +104,6 @@ struct VehicleDashboardView: View {
         } content: {
             Text("\(vehicle.odometer.formatted())")
                 .font(.title3.bold())
-        }
-    }
-    
-    private var maintenanceDashboardCard: some View {
-        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus", showingAddButton: vehicle.sortedServicesArray.count > 0) {
-            activeSheet = .logService
-        } content: {
-            if let service = nextDueService {
-                HStack {
-                    ServiceIndicatorView(vehicle: vehicle, service: service)
-                    
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(service.name)
-                            .font(.title3.bold())
-
-                        Text(service.nextDueDescription(currentOdometer: vehicle.odometer))
-                            .font(.footnote.bold())
-                            .foregroundStyle(Color.secondary)
-                    }
-                }
-            } else {
-                Text("Tap to get started")
-                    .font(.title3.bold())
-            }
-        }
-        .onTapGesture {
-            selectedSection = .maintenance
-        }
-    }
-    
-    private var fillupsDashboardCard: some View {
-        DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme), buttonLabel: "Add Fill-up", buttonSymbol: "plus") {
-            activeSheet = .addFillup
-        } content: {
-            if let fillup = vehicle.sortedFillupsArray.first {
-                HStack {
-                    if fillups.count > 0 {
-                        TrendArrowView(fillups: fillups)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(fillup.date.formatted(date: .numeric, time: .omitted))
-                            .font(.footnote.bold())
-                            .foregroundStyle(Color.secondary)
-                        
-                        Group {
-                            if fillup.fuelEconomy(settings: settings) > 0 {
-                                Text("\(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
-                            } else {
-                                Text(fillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "– \(settings.fuelEconomyUnit.rawValue)")
-                            }
-                        }
-                        .font(.title3.bold())
-                    }
-                }
-            } else {
-                Text("Add your first fill-up")
-                    .font(.title3.bold())
-            }
-        }
-        .onTapGesture {
-            selectedSection = .fillups
-        }
-    }
-    
-    private var repairsDashboardCard: some View {
-        DashboardCard(title: "Repairs", systemImage: "wrench.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus") {
-            activeSheet = .addRepair
-        } content: {
-            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text("\(vehicle.sortedRepairsArray.count)")
-                    .font(.title3.bold())
-                
-                Text("Logged")
-                    .font(.footnote.bold())
-                    .foregroundStyle(Color.secondary)
-            }
-        }
-        .onTapGesture {
-            selectedSection = .repairs
-        }
-    }
-    
-    private var customInfo: some View {
-        VStack(alignment: .leading) {
-            Text("Custom Info")
-                .font(.headline)
-                .padding(.leading)
-            
-            LazyVGrid(columns: columns, spacing: 5) {
-                if !vehicle.sortedCustomInfoArray.isEmpty {
-                    ForEach(vehicle.sortedCustomInfoArray, id: \.id) { customInfo in
-                        NavigationLink {
-                            CustomInfoDetailView(customInfo: customInfo)
-                        } label: {
-                            HStack {
-                                Text(customInfo.label)
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.footnote)
-                                    .foregroundStyle(Color.secondary)
-                            }
-                        }
-                        .padding()
-                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
-                    }
-                } else {
-                    Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
-                        .font(.subheadline)
-                        .foregroundStyle(Color.secondary)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
-                }
-                
-                Button("Add Info", systemImage: "plus") {
-                    activeSheet = .addCustomInfo
-                }
-                .foregroundStyle(settings.accentColor(for: .appTheme))
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background {
-                    RoundedRectangle.adaptive
-                        .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
-                }
-            }
         }
     }
     
@@ -325,34 +184,6 @@ struct VehicleDashboardView: View {
             FillupsDashboardView(vehicle: vehicle)
                 .tint(settings.accentColor(for: section.theme))
         }
-    }
-    
-    // Returns the next service due (or most overdue)
-    private var nextDueService: Service? {
-        return services.sorted { s1, s2 in
-            switch (s1.estimatedDaysUntilDue(currentOdometer: vehicle.odometer),
-                    s2.estimatedDaysUntilDue(currentOdometer: vehicle.odometer)) {
-            case let (d1?, d2?):
-                if d1 != d2 {
-                    return d1 < d2
-                } else if s1.name != s2.name {
-                    return s1.name < s2.name
-                } else {
-                    return s1.id < s2.id
-                }
-            case (nil, _?):
-                return false
-            case (_?, nil):
-                return true
-            case (nil, nil):
-                if s1.name != s2.name {
-                    return s1.name < s2.name
-                } else {
-                    return s1.id < s2.id
-                }
-            }
-        }
-        .first
     }
 }
 

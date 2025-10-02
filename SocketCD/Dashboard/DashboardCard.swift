@@ -60,10 +60,10 @@ struct DashboardCard<Content: View>: View {
                 Spacer()
                 
                 Button(buttonLabel, systemImage: buttonSymbol, action: quickAction)
-                    .buttonStyle(.bordered)
-                    .buttonBorderShape(.circle)
                     .labelStyle(.iconOnly)
                     .tint(accentColor)
+                    .padding(8)
+                    .background(accentColor.opacity(0.2), in: Circle())
                     .opacity(showingAddButton ? 1 : 0)
             }
         }
