@@ -25,7 +25,6 @@ struct FillupsDashboardView: View {
     
     @State private var showingAddFillup = false
     @State private var showingFuelEconomyInfo = false
-    @State private var animatingTrendArrow = false
     @State private var selectedDateRange: DateRange = .sixMonths
     
     var body: some View {
@@ -87,48 +86,42 @@ struct FillupsDashboardView: View {
     
     // View that groups the trend arrow, fuel economy info, and headline into one element
     private var headlineGroup: some View {
-//        HStack {
-//            if fillups.count > 3 && fillups.first?.fuelEconomy(settings: settings) != 0 {
-//                TrendArrowView(fillups: fillups)
-//            }
-            
-            VStack(alignment: .leading, spacing: 0) {
-                LabeledContent("Latest") {
-                    guard let date = fillups.first?.date else { return Text("") }
-                        
-                    return Text(date.formatted(date: .numeric, time: .omitted))
-                        .font(.subheadline)
-                }
-                .font(.headline)
-                
-                if let latestFillup = fillups.first {
-                    let economy = latestFillup.fuelEconomy(settings: settings)
+        VStack(alignment: .leading, spacing: 0) {
+            LabeledContent("Latest") {
+                guard let date = fillups.first?.date else { return Text("") }
                     
-                    if economy > 0 {
-                        Text("\(economy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                return Text(date.formatted(date: .numeric, time: .omitted))
+                    .font(.subheadline)
+            }
+            .font(.headline)
+            
+            if let latestFillup = fillups.first {
+                let economy = latestFillup.fuelEconomy(settings: settings)
+                
+                if economy > 0 {
+                    Text("\(economy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                        .font(.title2.bold())
+                } else {
+                    HStack(spacing: 3) {
+                        Text("– \(settings.fuelEconomyUnit.rawValue)")
                             .font(.title2.bold())
-                    } else {
-                        HStack(spacing: 3) {
-                            Text("– \(settings.fuelEconomyUnit.rawValue)")
-                                .font(.title2.bold())
-                            
-                            Button("Learn More", systemImage: "info.circle") {
-                                showingFuelEconomyInfo = true
-                            }
-                            .labelStyle(.iconOnly)
-                            .buttonStyle(.borderless)
-                            .popover(isPresented: $showingFuelEconomyInfo) {
-                                Text("Fuel economy is calculated only when there are at least two **Full Tank** fill-ups. Partial or missed fill-ups are not included.")
-                                    .font(.subheadline)
-                                    .padding()
-                                    .frame(width: 300)
-                                    .presentationCompactAdaptation(.popover)
-                            }
+                        
+                        Button("Learn More", systemImage: "info.circle") {
+                            showingFuelEconomyInfo = true
+                        }
+                        .labelStyle(.iconOnly)
+                        .buttonStyle(.borderless)
+                        .popover(isPresented: $showingFuelEconomyInfo) {
+                            Text("Fuel economy is calculated only when there are at least two **Full Tank** fill-ups. Partial or missed fill-ups are not included.")
+                                .font(.subheadline)
+                                .padding()
+                                .frame(width: 300)
+                                .presentationCompactAdaptation(.popover)
                         }
                     }
                 }
             }
-//        }
+        }
     }
     
     // Displayed when no data points exist to place on the chart
@@ -137,15 +130,27 @@ struct FillupsDashboardView: View {
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.system(size: 40))
                 .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                .frame(height: 50)
             
-            Text("One more to go")
-                .font(.title2.bold())
-                .foregroundStyle(Color.primary)
-            
-            Text("Add another **Full Tank** fill-up to see your fuel economy chart.")
-                .font(.footnote)
-                .foregroundStyle(Color.secondary)
-                .multilineTextAlignment(.center)
+            if fillups.contains(where: { $0.fillType == .fullTank }) {
+                Text("One more fill-up needed")
+                    .font(.title2.bold())
+                    .foregroundStyle(Color.primary)
+                
+                Text("Add another **Full Tank** fill-up to see your fuel economy chart.")
+                    .font(.footnote)
+                    .foregroundStyle(Color.secondary)
+                    .multilineTextAlignment(.center)
+            } else {
+                Text("One full tank, please")
+                    .font(.title2.bold())
+                    .foregroundStyle(Color.primary)
+                
+                Text("Fuel economy can only be calculated between **Full Tanks** of fuel.")
+                    .font(.footnote)
+                    .foregroundStyle(Color.secondary)
+                    .multilineTextAlignment(.center)
+            }
         }
         .frame(height: 200)
     }
