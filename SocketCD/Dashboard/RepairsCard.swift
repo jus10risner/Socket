@@ -15,17 +15,32 @@ struct RepairsCard: View {
     @Binding var selectedSection: AppSection?
     
     var body: some View {
-        DashboardCard(title: "Repairs", systemImage: "wrench.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus") {
+        DashboardCard(title: "Repairs", systemImage: "wrench.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus.circle.fill") {
             activeSheet = .addRepair
         } content: {
-            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text("\(vehicle.sortedRepairsArray.count)")
-                    .font(.title3.bold())
-                
-                Text("Logged")
-                    .font(.footnote.bold())
+            if let repair = vehicle.sortedRepairsArray.first {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Latest")
+                        .font(.footnote.bold())
+                        .foregroundStyle(Color.secondary)
+                    
+                    Text(repair.date.formatted(date: .numeric, time: .omitted))
+                        .font(.headline)
+                }
+            } else {
+                Text("No Data")
+                    .font(.headline)
                     .foregroundStyle(Color.secondary)
             }
+            
+//            HStack(alignment: .firstTextBaseline, spacing: 3) {
+//                Text("\(vehicle.sortedRepairsArray.count)")
+//                    .font(.title3.bold())
+//                
+//                Text("Logged")
+//                    .font(.footnote.bold())
+//                    .foregroundStyle(Color.secondary)
+//            }
         }
         .onTapGesture {
             selectedSection = .repairs

@@ -43,7 +43,7 @@ struct DashboardCard<Content: View>: View {
                 
                 Spacer()
                 
-                if buttonSymbol == "plus" {
+                if buttonSymbol == "plus.circle.fill" {
                     Image(systemName: "chevron.right")
                         .font(.footnote)
                         .foregroundStyle(Color.secondary)
@@ -61,9 +61,9 @@ struct DashboardCard<Content: View>: View {
                 
                 Button(buttonLabel, systemImage: buttonSymbol, action: quickAction)
                     .labelStyle(.iconOnly)
+                    .symbolRenderingMode(.hierarchical)
+                    .font(.title)
                     .tint(accentColor)
-                    .padding(8)
-                    .background(accentColor.opacity(0.2), in: Circle())
                     .opacity(showingAddButton ? 1 : 0)
             }
         }
@@ -75,5 +75,5 @@ struct DashboardCard<Content: View>: View {
 }
 
 #Preview {
-    DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: .blue, buttonLabel: "Add", buttonSymbol: "plus", quickAction: {}, content: {})
+    DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: .blue, buttonLabel: "Add", buttonSymbol: "plus.circle.fill", quickAction: {}, content: {})
 }

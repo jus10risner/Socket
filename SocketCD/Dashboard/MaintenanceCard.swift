@@ -28,7 +28,7 @@ struct MaintenanceCard: View {
     }
     
     var body: some View {
-        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus", showingAddButton: vehicle.sortedServicesArray.count > 0) {
+        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus.circle.fill", showingAddButton: vehicle.sortedServicesArray.count > 0) {
             activeSheet = .logService
         } content: {
             if let service = vehicle.sortedServicesArray.first {
@@ -37,7 +37,7 @@ struct MaintenanceCard: View {
                     
                     VStack(alignment: .leading, spacing: 0) {
                         Text(service.name)
-                            .font(.title3.bold())
+                            .font(.headline)
 
                         Text(service.nextDueDescription(currentOdometer: vehicle.odometer))
                             .font(.footnote.bold())
@@ -45,8 +45,15 @@ struct MaintenanceCard: View {
                     }
                 }
             } else {
-                Text("Tap to get started")
-                    .font(.title3.bold())
+                HStack {
+                    Circle()
+                        .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
+                        .frame(width: 30)
+                    
+                    Text("Tap to get started")
+                        .font(.headline)
+                        .foregroundStyle(Color.secondary)
+                }
             }
         }
         .onTapGesture {

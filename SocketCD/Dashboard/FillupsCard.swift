@@ -28,15 +28,15 @@ struct FillupsCard: View {
     }
     
     var body: some View {
-        DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme), buttonLabel: "Add Fill-up", buttonSymbol: "plus") {
+        DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme), buttonLabel: "Add Fill-up", buttonSymbol: "plus.circle.fill") {
             activeSheet = .addFillup
         } content: {
-            if let fillup = vehicle.sortedFillupsArray.first {
-                HStack {
-                    if fillups.count > 0 {
-                        TrendArrowView(fillups: fillups)
-                    }
-                    
+            HStack {
+//                if fillups.count > 0 {
+                TrendArrowView(fillups: fillups)
+                
+//                }
+                if let fillup = vehicle.sortedFillupsArray.first {
                     VStack(alignment: .leading, spacing: 0) {
                         Text(fillup.date.formatted(date: .numeric, time: .omitted))
                             .font(.footnote.bold())
@@ -49,12 +49,13 @@ struct FillupsCard: View {
                                 Text(fillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "– \(settings.fuelEconomyUnit.rawValue)")
                             }
                         }
-                        .font(.title3.bold())
+                        .font(.headline)
                     }
+                } else {
+                    Text("Add your first fill-up")
+                        .font(.headline)
+                        .foregroundStyle(Color.secondary)
                 }
-            } else {
-                Text("Add your first fill-up")
-                    .font(.title3.bold())
             }
         }
         .onTapGesture {

@@ -99,11 +99,11 @@ struct VehicleDashboardView: View {
     }
     
     private var odometerDashboardCard: some View {
-        DashboardCard(title: "Odometer", systemImage: "car.fill", accentColor: settings.accentColor(for: .appTheme), buttonLabel: "Update Odometer", buttonSymbol: "pencil") {
+        DashboardCard(title: "Odometer", systemImage: "car.fill", accentColor: settings.accentColor(for: .appTheme), buttonLabel: "Update Odometer", buttonSymbol: "pencil.circle.fill") {
             showingUpdateOdometerAlert = true
         } content: {
             Text("\(vehicle.odometer.formatted())")
-                .font(.title3.bold())
+                .font(.headline)
         }
     }
     
