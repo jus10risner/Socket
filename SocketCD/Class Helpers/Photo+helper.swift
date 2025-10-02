@@ -20,8 +20,8 @@ extension Photo {
         set { imageData_ = newValue }
     }
     
-    var converted: UIImage {
-        UIImage(data: imageData)!
+    var converted: UIImage? {
+        UIImage(data: imageData)
     }
     
     

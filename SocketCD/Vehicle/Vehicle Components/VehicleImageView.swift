@@ -27,8 +27,8 @@ struct VehicleImageView: View {
                         .foregroundStyle(.ultraThickMaterial)
                 }
                 .environment(\.colorScheme, .light)
-            } else if let carPhoto {
-                Image(uiImage: carPhoto.converted)
+            } else if let carPhoto, let uiImage = carPhoto.converted {
+                Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()
                     .frame(width: geo.size.width, height: geo.size.height) // Forces the image to obey the parent view's constraints
@@ -38,3 +38,4 @@ struct VehicleImageView: View {
         }
     }
 }
+

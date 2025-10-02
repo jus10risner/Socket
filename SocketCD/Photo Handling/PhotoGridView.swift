@@ -44,11 +44,15 @@ struct PhotoGridView: View {
                     RoundedRectangle.adaptive
                         .fill(Color.clear)
                         .aspectRatio(1.5, contentMode: .fit)
-                        .overlay(
-                            Image(uiImage: photo.converted)
-                                .resizable()
-                                .scaledToFill()
-                        )
+                        .overlay {
+                            if let uiImage = photo.converted {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                            } else {
+                                Color.clear
+                            }
+                        }
                         .clipShape(RoundedRectangle.adaptive)
                         .overlay {
                             RoundedRectangle.adaptive
@@ -78,7 +82,13 @@ struct PhotoGridView: View {
             .id(UUID()) // prevents flicker when deleting
         }
         .fullScreenCover(item: $selectedPhoto) { photo in
-            ImageDetailView(image: photo.converted)
+            if let uiImage = photo.converted {
+                ImageDetailView(image: uiImage)
+            } else {
+                Text("Image unavailable")
+                    .font(.headline)
+                    .padding()
+            }
         }
     }
     
