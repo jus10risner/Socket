@@ -31,7 +31,7 @@ struct MaintenanceCard: View {
         DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus.circle.fill", disableButton: vehicle.sortedServicesArray.count < 1) {
             activeSheet = .logService
         } content: {
-            if let service = vehicle.sortedServicesArray.first {
+            if let service = nextDueService {
                 HStack {
                     ServiceIndicatorView(vehicle: vehicle, service: service)
                     
@@ -53,6 +53,33 @@ struct MaintenanceCard: View {
         .onTapGesture {
             selectedSection = .maintenance
         }
+    }
+    
+    // Determines which service is due next; updates the card content after a service is logged (and thus no longer due next)
+    var nextDueService: Service? {
+        return services.sorted { s1, s2 in
+            switch (s1.estimatedDaysUntilDue(currentOdometer: vehicle.odometer),
+                    s2.estimatedDaysUntilDue(currentOdometer: vehicle.odometer)) {
+            case let (d1?, d2?):
+                if d1 != d2 {
+                    return d1 < d2
+                } else if s1.name != s2.name {
+                    return s1.name < s2.name
+                } else {
+                    return s1.id < s2.id
+                }
+            case (nil, _?):
+                return false
+            case (_?, nil):
+                return true
+            case (nil, nil):
+                if s1.name != s2.name {
+                    return s1.name < s2.name
+                } else {
+                    return s1.id < s2.id
+                }
+            }
+        }.first
     }
 }
 
