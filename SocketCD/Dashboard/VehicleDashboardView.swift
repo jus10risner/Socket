@@ -102,8 +102,14 @@ struct VehicleDashboardView: View {
         DashboardCard(title: "Odometer", systemImage: "car.fill", accentColor: settings.accentColor(for: .appTheme), buttonLabel: "Update Odometer", buttonSymbol: "pencil.circle.fill") {
             showingUpdateOdometerAlert = true
         } content: {
-            Text("\(vehicle.odometer.formatted())")
-                .font(.headline)
+            HStack(alignment: .firstTextBaseline, spacing: 3) {
+                Text("\(vehicle.odometer.formatted())")
+                    .font(.headline)
+                
+                Text(settings.distanceUnit.abbreviated)
+                    .font(.footnote.bold())
+                    .foregroundStyle(Color.secondary)
+            }
         }
     }
     
