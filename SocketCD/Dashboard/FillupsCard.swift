@@ -31,11 +31,11 @@ struct FillupsCard: View {
         DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme), buttonLabel: "Add Fill-up", buttonSymbol: "plus.circle.fill") {
             activeSheet = .addFillup
         } content: {
-            HStack {
-//                if fillups.count > 0 {
-                TrendArrowView(fillups: fillups)
+            HStack(alignment: .bottom) {
+                if fillups.count > 0 {
+                    TrendArrowView(fillups: fillups)
+                }
                 
-//                }
                 if let fillup = vehicle.sortedFillupsArray.first {
                     VStack(alignment: .leading, spacing: 0) {
                         Text(fillup.date.formatted(date: .numeric, time: .omitted))

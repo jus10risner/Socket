@@ -45,15 +45,9 @@ struct MaintenanceCard: View {
                     }
                 }
             } else {
-                HStack {
-                    Circle()
-                        .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
-                        .frame(width: 30)
-                    
-                    Text("Tap to get started")
-                        .font(.headline)
-                        .foregroundStyle(Color.secondary)
-                }
+                Text("Tap to get started")
+                    .font(.headline)
+                    .foregroundStyle(Color.secondary)
             }
         }
         .onTapGesture {
