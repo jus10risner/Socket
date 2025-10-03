@@ -18,14 +18,16 @@ struct CustomInfoDetailView: View {
         List {
             if !customInfo.detail.isEmpty {
                 Section(footer: Text(copyHint)) {
-                    Text(customInfo.detail)
-                        .onTapGesture {
+                    LabeledContent(customInfo.detail) {
+                        Button("Copy to clipboard", systemImage: "document.on.document") {
                             let pasteBoard = UIPasteboard.general
                             pasteBoard.string = customInfo.detail
                             copyHint = "Copied!"
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copyHint = "Tap to copy" }
                         }
+                        .labelStyle(.iconOnly)
+                    }
                 }
                 .textCase(nil)
             }
