@@ -28,19 +28,10 @@ struct RepairsCard: View {
                         .font(.headline)
                 }
             } else {
-                Text("No Data")
+                Text("No entries")
                     .font(.headline)
                     .foregroundStyle(Color.secondary)
             }
-            
-//            HStack(alignment: .firstTextBaseline, spacing: 3) {
-//                Text("\(vehicle.sortedRepairsArray.count)")
-//                    .font(.title3.bold())
-//                
-//                Text("Logged")
-//                    .font(.footnote.bold())
-//                    .foregroundStyle(Color.secondary)
-//            }
         }
         .onTapGesture {
             selectedSection = .repairs

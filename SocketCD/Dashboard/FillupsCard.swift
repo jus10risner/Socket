@@ -52,7 +52,7 @@ struct FillupsCard: View {
                         .font(.headline)
                     }
                 } else {
-                    Text("Add your first fill-up")
+                    Text("Nothing logged yet")
                         .font(.headline)
                         .foregroundStyle(Color.secondary)
                 }
