@@ -21,42 +21,50 @@ struct CustomInfoSection: View {
                 .padding(.leading)
             
             LazyVGrid(columns: columns, spacing: 5) {
-                if !vehicle.sortedCustomInfoArray.isEmpty {
-                    ForEach(vehicle.sortedCustomInfoArray, id: \.id) { customInfo in
-                        NavigationLink {
-                            CustomInfoDetailView(customInfo: customInfo)
-                        } label: {
-                            HStack {
-                                Text(customInfo.label)
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.footnote)
-                                    .foregroundStyle(Color.secondary)
+                ForEach(vehicle.sortedCustomInfoArray, id: \.id) { customInfo in
+                    NavigationLink {
+                        CustomInfoDetailView(customInfo: customInfo)
+                    } label: {
+                        HStack {
+                            LabeledContent(customInfo.label) {
+                                if !customInfo.detail.isEmpty {
+                                    Text(customInfo.detail)
+                                        .foregroundStyle(Color.secondary)
+                                    
+                                } else if customInfo.photos?.count != 0 {
+                                    Image(systemName: "photo")
+                                        .foregroundStyle(Color.secondary)
+                                }
                             }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.footnote)
+                                .foregroundStyle(Color.secondary)
                         }
                         .padding()
                         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
                     }
-                } else {
-                    Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
-                        .font(.subheadline)
-                        .foregroundStyle(Color.secondary)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
+                    .buttonStyle(.plain)
                 }
                 
-                Button("Add Info", systemImage: "plus") {
+                Button {
                     activeSheet = .addCustomInfo
-                }
-                .foregroundStyle(settings.accentColor(for: .appTheme))
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background {
-                    RoundedRectangle.adaptive
-                        .strokeBorder(Color.secondary, style: StrokeStyle(lineWidth: 0.5, dash: [5, 3]))
+                } label: {
+                    VStack(spacing: 20) {
+                        if vehicle.sortedCustomInfoArray.isEmpty {
+                            Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
+                                .font(.subheadline)
+                                .foregroundStyle(Color.secondary)
+                        }
+                        
+                        Label("Add Info", systemImage: "plus")
+                            .foregroundStyle(settings.accentColor(for: .appTheme))
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
                 }
             }
         }
