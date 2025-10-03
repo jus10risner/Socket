@@ -64,6 +64,7 @@ struct DashboardCard<Content: View>: View {
                     .symbolRenderingMode(.hierarchical)
                     .font(.title)
                     .tint(accentColor)
+                    .padding([.bottom, .trailing], -2)
                     .disabled(disableButton)
             }
         }
