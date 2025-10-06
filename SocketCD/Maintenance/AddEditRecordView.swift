@@ -44,7 +44,7 @@ struct AddEditRecordView: View {
                         SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
                     } label: {
                         if draftServiceLog.selectedServiceIDs.isEmpty {
-                            Text("Tap to select services")
+                            Text("Select services")
                                 .foregroundStyle(Color.secondary)
                         } else {
                             Text(draftServiceLog.selectedServiceNames(from: vehicle))

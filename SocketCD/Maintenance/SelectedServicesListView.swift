@@ -14,7 +14,7 @@ struct SelectedServicesListView: View {
     
     var body: some View {
         List {
-            Section("Select the services you'd like to log") {
+            Section("Select the services to log") {
                 ForEach(vehicle.sortedServicesArray.sorted { $0.name < $1.name }) { service in
                     Button {
                         toggleSelection(for: service)
