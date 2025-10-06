@@ -73,7 +73,7 @@ struct FillupsDashboardView: View {
         .navigationTitle("Fill-ups")
         .sheet(isPresented: $showingAddFillup) { AddEditFillupView(vehicle: vehicle) }
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
+            ToolbarItem {
                 Button("Add Fill-up", systemImage: "plus") {
                     showingAddFillup = true
                 }

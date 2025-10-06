@@ -58,7 +58,7 @@ struct RepairsListView: View {
             AddEditRepairView(vehicle: vehicle)
         }
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
+            ToolbarItem {
                 Button("Add New Repair", systemImage: "plus") {
                     showingAddRepair = true
                 }

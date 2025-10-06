@@ -68,16 +68,8 @@ struct MaintenanceListView: View {
             AddEditRecordView(vehicle: vehicle)
         })
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Menu("Set Up New Service", systemImage: "plus") {
-                    Button("Set Up New Service", systemImage: "plus") {
-                        showingAddService = true
-                    }
-                    
-                    Button("Log Service", systemImage: "plus.rectangle.on.rectangle") {
-                        showingLogService = true
-                    }
-                } primaryAction: {
+            ToolbarItem {
+                Button("Add Service", systemImage: "rectangle.badge.plus") {
                     showingAddService = true
                 }
             }
