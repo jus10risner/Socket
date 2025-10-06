@@ -24,7 +24,6 @@ struct AddPhotoButton: View {
     var body: some View {
         Menu {
             Button("Choose Photos", systemImage: "photo.on.rectangle") {
-//                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 showingPhotosPicker = true
             }
             
@@ -35,7 +34,7 @@ struct AddPhotoButton: View {
             }
         } label: {
             Label("Add Photo", systemImage: "photo")
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
         .onChange(of: selectedImages) { loadSelectedImages() }
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImages, matching: .images)
