@@ -42,9 +42,9 @@ struct MaintenanceListView: View {
                         ServiceListRowView(service: service, vehicle: vehicle)
                     }
                     
-                    if serviceTipDue == true {
-                        firstServiceInfo
-                    }
+//                    if serviceTipDue == true {
+//                        firstServiceInfo
+//                    }
                 }
             }
         }
@@ -61,7 +61,7 @@ struct MaintenanceListView: View {
         .onAppear { requestNotificationPermission() }
         .onChange(of: Array(services)) { requestNotificationPermission() }
 //        .onChange(of: vehicle.odometer) { vehicle.updateAllServiceNotifications() }
-        .sheet(isPresented: $showingAddService, onDismiss: { determineIfFirstServiceInfoDue() }) {
+        .sheet(isPresented: $showingAddService) {
             AddEditServiceView(vehicle: vehicle)
         }
         .sheet(isPresented: $showingLogService, content: {
@@ -79,46 +79,46 @@ struct MaintenanceListView: View {
     
     // MARK: - Views
     
-    // Determines whether to show firstServiceInfo tip
-    private var serviceTipDue: Bool {
-        var serviceRecordCount = 0
-        
-        if allServices.count > 0 {
-            for service in allServices {
-                if service.serviceRecords?.count != 0 {
-                    serviceRecordCount += 1
-                }
-            }
-        }
-        
-        return serviceRecordCount == 0 ? true : false
-    }
-    
-    // Shown when no services have been added for a given vehicle
-    private var firstServiceInfo: some View {
-        Section {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(Color(.socketPurple))
-                    .accessibilityElement()
-                
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("Now that you have a maintenance service set up, you can add a record each time this service is completed.")
-                    
-                    Text("Just swipe or tap on the service above, then tap \(Image(systemName: "plus.square.on.square.fill")) to add a new record.")
-                        .accessibilityElement()
-                        .accessibilityLabel("Just swipe or tap on a service above, then tap Add Service Record to add a new record.")
-                }
-                .padding(30)
-                .font(.subheadline)
-                .foregroundStyle(.white)
-                .accessibilityElement(children: .combine)
-            }
-            .padding(.top, 30)
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color(.systemGroupedBackground))
-        }
-    }
+//    // Determines whether to show firstServiceInfo tip
+//    private var serviceTipDue: Bool {
+//        var serviceRecordCount = 0
+//        
+//        if allServices.count > 0 {
+//            for service in allServices {
+//                if service.serviceRecords?.count != 0 {
+//                    serviceRecordCount += 1
+//                }
+//            }
+//        }
+//        
+//        return serviceRecordCount == 0 ? true : false
+//    }
+//    
+//    // Shown when no services have been added for a given vehicle
+//    private var firstServiceInfo: some View {
+//        Section {
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 10)
+//                    .foregroundStyle(Color(.socketPurple))
+//                    .accessibilityElement()
+//                
+//                VStack(alignment: .leading, spacing: 20) {
+//                    Text("Now that you have a maintenance service set up, you can add a record each time this service is completed.")
+//                    
+//                    Text("Just swipe or tap on the service above, then tap \(Image(systemName: "plus.square.on.square.fill")) to add a new record.")
+//                        .accessibilityElement()
+//                        .accessibilityLabel("Just swipe or tap on a service above, then tap Add Service Record to add a new record.")
+//                }
+//                .padding(30)
+//                .font(.subheadline)
+//                .foregroundStyle(.white)
+//                .accessibilityElement(children: .combine)
+//            }
+//            .padding(.top, 30)
+//            .listRowSeparator(.hidden)
+//            .listRowBackground(Color(.systemGroupedBackground))
+//        }
+//    }
     
     
     // MARK: - Methods
@@ -152,11 +152,11 @@ struct MaintenanceListView: View {
 //    }
     
     // Determines whether to show MaintenanceOnboardingView
-    func determineIfFirstServiceInfoDue() {
-        if serviceTipDue == true && allServices.count == 1 {
-            showingFirstServiceInfo = true
-        }
-    }
+//    func determineIfFirstServiceInfoDue() {
+//        if serviceTipDue == true && allServices.count == 1 {
+//            showingFirstServiceInfo = true
+//        }
+//    }
 }
 
 #Preview {
