@@ -17,6 +17,7 @@ struct ServiceListRowView: View {
     var body: some View {
         NavigationLink {
             ServiceDetailView(service: service, vehicle: vehicle)
+                .tint(settings.accentColor(for: .maintenanceTheme))
         } label: {
             Label {
                 serviceInfo

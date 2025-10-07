@@ -34,7 +34,7 @@ struct ContentView: View {
                 emptyDetailListView
             }
         }
-//        .tint(.primary)
+        .tint(Color.primary)
         .navigationSplitViewStyle(.balanced)
         .onAppear {
             for vehicle in vehicles {

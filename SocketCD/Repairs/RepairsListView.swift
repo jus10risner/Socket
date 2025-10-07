@@ -33,6 +33,7 @@ struct RepairsListView: View {
                     ForEach(repairs, id: \.id) { repair in
                         NavigationLink {
                             RepairDetailView(repair: repair)
+                                .tint(settings.accentColor(for: .repairsTheme))
                         } label: {
                             VStack(alignment: .leading) {
                                 Text(repair.name)

@@ -28,6 +28,7 @@ struct AllFillupsListView: View {
             ForEach(fillups) { fillup in
                 NavigationLink {
                     FillupDetailView(fillup: fillup)
+                        .tint(settings.accentColor(for: .fillupsTheme))
                 } label: {
                     LabeledContent {
                         Text(fillup.date.formatted(date: .numeric, time: .omitted))
