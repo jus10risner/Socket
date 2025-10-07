@@ -53,14 +53,7 @@ struct VehicleDashboardView: View {
             .background(GradientBackground())
             .navigationTitle(vehicle.name)
             .navigationDestination(item: $selectedSection) { section in
-                switch section {
-                case .maintenance:
-                    destinationView(for: .maintenance, vehicle: vehicle)
-                case .repairs:
-                    destinationView(for: .repairs, vehicle: vehicle)
-                case .fillups:
-                    destinationView(for: .fillups, vehicle: vehicle)
-                }
+                destinationView(for: section, vehicle: vehicle)
             }
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
