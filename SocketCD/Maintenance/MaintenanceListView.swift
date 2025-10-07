@@ -73,6 +73,14 @@ struct MaintenanceListView: View {
                     showingAddService = true
                 }
             }
+            
+            if #available(iOS 26, *) {
+                ToolbarItem(placement: .principal) {
+                    Text(vehicle.name)
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                }
+            }
         }
     }
     
