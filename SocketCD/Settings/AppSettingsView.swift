@@ -63,7 +63,6 @@ struct AppSettingsView: View {
                     .listRowBackground(Color(.systemGroupedBackground))
                     .frame(maxWidth: .infinity)
             }
-            .listItemTint(settings.accentColor(for: .appTheme))
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
