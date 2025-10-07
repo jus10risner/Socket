@@ -35,7 +35,7 @@ struct MaintenanceListView: View {
     var body: some View {
         ZStack {
             if vehicle.sortedServicesArray.isEmpty {
-                MaintenanceStartView()
+                EmptyMaintenanceView()
             } else {
                 List {
                     ForEach(vehicle.sortedServicesArray) { service in

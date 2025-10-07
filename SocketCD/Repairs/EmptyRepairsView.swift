@@ -1,5 +1,5 @@
 //
-//  RepairsStartView.swift
+//  EmptyRepairsView.swift
 //  SocketCD
 //
 //  Created by Justin Risner on 3/14/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RepairsStartView: View {
+struct EmptyRepairsView: View {
     @State private var showingMoreInfo = false
     
     var body: some View {
@@ -31,9 +31,10 @@ struct RepairsStartView: View {
                 .presentationCompactAdaptation(.popover)
             }
         }
+        .background(Color(.systemGroupedBackground))
     }
 }
 
 #Preview {
-    RepairsStartView()
+    EmptyRepairsView()
 }

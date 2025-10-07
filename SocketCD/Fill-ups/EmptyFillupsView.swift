@@ -1,29 +1,29 @@
 //
-//  MaintenanceStartView.swift
+//  EmptyFillupsView.swift
 //  SocketCD
 //
-//  Created by Justin Risner on 3/15/24.
+//  Created by Justin Risner on 3/14/24.
 //
 
 import SwiftUI
 
-struct MaintenanceStartView: View {
+struct EmptyFillupsView: View {
     @State private var showingMoreInfo = false
     
     var body: some View {
         ContentUnavailableView {
-            Label("No Maintenance Services", systemImage: "book.and.wrench")
+            Label("No Fill-ups", systemImage: "fuelpump")
         } description: {
-            Text("Tap the + button to set up a new service")
+            Text("Tap the plus button to add one")
         } actions: {
             Button("Learn More") {
                 showingMoreInfo = true
             }
             .popover(isPresented: $showingMoreInfo) {
                 Text("""
-                Keep your vehicle running smoothly with regular maintenance, like oil changes and air filter replacements.
+                Socket tracks your fuel economy over time to help you drive efficiently and spot trends that might signal a problem. 
                 
-                After you set up a new maintenance service, Socket can notify you each time it's due.
+                Adding fill-ups regularly also keeps your odometer current, so Socket can alert you when maintenance is due.
                 """)
                 .font(.subheadline)
                 .padding(20)
@@ -31,9 +31,10 @@ struct MaintenanceStartView: View {
                 .presentationCompactAdaptation(.popover)
             }
         }
+        .background(Color(.systemGroupedBackground))
     }
 }
 
 #Preview {
-    MaintenanceStartView()
+    EmptyFillupsView()
 }

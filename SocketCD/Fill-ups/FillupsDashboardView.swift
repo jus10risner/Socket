@@ -30,7 +30,7 @@ struct FillupsDashboardView: View {
     var body: some View {
         ZStack {
             if vehicle.sortedFillupsArray.isEmpty {
-                FillupsStartView()
+                EmptyFillupsView()
             } else {
                 List {
                     VStack {
