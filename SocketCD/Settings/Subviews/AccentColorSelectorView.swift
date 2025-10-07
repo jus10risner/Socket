@@ -38,7 +38,7 @@ struct AccentColorSelectorView: View {
         Button {
             settings.accentColor = nil
         } label: {
-            Label("Default Accent", systemImage: settings.accentColor == nil ? "circle.fill" : "circle")
+            Label("Default Accent", systemImage: settings.accentColor == nil ? "checkmark.circle.fill" : "circle.fill")
                 .labelStyle(.iconOnly)
                 .imageScale(.large)
                 .foregroundStyle(LinearGradient(stops: [Gradient.Stop(color: .indigo, location: 0.1), Gradient.Stop(color: .blue, location: 0.4), Gradient.Stop(color: .orange, location: 0.7), Gradient.Stop(color: .mint, location: 1)], startPoint: .leading, endPoint: .trailing))
@@ -51,7 +51,7 @@ struct AccentColorSelectorView: View {
             Button {
                 settings.accentColor = color
             } label: {
-                Label(color.rawValue, systemImage: settings.accentColor == color ? "circle.fill" : "circle")
+                Label(color.rawValue, systemImage: settings.accentColor == color ? "checkmark.circle.fill" : "circle.fill")
                     .labelStyle(.iconOnly)
                     .imageScale(.large)
                     .foregroundStyle(settings.colorValue(for: color))
