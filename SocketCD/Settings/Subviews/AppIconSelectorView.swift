@@ -29,7 +29,7 @@ struct AppIconSelectorView: View {
     
     private var iconOptions: some View {
         Picker("Icons", selection: $appIcon) {
-            iconLabel(title: "Primary", iconName: "Primary Icon")
+            iconLabel(title: "Socket Purple", iconName: "Primary Icon")
                 .tag(nil as AppIcon?)
             
             ForEach(AppIcon.allCases.filter { !$0.isClassic }, id: \.self) { icon in
@@ -58,14 +58,14 @@ struct AppIconSelectorView: View {
             Image(iconName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 40, height: 40)
+                .frame(width: 50, height: 50)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(.black.opacity(0.3), lineWidth: 0.5)
                 )
         }
-        .padding(.horizontal, 5)
+        .padding(8)
     }
 }
 

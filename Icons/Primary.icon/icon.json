@@ -10,7 +10,7 @@
             {
               "appearance" : "dark",
               "value" : {
-                "automatic-gradient" : "display-p3:0.38039,0.37647,0.82353,1.00000"
+                "automatic-gradient" : "display-p3:0.45882,0.45490,1.00000,1.00000"
               }
             }
           ],
@@ -30,7 +30,7 @@
             {
               "appearance" : "dark",
               "value" : {
-                "automatic-gradient" : "display-p3:0.38039,0.37647,0.82353,1.00000"
+                "automatic-gradient" : "display-p3:0.45882,0.45490,1.00000,1.00000"
               }
             }
           ],
