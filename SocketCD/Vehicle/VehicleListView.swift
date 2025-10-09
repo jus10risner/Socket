@@ -45,8 +45,8 @@ struct VehicleListView: View {
                 }
             }
         }
-//        .scrollContentBackground(.hidden)
-//        .background(Color(.customBackground))
+        .scrollContentBackground(.hidden)
+        .background(Color(.systemGroupedBackground))
         .navigationTitle("Vehicles")
 //        .navigationBarTitleDisplayMode(.large)
         .listRowSpacing(5)
