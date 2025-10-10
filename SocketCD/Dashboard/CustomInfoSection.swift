@@ -49,23 +49,23 @@ struct CustomInfoSection: View {
                     .buttonStyle(.plain)
                 }
                 
-                Button {
-                    activeSheet = .addCustomInfo
-                } label: {
-                    VStack(spacing: 20) {
-                        if vehicle.sortedCustomInfoArray.isEmpty {
-                            Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
-                                .font(.subheadline)
-                                .foregroundStyle(Color.secondary)
-                        }
-                        
-                        Label("Add Info", systemImage: "plus")
-                            .foregroundStyle(settings.accentColor(for: .appTheme))
+                VStack(spacing: 20) {
+                    if vehicle.sortedCustomInfoArray.isEmpty {
+                        Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.secondary)
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
+                    
+                    Button {
+                        activeSheet = .addCustomInfo
+                    } label: {
+                        Label("Add Info", systemImage: "plus")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
             }
         }
     }
