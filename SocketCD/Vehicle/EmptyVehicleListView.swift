@@ -8,16 +8,34 @@
 import SwiftUI
 
 struct EmptyVehicleListView: View {
+    @StateObject var monitor = CloudKitSyncMonitor(container: DataController.shared.container)
+    
     var body: some View {
-        ContentUnavailableView {
-            Label {
-                Text("Add a Vehicle")
-            } icon: {
-                Image(systemName: "car.fill")
-                    .foregroundStyle(Color(.socketPurple))
+        ZStack {
+            ContentUnavailableView {
+                Label {
+                    Text("Add a Vehicle")
+                } icon: {
+                    Image(systemName: "car.fill")
+                        .foregroundStyle(Color(.socketPurple))
+                }
+            } description: {
+                Text("Tap the plus button to get started.")
             }
-        } description: {
-            Text("Tap the plus button to get started.")
+            
+            VStack {
+                Spacer()
+                
+                if monitor.isSyncing == true {
+                    HStack {
+                        ProgressView()
+                        
+                        Text("Checking for iCloud data")
+                            .font(.caption)
+                            .foregroundStyle(Color.secondary)
+                    }
+                }
+            }
         }
     }
 }
