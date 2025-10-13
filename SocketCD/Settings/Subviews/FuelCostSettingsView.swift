@@ -16,7 +16,7 @@ struct FuelCostSettingsView: View {
                 Picker("Fill-up Cost Type", selection: $settings.fillupCostType) {
                     ForEach(FillupCostTypes.allCases, id: \.self) { type in
                         if type == .perUnit {
-                            Text("Cost per \(settings.fuelEconomyUnit == .mpg ? "gallon" : "liter")")
+                            Text("Price per \(settings.fuelEconomyUnit == .mpg ? "gallon" : "liter")")
                         } else {
                             Text("Total cost")
                         }
