@@ -22,6 +22,7 @@ struct VehicleDashboardView: View {
     @State private var selectedSection: AppSection?
     @State private var activeSheet: ActiveSheet?
     @State private var showingUpdateOdometerAlert = false
+    @State private var newOdometerValue: Int? = nil
     @State private var showingDeleteAlert = false
     
     @State private var exportURL: URL?
@@ -78,12 +79,18 @@ struct VehicleDashboardView: View {
                 ActivityView(activityItems: [item.url])
             }
             .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
-                TextField("New Odometer Reading", value: $draftVehicle.odometer, format: .number.decimalSeparator(strategy: .automatic))
-                    .multilineTextAlignment(.center)
+                TextField("\(draftVehicle.odometer ?? 0)", value: $newOdometerValue, format: .number.decimalSeparator(strategy: .automatic))
                     .keyboardType(.numberPad)
                 Button("Cancel", role: .cancel) { }
-                Button("Save") { vehicle.updateAndSave(draftVehicle: draftVehicle) }
-                    .keyboardShortcut(.defaultAction) // Makes the confirmation button the accent color
+                Button("Save") {
+                    if let newOdometer = newOdometerValue {
+                        draftVehicle.odometer = newOdometer
+                        vehicle.updateAndSave(draftVehicle: draftVehicle)
+                    }
+                }
+                .disabled(newOdometerValue == nil)
+            }, message: {
+                Text("Enter the current odometer reading for this vehicle.")
             })
             .toolbar {
                 vehicleToolbar
@@ -116,7 +123,10 @@ struct VehicleDashboardView: View {
                 
                 Divider()
                 
-                Button("Delete Vehicle", systemImage: "trash", role: .destructive) { showingDeleteAlert = true }
+                Button(role: .destructive) { showingDeleteAlert = true } label: {
+                    Label("Delete Vehicle", systemImage: "trash")
+                        .tint(Color.red)
+                }
             }
             .confirmationDialog("Which paper size do you prefer?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
                 Button("A4") { exportPDF(pageSize: .a4) }
