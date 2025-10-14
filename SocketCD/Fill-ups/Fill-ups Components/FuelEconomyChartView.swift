@@ -30,14 +30,13 @@ struct FuelEconomyChartView: View {
                     .annotation(position: .top, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
                         VStack(spacing: 2) {
                             Text(selectedFillup.date.formatted(date: .numeric, time: .omitted))
-                                .font(.subheadline)
+                                .font(.caption)
                             
                             Text("\(selectedFillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                                .font(.headline)
+                                .font(.footnote.bold())
                         }
                         .foregroundStyle(Color.white)
-                        .padding(10)
-                        .background(RoundedRectangle.adaptive.fill(settings.accentColor(for: .fillupsTheme).gradient))
+                        .padding()
                         .background(RoundedRectangle.adaptive.fill(settings.accentColor(for: .fillupsTheme).gradient))
                     }
                 
