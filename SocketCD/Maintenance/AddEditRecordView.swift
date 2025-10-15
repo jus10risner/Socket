@@ -43,11 +43,16 @@ struct AddEditRecordView: View {
                     NavigationLink {
                         SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
                     } label: {
-                        if draftServiceLog.selectedServiceIDs.isEmpty {
-                            Text("Select services")
-                                .foregroundStyle(Color.secondary)
-                        } else {
-                            Text(draftServiceLog.selectedServiceNames(from: vehicle))
+                        LabeledInput(label: "Services") {
+                            Group {
+                                if draftServiceLog.selectedServiceIDs.isEmpty {
+                                    Text("Tap to Select")
+//                                        .foregroundStyle(Color.secondary)
+                                } else {
+                                    Text(draftServiceLog.selectedServiceNames(from: vehicle))
+                                }
+                            }
+                            .multilineTextAlignment(.leading)
                         }
                     }
                     
