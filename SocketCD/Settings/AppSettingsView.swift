@@ -77,7 +77,6 @@ struct AppSettingsView: View {
                 Text("Please make sure email has been set up on this device, then try again.")
             }
         }
-        .tint(settings.accentColor(for: .appTheme))
     }
     
     
