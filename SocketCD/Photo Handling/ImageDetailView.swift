@@ -31,6 +31,7 @@ struct ImageDetailView: View {
                 ToolbarItem(placement: .primaryAction) {
                     if let imageURL {
                         ShareLink("Share Image", item: imageURL)
+                            .adaptiveTint()
                     }
                 }
                 
@@ -38,6 +39,7 @@ struct ImageDetailView: View {
                     Button("Dismiss", systemImage: "xmark") {
                         dismiss()
                     }
+                    .adaptiveTint()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

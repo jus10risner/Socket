@@ -79,9 +79,11 @@ struct FillTypeInfoView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
-                    Button("Dismiss", systemImage: "xmark") {
+                    Button("Done", systemImage: "xmark") {
                         dismiss()
                     }
+                    .labelStyle(.adaptive)
+                    .adaptiveTint()
                 }
             }
         }

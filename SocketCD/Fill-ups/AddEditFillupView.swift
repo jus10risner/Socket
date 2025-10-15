@@ -113,6 +113,7 @@ struct AddEditFillupView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
                         .labelStyle(.adaptive)
+                        .adaptiveTint()
                 }
             }
             .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {

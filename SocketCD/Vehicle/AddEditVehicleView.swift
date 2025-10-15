@@ -61,6 +61,7 @@ struct AddEditVehicleView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
                         .labelStyle(.adaptive)
+                        .adaptiveTint()
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {

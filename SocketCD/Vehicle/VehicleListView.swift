@@ -56,8 +56,14 @@ struct VehicleListView: View {
 //                showingOnboardingText = true
 //            }
 //        }
-        .sheet(isPresented: $showingSettings, onDismiss: updateNotifications) { AppSettingsView() }
-        .sheet(isPresented: $showingAddVehicle) { AddEditVehicleView() }
+        .sheet(isPresented: $showingSettings, onDismiss: updateNotifications) {
+            AppSettingsView()
+                .tint(settings.accentColor(for: .appTheme))
+        }
+        .sheet(isPresented: $showingAddVehicle) {
+            AddEditVehicleView()
+                .tint(settings.accentColor(for: .appTheme))
+        }
         .toolbar {
 //            ToolbarItem(placement: .topBarLeading) {
 //                if !iCloudContainerAvailable {
@@ -72,6 +78,7 @@ struct VehicleListView: View {
                 Button("Add a Vehicle", systemImage: "plus") {
                     showingAddVehicle = true
                 }
+                .adaptiveTint()
             }
             
             if #available(iOS 26, *) {
@@ -82,6 +89,7 @@ struct VehicleListView: View {
                 Button("Settings", systemImage: "gearshape") {
                     showingSettings = true
                 }
+                .adaptiveTint()
             }
         }
     }

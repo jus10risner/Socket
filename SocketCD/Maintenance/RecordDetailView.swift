@@ -37,6 +37,7 @@ struct RecordDetailView: View {
                 Button("Edit") {
                     showingEditRecord = true
                 }
+                .adaptiveTint()
             }
         }
         .sheet(isPresented: $showingEditRecord) {

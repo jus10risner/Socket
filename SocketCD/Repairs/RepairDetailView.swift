@@ -37,6 +37,7 @@ struct RepairDetailView: View {
                 Button("Edit") {
                     showingEditRepair = true
                 }
+                .adaptiveTint()
             }
         }
         .sheet(isPresented: $showingEditRepair) {

@@ -46,6 +46,7 @@ struct CustomInfoDetailView: View {
                 Button("Edit") {
                     showingEditCustomInfo = true
                 }
+                .adaptiveTint()
             }
         }
     }

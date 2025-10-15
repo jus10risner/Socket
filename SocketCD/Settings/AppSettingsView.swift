@@ -69,6 +69,7 @@ struct AppSettingsView: View {
                 ToolbarItem {
                     Button("Done", systemImage: "xmark") { dismiss() }
                         .labelStyle(.adaptive)
+                        .adaptiveTint()
                 }
             }
             .alert("Could not send mail", isPresented: $showingMailError) {

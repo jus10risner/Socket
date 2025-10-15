@@ -73,6 +73,7 @@ struct FillupDetailView: View {
                 Button("Edit") {
                     showingEditFillup = true
                 }
+                .adaptiveTint()
             }
         }
     }

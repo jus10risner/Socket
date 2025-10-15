@@ -128,6 +128,7 @@ struct VehicleDashboardView: View {
                         .tint(Color.red)
                 }
             }
+            .adaptiveTint()
             .confirmationDialog("Which paper size do you prefer?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
                 Button("A4") { exportPDF(pageSize: .a4) }
                 

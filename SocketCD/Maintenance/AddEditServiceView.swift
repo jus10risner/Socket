@@ -153,6 +153,7 @@ struct AddEditServiceView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
                         .labelStyle(.adaptive)
+                        .adaptiveTint()
                 }
             }
             .alert("Delete Service", isPresented: $showingDeleteAlert) {

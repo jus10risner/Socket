@@ -91,6 +91,7 @@ struct AddEditRepairView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
                         .labelStyle(.adaptive)
+                        .adaptiveTint()
                 }
             }
             .alert("Delete Repair", isPresented: $showingDeleteAlert) {
