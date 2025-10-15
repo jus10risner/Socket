@@ -45,8 +45,8 @@ struct VehicleListView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color(.systemGroupedBackground))
+//        .scrollContentBackground(.hidden)
+//        .background(Color(.systemGroupedBackground))
         .navigationTitle("Vehicles")
 //        .navigationBarTitleDisplayMode(.large)
         .listRowSpacing(5)
@@ -59,26 +59,29 @@ struct VehicleListView: View {
         .sheet(isPresented: $showingSettings, onDismiss: updateNotifications) { AppSettingsView() }
         .sheet(isPresented: $showingAddVehicle) { AddEditVehicleView() }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                if !iCloudContainerAvailable {
-                    Label("iCloud not available", systemImage: "icloud.slash")
-                        .foregroundStyle(Color.secondary)
-                        .labelStyle(.iconOnly)
-                        .imageScale(.small)
+//            ToolbarItem(placement: .topBarLeading) {
+//                if !iCloudContainerAvailable {
+//                    Label("iCloud not available", systemImage: "icloud.slash")
+//                        .foregroundStyle(Color.secondary)
+//                        .labelStyle(.iconOnly)
+//                        .imageScale(.small)
+//                }
+//            }
+                
+            ToolbarItem {
+                Button("Add a Vehicle", systemImage: "plus") {
+                    showingAddVehicle = true
                 }
             }
             
+            if #available(iOS 26, *) {
+                ToolbarSpacer()
+            }
+            
             ToolbarItem {
-                Menu("Options", systemImage: "ellipsis.circle") {
-                    Button("Add a Vehicle", systemImage: "plus") {
-                        showingAddVehicle = true
-                    }
-                    
-                    Button("Settings", systemImage: "gearshape") {
-                        showingSettings = true
-                    }
+                Button("Settings", systemImage: "gearshape") {
+                    showingSettings = true
                 }
-//                .tint(.primary)
             }
         }
     }
@@ -113,9 +116,9 @@ struct VehicleListView: View {
     // MARK: - Methods
     
     
-    var iCloudContainerAvailable: Bool {
-        FileManager.default.ubiquityIdentityToken != nil
-    }
+//    var iCloudContainerAvailable: Bool {
+//        FileManager.default.ubiquityIdentityToken != nil
+//    }
     
     func updateNotifications() {
         for vehicle in vehicles {
