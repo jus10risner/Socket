@@ -73,17 +73,27 @@ struct VehicleListView: View {
 //                        .imageScale(.small)
 //                }
 //            }
-                
-            ToolbarItem {
-                Button("Add a Vehicle", systemImage: "plus") {
-                    showingAddVehicle = true
+            if #available(iOS 26, *) {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    
+                    Button("Add a Vehicle", systemImage: "plus", role: .confirm) {
+                        showingAddVehicle = true
+                    }
+                    .tint(settings.accentColor(for: .appTheme))
                 }
-                .adaptiveTint()
+            } else {
+                ToolbarItem {
+                    Button("Add a Vehicle", systemImage: "plus") {
+                        showingAddVehicle = true
+                    }
+                }
             }
             
-            if #available(iOS 26, *) {
-                ToolbarSpacer()
-            }
+            
+//            if #available(iOS 26, *) {
+//                ToolbarSpacer()
+//            }
             
             ToolbarItem {
                 Button("Settings", systemImage: "gearshape") {

@@ -50,6 +50,7 @@ struct MaintenanceListView: View {
         }
         .tint(settings.accentColor(for: .maintenanceTheme))
         .navigationTitle("Maintenance")
+        .toolbarSubtitle(vehicle.name)
         .listRowSpacing(5)
         .overlay {
             if showingFirstServiceInfo == true {
@@ -68,19 +69,36 @@ struct MaintenanceListView: View {
             AddEditRecordView(vehicle: vehicle)
         })
         .toolbar {
-            ToolbarItem {
-                Button("Add Service", systemImage: "rectangle.badge.plus") {
-                    showingAddService = true
+            if #available(iOS 26, *) {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    
+                    Button("Add Service", systemImage: "rectangle.badge.plus", role: .confirm) {
+                        showingAddService = true
+                    }
+                    .tint(settings.accentColor(for: .maintenanceTheme))
+                }
+            } else {
+                ToolbarItem {
+                    Button("Add Service", systemImage: "rectangle.badge.plus") {
+                        showingAddService = true
+                    }
                 }
             }
             
-            if #available(iOS 26, *) {
-                ToolbarItem(placement: .principal) {
-                    Text(vehicle.name)
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                }
-            }
+//            ToolbarItem {
+//                Button("Add Service", systemImage: "rectangle.badge.plus") {
+//                    showingAddService = true
+//                }
+//            }
+            
+//            if #available(iOS 26, *) {
+//                ToolbarItem(placement: .principal) {
+//                    Text(vehicle.name)
+//                        .font(.headline)
+//                        .multilineTextAlignment(.center)
+//                }
+//            }
         }
     }
     

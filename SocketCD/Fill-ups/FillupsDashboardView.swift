@@ -71,21 +71,39 @@ struct FillupsDashboardView: View {
         }
         .tint(settings.accentColor(for: .fillupsTheme))
         .navigationTitle("Fill-ups")
+        .toolbarSubtitle(vehicle.name)
         .sheet(isPresented: $showingAddFillup) { AddEditFillupView(vehicle: vehicle) }
         .toolbar {
-            ToolbarItem {
-                Button("Add Fill-up", systemImage: "plus") {
-                    showingAddFillup = true
+            if #available(iOS 26, *) {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    
+                    Button("Add Fill-up", systemImage: "plus", role: .confirm) {
+                        showingAddFillup = true
+                    }
+                    .tint(settings.accentColor(for: .fillupsTheme))
+                }
+            } else {
+                ToolbarItem {
+                    Button("Add Fill-up", systemImage: "plus") {
+                        showingAddFillup = true
+                    }
                 }
             }
             
-            if #available(iOS 26, *) {
-                ToolbarItem(placement: .principal) {
-                    Text(vehicle.name)
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                }
-            }
+//            ToolbarItem {
+//                Button("Add Fill-up", systemImage: "plus") {
+//                    showingAddFillup = true
+//                }
+//            }
+            
+//            if #available(iOS 26, *) {
+//                ToolbarItem(placement: .principal) {
+//                    Text(vehicle.name)
+//                        .font(.headline)
+//                        .multilineTextAlignment(.center)
+//                }
+//            }
         }
     }
     

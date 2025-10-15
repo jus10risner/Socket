@@ -10,6 +10,7 @@
 		9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */; };
 		9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */; };
 		9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */; };
+		9E187C152EA004C700FBDAC9 /* ToolbarSubtitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */; };
 		9E189E372BD1ABE900095EC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E189E362BD1ABE900095EC2 /* Assets.xcassets */; };
 		9E1AD9042E8DAB6000E60184 /* MaintenanceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */; };
 		9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */; };
@@ -118,6 +119,7 @@
 		9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExportRecord.swift; sourceTree = "<group>"; };
 		9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveTint.swift; sourceTree = "<group>"; };
+		9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSubtitle.swift; sourceTree = "<group>"; };
 		9E189E362BD1ABE900095EC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceCard.swift; sourceTree = "<group>"; };
 		9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupsCard.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */,
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
+				9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */,
 				9E02BAF92E45237C00D45FA3 /* Export */,
 				9E87C5B52E4235CF001BE562 /* FormFooterView.swift */,
 			);
@@ -684,6 +687,7 @@
 				9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */,
 				9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */,
 				9E1AD9042E8DAB6000E60184 /* MaintenanceCard.swift in Sources */,
+				9E187C152EA004C700FBDAC9 /* ToolbarSubtitle.swift in Sources */,
 				9EEAC4902BA1036F0053C65E /* DataController.swift in Sources */,
 				9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */,
 				9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */,

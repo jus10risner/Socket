@@ -55,23 +55,41 @@ struct RepairsListView: View {
         }
         .tint(settings.accentColor(for: .repairsTheme))
         .navigationTitle("Repairs")
+        .toolbarSubtitle(vehicle.name)
         .sheet(isPresented: $showingAddRepair) {
             AddEditRepairView(vehicle: vehicle)
         }
         .toolbar {
-            ToolbarItem {
-                Button("Add New Repair", systemImage: "plus") {
-                    showingAddRepair = true
+            if #available(iOS 26, *) {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    
+                    Button("Add New Repair", systemImage: "plus", role: .confirm) {
+                        showingAddRepair = true
+                    }
+                    .tint(settings.accentColor(for: .repairsTheme))
+                }
+            } else {
+                ToolbarItem {
+                    Button("Add New Repair", systemImage: "plus") {
+                        showingAddRepair = true
+                    }
                 }
             }
             
-            if #available(iOS 26, *) {
-                ToolbarItem(placement: .principal) {
-                    Text(vehicle.name)
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                }
-            }
+//            ToolbarItem {
+//                Button("Add New Repair", systemImage: "plus") {
+//                    showingAddRepair = true
+//                }
+//            }
+            
+//            if #available(iOS 26, *) {
+//                ToolbarItem(placement: .principal) {
+//                    Text(vehicle.name)
+//                        .font(.headline)
+//                        .multilineTextAlignment(.center)
+//                }
+//            }
         }
     }
 }
