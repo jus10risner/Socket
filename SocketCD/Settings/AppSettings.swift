@@ -49,13 +49,13 @@ class AppSettings: ObservableObject {
 
         switch theme {
         case .appTheme:
-            return .indigo
+            return Color.indigo.mix(with: .cyan, by: 0.2)
         case .maintenanceTheme:
-            return .blue
+            return .green
         case .repairsTheme:
             return .orange
         case .fillupsTheme:
-            return .mint
+            return .teal
         }
     }
     
