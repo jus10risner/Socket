@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */; };
 		9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */; };
+		9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */; };
 		9E189E372BD1ABE900095EC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E189E362BD1ABE900095EC2 /* Assets.xcassets */; };
 		9E1AD9042E8DAB6000E60184 /* MaintenanceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */; };
 		9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */; };
@@ -116,6 +117,7 @@
 /* Begin PBXFileReference section */
 		9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExportRecord.swift; sourceTree = "<group>"; };
 		9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
+		9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveTint.swift; sourceTree = "<group>"; };
 		9E189E362BD1ABE900095EC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceCard.swift; sourceTree = "<group>"; };
 		9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupsCard.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				9EEAC4992BA1ED8C0053C65E /* AppearanceController.swift */,
 				9E6A53452BADD68A00F75D49 /* AppInfo.swift */,
 				9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */,
+				9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */,
 				9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */,
 				9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */,
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
@@ -717,6 +720,7 @@
 				9EEAC4C12BA24EEC0053C65E /* AppSettings.swift in Sources */,
 				9EEAC4CB2BA256570053C65E /* AddEditVehicleView.swift in Sources */,
 				9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */,
+				9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */,
 				9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */,
 				9EEAC4B32BA1F08F0053C65E /* CameraCapture.swift in Sources */,
 				9E1AD90A2E8DB00900E60184 /* CustomInfoSection.swift in Sources */,
