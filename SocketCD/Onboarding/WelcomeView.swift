@@ -24,6 +24,9 @@ struct WelcomeView: View {
             
             VStack(spacing: 0) {
                 Image("Primary Icon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .padding(.bottom, 10)
                 
@@ -50,20 +53,15 @@ struct WelcomeView: View {
             Button {
                 settings.welcomeViewPresented = false
             } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .foregroundStyle(settings.accentColor(for: .appTheme))
-                        .frame(height: 50)
-                    
-                    Text("Continue")
-                        .font(.body.bold())
-                        .foregroundStyle(Color.white)
-                }
+                Text("Continue")
+                    .font(.title3.bold())
+                    .padding(.vertical, 10)
+                    .frame(maxWidth: 350)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.borderedProminent)
         }
         .interactiveDismissDisabled()
-        .padding(40)
+        .padding(.horizontal, 40)
     }
     
     // Short intro to Maintenance in Socket
@@ -88,7 +86,7 @@ struct WelcomeView: View {
     // Short intro to Repairs in Socket
     private var repairsBlurb: some View {
         HStack(spacing: 15) {
-            Image(systemName: "wrench.fill")
+            Image(systemName: "wrench.adjustable.fill")
                 .font(.title)
                 .foregroundStyle(settings.accentColor(for: .repairsTheme))
                 .frame(minWidth: 40)
@@ -116,7 +114,7 @@ struct WelcomeView: View {
             VStack(alignment: .leading) {
                 Text("Log Fill-ups")
                     .font(.subheadline.bold())
-                Text("Track fuel economy, and visualize trends over time.")
+                Text("Track fuel economy and visualize trends over time.")
                     .font(.subheadline)
                     .foregroundStyle(Color.secondary)
             }
@@ -126,4 +124,5 @@ struct WelcomeView: View {
 
 #Preview {
     WelcomeView()
+        .environmentObject(AppSettings())
 }

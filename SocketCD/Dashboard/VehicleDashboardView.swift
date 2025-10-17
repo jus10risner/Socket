@@ -46,6 +46,13 @@ struct VehicleDashboardView: View {
                     FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
                 }
                 
+                HStack(spacing: 5) {
+                    timelineView
+                    
+                    chartView
+                }
+                .padding(.top, 5)
+                
                 CustomInfoSection(vehicle: vehicle, columns: columns, activeSheet: $activeSheet)
                     .padding(.top, 30)
             }
@@ -111,6 +118,29 @@ struct VehicleDashboardView: View {
                     .foregroundStyle(Color.secondary)
             }
         }
+    }
+    
+    private var timelineView: some View {
+        NavigationLink {
+            TimelineView(vehicle: vehicle)
+        } label: {
+            Label("Timeline", systemImage: "list.bullet")
+        }
+        
+//        Button("Timeline", systemImage: "list.bullet") {  }
+            .tint(settings.accentColor(for: .appTheme))
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
+
+    }
+    
+    private var chartView: some View {
+        Button("Charts", systemImage: "chart.bar.fill") {  }
+            .tint(settings.accentColor(for: .appTheme))
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
     }
     
     @ToolbarContentBuilder

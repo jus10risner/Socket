@@ -69,7 +69,7 @@ struct OnboardingTips: View {
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
-                            .colorSchemeBackground(colorScheme: colorScheme)
+//                            .colorSchemeBackground(colorScheme: colorScheme)
                             .shadow(color: .secondary.opacity(0.4), radius: colorScheme == .dark ? 0 : 2)
                         //
                         VStack(alignment: .leading, spacing: 0) {

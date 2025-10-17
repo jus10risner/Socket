@@ -110,9 +110,10 @@ struct ServiceDetailView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button("Add Service Record", systemImage: "plus") {
+                Button("Add Service Record", systemImage: "plus.square.on.square") {
                     showingAddRecord = true
                 }
+                .adaptiveTint()
             }
         }
     }

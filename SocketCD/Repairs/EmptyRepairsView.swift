@@ -12,7 +12,7 @@ struct EmptyRepairsView: View {
     
     var body: some View {
         ContentUnavailableView {
-            Label("No Repairs", systemImage: "wrench")
+            Label("No Repairs", systemImage: "wrench.adjustable")
         } description: {
             Text("Tap the plus button to add one")
         } actions: {

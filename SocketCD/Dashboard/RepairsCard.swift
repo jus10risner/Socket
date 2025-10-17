@@ -15,7 +15,7 @@ struct RepairsCard: View {
     @Binding var selectedSection: AppSection?
     
     var body: some View {
-        DashboardCard(title: "Repairs", systemImage: "wrench.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus.circle.fill") {
+        DashboardCard(title: "Repairs", systemImage: "wrench.adjustable.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus.circle.fill") {
             activeSheet = .addRepair
         } content: {
             if let repair = vehicle.sortedRepairsArray.first {

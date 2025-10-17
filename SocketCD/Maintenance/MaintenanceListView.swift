@@ -73,14 +73,14 @@ struct MaintenanceListView: View {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Spacer()
                     
-                    Button("Add Service", systemImage: "rectangle.badge.plus", role: .confirm) {
+                    Button("Add Service", systemImage: "plus", role: .confirm) {
                         showingAddService = true
                     }
                     .tint(settings.accentColor(for: .maintenanceTheme))
                 }
             } else {
                 ToolbarItem {
-                    Button("Add Service", systemImage: "rectangle.badge.plus") {
+                    Button("Add Service", systemImage: "plus") {
                         showingAddService = true
                     }
                 }

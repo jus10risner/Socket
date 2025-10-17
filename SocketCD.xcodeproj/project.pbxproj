@@ -11,6 +11,7 @@
 		9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */; };
 		9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */; };
 		9E187C152EA004C700FBDAC9 /* ToolbarSubtitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */; };
+		9E187C172EA158CC00FBDAC9 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C162EA158CC00FBDAC9 /* TimelineView.swift */; };
 		9E189E372BD1ABE900095EC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E189E362BD1ABE900095EC2 /* Assets.xcassets */; };
 		9E1AD9042E8DAB6000E60184 /* MaintenanceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */; };
 		9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */; };
@@ -120,6 +121,7 @@
 		9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveTint.swift; sourceTree = "<group>"; };
 		9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSubtitle.swift; sourceTree = "<group>"; };
+		9E187C162EA158CC00FBDAC9 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		9E189E362BD1ABE900095EC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceCard.swift; sourceTree = "<group>"; };
 		9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupsCard.swift; sourceTree = "<group>"; };
@@ -532,6 +534,7 @@
 			isa = PBXGroup;
 			children = (
 				9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */,
+				9E187C162EA158CC00FBDAC9 /* TimelineView.swift */,
 				9E1AD9092E8DB00900E60184 /* CustomInfoSection.swift */,
 				9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */,
 				9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */,
@@ -700,6 +703,7 @@
 				9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */,
 				9EEAC4F52BA37A270053C65E /* RepairsListView.swift in Sources */,
 				9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */,
+				9E187C172EA158CC00FBDAC9 /* TimelineView.swift in Sources */,
 				9EEAC4B92BA1F1180053C65E /* ImageDetailView.swift in Sources */,
 				9EEAC4FD2BA380BA0053C65E /* AddEditRepairView.swift in Sources */,
 				9EEAC51C2BA4A1E70053C65E /* EmptyMaintenanceView.swift in Sources */,
