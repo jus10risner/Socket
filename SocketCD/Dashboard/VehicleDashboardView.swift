@@ -46,13 +46,6 @@ struct VehicleDashboardView: View {
                     FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
                 }
                 
-                HStack(spacing: 5) {
-                    timelineView
-                    
-                    chartView
-                }
-                .padding(.top, 5)
-                
                 CustomInfoSection(vehicle: vehicle, columns: columns, activeSheet: $activeSheet)
                     .padding(.top, 30)
             }
@@ -80,6 +73,8 @@ struct VehicleDashboardView: View {
                 case .editVehicle:
                     AddEditVehicleView(vehicle: vehicle)
                         .tint(settings.accentColor(for: .appTheme))
+                case .showTimeline:
+                    TimelineView(vehicle: vehicle)
                 }
             }
             .sheet(item: $shareItem) { item in
@@ -120,38 +115,27 @@ struct VehicleDashboardView: View {
         }
     }
     
-    private var timelineView: some View {
-        NavigationLink {
-            TimelineView(vehicle: vehicle)
+    private var timelineButton: some View {
+        Button {
+            activeSheet = .showTimeline
         } label: {
-            Label("Timeline", systemImage: "list.bullet")
+            Label("Activity Timeline", systemImage: "list.bullet")
+            Text("Maintenance and Repairs")
         }
-        
-//        Button("Timeline", systemImage: "list.bullet") {  }
-            .tint(settings.accentColor(for: .appTheme))
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
 
-    }
-    
-    private var chartView: some View {
-        Button("Charts", systemImage: "chart.bar.fill") {  }
-            .tint(settings.accentColor(for: .appTheme))
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
     }
     
     @ToolbarContentBuilder
     private var vehicleToolbar: some ToolbarContent {
-        ToolbarItemGroup {
+        ToolbarItem {
             Menu("Vehicle Options", systemImage: "ellipsis") {
-                Button("Edit Vehicle", systemImage: "pencil") { activeSheet = .editVehicle }
+                timelineButton
                 
                 exportMenu
                 
                 Divider()
+                
+                Button("Edit Vehicle", systemImage: "pencil") { activeSheet = .editVehicle }
                 
                 Button(role: .destructive) { showingDeleteAlert = true } label: {
                     Label("Delete Vehicle", systemImage: "trash")
@@ -199,13 +183,13 @@ struct VehicleDashboardView: View {
     private var exportMenu: some View {
         Menu("Export Records", systemImage: "square.and.arrow.up") {
             Section("Printable Document (PDF)") {
-                Button("Maintenance & Repairs") { showingPageSizeSelector = true }
+                Button("Maintenance and Repairs") { showingPageSizeSelector = true }
             }
             
             Section("Spreadsheet (CSV)") {
                 csvExportButton(title: "All Records") { CSVExporter.exportAllRecords(for: vehicle) }
                 csvExportButton(title: "Fill-ups") { CSVExporter.exportFillups(for: vehicle) }
-                csvExportButton(title: "Maintenance & Repairs") { CSVExporter.exportServicesAndRepairs(for: vehicle) }
+                csvExportButton(title: "Maintenance and Repairs") { CSVExporter.exportServicesAndRepairs(for: vehicle) }
             }
         }
         .accessibilityHint("Save or share records for this vehicle")
@@ -260,7 +244,7 @@ struct ShareItem: Identifiable {
 }
 
 enum ActiveSheet: String, Identifiable {
-    case logService, addRepair, addFillup, addCustomInfo, editVehicle
+    case logService, addRepair, addFillup, addCustomInfo, editVehicle, showTimeline
     
     var id: String { rawValue }
 }

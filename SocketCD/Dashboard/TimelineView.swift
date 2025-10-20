@@ -8,88 +8,73 @@
 import SwiftUI
 
 struct TimelineView: View {
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var settings: AppSettings
     let vehicle: Vehicle
     
     var body: some View {
-        List(vehicle.groupedServiceAndRepairTimeline, id: \.date) { group in
-            HStack {
-                VStack {
-                    VStack(spacing: 0) {
-                        // Month (e.g., "Oct")
-                        Text(group.date.formatted(.dateTime.month(.abbreviated)))
-                            .font(.subheadline)
-                        // Day (e.g., "17")
-                        Text(group.date.formatted(.dateTime.day()))
-                            .font(.title2)
-                        // Year (e.g., "2025")
-                        Text(group.date.formatted(.dateTime.year()))
-                            .font(.subheadline)
-                            .foregroundStyle(Color.secondary)
-                    }
-                }
-                
-                Divider()
-                
-                VStack(alignment: .leading) {
-                    ForEach(group.entries) { item in
-                        HStack(alignment: .firstTextBaseline) {
-                            Group {
-                                switch item.type {
-                                case .repair:
-                                    Image(systemName: "wrench.adjustable.fill")
-                                        .foregroundStyle(settings.accentColor(for: .repairsTheme))
-                                default:
-                                    Image(systemName: "book.and.wrench.fill")
-                                        .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
+        NavigationStack {
+            List(timelineGroupsByYear, id: \.year) { yearGroup in
+                Section(header: Text(yearGroup.year.formatted(.number.grouping(.never)))) {
+                    ForEach(yearGroup.groups, id: \.date) { group in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(group.date.formatted(.dateTime.month(.abbreviated).day()))
+                                    .font(.callout.bold())
+                                
+                                if let odometer = group.entries.first?.odometer {
+                                    Text("\(odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                                        .font(.caption2)
+                                        .foregroundStyle(Color.secondary)
                                 }
                             }
-                            .imageScale(.small)
+                            .frame(minWidth: 65, alignment: .leading)
                             
-                            Text(item.displayName)
+                            Divider()
+                            
+                            VStack(alignment: .leading) {
+                                ForEach(group.entries) { item in
+                                    HStack(alignment: .firstTextBaseline) {
+                                        Group {
+                                            switch item.type {
+                                            case .repair:
+                                                Image(systemName: "wrench.adjustable.fill")
+                                                    .foregroundStyle(settings.accentColor(for: .repairsTheme))
+                                            default:
+                                                Image(systemName: "book.and.wrench.fill")
+                                                    .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
+                                            }
+                                        }
+                                        .imageScale(.small)
+                                        
+                                        Text(item.displayName)
+                                    }
+                                }
+                            }
                         }
                     }
-                    
-                    Text("\(group.entries.first?.odometer.formatted() ?? "–") \(settings.distanceUnit.abbreviated)")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
                 }
             }
-            
-//            VStack(alignment: .leading, spacing: 4) {
-//                HStack {
-//                    Text(group.date.formatted(date: .numeric, time: .omitted))
-//                        .bold()
-////                        .font(.headline)
-//                    Text("\(group.entries.first?.odometer.formatted() ?? "–") \(settings.distanceUnit.abbreviated)")
-////                        .font(.subheadline)
-//                        .foregroundStyle(.secondary)
-//                }
-//                .font(.subheadline)
-//                
-//                ForEach(group.entries) { item in
-//                    HStack(alignment: .firstTextBaseline) {
-//                        Group {
-//                            switch item.type {
-//                            case .repair:
-//                                Image(systemName: "wrench.adjustable.fill")
-//                                    .foregroundStyle(settings.accentColor(for: .repairsTheme))
-//                            default:
-//                                Image(systemName: "book.and.wrench.fill")
-//                                    .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
-//                            }
-//                        }
-//                        .imageScale(.small)
-////                        Text("•")
-////                            .padding(.trailing, 2)
-//                        Text(item.displayName)
-//                    }
-//                }
-//            }
-            .padding(.vertical, 4)
+            .listRowSpacing(5)
+            .navigationTitle("Activity Timeline")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Done", systemImage: "xmark") {
+                    dismiss()
+                }
+                .labelStyle(.adaptive)
+                .adaptiveTint()
+            }
         }
-        .listRowSpacing(5)
-        .navigationTitle("Timeline")
+    }
+    
+    // Separates timeline by year, so records can be further grouped by year performed
+    private var timelineGroupsByYear: [(year: Int, groups: [(date: Date, entries: [VehicleExportRecord])])] {
+        let groups = vehicle.groupedServiceAndRepairTimeline
+        let groupedByYear = Dictionary(grouping: groups) { Calendar.current.component(.year, from: $0.date) }
+        return groupedByYear
+            .map { (year: $0.key, groups: $0.value.sorted { $0.date > $1.date }) }
+            .sorted { $0.year > $1.year }
     }
 }
 
