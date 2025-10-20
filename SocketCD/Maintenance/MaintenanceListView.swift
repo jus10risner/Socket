@@ -69,20 +69,35 @@ struct MaintenanceListView: View {
             AddEditRecordView(vehicle: vehicle)
         })
         .toolbar {
+            ToolbarItem {
+                Button {
+                    showingAddService = true
+                } label: {
+                    Label(title: {
+                        Text("Set Up New Service")
+                    }, icon: {
+                        Image("book.badge.plus")
+                    })
+                }
+                .tint(Color.primary)
+            }
+            
             if #available(iOS 26, *) {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Spacer()
                     
-                    Button("Add Service", systemImage: "plus", role: .confirm) {
-                        showingAddService = true
+                    Button("Log Service", systemImage: "plus", role: .confirm) {
+                        showingLogService = true
                     }
                     .tint(settings.accentColor(for: .maintenanceTheme))
+                    .disabled(services.isEmpty)
                 }
             } else {
                 ToolbarItem {
-                    Button("Add Service", systemImage: "plus") {
-                        showingAddService = true
+                    Button("Log Service", systemImage: "plus") {
+                        showingLogService = true
                     }
+                    .disabled(services.isEmpty)
                 }
             }
         }

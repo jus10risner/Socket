@@ -81,7 +81,7 @@ struct ServiceDetailView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button("Add Service Record", systemImage: "plus.square.on.square") {
+                Button("Add Service Record", systemImage: "plus") {
                     showingAddRecord = true
                 }
                 .adaptiveTint()
