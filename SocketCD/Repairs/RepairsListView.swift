@@ -76,20 +76,6 @@ struct RepairsListView: View {
                     }
                 }
             }
-            
-//            ToolbarItem {
-//                Button("Add New Repair", systemImage: "plus") {
-//                    showingAddRepair = true
-//                }
-//            }
-            
-//            if #available(iOS 26, *) {
-//                ToolbarItem(placement: .principal) {
-//                    Text(vehicle.name)
-//                        .font(.headline)
-//                        .multilineTextAlignment(.center)
-//                }
-//            }
         }
     }
 }

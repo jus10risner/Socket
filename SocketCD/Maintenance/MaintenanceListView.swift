@@ -85,20 +85,6 @@ struct MaintenanceListView: View {
                     }
                 }
             }
-            
-//            ToolbarItem {
-//                Button("Add Service", systemImage: "rectangle.badge.plus") {
-//                    showingAddService = true
-//                }
-//            }
-            
-//            if #available(iOS 26, *) {
-//                ToolbarItem(placement: .principal) {
-//                    Text(vehicle.name)
-//                        .font(.headline)
-//                        .multilineTextAlignment(.center)
-//                }
-//            }
         }
     }
     

@@ -90,20 +90,6 @@ struct FillupsDashboardView: View {
                     }
                 }
             }
-            
-//            ToolbarItem {
-//                Button("Add Fill-up", systemImage: "plus") {
-//                    showingAddFillup = true
-//                }
-//            }
-            
-//            if #available(iOS 26, *) {
-//                ToolbarItem(placement: .principal) {
-//                    Text(vehicle.name)
-//                        .font(.headline)
-//                        .multilineTextAlignment(.center)
-//                }
-//            }
         }
     }
     
