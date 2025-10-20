@@ -51,24 +51,6 @@ struct ServiceDetailView: View {
                     }
                     .buttonStyle(.bordered)
                 }
-
-                
-//                VStack {
-//                    Text(service.name)
-//                        .font(.title2.bold())
-//                    
-//                    Text("Due every \(service.intervalDescription)")
-//                        .font(.caption)
-//                        .foregroundStyle(Color.secondary)
-//                    
-//                    Button("Edit") {
-//                        showingEditService = true
-//                    }
-//                    .buttonStyle(.bordered)
-//                    .font(.subheadline)
-//                }
-//                .frame(maxWidth: .infinity)
-//                .padding(.bottom)
             }
             .headerProminence(.increased)
             
@@ -79,18 +61,7 @@ struct ServiceDetailView: View {
                             RecordDetailView(record: record, vehicle: vehicle, service: service)
                                 .tint(settings.accentColor(for: .maintenanceTheme))
                         } label: {
-                            LabeledContent {
-                                Text(record.effectiveDate.formatted(date: .numeric, time: .omitted))
-                            } label: {
-                                HStack(spacing: 3) {
-                                    odometerSymbol
-                                    
-                                    Text("\(record.effectiveOdometer) \(settings.distanceUnit.abbreviated)")
-                                }
-                            }
-
-                            
-//                            LabeledContent("\(record.effectiveOdometer) \(settings.distanceUnit.abbreviated)", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
+                            LabeledContent("\(record.effectiveOdometer) \(settings.distanceUnit.abbreviated)", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
                         }
                     }
                 }
