@@ -48,7 +48,7 @@ struct VehicleListView: View {
 //        .scrollContentBackground(.hidden)
 //        .background(Color(.systemGroupedBackground))
         .navigationTitle("Vehicles")
-//        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.large)
         .listRowSpacing(5)
         .scrollIndicators(.hidden)
 //        .onAppear {
@@ -65,41 +65,20 @@ struct VehicleListView: View {
                 .tint(settings.accentColor(for: .appTheme))
         }
         .toolbar {
-//            ToolbarItem(placement: .topBarLeading) {
-//                if !iCloudContainerAvailable {
-//                    Label("iCloud not available", systemImage: "icloud.slash")
-//                        .foregroundStyle(Color.secondary)
-//                        .labelStyle(.iconOnly)
-//                        .imageScale(.small)
-//                }
-//            }
-            if #available(iOS 26, *) {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Spacer()
-                    
-                    Button("Add a Vehicle", systemImage: "plus", role: .confirm) {
-                        showingAddVehicle = true
-                    }
-                    .tint(settings.accentColor(for: .appTheme))
-                }
-            } else {
-                ToolbarItem {
-                    Button("Add a Vehicle", systemImage: "plus") {
-                        showingAddVehicle = true
-                    }
+            ToolbarItem{
+                Button("Add a Vehicle", systemImage: "plus") {
+                    showingAddVehicle = true
                 }
             }
             
-            
-//            if #available(iOS 26, *) {
-//                ToolbarSpacer()
-//            }
+            if #available(iOS 26, *) {
+                ToolbarSpacer()
+            }
             
             ToolbarItem {
                 Button("Settings", systemImage: "gearshape") {
                     showingSettings = true
                 }
-                .adaptiveTint()
             }
         }
     }
