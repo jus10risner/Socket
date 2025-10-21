@@ -14,7 +14,7 @@ struct EmptyMaintenanceView: View {
         ContentUnavailableView {
             Label("No Maintenance Services", systemImage: "book.and.wrench")
         } description: {
-            Text("Tap the button at the top of the screen to set up a new service")
+            Text("Tap the book button in the top-right corner to set up a service.")
                 .accessibilityHidden(true)
         } actions: {
             Button("Learn More") {
