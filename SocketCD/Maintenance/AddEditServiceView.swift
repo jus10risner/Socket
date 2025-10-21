@@ -47,7 +47,7 @@ struct AddEditServiceView: View {
                     }
                 }
                 
-                Section(footer: Text("Track by distance, time, or both — your choice.")) {
+                Section(footer: Text("Track by distance, time, or both.")) {
                     formItem(headline: "This service should be performed every:") {
                         HStack {
                             TextField("5,000", value: $draftService.distanceInterval, format: .number.decimalSeparator(strategy: .automatic))
