@@ -74,13 +74,13 @@ struct AddEditRecordView: View {
                 FormFooterView (
                     note: $draftServiceLog.note,
                     photos: $draftServiceLog.photos,
-                    deleteButtonTitle: "Delete Record",
+                    deleteButtonTitle: "Delete Service Log",
                     onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
                 )
             }
             .scrollDismissesKeyboard(.interactively)
             .listRowSpacing(0) // Added to prevent list row spacing when launched from swipe action on MaintenanceListView
-            .navigationTitle(record != nil ? "Edit Service Record" : "Log Service")
+            .navigationTitle(record != nil ? "Edit Service Log" : "Log Service")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if record == nil {
@@ -130,7 +130,7 @@ struct AddEditRecordView: View {
                 }
                 Button("Cancel", role: .cancel) { }
             } message: {
-                Text("Permanently delete this service record? This cannot be undone.")
+                Text("Permanently delete this service log? This cannot be undone.")
             }
         }
     }

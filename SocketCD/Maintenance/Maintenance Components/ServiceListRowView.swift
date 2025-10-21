@@ -31,7 +31,7 @@ struct ServiceListRowView: View {
             AddEditRecordView(service: service, vehicle: vehicle)
         }
         .swipeActions(edge: .leading) {
-            Button("Add Service Record", systemImage: "plus") {
+            Button("Add Service Log", systemImage: "plus") {
                 selectedService = service
             }
             .tint(settings.accentColor(for: .maintenanceTheme))
@@ -48,7 +48,7 @@ struct ServiceListRowView: View {
                 .font(.headline)
             
             if service.sortedServiceRecordsArray.isEmpty {
-                Text("Swipe or tap to add a service record")
+                Text("Swipe or tap to add a service log")
                     .font(.subheadline)
                     .foregroundStyle(Color.secondary)
             } else {

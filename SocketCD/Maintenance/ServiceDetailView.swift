@@ -70,6 +70,7 @@ struct ServiceDetailView: View {
                 serviceRecordHint
             }
         }
+        .navigationTitle("Service Info")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingAddRecord) {
             AddEditRecordView(service: service, vehicle: vehicle)
@@ -81,7 +82,7 @@ struct ServiceDetailView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button("Add Service Record", systemImage: "plus") {
+                Button("Add Service Log", systemImage: "plus") {
                     showingAddRecord = true
                 }
                 .adaptiveTint()

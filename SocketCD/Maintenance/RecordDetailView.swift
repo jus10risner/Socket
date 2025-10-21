@@ -30,7 +30,7 @@ struct RecordDetailView: View {
             
             FormFooterView(note: record.effectiveNote, photos: record.effectivePhotos)
         }
-        .navigationTitle("Record Details")
+        .navigationTitle("Log Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem {
