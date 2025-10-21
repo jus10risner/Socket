@@ -55,6 +55,8 @@ struct CustomInfoSection: View {
                         Text("Add things like your vehicle's VIN or photos of important documents here, for easy reference.")
                             .font(.subheadline)
                             .foregroundStyle(Color.secondary)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     
                     Button {
