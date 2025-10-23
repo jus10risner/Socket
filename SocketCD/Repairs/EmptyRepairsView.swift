@@ -23,7 +23,7 @@ struct EmptyRepairsView: View {
                 Text("""
                 Repairs, like replacing brake pads or a failing alternator, are done as-needed rather than on a schedule. 
                 
-                Want a reminder to do sometihg again? Add it to Maintenance.
+                Want a reminder to do something again? Add it to Maintenance.
                 """)
                 .font(.subheadline)
                 .padding(20)
