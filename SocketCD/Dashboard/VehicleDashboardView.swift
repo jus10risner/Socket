@@ -189,7 +189,7 @@ struct VehicleDashboardView: View {
             Section("Spreadsheet (CSV)") {
                 csvExportButton(title: "All Records") { CSVExporter.exportAllRecords(for: vehicle) }
                 csvExportButton(title: "Fill-ups") { CSVExporter.exportFillups(for: vehicle) }
-                csvExportButton(title: "Maintenance and Repairs") { CSVExporter.exportServicesAndRepairs(for: vehicle) }
+                csvExportButton(title: "Maintenance and Repairs") { CSVExporter.exportMaintenanceAndRepairs(for: vehicle) }
             }
         }
         .accessibilityHint("Save or share records for this vehicle")

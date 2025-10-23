@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CSVExporter {
     // MARK: - Export only service and repair records
-    static func exportServicesAndRepairs(for vehicle: Vehicle) -> URL? {
-        let fileName = "\(vehicle.name) Service & Repairs.csv"
+    static func exportMaintenanceAndRepairs(for vehicle: Vehicle) -> URL? {
+        let fileName = "\(vehicle.name) Maintenance & Repairs.csv"
         let tempDirectory = NSTemporaryDirectory()
         let fileURL = URL(fileURLWithPath: tempDirectory, isDirectory: true).appendingPathComponent(fileName)
 
