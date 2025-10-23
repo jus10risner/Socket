@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */; };
+		9E0B19B52EAA7FF800E7A820 /* InformationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */; };
 		9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */; };
 		9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */; };
 		9E187C152EA004C700FBDAC9 /* ToolbarSubtitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */; };
@@ -118,6 +119,7 @@
 
 /* Begin PBXFileReference section */
 		9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExportRecord.swift; sourceTree = "<group>"; };
+		9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationItemView.swift; sourceTree = "<group>"; };
 		9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveTint.swift; sourceTree = "<group>"; };
 		9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSubtitle.swift; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC4C52BA253950053C65E /* WelcomeView.swift */,
+				9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */,
 				9E7507562BF50FB9000E25BD /* OnboardingTips.swift */,
 				9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */,
 			);
@@ -674,6 +677,7 @@
 				9EEAC4FB2BA37FDB0053C65E /* RepairDetailView.swift in Sources */,
 				9EEAC4812BA0F9C20053C65E /* ContentView.swift in Sources */,
 				9E52CCBA2E72FC0C00B3CB45 /* SelectedServicesListView.swift in Sources */,
+				9E0B19B52EAA7FF800E7A820 /* InformationItemView.swift in Sources */,
 				9EEAC4FF2BA388D50053C65E /* Fillup+helper.swift in Sources */,
 				9EEAC52A2BA4CBB40053C65E /* RecordDetailView.swift in Sources */,
 				9EEAC52C2BA4CD150053C65E /* AddEditRecordView.swift in Sources */,
