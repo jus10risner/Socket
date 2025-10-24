@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */; };
 		9E0B19B52EAA7FF800E7A820 /* InformationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */; };
+		9E0B19B72EAA87C500E7A820 /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */; };
+		9E0B19B92EABDA2400E7A820 /* AddFillupIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B82EABDA2400E7A820 /* AddFillupIntent.swift */; };
 		9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */; };
 		9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */; };
 		9E187C152EA004C700FBDAC9 /* ToolbarSubtitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */; };
@@ -120,6 +122,8 @@
 /* Begin PBXFileReference section */
 		9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExportRecord.swift; sourceTree = "<group>"; };
 		9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationItemView.swift; sourceTree = "<group>"; };
+		9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
+		9E0B19B82EABDA2400E7A820 /* AddFillupIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFillupIntent.swift; sourceTree = "<group>"; };
 		9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveTint.swift; sourceTree = "<group>"; };
 		9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSubtitle.swift; sourceTree = "<group>"; };
@@ -394,6 +398,7 @@
 				9EB025402E54C7AC008B4AC7 /* Extensions */,
 				9EEAC48F2BA1036F0053C65E /* DataController.swift */,
 				9EEAC4972BA1E99F0053C65E /* Enums.swift */,
+				9E0B19B82EABDA2400E7A820 /* AddFillupIntent.swift */,
 				9EEAC48C2BA0FA280053C65E /* SocketDataModel.xcdatamodeld */,
 				9E189E362BD1ABE900095EC2 /* Assets.xcassets */,
 				9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */,
@@ -453,6 +458,7 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC4C52BA253950053C65E /* WelcomeView.swift */,
+				9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */,
 				9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */,
 				9E7507562BF50FB9000E25BD /* OnboardingTips.swift */,
 				9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */,
@@ -704,6 +710,7 @@
 				9E916A442E464B7800E10B42 /* CSVExporter.swift in Sources */,
 				9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */,
 				9EEAC4CF2BA258290053C65E /* VehicleImageView.swift in Sources */,
+				9E0B19B92EABDA2400E7A820 /* AddFillupIntent.swift in Sources */,
 				9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */,
 				9EEAC4F52BA37A270053C65E /* RepairsListView.swift in Sources */,
 				9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */,
@@ -740,6 +747,7 @@
 				9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */,
 				9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */,
 				9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */,
+				9E0B19B72EAA87C500E7A820 /* WhatsNewView.swift in Sources */,
 				9EEAC48E2BA0FA280053C65E /* SocketDataModel.xcdatamodeld in Sources */,
 				9EEAC4F32BA379FE0053C65E /* EmptyRepairsView.swift in Sources */,
 				9EEAC4D32BA258960053C65E /* Photo+helper.swift in Sources */,
