@@ -12,8 +12,8 @@ import SwiftUI
 // Required for camera capture
 
 struct CameraCapture: UIViewControllerRepresentable {
-    @Environment(\.dismiss) var dismiss
     @Binding var image: UIImage?
+    @Binding var isPresented: Bool
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<CameraCapture>) -> UIImagePickerController {
         let cameraCapture = UIImagePickerController()
@@ -42,11 +42,15 @@ struct CameraCapture: UIViewControllerRepresentable {
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
-            if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            if let image = info[.originalImage] as? UIImage {
                 parent.image = image
             }
             
-            parent.dismiss()
+            parent.isPresented = false
+        }
+        
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.isPresented = false
         }
     }
 }

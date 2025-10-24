@@ -33,7 +33,7 @@ struct AddEditVehicleImageView: View {
 //        .animation(.default, value: draftVehicle.photo)
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImage, matching: .images)
         .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: verifyAndAdd) {
-            CameraCapture(image: $capturedImage)
+            CameraCapture(image: $capturedImage, isPresented: $cameraViewModel.showingCamera)
                 .ignoresSafeArea()
         }
         .onChange(of: selectedImage) { loadSelectedImage() }

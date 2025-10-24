@@ -39,7 +39,7 @@ struct AddPhotoButton: View {
         .onChange(of: selectedImages) { loadSelectedImages() }
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImages, matching: .images)
         .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: verifyAndAppend) {
-            CameraCapture(image: $capturedImage)
+            CameraCapture(image: $capturedImage, isPresented: $cameraViewModel.showingCamera)
                 .ignoresSafeArea()
         }
         .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
@@ -62,7 +62,6 @@ struct AddPhotoButton: View {
         } message: {
             Text("There was a problem saving that image. Please try another image.")
         }
-        .textCase(nil)
     }
     
     // MARK: - Methods

@@ -49,6 +49,7 @@ struct PhotoGridView: View {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFill()
+                                    .contentShape(Rectangle())
                             } else {
                                 Color.clear
                             }
