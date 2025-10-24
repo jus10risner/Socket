@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InformationItemView: View {
     let title: String
-    let subtitle: String
+    let description: String
     let imageName: String
     let accentColor: Color
     
@@ -28,7 +28,7 @@ struct InformationItemView: View {
                     .foregroundColor(.primary)
                     .accessibility(addTraits: .isHeader)
 
-                Text(subtitle)
+                Text(description)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -39,5 +39,5 @@ struct InformationItemView: View {
 }
 
 #Preview {
-    InformationItemView(title: "Maintain Vehicles", subtitle: "Get reminders when routine maintenance services are due.", imageName: "book.and.wrench.fill", accentColor: Color.indigo.mix(with: .cyan, by: 0.2))
+    InformationItemView(title: "Maintain Vehicles", description: "Get reminders when routine maintenance services are due.", imageName: "book.and.wrench.fill", accentColor: Color.indigo.mix(with: .cyan, by: 0.2))
 }

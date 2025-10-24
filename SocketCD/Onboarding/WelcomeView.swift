@@ -12,7 +12,7 @@ struct WelcomeView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        VStack {
+        VStack(spacing: 30) {
            Spacer()
             
             VStack(spacing: 0) {
@@ -30,19 +30,16 @@ struct WelcomeView: View {
                 .multilineTextAlignment(.center)
             }
             .font(.largeTitle.bold())
-            
-            Spacer()
 
             VStack(alignment: .leading) {
-                InformationItemView(title: "Track Maintenance", subtitle: "Get notified when it’s time for service.", imageName: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme))
+                InformationItemView(title: "Track Maintenance", description: "Get notified when it’s time for service.", imageName: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme))
                 
-                InformationItemView(title: "Document Repairs", subtitle: "Keep a history of work performed and share it easily.", imageName: "wrench.adjustable.fill", accentColor: settings.accentColor(for: .repairsTheme))
+                InformationItemView(title: "Document Repairs", description: "Keep a history of work performed and share it easily.", imageName: "wrench.adjustable.fill", accentColor: settings.accentColor(for: .repairsTheme))
                 
-                InformationItemView(title: "Log Fill-ups", subtitle: "Track fuel economy and visualize trends over time.", imageName: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme))
+                InformationItemView(title: "Log Fill-ups", description: "Track fuel economy and visualize trends over time.", imageName: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme))
             }
             .padding(.horizontal)
             
-            Spacer()
             Spacer()
             
             Button {
@@ -57,7 +54,7 @@ struct WelcomeView: View {
             .buttonStyle(.borderedProminent)
         }
         .interactiveDismissDisabled()
-        .padding(.horizontal, 40)
+//        .padding(.horizontal, 40)
     }
 }
 
