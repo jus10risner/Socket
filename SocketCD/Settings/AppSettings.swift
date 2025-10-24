@@ -9,6 +9,8 @@ import SwiftUI
 
 class AppSettings: ObservableObject {
     
+    static let shared = AppSettings()
+    
     // MARK: - AppSettingsView
     
     @AppStorage("distanceUnit") var distanceUnit: DistanceUnits = .miles
