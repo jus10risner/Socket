@@ -10,7 +10,6 @@ import SwiftUI
 struct AddEditRecordView: View {
     // MARK: - Environment
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     
     // MARK: - Observed Objects
     @ObservedObject var service: Service
@@ -148,5 +147,4 @@ struct AddEditRecordView: View {
     record.odometer = 12345
     
     return AddEditRecordView(service: service, vehicle: vehicle, record: record)
-        .environmentObject(AppSettings())
 }

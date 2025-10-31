@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ServiceListRowView: View {
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var service: Service
     @ObservedObject var vehicle: Vehicle
     
@@ -17,7 +16,6 @@ struct ServiceListRowView: View {
     var body: some View {
         NavigationLink {
             ServiceDetailView(service: service, vehicle: vehicle)
-                .tint(settings.accentColor(for: .maintenanceTheme))
         } label: {
             Label {
                 serviceInfo
@@ -34,7 +32,7 @@ struct ServiceListRowView: View {
             Button("Add Service Log", systemImage: "plus") {
                 selectedService = service
             }
-            .tint(settings.accentColor(for: .maintenanceTheme))
+            .tint(Color(.maintenanceTheme))
         }
     }
     
@@ -68,5 +66,4 @@ struct ServiceListRowView: View {
     service.name = "Oil Change"
     
     return ServiceListRowView(service: service, vehicle: vehicle)
-        .environmentObject(AppSettings())
 }

@@ -69,7 +69,6 @@ struct FillupsDashboardView: View {
                 }
             }
         }
-        .tint(settings.accentColor(for: .fillupsTheme))
         .navigationTitle("Fill-ups")
         .toolbarSubtitle(vehicle.name)
         .sheet(isPresented: $showingAddFillup) { AddEditFillupView(vehicle: vehicle) }
@@ -81,7 +80,7 @@ struct FillupsDashboardView: View {
                     Button("Add Fill-up", systemImage: "plus", role: .confirm) {
                         showingAddFillup = true
                     }
-                    .tint(settings.accentColor(for: .fillupsTheme))
+                    .tint(Color(.fillupsTheme))
                 }
             } else {
                 ToolbarItem {
@@ -141,7 +140,7 @@ struct FillupsDashboardView: View {
         VStack {
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.system(size: 40))
-                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                .foregroundStyle(Color(.fillupsTheme))
                 .frame(height: 50)
             
             if fillups.contains(where: { $0.fillType == .fullTank }) {

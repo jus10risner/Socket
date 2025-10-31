@@ -44,20 +44,11 @@ class AppSettings: ObservableObject {
     
     // MARK: - Helpers
     
-    func accentColor(for theme: AvailableThemes) -> Color {
+    func selectedAccent() -> Color {
         if let accentColor {
             return accentColor.value
-        }
-
-        switch theme {
-        case .appTheme:
-            return Color.indigo.mix(with: .cyan, by: 0.2)
-        case .maintenanceTheme:
-            return .green
-        case .repairsTheme:
-            return .orange
-        case .fillupsTheme:
-            return .teal
+        } else {
+            return Color.indigo.mix(with: .cyan, by: 0.2) // Same as Color.accentColor (keeping here for mix reference)
         }
     }
     

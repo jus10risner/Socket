@@ -18,7 +18,7 @@ struct TimelineView: View {
                 Section(header: Text(yearGroup.year.formatted(.number.grouping(.never)))) {
                     ForEach(yearGroup.groups, id: \.date) { group in
                         HStack {
-                            VStack(alignment: .leading, spacing: 5) {
+                            VStack(alignment: .leading, spacing: 0) {
                                 Text(group.date.formatted(.dateTime.month(.abbreviated).day()))
                                     .font(.callout.bold())
                                 
@@ -39,10 +39,10 @@ struct TimelineView: View {
                                             switch item.type {
                                             case .repair:
                                                 Image(systemName: "wrench.adjustable.fill")
-                                                    .foregroundStyle(settings.accentColor(for: .repairsTheme))
+                                                    .foregroundStyle(Color(.repairsTheme))
                                             default:
                                                 Image(systemName: "book.and.wrench.fill")
-                                                    .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
+                                                    .foregroundStyle(Color(.maintenanceTheme))
                                             }
                                         }
                                         .imageScale(.small)

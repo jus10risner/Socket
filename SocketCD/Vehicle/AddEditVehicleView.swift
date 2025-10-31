@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AddEditVehicleView: View {
-    @EnvironmentObject var settings: AppSettings
     @Environment(\.managedObjectContext) var context
     @Environment(\.dismiss) var dismiss
     @StateObject var draftVehicle = DraftVehicle()
@@ -130,5 +129,4 @@ struct AddEditVehicleView: View {
 
 #Preview {
     AddEditVehicleView()
-        .environmentObject(AppSettings())
 }

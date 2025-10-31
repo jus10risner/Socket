@@ -125,7 +125,7 @@ struct AppSettingsView: View {
                 .foregroundStyle(Color.primary)
         } icon: {
             Image(systemName: symbol)
-                .foregroundStyle(settings.accentColor(for: .appTheme))
+                .foregroundStyle(settings.selectedAccent())
         }
 
     }

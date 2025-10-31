@@ -24,7 +24,6 @@ struct CustomInfoSection: View {
                 ForEach(vehicle.sortedCustomInfoArray, id: \.id) { customInfo in
                     NavigationLink {
                         CustomInfoDetailView(customInfo: customInfo)
-                            .tint(settings.accentColor(for: .appTheme))
                     } label: {
                         HStack {
                             LabeledContent(customInfo.label) {
@@ -65,7 +64,7 @@ struct CustomInfoSection: View {
                         Label("Add Info", systemImage: "plus")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                    .tint(settings.accentColor(for: .appTheme))
+                    .tint(settings.selectedAccent())
                 }
                 .padding()
                 .frame(maxWidth: .infinity)

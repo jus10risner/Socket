@@ -10,7 +10,6 @@ import SwiftUI
 
 struct AddEditVehicleImageView: View {
     // MARK: - Environment
-    @EnvironmentObject var settings: AppSettings
     @Environment(\.managedObjectContext) var context
     
     // MARK: - Observed Objects
@@ -116,8 +115,7 @@ struct AddEditVehicleImageView: View {
             }
         }
         .buttonStyle(.borderedProminent)
-        .foregroundStyle(Color.white)
-        .tint(settings.accentColor(for: .appTheme))
+//        .foregroundStyle(Color.white)
         .frame(maxWidth: .infinity)
     }
     
@@ -157,5 +155,4 @@ struct AddEditVehicleImageView: View {
 
 #Preview {
     AddEditVehicleImageView(draftVehicle: DraftVehicle())
-        .environmentObject(AppSettings())
 }

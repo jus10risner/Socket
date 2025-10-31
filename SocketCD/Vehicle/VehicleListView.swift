@@ -10,7 +10,6 @@ import SwiftUI
 struct VehicleListView: View {
     @Environment(\.managedObjectContext) var context
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     @Binding var selectedVehicle: Vehicle?
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
@@ -58,17 +57,16 @@ struct VehicleListView: View {
 //        }
         .sheet(isPresented: $showingSettings, onDismiss: updateNotifications) {
             AppSettingsView()
-                .tint(settings.accentColor(for: .appTheme))
         }
         .sheet(isPresented: $showingAddVehicle) {
             AddEditVehicleView()
-                .tint(settings.accentColor(for: .appTheme))
         }
         .toolbar {
             ToolbarItem{
                 Button("Add a Vehicle", systemImage: "plus") {
                     showingAddVehicle = true
                 }
+                .adaptiveTint()
             }
             
             if #available(iOS 26, *) {
@@ -79,6 +77,7 @@ struct VehicleListView: View {
                 Button("Settings", systemImage: "gearshape") {
                     showingSettings = true
                 }
+                .adaptiveTint()
             }
         }
     }

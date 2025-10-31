@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MaintenanceOnboardingView: View {
-    @EnvironmentObject var settings: AppSettings
     let vehicle: Vehicle
     let service: Service
     @Binding var showingServiceRecordTip: Bool
@@ -37,7 +36,7 @@ struct MaintenanceOnboardingView: View {
             ZStack(alignment: .leading) {
                 ZStack {
                     Rectangle()
-                        .foregroundStyle(settings.accentColor(for: .maintenanceTheme))
+                        .foregroundStyle(Color(.maintenanceTheme))
                         .frame(width: swipeActionWidth)
                     
                     Image(systemName: "plus.square.on.square.fill")
@@ -171,5 +170,4 @@ struct MaintenanceOnboardingView: View {
     service.name = "Oil Change"
     
     return MaintenanceOnboardingView(vehicle: vehicle, service: service, showingServiceRecordTip: .constant(false))
-        .environmentObject(AppSettings())
 }

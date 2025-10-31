@@ -9,7 +9,6 @@ import SwiftUI
 
 struct WhatsNewView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     
     var body: some View {
         VStack(spacing: 30) {
@@ -23,11 +22,11 @@ struct WhatsNewView: View {
             .font(.title.bold())
             
             VStack(alignment: .leading) {
-                InformationItemView(title: "Dashboard View", description: "See important info and quickly add records, all from one place.", imageName: "rectangle.3.group", accentColor: settings.accentColor(for: .appTheme))
+                InformationItemView(title: "Dashboard View", description: "See important info and quickly add records, all from one place.", imageName: "rectangle.3.group", accentColor: Color.accent)
                 
-                InformationItemView(title: "Log Multiple Services", description: "Select multiple services to log at once, with shared notes, photos, and more.", imageName: "circle.grid.2x2.topleft.checkmark.filled", accentColor: settings.accentColor(for: .appTheme))
+                InformationItemView(title: "Log Multiple Services", description: "Select multiple services to log at once, with shared notes, photos, and more.", imageName: "circle.grid.2x2.topleft.checkmark.filled", accentColor: Color.accent)
                 
-                InformationItemView(title: "New Maintenance Indicator", description: "Visualize the time or distance left until service, with a new gauge view.", imageName: "book.and.wrench", accentColor: settings.accentColor(for: .appTheme))
+                InformationItemView(title: "New Maintenance Indicator", description: "Visualize the time or distance left until service, with a new gauge view.", imageName: "book.and.wrench", accentColor: Color.accent)
             }
             .padding(.horizontal)
             
@@ -41,7 +40,7 @@ struct WhatsNewView: View {
                     .padding(.vertical, 10)
                     .frame(maxWidth: 350)
             }
-            .tint(settings.accentColor(for: .appTheme))
+            .tint(Color.accent)
             .buttonStyle(.borderedProminent)
         }
     }
@@ -49,5 +48,4 @@ struct WhatsNewView: View {
 
 #Preview {
     WhatsNewView()
-        .environmentObject(AppSettings())
 }

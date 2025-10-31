@@ -17,7 +17,7 @@ struct SocketCDApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .tint(.primary)
+                .tint(settings.selectedAccent())
                 .environment(\.managedObjectContext, dataController.container.viewContext)
                 .environmentObject(settings)
                 .task { AppearanceController.shared.setAppearance() }

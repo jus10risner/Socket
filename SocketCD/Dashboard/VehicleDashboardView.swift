@@ -51,7 +51,8 @@ struct VehicleDashboardView: View {
             }
             .padding(.horizontal)
             .scrollContentBackground(.hidden)
-            .background(GradientBackground())
+            .background(Color(.systemGroupedBackground))
+//            .background(GradientBackground())
             .navigationTitle(vehicle.name)
             .navigationDestination(item: $selectedSection) { section in
                 destinationView(for: section, vehicle: vehicle)
@@ -60,19 +61,14 @@ struct VehicleDashboardView: View {
                 switch sheet {
                 case .logService:
                     AddEditRecordView(service: vehicle.sortedServicesArray.first, vehicle: vehicle)
-                        .tint(settings.accentColor(for: .maintenanceTheme))
                 case .addRepair:
                     AddEditRepairView(vehicle: vehicle)
-                        .tint(settings.accentColor(for: .repairsTheme))
                 case .addFillup:
                     AddEditFillupView(vehicle: vehicle)
-                        .tint(settings.accentColor(for: .fillupsTheme))
                 case .addCustomInfo:
                     AddEditCustomInfoView(vehicle: vehicle)
-                        .tint(settings.accentColor(for: .appTheme))
                 case .editVehicle:
                     AddEditVehicleView(vehicle: vehicle)
-                        .tint(settings.accentColor(for: .appTheme))
                 case .showTimeline:
                     TimelineView(vehicle: vehicle)
                 }
@@ -101,7 +97,7 @@ struct VehicleDashboardView: View {
     }
     
     private var odometerDashboardCard: some View {
-        DashboardCard(title: "Odometer", systemImage: "car.fill", accentColor: settings.accentColor(for: .appTheme), buttonLabel: "Update Odometer", buttonSymbol: "pencil.circle.fill") {
+        DashboardCard(title: "Odometer", systemImage: "car.fill", accentColor: Color.accentColor, buttonLabel: "Update Odometer", buttonSymbol: "pencil.circle.fill") {
             showingUpdateOdometerAlert = true
         } content: {
             HStack(alignment: .firstTextBaseline, spacing: 3) {
@@ -200,42 +196,39 @@ struct VehicleDashboardView: View {
         switch section {
         case .maintenance:
             MaintenanceListView(vehicle: vehicle)
-                .tint(settings.accentColor(for: section.theme))
         case .repairs:
             RepairsListView(vehicle: vehicle)
-                .tint(settings.accentColor(for: section.theme))
         case .fillups:
             FillupsDashboardView(vehicle: vehicle)
-                .tint(settings.accentColor(for: section.theme))
         }
     }
 }
 
 // Creates a gradient background, with backgroundExtensionEffect applied on iOS 26+ (for iPad use)
-struct GradientBackground: View {
-    var body: some View {
-        let gradient = LinearGradient(
-            colors: [
-                Color.indigo.opacity(0.5),
-                Color(.systemGroupedBackground),
-                Color(.systemGroupedBackground),
-                Color(.systemGroupedBackground)
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-
-        Group {
-            if #available(iOS 26, *) {
-                gradient.backgroundExtensionEffect()
-            } else {
-                gradient
-            }
-        }
-        .background(.ultraThinMaterial)
-        .ignoresSafeArea()
-    }
-}
+//struct GradientBackground: View {
+//    var body: some View {
+//        let gradient = LinearGradient(
+//            colors: [
+//                Color.indigo.opacity(0.5),
+//                Color(.systemGroupedBackground),
+//                Color(.systemGroupedBackground),
+//                Color(.systemGroupedBackground)
+//            ],
+//            startPoint: .top,
+//            endPoint: .bottom
+//        )
+//
+//        Group {
+//            if #available(iOS 26, *) {
+//                gradient.backgroundExtensionEffect()
+//            } else {
+//                gradient
+//            }
+//        }
+//        .background(.ultraThinMaterial)
+//        .ignoresSafeArea()
+//    }
+//}
 
 // Allows ActivityView to work with the .sheet(item:) modifier (requires a URL with Identifiable conformance)
 struct ShareItem: Identifiable {

@@ -37,10 +37,11 @@ struct FuelEconomyChartView: View {
                         }
                         .foregroundStyle(Color.white)
                         .padding()
-                        .background(RoundedRectangle.adaptive.fill(settings.accentColor(for: .fillupsTheme).gradient))
+                        .background(RoundedRectangle.adaptive.fill(Color(.fillupsTheme).gradient))
                     }
                 
                 PointMark(x: .value("Date", selectedFillup.date), y: .value("Fuel Economy", selectedFillup.fuelEconomy(settings: settings)))
+                    .foregroundStyle(Color(.fillupsTheme))
             }
             
             ForEach(data) { fillup in
@@ -49,7 +50,7 @@ struct FuelEconomyChartView: View {
                 PointMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
                     .opacity(data.count == 1 ? 1 : 0) // Vislble only when a single data point is available; also serves to make animation between data sets more fluid
             }
-            .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+            .foregroundStyle(Color(.fillupsTheme))
             
             
         }

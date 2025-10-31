@@ -11,14 +11,6 @@ import SwiftUI
 
 enum AppSection: String, CaseIterable {
     case maintenance, repairs, fillups
-    
-    var theme: AvailableThemes {
-        switch self {
-        case .maintenance: return .maintenanceTheme
-        case .repairs: return .repairsTheme
-        case .fillups: return .fillupsTheme
-        }
-    }
 }
 
 // MARK: - Fill-ups
@@ -47,10 +39,6 @@ enum ServiceStatus: Int {
 
 enum AppearanceOptions: String, CaseIterable {
     case automatic, light, dark
-}
-
-enum AvailableThemes {
-    case appTheme, maintenanceTheme, repairsTheme, fillupsTheme
 }
 
 enum AccentColors: String, CaseIterable {

@@ -28,7 +28,6 @@ struct AllFillupsListView: View {
             ForEach(fillups) { fillup in
                 NavigationLink {
                     FillupDetailView(fillup: fillup)
-                        .tint(settings.accentColor(for: .fillupsTheme))
                 } label: {
                     LabeledContent {
                         Text(fillup.date.formatted(date: .numeric, time: .omitted))
@@ -62,7 +61,7 @@ struct AllFillupsListView: View {
     private func listRowLabel(symbol: String, text: String) -> some View {
         HStack(spacing: 5) {
             Image(systemName: symbol)
-                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                .foregroundStyle(Color(.fillupsTheme))
             
             Text(text)
         }

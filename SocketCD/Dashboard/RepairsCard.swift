@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct RepairsCard: View {
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
     
     @Binding var activeSheet: ActiveSheet?
     @Binding var selectedSection: AppSection?
     
     var body: some View {
-        DashboardCard(title: "Repairs", systemImage: "wrench.adjustable.fill", accentColor: settings.accentColor(for: .repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus.circle.fill") {
+        DashboardCard(title: "Repairs", systemImage: "wrench.adjustable.fill", accentColor: Color(.repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus.circle.fill") {
             activeSheet = .addRepair
         } content: {
             if let repair = vehicle.sortedRepairsArray.first {
@@ -46,5 +45,4 @@ struct RepairsCard: View {
     vehicle.odometer = 12345
     
     return RepairsCard(vehicle: vehicle, activeSheet: .constant(nil), selectedSection: .constant(nil))
-        .environmentObject(AppSettings())
 }

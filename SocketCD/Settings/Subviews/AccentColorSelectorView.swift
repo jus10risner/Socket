@@ -41,7 +41,8 @@ struct AccentColorSelectorView: View {
             Label("Default Accent", systemImage: settings.accentColor == nil ? "checkmark.circle.fill" : "circle.fill")
                 .labelStyle(.iconOnly)
                 .imageScale(.large)
-                .foregroundStyle(LinearGradient(stops: [Gradient.Stop(color: .indigo, location: 0.1), Gradient.Stop(color: .blue, location: 0.4), Gradient.Stop(color: .orange, location: 0.7), Gradient.Stop(color: .mint, location: 1)], startPoint: .leading, endPoint: .trailing))
+                .foregroundStyle(Color.accentColor)
+//                .foregroundStyle(LinearGradient(stops: [Gradient.Stop(color: .indigo, location: 0.1), Gradient.Stop(color: .blue, location: 0.4), Gradient.Stop(color: .orange, location: 0.7), Gradient.Stop(color: .mint, location: 1)], startPoint: .leading, endPoint: .trailing))
         }
     }
     

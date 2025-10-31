@@ -39,7 +39,7 @@ struct TrendArrowView: View {
                 economyUnavailableButton
             }
         }
-        .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+        .foregroundStyle(Color(.fillupsTheme))
         .font(.title2.bold())
         .onAppear { animateTrendArrow(shouldReset: false) }
         .mask {

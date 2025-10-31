@@ -32,11 +32,11 @@ struct WelcomeView: View {
             .font(.largeTitle.bold())
 
             VStack(alignment: .leading) {
-                InformationItemView(title: "Track Maintenance", description: "Get notified when it’s time for service.", imageName: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme))
+                InformationItemView(title: "Track Maintenance", description: "Get notified when it’s time for service.", imageName: "book.and.wrench.fill", accentColor: Color(.maintenanceTheme))
                 
-                InformationItemView(title: "Document Repairs", description: "Keep a history of work performed and share it easily.", imageName: "wrench.adjustable.fill", accentColor: settings.accentColor(for: .repairsTheme))
+                InformationItemView(title: "Document Repairs", description: "Keep a history of work performed and share it easily.", imageName: "wrench.adjustable.fill", accentColor: Color(.repairsTheme))
                 
-                InformationItemView(title: "Log Fill-ups", description: "Track fuel economy and visualize trends over time.", imageName: "fuelpump.fill", accentColor: settings.accentColor(for: .fillupsTheme))
+                InformationItemView(title: "Log Fill-ups", description: "Track fuel economy and visualize trends over time.", imageName: "fuelpump.fill", accentColor: Color(.fillupsTheme))
             }
             .padding(.horizontal)
             
@@ -50,7 +50,7 @@ struct WelcomeView: View {
                     .padding(.vertical, 10)
                     .frame(maxWidth: 350)
             }
-            .tint(settings.accentColor(for: .appTheme))
+            .tint(settings.selectedAccent())
             .buttonStyle(.borderedProminent)
         }
         .interactiveDismissDisabled()

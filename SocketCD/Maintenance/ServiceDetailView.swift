@@ -59,7 +59,6 @@ struct ServiceDetailView: View {
                     ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
                         NavigationLink {
                             RecordDetailView(record: record, vehicle: vehicle, service: service)
-                                .tint(settings.accentColor(for: .maintenanceTheme))
                         } label: {
                             LabeledContent("\(record.effectiveOdometer) \(settings.distanceUnit.abbreviated)", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
                         }

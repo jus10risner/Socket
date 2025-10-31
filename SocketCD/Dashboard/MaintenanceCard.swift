@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MaintenanceCard: View {
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
     
     @Binding var activeSheet: ActiveSheet?
@@ -28,7 +27,7 @@ struct MaintenanceCard: View {
     }
     
     var body: some View {
-        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: settings.accentColor(for: .maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus.circle.fill", disableButton: vehicle.sortedServicesArray.count < 1) {
+        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: Color(.maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus.circle.fill", disableButton: vehicle.sortedServicesArray.count < 1) {
             activeSheet = .logService
         } content: {
             if let service = nextDueService {
@@ -90,5 +89,4 @@ struct MaintenanceCard: View {
     vehicle.odometer = 12345
     
     return MaintenanceCard(vehicle: vehicle, activeSheet: .constant(nil), selectedSection: .constant(nil))
-        .environmentObject(AppSettings())
 }

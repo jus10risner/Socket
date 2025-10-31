@@ -9,7 +9,6 @@ import SwiftUI
 
 struct FillTypeInfoView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     
     var body: some View {
         NavigationStack {
@@ -19,7 +18,7 @@ struct FillTypeInfoView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Full Tank")
                                 .font(.headline)
-                                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                                .foregroundStyle(Color(.fillupsTheme))
                             
                             Text("Select this fill type if you have filled your fuel tank completely.")
                             
@@ -34,7 +33,7 @@ struct FillTypeInfoView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Partial Fill")
                                 .font(.headline)
-                                .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                                .foregroundStyle(Color(.fillupsTheme))
                             
                             Text("Select this fill type if fuel was added, but the fuel tank is not completely full.")
                             
@@ -50,7 +49,7 @@ struct FillTypeInfoView: View {
                             VStack(alignment: .leading) {
                                 Text("Missed Fill-up")
                                     .font(.headline)
-                                    .foregroundStyle(settings.accentColor(for: .fillupsTheme))
+                                    .foregroundStyle(Color(.fillupsTheme))
                                 
                                 Text("(Full Tank)")
                                     .font(.caption)
@@ -68,12 +67,7 @@ struct FillTypeInfoView: View {
                         }
                         .padding()
                     }
-                } header: {
-                    Text("Fill Types")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
                 }
-                .headerProminence(.increased)
             }
             .font(.subheadline)
             .navigationBarTitleDisplayMode(.inline)
@@ -84,6 +78,11 @@ struct FillTypeInfoView: View {
                     }
                     .labelStyle(.adaptive)
                     .adaptiveTint()
+                }
+                
+                ToolbarItem(placement: .principal) {
+                    Text("Fill Types")
+                        .font(.headline)
                 }
             }
         }
@@ -97,5 +96,4 @@ struct FillTypeInfoView: View {
 
 #Preview {
     FillTypeInfoView()
-        .environmentObject(AppSettings())
 }

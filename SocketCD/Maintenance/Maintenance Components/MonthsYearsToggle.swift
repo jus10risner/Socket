@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MonthsYearsToggle: View {
-    @EnvironmentObject var settings: AppSettings
     @Binding var monthsInterval: Bool
     let timeInterval: Int?
     
@@ -60,5 +59,4 @@ struct MonthsYearsToggle: View {
 
 #Preview {
     MonthsYearsToggle(monthsInterval: .constant(true), timeInterval: 2)
-        .environmentObject(AppSettings())
 }

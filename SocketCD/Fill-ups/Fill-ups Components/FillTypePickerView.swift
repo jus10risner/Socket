@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FillTypePicker: View {
-    @EnvironmentObject var settings: AppSettings
     @Binding var fillType: FillType
     @Binding var showingFillTypeInfo: Bool
     
@@ -27,5 +26,4 @@ struct FillTypePicker: View {
 
 #Preview {
     FillTypePicker(fillType: .constant(.fullTank), showingFillTypeInfo: .constant(true))
-        .environmentObject(AppSettings())
 }

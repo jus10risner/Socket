@@ -13,6 +13,7 @@ struct VehicleListRowView: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var vehicle: Vehicle
     let isSelected: Bool
+    let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     
     @FetchRequest var services: FetchedResults<Service>
     
@@ -71,7 +72,7 @@ struct VehicleListRowView: View {
         .background {
             RoundedRectangle.adaptive
                 .fill(colorScheme == .dark ? Color.gray.opacity(0.3) : Color(.secondarySystemGroupedBackground))
-                .strokeBorder(Color.secondary.opacity(0.5), lineWidth: UIDevice.current.userInterfaceIdiom == .pad && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
+                .strokeBorder(isPad && isSelected ? Color.accentColor : Color.secondary.opacity(0.5), lineWidth: isPad && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
         }
         .containerShape(RoundedRectangle.adaptive)
         .listRowInsets(EdgeInsets())

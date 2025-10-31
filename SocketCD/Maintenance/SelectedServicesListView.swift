@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SelectedServicesListView: View {
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var draftServiceLog: DraftServiceLog
     let vehicle: Vehicle
     
@@ -22,7 +21,7 @@ struct SelectedServicesListView: View {
                         LabeledContent(service.name) {
                             if let id = service.id, draftServiceLog.selectedServiceIDs.contains(id) {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(Color.white, settings.accentColor(for: .maintenanceTheme))
+                                    .foregroundStyle(Color.white, Color(.maintenanceTheme))
                             } else {
                                 Image(systemName: "circle")
                                     .foregroundStyle(Color.secondary)
@@ -54,5 +53,4 @@ struct SelectedServicesListView: View {
     vehicle.name = "My Car"
     
     return SelectedServicesListView(draftServiceLog: DraftServiceLog(), vehicle: vehicle)
-        .environmentObject(AppSettings())
 }

@@ -48,7 +48,6 @@ struct MaintenanceListView: View {
                 }
             }
         }
-        .tint(settings.accentColor(for: .maintenanceTheme))
         .navigationTitle("Maintenance")
         .toolbarSubtitle(vehicle.name)
         .listRowSpacing(5)
@@ -79,7 +78,7 @@ struct MaintenanceListView: View {
                         Image("book.badge.plus")
                     })
                 }
-                .tint(Color.primary)
+                .adaptiveTint()
             }
             
             if #available(iOS 26, *) {
@@ -89,7 +88,7 @@ struct MaintenanceListView: View {
                     Button("Log Service", systemImage: "plus", role: .confirm) {
                         showingLogService = true
                     }
-                    .tint(settings.accentColor(for: .maintenanceTheme))
+                    .tint(Color(.maintenanceTheme))
                     .disabled(services.isEmpty)
                 }
             } else {

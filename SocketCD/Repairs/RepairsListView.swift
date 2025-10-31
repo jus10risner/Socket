@@ -33,7 +33,6 @@ struct RepairsListView: View {
                     ForEach(repairs, id: \.id) { repair in
                         NavigationLink {
                             RepairDetailView(repair: repair)
-                                .tint(settings.accentColor(for: .repairsTheme))
                         } label: {
                             VStack(alignment: .leading) {
                                 Text(repair.name)
@@ -53,7 +52,6 @@ struct RepairsListView: View {
                 }
             }
         }
-        .tint(settings.accentColor(for: .repairsTheme))
         .navigationTitle("Repairs")
         .toolbarSubtitle(vehicle.name)
         .sheet(isPresented: $showingAddRepair) {
@@ -67,7 +65,7 @@ struct RepairsListView: View {
                     Button("Add New Repair", systemImage: "plus", role: .confirm) {
                         showingAddRepair = true
                     }
-                    .tint(settings.accentColor(for: .repairsTheme))
+                    .tint(Color(.repairsTheme))
                 }
             } else {
                 ToolbarItem {
