@@ -72,7 +72,7 @@ struct VehicleListRowView: View {
         .background {
             RoundedRectangle.adaptive
                 .fill(colorScheme == .dark ? Color.gray.opacity(0.3) : Color(.secondarySystemGroupedBackground))
-                .strokeBorder(isPad && isSelected ? Color.accentColor : Color.secondary.opacity(0.5), lineWidth: isPad && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
+                .strokeBorder(isPad && isSelected ? Color.accent : Color.secondary.opacity(0.5), lineWidth: isPad && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
         }
         .containerShape(RoundedRectangle.adaptive)
         .listRowInsets(EdgeInsets())

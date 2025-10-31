@@ -42,7 +42,7 @@ enum AppearanceOptions: String, CaseIterable {
 }
 
 enum AccentColors: String, CaseIterable {
-    case red = "red", orange = "orange", yellow = "yellow", green = "green", blue = "blue", indigo = "indigo", purple = "purple", cyan = "cyan", mint = "mint"
+    case red = "red", orange = "orange", yellow = "yellow", green = "green", blue = "blue", purple = "purple", cyan = "cyan", mint = "mint"
     
     // Returns the Color for the user's selected accent color
     var value: Color {
@@ -57,8 +57,6 @@ enum AccentColors: String, CaseIterable {
             Color.green
         case .blue:
             Color.blue
-        case .indigo:
-            Color.indigo
         case .purple:
             Color.purple
         case .cyan:

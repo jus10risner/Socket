@@ -48,7 +48,7 @@ class AppSettings: ObservableObject {
         if let accentColor {
             return accentColor.value
         } else {
-            return Color.indigo.mix(with: .cyan, by: 0.2) // Same as Color.accentColor (keeping here for mix reference)
+            return Color.indigo.mix(with: .cyan, by: 0.2) // Same as Color.accent (keeping here for mix reference)
         }
     }
     
@@ -65,8 +65,6 @@ class AppSettings: ObservableObject {
             Color.green
         case .blue:
             Color.blue
-        case .indigo:
-            Color.indigo
         case .purple:
             Color.purple
         case .cyan:
