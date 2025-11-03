@@ -34,22 +34,11 @@ struct RepairsListView: View {
                         NavigationLink {
                             RepairDetailView(repair: repair)
                         } label: {
-                            VStack(alignment: .leading) {
-                                Text(repair.name)
-                                    .font(.headline)
-                                
-                                HStack {
-                                    Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
-                                    
-                                    Text(repair.date.formatted(date: .numeric, time: .omitted))
-                                        .foregroundStyle(Color.secondary)
-                                }
-                                .font(.caption)
-                            }
-                            .accessibilityElement(children: .combine)
+                            listRowItem(repair: repair)
                         }
                     }
                 }
+                .listRowSpacing(5)
             }
         }
         .navigationTitle("Repairs")
@@ -74,6 +63,22 @@ struct RepairsListView: View {
                     }
                 }
             }
+        }
+    }
+    
+    // Repairs list row label
+    private func listRowItem(repair: Repair) -> some View {
+        VStack(alignment: .leading) {
+            Text(repair.name)
+                .font(.headline)
+
+            HStack(spacing: 5) {
+                Text(repair.date.formatted(date: .numeric, time: .omitted))
+                Text("•")
+                Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
         }
     }
 }

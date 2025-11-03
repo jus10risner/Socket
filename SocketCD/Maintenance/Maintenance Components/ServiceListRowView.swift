@@ -41,17 +41,17 @@ struct ServiceListRowView: View {
     
     // Service name and relevant info
     private var serviceInfo: some View {
-        VStack(alignment: .leading, spacing: 3) {
+        VStack(alignment: .leading) {
             Text(service.name)
                 .font(.headline)
             
             if service.sortedServiceRecordsArray.isEmpty {
-                Text("Swipe or tap to add a service log")
-                    .font(.subheadline)
+                Text("Tap the plus button to add a service log")
+                    .font(.caption)
                     .foregroundStyle(Color.secondary)
             } else {
                 Text(service.nextDueDescription(currentOdometer: vehicle.odometer))
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundStyle(Color.secondary)
             }
         }
