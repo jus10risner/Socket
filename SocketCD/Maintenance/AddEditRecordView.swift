@@ -38,6 +38,8 @@ struct AddEditRecordView: View {
     var body: some View {
         NavigationStack {
             Form {
+                AddEditFormSymbol(symbolName: "book.and.wrench.fill", text: record != nil ? "Edit Service Log" : "Log Service", accentColor: Color.maintenanceTheme)
+                
                 Section {
                     NavigationLink {
                         SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
@@ -79,7 +81,7 @@ struct AddEditRecordView: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .listRowSpacing(0) // Added to prevent list row spacing when launched from swipe action on MaintenanceListView
-            .navigationTitle(record != nil ? "Edit Service Log" : "Log Service")
+//            .navigationTitle(record != nil ? "Edit Service Log" : "Log Service")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if record == nil {

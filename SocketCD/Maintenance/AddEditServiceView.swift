@@ -39,6 +39,8 @@ struct AddEditServiceView: View {
     var body: some View {
         NavigationStack {
             Form {
+                AddEditFormSymbol(symbolName: "book.and.wrench.fill", text: service != nil ? "Edit Service" : "New Service", accentColor: Color.maintenanceTheme)
+                
                 Section {
                     LabeledInput(label: "Service Name") {
                         TextField("e.g. Oil Change", text: $draftService.name)
@@ -120,7 +122,7 @@ struct AddEditServiceView: View {
                 
             }
             .scrollDismissesKeyboard(.interactively)
-            .navigationTitle(service != nil ? "Edit Service" : "New Service")
+//            .navigationTitle(service != nil ? "Edit Service" : "New Service")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if service == nil {
