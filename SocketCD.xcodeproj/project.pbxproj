@@ -94,7 +94,6 @@
 		9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5052BA38B8E0053C65E /* FillupsDashboardView.swift */; };
 		9EEAC5082BA38BC20053C65E /* EmptyFillupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5072BA38BC20053C65E /* EmptyFillupsView.swift */; };
 		9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */; };
-		9EEAC5112BA4852C0053C65E /* FillTypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5102BA4852C0053C65E /* FillTypePickerView.swift */; };
 		9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5142BA489D30053C65E /* AllFillupsListView.swift */; };
 		9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5162BA48A7E0053C65E /* FillupDetailView.swift */; };
 		9EEAC5192BA48D720053C65E /* AddEditFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5182BA48D720053C65E /* AddEditFillupView.swift */; };
@@ -210,7 +209,6 @@
 		9EEAC5052BA38B8E0053C65E /* FillupsDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupsDashboardView.swift; sourceTree = "<group>"; };
 		9EEAC5072BA38BC20053C65E /* EmptyFillupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyFillupsView.swift; sourceTree = "<group>"; };
 		9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillTypeInfoView.swift; sourceTree = "<group>"; };
-		9EEAC5102BA4852C0053C65E /* FillTypePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillTypePickerView.swift; sourceTree = "<group>"; };
 		9EEAC5142BA489D30053C65E /* AllFillupsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFillupsListView.swift; sourceTree = "<group>"; };
 		9EEAC5162BA48A7E0053C65E /* FillupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupDetailView.swift; sourceTree = "<group>"; };
 		9EEAC5182BA48D720053C65E /* AddEditFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditFillupView.swift; sourceTree = "<group>"; };
@@ -514,7 +512,6 @@
 			children = (
 				9E620BF52BC04531005E16DD /* DraftFillup.swift */,
 				9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */,
-				9EEAC5102BA4852C0053C65E /* FillTypePickerView.swift */,
 				9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */,
 				9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */,
 			);
@@ -752,7 +749,6 @@
 				9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */,
 				9EEAC4E62BA364AA0053C65E /* CustomInfo+helper.swift in Sources */,
 				9EEAC5192BA48D720053C65E /* AddEditFillupView.swift in Sources */,
-				9EEAC5112BA4852C0053C65E /* FillTypePickerView.swift in Sources */,
 				9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */,
 				9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */,
 				9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */,

@@ -70,7 +70,7 @@ struct AddEditFillupView: View {
                     }
                     .foregroundStyle(Color.secondary)
                     
-                    FillTypePicker(fillType: $draftFillup.fillType, showingFillTypeInfo: $showingFillTypeInfo)
+                    fillTypePicker
                 } footer: {
                     Button("About fill types...") { showingFillTypeInfo = true }
                         .font(.footnote)
@@ -142,6 +142,19 @@ struct AddEditFillupView: View {
         } else {
             return (cost / (draftFillup.volume ?? 0)).asCurrency()
         }
+    }
+    
+    // Allows the user to specify a fill type for a given fill-up
+    private var fillTypePicker: some View {
+        LabeledInput(label: "Fill Type") {
+            Picker("Select a Fill Type", selection: $draftFillup.fillType) {
+                ForEach(FillType.allCases, id: \.self) { fillupType in
+                    Text(fillupType.rawValue)
+                }
+            }
+            .labelsHidden()
+        }
+        .buttonStyle(.plain)
     }
 }
 
