@@ -39,7 +39,7 @@ struct AddEditServiceView: View {
     var body: some View {
         NavigationStack {
             Form {
-                AddEditFormSymbol(symbolName: "book.and.wrench.fill", text: service != nil ? "Edit Service" : "New Service", accentColor: Color.maintenanceTheme)
+                FormHeaderView(symbolName: "book.and.wrench", primaryText: service != nil ? "Edit Service" : "New Service", accentColor: Color.maintenanceTheme)
                 
                 Section {
                     LabeledInput(label: "Service Name") {
@@ -122,7 +122,6 @@ struct AddEditServiceView: View {
                 
             }
             .scrollDismissesKeyboard(.interactively)
-//            .navigationTitle(service != nil ? "Edit Service" : "New Service")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if service == nil {

@@ -34,7 +34,7 @@ struct AddEditRepairView: View {
     var body: some View {
         NavigationStack {
             Form {
-                AddEditFormSymbol(symbolName: "wrench.adjustable.fill", text: repair != nil ? "Edit Repair" : "New Repair", accentColor: Color.repairsTheme)
+                FormHeaderView(symbolName: "wrench.adjustable.fill", primaryText: repair != nil ? "Edit Repair" : "New Repair", accentColor: Color.repairsTheme)
                 
                 Section {
                     DatePicker("Date", selection: $draftRepair.date, displayedComponents: .date)
@@ -65,7 +65,6 @@ struct AddEditRepairView: View {
                 )
             }
             .scrollDismissesKeyboard(.interactively)
-//            .navigationTitle(repair != nil ? "Edit Repair" : "New Repair")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if repair == nil {

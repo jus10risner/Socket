@@ -10,7 +10,7 @@
 		9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */; };
 		9E0B19B52EAA7FF800E7A820 /* InformationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */; };
 		9E0B19B72EAA87C500E7A820 /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */; };
-		9E1528852EB917DB005170AB /* AddEditFormSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1528842EB917DB005170AB /* AddEditFormSymbol.swift */; };
+		9E1528852EB917DB005170AB /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1528842EB917DB005170AB /* FormHeaderView.swift */; };
 		9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */; };
 		9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */; };
 		9E187C152EA004C700FBDAC9 /* ToolbarSubtitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */; };
@@ -122,7 +122,7 @@
 		9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExportRecord.swift; sourceTree = "<group>"; };
 		9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationItemView.swift; sourceTree = "<group>"; };
 		9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
-		9E1528842EB917DB005170AB /* AddEditFormSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditFormSymbol.swift; sourceTree = "<group>"; };
+		9E1528842EB917DB005170AB /* FormHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHeaderView.swift; sourceTree = "<group>"; };
 		9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveTint.swift; sourceTree = "<group>"; };
 		9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSubtitle.swift; sourceTree = "<group>"; };
@@ -314,7 +314,7 @@
 				9E187C142EA004C700FBDAC9 /* ToolbarSubtitle.swift */,
 				9E02BAF92E45237C00D45FA3 /* Export */,
 				9E87C5B52E4235CF001BE562 /* FormFooterView.swift */,
-				9E1528842EB917DB005170AB /* AddEditFormSymbol.swift */,
+				9E1528842EB917DB005170AB /* FormHeaderView.swift */,
 			);
 			path = Misc.;
 			sourceTree = "<group>";
@@ -720,7 +720,7 @@
 				9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */,
 				9E5270E02E8AF82300EFDCB8 /* FuelCostSettingsView.swift in Sources */,
 				9EE5620D2BD9706600F5BE7E /* VehicleListRowView.swift in Sources */,
-				9E1528852EB917DB005170AB /* AddEditFormSymbol.swift in Sources */,
+				9E1528852EB917DB005170AB /* FormHeaderView.swift in Sources */,
 				9E620C092BC08194005E16DD /* AddEditVehicleImageView.swift in Sources */,
 				9EEAC4EE2BA374D70053C65E /* CustomInfoDetailView.swift in Sources */,
 				9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */,

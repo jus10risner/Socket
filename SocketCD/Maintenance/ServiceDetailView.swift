@@ -18,6 +18,13 @@ struct ServiceDetailView: View {
     
     var body: some View {
         List {
+            FormHeaderView(symbolName: "book.and.wrench", primaryText: service.name, secondaryText: "Due every \(service.intervalDescription)", accentColor: Color.maintenanceTheme) {
+                Button("Edit") {
+                    showingEditService = true
+                }
+                .tint(Color.maintenanceTheme)
+            }
+            
             Section {
                 LabeledContent("Next Due") {
                     if !service.sortedServiceRecordsArray.isEmpty {
@@ -39,20 +46,7 @@ struct ServiceDetailView: View {
                             .textSelection(.enabled)
                     }
                 }
-            } header: {
-                ContentUnavailableView {
-                    Text(service.name)
-                        .font(.title2.bold())
-                } description: {
-                    Text("Due every \(service.intervalDescription)")
-                } actions: {
-                    Button("Edit") {
-                        showingEditService = true
-                    }
-                    .buttonStyle(.bordered)
-                }
             }
-            .headerProminence(.increased)
             
             if !service.sortedServiceRecordsArray.isEmpty && !service.sortedServiceRecordsArray.contains(where: { $0.serviceLog?.isBaseline == true }) {
                 Section("Service History") {
@@ -84,7 +78,8 @@ struct ServiceDetailView: View {
                 Button("Add Service Log", systemImage: "plus") {
                     showingAddRecord = true
                 }
-                .adaptiveTint()
+//                .adaptiveTint()
+                .tint(.primary)
             }
         }
     }

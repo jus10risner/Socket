@@ -40,7 +40,7 @@ struct AddEditFillupView: View {
     var body: some View {
         NavigationStack {
             Form {
-                AddEditFormSymbol(symbolName: "fuelpump.fill", text: fillup != nil ? "Edit Fill-up" : "New Fill-up", accentColor: Color.fillupsTheme)
+                FormHeaderView(symbolName: "fuelpump.fill", primaryText: fillup != nil ? "Edit Fill-up" : "New Fill-up", accentColor: Color.fillupsTheme)
                 
                 Section {
                     DatePicker("Fill-up Date", selection: $draftFillup.date, displayedComponents: .date)
@@ -87,7 +87,6 @@ struct AddEditFillupView: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .sheet(isPresented: $showingFillTypeInfo) { FillTypeInfoView() }
-//            .navigationTitle(fillup != nil ? "Edit Fill-up" : "New Fill-up")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if fillup == nil {
