@@ -59,8 +59,6 @@ struct ServiceDetailView: View {
                     }
                 }
                 .textCase(nil)
-            } else {
-                serviceRecordHint
             }
         }
         .navigationTitle("Service Info")
@@ -111,30 +109,6 @@ struct ServiceDetailView: View {
             .padding(.horizontal, 2)
             .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder())
             .accessibilityLabel("Odometer")
-    }
-    
-    // Hint for adding a new service record
-    private var serviceRecordHint: some View {
-        Section {
-            HStack(spacing: 3) {
-                Text("Tap")
-                
-                Button("Add Service Record", systemImage: "plus") {
-                    showingAddRecord = true
-                }
-                .font(.title3)
-                .labelStyle(.iconOnly)
-                
-                Text("to add a new service record")
-            }
-            .frame(maxWidth: .infinity)
-            .padding(20)
-            .font(.subheadline)
-            .foregroundStyle(.white)
-            .accessibilityElement()
-            .accessibilityLabel("Tap the Add Service Record button, to add a service record")
-        }
-        .listRowBackground(Color(.socketPurple))
     }
 }
 
