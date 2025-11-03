@@ -12,13 +12,19 @@ struct EmptyRepairsView: View {
     
     var body: some View {
         ContentUnavailableView {
-            Label("No Repairs", systemImage: "wrench.adjustable")
+            Label {
+                Text("No Repairs")
+            } icon: {
+                Image(systemName: "wrench.adjustable")
+                    .foregroundStyle(Color(.repairsTheme))
+            }
         } description: {
-            Text("Tap the plus button to add one")
+            Text("Tap the plus button to add a repair.")
         } actions: {
             Button("Learn More") {
                 showingMoreInfo = true
             }
+            .tint(Color(.repairsTheme))
             .popover(isPresented: $showingMoreInfo) {
                 Text("""
                 Repairs, like replacing brake pads or a failing alternator, are done as-needed rather than on a schedule. 

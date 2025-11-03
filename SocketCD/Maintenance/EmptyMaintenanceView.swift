@@ -12,14 +12,20 @@ struct EmptyMaintenanceView: View {
     
     var body: some View {
         ContentUnavailableView {
-            Label("No Maintenance Services", systemImage: "book.and.wrench")
+            Label {
+                Text("No Maintenance Services")
+            } icon: {
+                Image(systemName: "book.and.wrench")
+                    .foregroundStyle(Color(.maintenanceTheme))
+            }
         } description: {
-            Text("Tap the book button in the top-right corner to set up a service.")
+            Text("Tap the book button at the top of the screen to set up a service.")
                 .accessibilityHidden(true)
         } actions: {
             Button("Learn More") {
                 showingMoreInfo = true
             }
+            .tint(Color(.maintenanceTheme))
             .popover(isPresented: $showingMoreInfo) {
                 Text("""
                 Keep your vehicle running smoothly with regular maintenance, like oil changes and air filter replacements.
