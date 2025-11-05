@@ -22,11 +22,11 @@ struct WhatsNewView: View {
             .font(.title.bold())
             
             VStack(alignment: .leading) {
-                InformationItemView(title: "Dashboard View", description: "See important info and quickly add records, all from one place.", imageName: "rectangle.3.group", accentColor: Color.accent)
+                InformationItemView(title: "Now on iPad", description: "Explore your vehicle data with more room to see everything at a glance.", imageName: "ipad.landscape.and.iphone", accentColor: Color.accent)
                 
-                InformationItemView(title: "Log Multiple Services", description: "Select multiple services to log at once, with shared notes, photos, and more.", imageName: "circle.grid.2x2.topleft.checkmark.filled", accentColor: Color.accent)
+                InformationItemView(title: "Dashboard View", description: "See important vehicle info and quickly add records, all from one place.", imageName: "rectangle.3.group", accentColor: Color.accent)
                 
-                InformationItemView(title: "New Maintenance Indicator", description: "Visualize the time or distance left until service, with a new gauge view.", imageName: "book.and.wrench", accentColor: Color.accent)
+                InformationItemView(title: "Log Multiple Services", description: "Select multiple maintenance services to log at once, with shared notes and more.", imageName: "circle.grid.2x2.topleft.checkmark.filled", accentColor: Color.accent)
             }
             .padding(.horizontal)
             
