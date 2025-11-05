@@ -54,13 +54,14 @@ struct RepairsListView: View {
                     Button("Add New Repair", systemImage: "plus", role: .confirm) {
                         showingAddRepair = true
                     }
-                    .tint(Color(.repairsTheme))
+                    .tint(Color.repairsTheme)
                 }
             } else {
                 ToolbarItem {
                     Button("Add New Repair", systemImage: "plus") {
                         showingAddRepair = true
                     }
+                    .tint(Color.repairsTheme)
                 }
             }
         }

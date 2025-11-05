@@ -80,13 +80,14 @@ struct FillupsDashboardView: View {
                     Button("Add Fill-up", systemImage: "plus", role: .confirm) {
                         showingAddFillup = true
                     }
-                    .tint(Color(.fillupsTheme))
+                    .tint(Color.fillupsTheme)
                 }
             } else {
                 ToolbarItem {
                     Button("Add Fill-up", systemImage: "plus") {
                         showingAddFillup = true
                     }
+                    .tint(Color.fillupsTheme)
                 }
             }
         }

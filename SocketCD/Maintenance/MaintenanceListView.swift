@@ -78,7 +78,8 @@ struct MaintenanceListView: View {
                         Image("book.badge.plus")
                     })
                 }
-                .adaptiveTint()
+//                .adaptiveTint()
+                .tint(Color.primary)
             }
             
             if #available(iOS 26, *) {
@@ -88,7 +89,7 @@ struct MaintenanceListView: View {
                     Button("Log Service", systemImage: "plus", role: .confirm) {
                         showingLogService = true
                     }
-                    .tint(Color(.maintenanceTheme))
+                    .tint(Color.maintenanceTheme)
                     .disabled(services.isEmpty)
                 }
             } else {
@@ -96,6 +97,7 @@ struct MaintenanceListView: View {
                     Button("Log Service", systemImage: "plus") {
                         showingLogService = true
                     }
+                    .tint(Color.maintenanceTheme)
                     .disabled(services.isEmpty)
                 }
             }
