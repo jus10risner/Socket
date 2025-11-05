@@ -8,13 +8,21 @@
 import SwiftUI
 
 struct AppIconSelectorView: View {
+    @Environment(\.colorScheme) var colorScheme
     @AppStorage("appIcon") var appIcon: AppIcon?
     
     var body: some View {
         List {
-            iconOptions
+            Picker("Icons", selection: $appIcon) {
+                iconLabel(title: "Socket Purple", iconName: "Primary Icon")
+                    .tag(nil as AppIcon?)
                 
-            classicIcons
+                ForEach(AppIcon.allCases, id: \.self) { icon in
+                    iconLabel(title: "\(icon.rawValue)", iconName: "\(icon.rawValue) Icon")
+                        .tag(icon) // This connects the row to the selection binding
+                }
+            }
+            .labelsHidden()
         }
         .pickerStyle(.inline)
         .navigationTitle("App Icon")
@@ -26,29 +34,6 @@ struct AppIconSelectorView: View {
     
     
     // MARK: - Views
-    
-    private var iconOptions: some View {
-        Picker("Icons", selection: $appIcon) {
-            iconLabel(title: "Socket Purple", iconName: "Primary Icon")
-                .tag(nil as AppIcon?)
-            
-            ForEach(AppIcon.allCases.filter { !$0.isClassic }, id: \.self) { icon in
-                iconLabel(title: "\(icon.rawValue)", iconName: "\(icon.rawValue) Icon")
-                    .tag(icon) // This connects the row to the selection binding
-            }
-        }
-        .labelsHidden()
-    }
-    
-    // Icons from the original version of Socket
-    private var classicIcons: some View {
-        Picker("Classic Icons", selection: $appIcon) {
-            ForEach(AppIcon.allCases.filter({ $0.isClassic }), id: \.self) { icon in
-                iconLabel(title: "\(icon.rawValue)", iconName: "\(icon.rawValue) Icon")
-                    .tag(icon)
-            }
-        }
-    }
     
     private func iconLabel(title: String, iconName: String) -> some View {
         Label {
@@ -62,7 +47,17 @@ struct AppIconSelectorView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(.black.opacity(0.3), lineWidth: 0.5)
+                        .stroke(Color.secondary, lineWidth: 0.2)
+                )
+                .environment(\.colorScheme,
+                    {
+                        if #available(iOS 18, *) {
+                            return colorScheme
+                        } else {
+                            // iOS 17: force light mode only
+                            return .light
+                        }
+                    }()
                 )
         }
         .padding(8)
