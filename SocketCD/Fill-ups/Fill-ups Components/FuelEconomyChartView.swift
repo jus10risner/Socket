@@ -14,6 +14,7 @@ struct FuelEconomyChartView: View {
     let averageFuelEconomy: Double
     
     @Binding var selectedDateRange: DateRange
+    @Binding var showingAverage: Bool
     @State private var selectedDate: Date?
     
     private var selectedFillup: Fillup? { // Used to populate information in the annotation
@@ -24,6 +25,14 @@ struct FuelEconomyChartView: View {
     
     var body: some View {
         Chart {
+            ForEach(data) { fillup in
+                LineMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
+                
+                PointMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
+                    .opacity(data.count == 1 ? 1 : 0) // Vislble only when a single data point is available; also serves to make animation between data sets more fluid
+            }
+            .foregroundStyle(showingAverage ? Color.secondary.opacity(0.5) : Color.fillupsTheme)
+            
             if let selectedFillup {
                 RuleMark(x: .value("Selected Fill-up", selectedFillup.date))
                     .foregroundStyle(Color.secondary.opacity(0.3))
@@ -47,23 +56,23 @@ struct FuelEconomyChartView: View {
                     .foregroundStyle(Color(.fillupsTheme))
             }
             
-            ForEach(data) { fillup in
-                LineMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
-                
-                PointMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
-                    .opacity(data.count == 1 ? 1 : 0) // Vislble only when a single data point is available; also serves to make animation between data sets more fluid
+            if showingAverage {
+                RuleMark(y: .value("Average", averageFuelEconomy))
+                    .foregroundStyle(Color.fillupsTheme)
             }
-            .foregroundStyle(Color(.fillupsTheme))
-            
-            
         }
         .animation(.easeInOut, value: selectedDateRange)
+        .animation(.easeInOut, value: showingAverage)
         .chartYScale(domain: yRange)
         .chartYAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
         .chartXAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
         .chartXScale(domain: xRange)
         .chartXSelection(value: $selectedDate)
         .frame(minHeight: 200)
+        .chartPlotStyle { proxy in
+            proxy
+                .background(Color(.systemGroupedBackground).opacity(0.3))
+        }
     }
     
     // The horizontal scale of the chart

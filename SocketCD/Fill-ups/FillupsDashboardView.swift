@@ -26,6 +26,7 @@ struct FillupsDashboardView: View {
     @State private var showingAddFillup = false
     @State private var showingFuelEconomyInfo = false
     @State private var selectedDateRange: DateRange = .sixMonths
+    @State private var showingAverage: Bool = false
     
     var body: some View {
         ZStack {
@@ -33,31 +34,57 @@ struct FillupsDashboardView: View {
                 EmptyFillupsView()
             } else {
                 List {
-                    VStack(spacing: 10) {
+                    VStack(spacing: 15) {
                         latestFillupInfo
-                            .padding(.bottom, 10)
                         
                         if data.count == 0 {
                             emptyChartView
                         } else {
-                            FuelEconomyChartView(data: data, averageFuelEconomy: averageFuelEconomy, selectedDateRange: $selectedDateRange)
-                            
-                            Picker("Date Range", selection: $selectedDateRange) {
-                                ForEach(DateRange.allCases, id: \.self) {
-                                    Text($0.rawValue)
+                            VStack(spacing: 15) {
+                                FuelEconomyChartView(data: data, averageFuelEconomy: averageFuelEconomy, selectedDateRange: $selectedDateRange, showingAverage: $showingAverage)
+                                
+                                Picker("Date Range", selection: $selectedDateRange) {
+                                    ForEach(DateRange.allCases, id: \.self) {
+                                        Text($0.rawValue)
+                                    }
                                 }
+                                .pickerStyle(.segmented)
+                                
+                                Button {
+                                    showingAverage.toggle()
+                                } label: {
+                                    HStack {
+                                        Text("Average")
+                                        
+                                        Spacer()
+                                        
+                                        HStack(spacing: 3) {
+                                            Text("\(averageFuelEconomy, specifier: "%.1f")")
+                                                .bold()
+                                            
+                                            Text("\(settings.fuelEconomyUnit.rawValue)")
+                                                .bold()
+                                                .foregroundStyle(showingAverage ? Color.white : Color.secondary)
+                                        }
+                                        
+                                    }
+                                    .contentShape(Rectangle())
+                                    .font(.subheadline)
+                                    .foregroundStyle(showingAverage ? Color.white : Color.primary)
+                                    .padding(.vertical, 9)
+                                    .padding(.horizontal, 15)
+                                    .background(
+                                        RoundedRectangle.adaptive
+                                            .fill(showingAverage ? Color.fillupsTheme : Color.clear)
+                                            .stroke(showingAverage ? Color.clear : Color.secondary, lineWidth: 0.5)
+                                    )
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .pickerStyle(.segmented)
-                            
-                            Divider().frame(height: 0)
-                            
-                            LabeledContent("Average") {
-                                Text("\(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                            }
-                            .padding(.top, 5)
                         }
                     }
-                    .padding(.vertical, 10)
+                    .listRowInsets(EdgeInsets())
+                    .padding(15)
                     
                     Section {
                         NavigationLink {
@@ -112,8 +139,14 @@ struct FillupsDashboardView: View {
                 let economy = latestFillup.fuelEconomy(settings: settings)
                 
                 if economy > 0 {
-                    Text("\(economy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                        .font(.title2.bold())
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
+                        Text("\(economy, specifier: "%.1f")")
+                            .font(.title2.bold())
+                        
+                        Text("\(settings.fuelEconomyUnit.rawValue)")
+                            .font(.title3.bold())
+                            .foregroundStyle(Color.secondary)
+                    }
                 } else {
                     HStack(spacing: 3) {
                         Group {
