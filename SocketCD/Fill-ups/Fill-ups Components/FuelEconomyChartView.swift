@@ -29,15 +29,18 @@ struct FuelEconomyChartView: View {
                     .foregroundStyle(Color.secondary.opacity(0.3))
                     .annotation(position: .top, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
                         VStack(spacing: 2) {
+                            Text("\(selectedFillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                                .font(.headline)
+                            
                             Text(selectedFillup.date.formatted(date: .numeric, time: .omitted))
                                 .font(.caption)
-                            
-                            Text("\(selectedFillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                                .font(.footnote.bold())
+                                .foregroundStyle(Color.secondary)
                         }
-                        .foregroundStyle(Color.white)
                         .padding()
-                        .background(RoundedRectangle.adaptive.fill(Color(.fillupsTheme).gradient))
+                        .background(
+                            RoundedRectangle.adaptive
+                                .fill(Color(.tertiarySystemGroupedBackground))
+                        )
                     }
                 
                 PointMark(x: .value("Date", selectedFillup.date), y: .value("Fuel Economy", selectedFillup.fuelEconomy(settings: settings)))
