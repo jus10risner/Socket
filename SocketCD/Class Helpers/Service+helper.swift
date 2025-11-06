@@ -348,7 +348,7 @@ extension Service {
                let alertDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeMaintenance, to: dateDue),
                dateDue > now, alertDate > now {
 
-                if !pendingIDs.contains(self.timeBasedNotificationIdentifier) {
+                if !pendingIDs.contains(self.timeBasedNotificationIdentifier) && !self.notificationScheduled {
                     self.scheduleNotificationOnDate(alertDate, for: vehicle) {
                         didSchedule = true
                         self.saveNotificationFlagIfNeeded(didSchedule, context: context)
@@ -363,7 +363,7 @@ extension Service {
             if let odometerDue = self.odometerDue {
                 let distanceRemaining = odometerDue - vehicle.odometer
                 if distanceRemaining <= settings.distanceBeforeMaintenance, distanceRemaining >= 0 {
-                    if !pendingIDs.contains(self.distanceBasedNotificationIdentifier) {
+                    if !pendingIDs.contains(self.distanceBasedNotificationIdentifier) && !self.notificationScheduled {
                         self.scheduleNotificationMomentarily(for: vehicle) {
                             didSchedule = true
                             self.saveNotificationFlagIfNeeded(didSchedule, context: context)
@@ -376,7 +376,7 @@ extension Service {
             }
 
             // If nothing was scheduled and both are no longer valid
-            if !didSchedule {
+            if !didSchedule && self.serviceStatus == .notDue {
                 DispatchQueue.main.async {
                     let context = DataController.shared.container.viewContext
                     self.notificationScheduled = false
