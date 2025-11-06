@@ -46,7 +46,14 @@ struct FillupsCard: View {
                             if fillup.fuelEconomy(settings: settings) > 0 {
                                 Text("\(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
                             } else {
-                                Text(fillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "– \(settings.fuelEconomyUnit.rawValue)")
+                                switch fillup.fillType {
+                                case .fullTank:
+                                    Text(fillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "Full Tank")
+                                case .partialFill:
+                                    Text("Partial Fill")
+                                case .missedFill:
+                                    Text("Full Tank (Reset)")
+                                }
                             }
                         }
                         .font(.headline)

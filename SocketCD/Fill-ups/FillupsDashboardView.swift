@@ -33,8 +33,9 @@ struct FillupsDashboardView: View {
                 EmptyFillupsView()
             } else {
                 List {
-                    VStack {
-                        headlineGroup
+                    VStack(spacing: 10) {
+                        latestFillupInfo
+                            .padding(.bottom, 10)
                         
                         if data.count == 0 {
                             emptyChartView
@@ -96,10 +97,10 @@ struct FillupsDashboardView: View {
     
     // MARK: - Views
     
-    // View that groups the trend arrow, fuel economy info, and headline into one element
-    private var headlineGroup: some View {
+    // Includes a "Learn More" popover, when fuel economy is 0
+    private var latestFillupInfo: some View {
         VStack(alignment: .leading, spacing: 0) {
-            LabeledContent("Latest") {
+            LabeledContent("Latest Fill-up") {
                 guard let date = fillups.first?.date else { return Text("") }
                     
                 return Text(date.formatted(date: .numeric, time: .omitted))
@@ -115,14 +116,24 @@ struct FillupsDashboardView: View {
                         .font(.title2.bold())
                 } else {
                     HStack(spacing: 3) {
-                        Text("– \(settings.fuelEconomyUnit.rawValue)")
-                            .font(.title2.bold())
+                        Group {
+                            switch latestFillup.fillType {
+                            case .fullTank:
+                                Text(latestFillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "Full Tank")
+                            case .partialFill:
+                                Text("Partial Fill")
+                            case .missedFill:
+                                Text("Full Tank (Reset)")
+                            }
+                        }
+                        .font(.title2.bold())
                         
                         Button("Learn More", systemImage: "info.circle") {
                             showingFuelEconomyInfo = true
                         }
                         .labelStyle(.iconOnly)
                         .buttonStyle(.borderless)
+                        .tint(Color.fillupsTheme)
                         .popover(isPresented: $showingFuelEconomyInfo) {
                             Text("Fuel economy is calculated only when there are at least two **Full Tank** fill-ups. Partial or missed fill-ups are not included.")
                                 .font(.subheadline)
