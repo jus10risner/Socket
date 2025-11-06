@@ -138,33 +138,42 @@ struct FillupsDashboardView: View {
     
     // Displayed when no data points exist to place on the chart
     private var emptyChartView: some View {
-        VStack {
+        let isFullTank = fillups.contains(where: { $0.fillType == .fullTank })
+        
+        return VStack(spacing: 5) {
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.system(size: 40))
                 .foregroundStyle(Color(.fillupsTheme))
                 .frame(height: 50)
             
-            if fillups.contains(where: { $0.fillType == .fullTank }) {
-                Text("One more fill-up needed")
-                    .font(.title2.bold())
-                    .foregroundStyle(Color.primary)
-                
-                Text("Add another **Full Tank** fill-up to see your fuel economy chart.")
-                    .font(.footnote)
-                    .foregroundStyle(Color.secondary)
-                    .multilineTextAlignment(.center)
-            } else {
-                Text("One full tank, please")
-                    .font(.title2.bold())
-                    .foregroundStyle(Color.primary)
-                
-                Text("Fuel economy can only be calculated between **Full Tanks** of fuel.")
-                    .font(.footnote)
-                    .foregroundStyle(Color.secondary)
-                    .multilineTextAlignment(.center)
+            Group {
+                if isFullTank {
+                    Text("Just one more fill-up")
+                } else {
+                    Text("Let’s start with a full tank")
+                }
             }
+            .font(.title2.bold())
+            .foregroundStyle(Color.primary)
+            
+            Group {
+                if isFullTank {
+                    Text("Add one more **Full Tank** to see your fuel economy chart.")
+                } else {
+                    Text("Fuel economy is measured between **Full Tank** fill-ups.")
+                }
+            }
+            .font(.subheadline)
+            .foregroundStyle(Color.secondary)
+            .multilineTextAlignment(.center)
         }
+        .padding(.horizontal)
         .frame(height: 200)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle.adaptive
+                .fill(Color(.tertiarySystemGroupedBackground))
+        )
     }
     
     // Determines which data points to plot (excludes those with fuel economy of 0)
