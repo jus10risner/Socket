@@ -52,7 +52,6 @@ struct VehicleDashboardView: View {
             .padding(.horizontal)
             .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))
-//            .background(GradientBackground())
             .navigationTitle(vehicle.name)
             .navigationDestination(item: $selectedSection) { section in
                 destinationView(for: section, vehicle: vehicle)
@@ -118,14 +117,15 @@ struct VehicleDashboardView: View {
             Label("Activity Timeline", systemImage: "list.bullet")
             Text("Maintenance and Repairs")
         }
-
     }
     
     @ToolbarContentBuilder
     private var vehicleToolbar: some ToolbarContent {
         ToolbarItem {
             Menu("Vehicle Options", systemImage: "ellipsis") {
-                timelineButton
+                if !vehicle.groupedServiceAndRepairTimeline.isEmpty {
+                    timelineButton
+                }
                 
                 exportMenu
                 
@@ -203,32 +203,6 @@ struct VehicleDashboardView: View {
         }
     }
 }
-
-// Creates a gradient background, with backgroundExtensionEffect applied on iOS 26+ (for iPad use)
-//struct GradientBackground: View {
-//    var body: some View {
-//        let gradient = LinearGradient(
-//            colors: [
-//                Color.indigo.opacity(0.5),
-//                Color(.systemGroupedBackground),
-//                Color(.systemGroupedBackground),
-//                Color(.systemGroupedBackground)
-//            ],
-//            startPoint: .top,
-//            endPoint: .bottom
-//        )
-//
-//        Group {
-//            if #available(iOS 26, *) {
-//                gradient.backgroundExtensionEffect()
-//            } else {
-//                gradient
-//            }
-//        }
-//        .background(.ultraThinMaterial)
-//        .ignoresSafeArea()
-//    }
-//}
 
 // Allows ActivityView to work with the .sheet(item:) modifier (requires a URL with Identifiable conformance)
 struct ShareItem: Identifiable {
