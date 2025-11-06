@@ -26,13 +26,15 @@ struct FormHeaderView<Content: View>: View {
         Section {
             VStack(spacing: 10) {
                 Image(systemName: symbolName)
-                    .font(.largeTitle)
+                    .font(.title)
                     .foregroundStyle(accentColor)
+                    .padding()
+                    .background(Color(.tertiarySystemBackground), in: Circle())
                     .accessibilityHidden(true)
                 
                 VStack(spacing: 0) {
                     Text(primaryText)
-                        .font(.title2.bold())
+                        .font(.title3.bold())
                     
                     if let secondaryText {
                         Text(secondaryText)
