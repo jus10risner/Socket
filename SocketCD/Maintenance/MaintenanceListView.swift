@@ -49,7 +49,6 @@ struct MaintenanceListView: View {
             }
         }
         .navigationTitle("Maintenance")
-        .toolbarSubtitle(vehicle.name)
         .listRowSpacing(5)
         .overlay {
             if showingFirstServiceInfo == true {
@@ -82,23 +81,14 @@ struct MaintenanceListView: View {
                 .tint(Color.primary)
             }
             
+            AdaptiveToolbarButton(title: "Log Service", tint: Color.maintenanceTheme, disabled: services.isEmpty) {
+                showingLogService = true
+            }
+            
             if #available(iOS 26, *) {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Spacer()
-                    
-                    Button("Log Service", systemImage: "plus", role: .confirm) {
-                        showingLogService = true
-                    }
-                    .tint(Color.maintenanceTheme)
-                    .disabled(services.isEmpty)
-                }
-            } else {
-                ToolbarItem {
-                    Button("Log Service", systemImage: "plus") {
-                        showingLogService = true
-                    }
-                    .tint(Color.maintenanceTheme)
-                    .disabled(services.isEmpty)
+                ToolbarItem(placement: .principal) {
+                    Text(vehicle.name)
+                        .multilineTextAlignment(.center)
                 }
             }
         }
