@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E00C4C62EBE9B8600B3E88F /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E00C4C52EBE9B8600B3E88F /* TermsOfUseView.swift */; };
 		9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */; };
 		9E0B19B52EAA7FF800E7A820 /* InformationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */; };
 		9E0B19B72EAA87C500E7A820 /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */; };
@@ -119,6 +120,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9E00C4C52EBE9B8600B3E88F /* TermsOfUseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseView.swift; sourceTree = "<group>"; };
 		9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExportRecord.swift; sourceTree = "<group>"; };
 		9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationItemView.swift; sourceTree = "<group>"; };
 		9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
@@ -457,6 +459,7 @@
 			children = (
 				9EEAC4C52BA253950053C65E /* WelcomeView.swift */,
 				9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */,
+				9E00C4C52EBE9B8600B3E88F /* TermsOfUseView.swift */,
 				9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */,
 				9E7507562BF50FB9000E25BD /* OnboardingTips.swift */,
 				9E312D762BF2924B0069CBFF /* MaintenanceOnboardingView.swift */,
@@ -668,6 +671,7 @@
 			files = (
 				9E7507572BF50FB9000E25BD /* OnboardingTips.swift in Sources */,
 				9EEAC5012BA389020053C65E /* Service+helper.swift in Sources */,
+				9E00C4C62EBE9B8600B3E88F /* TermsOfUseView.swift in Sources */,
 				9EEAC51E2BA4A2280053C65E /* MaintenanceListView.swift in Sources */,
 				9EEAC4BE2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift in Sources */,
 				9EEAC4D72BA332E50053C65E /* VehicleListView.swift in Sources */,
