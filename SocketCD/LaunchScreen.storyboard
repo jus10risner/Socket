@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -25,11 +25,11 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N95-TQ-tsH">
                                 <rect key="frame" x="0.0" y="118" width="393" height="666"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Primary Icon" translatesAutoresizingMaskIntoConstraints="NO" id="JN4-b7-sEx">
-                                        <rect key="frame" x="159" y="295.66666666666669" width="75" height="75"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launch Glyph" translatesAutoresizingMaskIntoConstraints="NO" id="JN4-b7-sEx">
+                                        <rect key="frame" x="146" y="283" width="100" height="100"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="75" id="4az-3O-olk"/>
-                                            <constraint firstAttribute="height" constant="75" id="8U8-G9-3dY"/>
+                                            <constraint firstAttribute="width" constant="100" id="4az-3O-olk"/>
+                                            <constraint firstAttribute="height" constant="100" id="8U8-G9-3dY"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
@@ -59,7 +59,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Primary Icon" width="341.33334350585938" height="341.33334350585938"/>
+        <image name="Launch Glyph" width="341.33334350585938" height="341.33334350585938"/>
         <systemColor name="systemGroupedBackgroundColor">
             <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
