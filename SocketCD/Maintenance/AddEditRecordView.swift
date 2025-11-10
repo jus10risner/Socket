@@ -41,6 +41,9 @@ struct AddEditRecordView: View {
                 FormHeaderView(symbolName: "book.and.wrench.fill", primaryText: record != nil ? "Edit Service Log" : "New Service Log", accentColor: Color.maintenanceTheme)
                 
                 Section {
+                    DatePicker("Service Date", selection: $draftServiceLog.date, displayedComponents: .date)
+                        .foregroundStyle(Color.secondary)
+                    
                     NavigationLink {
                         SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
                     } label: {
@@ -55,9 +58,6 @@ struct AddEditRecordView: View {
                             .multilineTextAlignment(.leading)
                         }
                     }
-                    
-                    DatePicker("Service Date", selection: $draftServiceLog.date, displayedComponents: .date)
-                        .foregroundStyle(Color.secondary)
                     
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftServiceLog.odometer, format: .number.decimalSeparator(strategy: .automatic))
