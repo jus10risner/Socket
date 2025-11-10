@@ -19,8 +19,8 @@ struct InformationItemView: View {
                 .font(.title)
                 .foregroundColor(accentColor)
                 .symbolRenderingMode(.monochrome)
-                .frame(width: 30)
-                .padding()
+                .frame(width: 36, alignment: .center)
+                .padding(.trailing, 8)
                 .accessibility(hidden: true)
 
             VStack(alignment: .leading) {
@@ -28,14 +28,17 @@ struct InformationItemView: View {
                     .font(.headline)
                     .foregroundColor(.primary)
                     .accessibility(addTraits: .isHeader)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 Text(description)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
+                    .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
             }
+            .layoutPriority(1)
         }
-        .padding(.top)
     }
 }
 
