@@ -34,7 +34,7 @@ struct FormHeaderView<Content: View>: View {
                 
                 VStack(spacing: 0) {
                     Text(primaryText)
-                        .font(.title3.bold())
+                        .font(secondaryText == nil ? .headline : .title3.bold())
                     
                     if let secondaryText {
                         Text(secondaryText)

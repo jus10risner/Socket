@@ -16,7 +16,7 @@ struct FillTypeInfoView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Full Tank")
-                            .font(.title3.bold())
+                            .font(.headline)
                         
                         Text("Select this fill type if you have filled your fuel tank completely. To track fuel economy accurately, it is important to always try to use Full Tank fill-ups.")
                     }
@@ -25,7 +25,7 @@ struct FillTypeInfoView: View {
                     
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Partial Fill")
-                            .font(.title3.bold())
+                            .font(.headline)
                         
                         Text("Select this fill type if fuel was added, but the fuel tank is not completely full. Fuel economy will not be calculated for this fill-up, but will resume after your next Full Tank fill-up.")
                     }
@@ -34,7 +34,7 @@ struct FillTypeInfoView: View {
                     
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Missed Fill-up (Full Tank)")
-                            .font(.title3.bold())
+                            .font(.headline)
                         
                         Text("Select this fill type if you forgot to add one or more recent fill-ups to Socket. Fuel economy calculation will resume after your next Full Tank fill-up.")
                         
