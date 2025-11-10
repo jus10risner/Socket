@@ -37,6 +37,8 @@ struct AdaptiveToolbarButton: ToolbarContent {
                 Button(title, systemImage: "plus") {
                     action()
                 }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.circle)
                 .tint(tint)
                 .disabled(disabled)
             }
