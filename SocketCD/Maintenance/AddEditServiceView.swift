@@ -42,11 +42,9 @@ struct AddEditServiceView: View {
                 FormHeaderView(symbolName: "book.and.wrench", primaryText: service != nil ? "Edit Service" : "New Service", accentColor: Color.maintenanceTheme)
                 
                 Section {
-                    LabeledInput(label: "Service Name") {
-                        TextField("e.g. Oil Change", text: $draftService.name)
-                            .textInputAutocapitalization(.words)
-                            .focused($isInputActive)
-                    }
+                    TextField("Service Name (e.g. Oil Change)", text: $draftService.name)
+                        .textInputAutocapitalization(.words)
+                        .focused($isInputActive)
                 }
                 
                 Section(footer: Text("Track by distance, time, or both.")) {
@@ -91,6 +89,11 @@ struct AddEditServiceView: View {
                             LabeledInput(label: "Odometer") {
                                 TextField("Required", value: $draftServiceLog.odometer, format: .number.decimalSeparator(strategy: .automatic))
                                     .keyboardType(.numberPad)
+                            }
+                            
+                            LabeledInput(label: "Cost") {
+                                TextField("Optional", value: $draftServiceLog.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                    .keyboardType(.decimalPad)
                             }
                         } else {
                             formItem(headline: "Define a starting point for this service.", subheadline: "This will not be added to service history.") {
@@ -139,6 +142,7 @@ struct AddEditServiceView: View {
                         } else if let vehicle {
                             if vehicle.sortedServicesArray.contains(where: { service in service.name == draftService.name }) {
                                 showingDuplicateNameError = true
+                                return
                             } else if draftServiceLog.odometer != nil {
                                 vehicle.addNewService(draftService: draftService, initialRecord: draftServiceLog, isBaseLine: loggingService ? false : true)
                             }

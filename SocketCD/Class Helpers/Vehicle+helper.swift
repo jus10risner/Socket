@@ -274,6 +274,7 @@ extension Vehicle {
         serviceRecord.id = UUID()
         serviceRecord.date = draftServiceLog.date
         serviceRecord.odometer = draftServiceLog.odometer ?? self.odometer
+        serviceRecord.cost = draftServiceLog.cost ?? 0.0
         
         // Add a baseline service log, if the user does not add their own service record (allows service alerts to work even for new vehicles where service has not yet been performed)
         if isBaseLine {

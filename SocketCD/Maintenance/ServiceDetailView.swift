@@ -61,7 +61,6 @@ struct ServiceDetailView: View {
                 .textCase(nil)
             }
         }
-        .navigationTitle("Service Info")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingAddRecord) {
             AddEditRecordView(service: service, vehicle: vehicle)
