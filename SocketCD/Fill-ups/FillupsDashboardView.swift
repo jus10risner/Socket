@@ -41,6 +41,22 @@ struct FillupsDashboardView: View {
                             if data.count == 0 {
                                 emptyChartView
                             } else {
+                                Button {
+                                    showingAverage.toggle()
+                                } label: {
+                                    Text("Average: \(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                                        .font(.subheadline)
+                                        .foregroundStyle(showingAverage ? Color.white : Color.primary)
+                                        .padding(.vertical, 9)
+                                        .padding(.horizontal, 15)
+                                        .background(
+                                            RoundedRectangle.adaptive
+                                                .fill(showingAverage ? Color.fillupsTheme : Color.clear)
+                                                .stroke(showingAverage ? Color.clear : Color.secondary, lineWidth: 0.5)
+                                        )
+                                }
+                                .buttonStyle(.plain)
+                                
                                 FuelEconomyChartView(data: data, averageFuelEconomy: averageFuelEconomy, selectedDateRange: $selectedDateRange, showingAverage: $showingAverage)
                                 
                                 Picker("Date Range", selection: $selectedDateRange) {
@@ -49,38 +65,11 @@ struct FillupsDashboardView: View {
                                     }
                                 }
                                 .pickerStyle(.segmented)
-                                
-                                Button {
-                                    showingAverage.toggle()
-                                } label: {
-                                    HStack {
-                                        Text("Average:")
-                                        
-                                        HStack(spacing: 3) {
-                                            Text("\(averageFuelEconomy, specifier: "%.1f")")
-                                                .bold()
-                                            
-                                            Text("\(settings.fuelEconomyUnit.rawValue)")
-                                                .bold()
-                                                .foregroundStyle(showingAverage ? Color.white : Color.secondary)
-                                        }
-                                        
-                                    }
-                                    .contentShape(Rectangle())
-                                    .font(.subheadline)
-                                    .foregroundStyle(showingAverage ? Color.white : Color.primary)
-                                    .padding(.vertical, 9)
-                                    .padding(.horizontal, 15)
-                                    .background(
-                                        RoundedRectangle.adaptive
-                                            .fill(showingAverage ? Color.fillupsTheme : Color.clear)
-                                            .stroke(showingAverage ? Color.clear : Color.secondary, lineWidth: 0.5)
-                                    )
-                                }
-                                .buttonStyle(.plain)
                             }
                         }
+                        .padding(15) // Maintains correct padding in iOS 17/18
                     }
+                    .listRowInsets(EdgeInsets())
                     
                     Section {
                         NavigationLink {

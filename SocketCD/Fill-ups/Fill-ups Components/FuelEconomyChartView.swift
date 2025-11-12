@@ -45,10 +45,12 @@ struct FuelEconomyChartView: View {
                                 .font(.caption)
                                 .foregroundStyle(Color.secondary)
                         }
-                        .padding()
+                        .padding(.horizontal)
+                        .padding(.vertical, 10)
                         .background(
-                            RoundedRectangle(cornerRadius: 20)
+                            RoundedRectangle.adaptive
                                 .fill(Color(.tertiarySystemGroupedBackground))
+                                .stroke(Color.secondary, lineWidth: 0.5)
                         )
                     }
                 
