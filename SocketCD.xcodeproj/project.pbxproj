@@ -318,8 +318,7 @@
 				9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */,
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
-				9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */,
-				9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */,
+				9E6EA6B42EC4DAE20060E25F /* Notifications */,
 				9E02BAF92E45237C00D45FA3 /* Export */,
 				9E87C5B52E4235CF001BE562 /* FormFooterView.swift */,
 				9E1528842EB917DB005170AB /* FormHeaderView.swift */,
@@ -337,6 +336,15 @@
 				9EEAC4BD2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		9E6EA6B42EC4DAE20060E25F /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */,
+				9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		9E97B27B2BD3FBE8002B1E9F /* SocketCDTests */ = {
