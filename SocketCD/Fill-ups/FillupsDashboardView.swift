@@ -34,13 +34,13 @@ struct FillupsDashboardView: View {
                 EmptyFillupsView()
             } else {
                 List {
-                    VStack(spacing: 15) {
-                        latestFillupInfo
-                        
-                        if data.count == 0 {
-                            emptyChartView
-                        } else {
-                            VStack(spacing: 15) {
+                    Section {
+                        VStack(spacing: 15) {
+                            latestFillupInfo
+                            
+                            if data.count == 0 {
+                                emptyChartView
+                            } else {
                                 FuelEconomyChartView(data: data, averageFuelEconomy: averageFuelEconomy, selectedDateRange: $selectedDateRange, showingAverage: $showingAverage)
                                 
                                 Picker("Date Range", selection: $selectedDateRange) {
@@ -54,9 +54,7 @@ struct FillupsDashboardView: View {
                                     showingAverage.toggle()
                                 } label: {
                                     HStack {
-                                        Text("Average")
-                                        
-                                        Spacer()
+                                        Text("Average:")
                                         
                                         HStack(spacing: 3) {
                                             Text("\(averageFuelEconomy, specifier: "%.1f")")
@@ -83,8 +81,6 @@ struct FillupsDashboardView: View {
                             }
                         }
                     }
-                    .listRowInsets(EdgeInsets())
-                    .padding(15)
                     
                     Section {
                         NavigationLink {
@@ -194,9 +190,9 @@ struct FillupsDashboardView: View {
             
             Group {
                 if isFullTank {
-                    Text("Add one more **Full Tank** to see your fuel economy chart.")
+                    Text("Add one more **Full Tank** fill-up to see your fuel economy chart.")
                 } else {
-                    Text("Fuel economy is measured between **Full Tank** fill-ups.")
+                    Text("Fuel economy can only be measured between **Full Tank** fill-ups.")
                 }
             }
             .font(.subheadline)

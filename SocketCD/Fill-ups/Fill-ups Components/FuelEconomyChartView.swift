@@ -47,7 +47,7 @@ struct FuelEconomyChartView: View {
                         }
                         .padding()
                         .background(
-                            RoundedRectangle.adaptive
+                            RoundedRectangle(cornerRadius: 20)
                                 .fill(Color(.tertiarySystemGroupedBackground))
                         )
                     }
