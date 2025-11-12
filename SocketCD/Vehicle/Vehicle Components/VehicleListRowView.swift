@@ -27,17 +27,7 @@ struct VehicleListRowView: View {
         )
     }
     
-    @State private var isAnimating = false
-    
     var body: some View {
-//        if UIDevice.current.userInterfaceIdiom == .pad {
-//            sidebarRowView
-//        } else {
-            cardView
-//        }
-    }
-    
-    private var cardView: some View {
         VStack(spacing: 10) {
             vehicleImage
                 .aspectRatio(2, contentMode: .fit)
@@ -61,8 +51,11 @@ struct VehicleListRowView: View {
                 
                 Spacer()
                 
-                if serviceDue == true {
-                    maintenanceAlert
+                if badgeNumber != 0 {
+                    Image(systemName: "\(badgeNumber).circle.fill")
+                        .imageScale(.large)
+                        .foregroundStyle(Color.white, Color.red)
+                        .accessibilityLabel("\(badgeNumber) services due for this vehicle.")
                 }
             }
             .padding(.horizontal)
@@ -79,35 +72,6 @@ struct VehicleListRowView: View {
         .listRowBackground(Color.clear)
     }
     
-//    private var sidebarRowView: some View {
-//        HStack(spacing: 8) {
-//            vehicleImage
-//                .aspectRatio(1.5, contentMode: .fit)
-//                .frame(height: 60)
-//                .clipShape(RoundedRectangle(cornerRadius: 10))
-//                .overlay(
-//                    RoundedRectangle(cornerRadius: 10)
-//                        .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
-//                )
-//            
-//            VStack(alignment: .leading, spacing: 2) {
-//                Text(vehicle.name)
-//                    .font(.body)
-//                    .lineLimit(1)
-//                
-//                Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
-//                    .font(.caption)
-//                    .foregroundStyle(.secondary)
-//            }
-//            
-//            Spacer()
-//            
-//            if serviceDue {
-//                alternateMaintenanceAlert
-//            }
-//        }
-//    }
-    
     
     // MARK: - Views
     
@@ -121,24 +85,11 @@ struct VehicleListRowView: View {
         }
     }
     
-    private var maintenanceAlert: some View {
-        Image(systemName: "exclamationmark.circle.fill")
-            .symbolEffect(.bounce, value: isAnimating)
-            .symbolRenderingMode(.multicolor)
-            .font(.title3)
-            .foregroundStyle(.red)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                    isAnimating = true
-                }
-            }
-    }
-    
     // MARK: - Computed Properties
     
-    // Determines whether to show maintenanceAlert for the given vehicle
-    var serviceDue: Bool {
-        return services.contains(where: { $0.serviceStatus == .due || $0.serviceStatus == .overDue })
+    // Calculates the number of services that are due for the given vehicle
+    var badgeNumber: Int {
+        return services.filter({ $0.serviceStatus == .due || $0.serviceStatus == .overDue }).count
     }
 }
 
