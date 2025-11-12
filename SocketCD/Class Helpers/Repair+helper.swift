@@ -56,7 +56,7 @@ extension Repair {
         
         if let vehicle = self.vehicle, let draftOdometer = draftRepair.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer
-            vehicle.updateAllServiceNotifications()
+//            vehicle.updateAllServiceNotifications()
         }
         
 //        if let odometer = draftRepair.odometer {

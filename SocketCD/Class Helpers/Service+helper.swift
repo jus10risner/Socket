@@ -278,9 +278,9 @@ extension Service {
         self.monthsInterval = draftService.monthsInterval
         self.note = draftService.serviceNote
         
-        if let vehicle = self.vehicle {
-            self.updateNotifications(vehicle: vehicle)
-        }
+//        if let vehicle = self.vehicle {
+//            self.updateNotifications(vehicle: vehicle)
+//        }
         
         try? context.save()
     }
@@ -323,7 +323,7 @@ extension Service {
                let draftOdo = draftServiceLog.odometer,
                draftOdo > vehicle.odometer {
                 vehicle.odometer = draftOdo
-                svc.updateNotifications(vehicle: vehicle)
+//                svc.updateNotifications(vehicle: vehicle)
             }
         }
         
@@ -333,136 +333,256 @@ extension Service {
     
     // MARK: - Notification Scheduling Methods
     
-    func updateNotifications(vehicle: Vehicle) {
-        let context = DataController.shared.container.viewContext
-        let settings = AppSettings()
+    func evaluateNotifications(for vehicle: Vehicle) {
         let now = Date()
+        let settings = AppSettings()
+        let context = DataController.shared.container.viewContext
 
-        // Get pending notifications
-        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-            let pendingIDs = Set(requests.map(\.identifier))
-            var didSchedule = false
+        var shouldSchedule = false
+        print("Evaluating notifications for service: \(name)")
 
-            // === TIME-BASED ===
-            if let dateDue = self.dateDue,
-               let alertDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeMaintenance, to: dateDue),
-               dateDue > now, alertDate > now {
+        // === TIME-BASED ===
+        if let dateDue = self.dateDue,
+           let alertDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeMaintenance, to: dateDue),
+           dateDue > now, alertDate > now {
+            shouldSchedule = true
+            print(" → Time-based notification is valid. Scheduling for \(alertDate.formatted())")
+            NotificationScheduler.scheduleTimeBased(for: self, vehicle: vehicle, on: alertDate)
+        } else {
+            print(" → Time-based notification no longer valid. Cancelling if scheduled.")
+            NotificationScheduler.cancelTimeBased(for: self)
+        }
 
-                if !pendingIDs.contains(self.timeBasedNotificationIdentifier) && !self.notificationScheduled {
-                    self.scheduleNotificationOnDate(alertDate, for: vehicle) {
-                        didSchedule = true
-                        self.saveNotificationFlagIfNeeded(didSchedule, context: context)
-                    }
-                }
+        // === DISTANCE-BASED ===
+        if let odometerDue = self.odometerDue {
+            let distanceRemaining = odometerDue - vehicle.odometer
+            if distanceRemaining <= settings.distanceBeforeMaintenance, distanceRemaining >= 0 {
+                shouldSchedule = true
+                print(" → Distance-based notification is valid (remaining \(distanceRemaining)). Scheduling.")
+                NotificationScheduler.scheduleDistanceBased(for: self, vehicle: vehicle)
             } else {
-                // Cancel time-based notifications, if no longer due
-                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.timeBasedNotificationIdentifier])
-            }
-
-            // === DISTANCE-BASED ===
-            if let odometerDue = self.odometerDue {
-                let distanceRemaining = odometerDue - vehicle.odometer
-                if distanceRemaining <= settings.distanceBeforeMaintenance, distanceRemaining >= 0 {
-                    if !pendingIDs.contains(self.distanceBasedNotificationIdentifier) && !self.notificationScheduled {
-                        self.scheduleNotificationMomentarily(for: vehicle) {
-                            didSchedule = true
-                            self.saveNotificationFlagIfNeeded(didSchedule, context: context)
-                        }
-                    }
-                } else {
-                    // Cancel distance-based notifications, if no longer relevant
-                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.distanceBasedNotificationIdentifier])
-                }
-            }
-
-            // If nothing was scheduled and both are no longer valid
-            if !didSchedule && self.serviceStatus == .notDue {
-                DispatchQueue.main.async {
-                    let context = DataController.shared.container.viewContext
-                    self.notificationScheduled = false
-                    try? context.save()
-                }
+                print(" → Distance-based notification not applicable. Cancelling if scheduled.")
+                NotificationScheduler.cancelDistanceBased(for: self)
             }
         }
+
+        // === Update Core Data flag ===
+        if notificationScheduled != shouldSchedule {
+            notificationScheduled = shouldSchedule
+            try? context.save()
+            print(" → Updated notificationScheduled = \(shouldSchedule)")
+        } else {
+            print(" → No change to notificationScheduled (\(notificationScheduled))")
+        }
+
+        print("Finished evaluating \(name)\n")
     }
+    
+//    func updateNotifications(vehicle: Vehicle) {
+//        let context = DataController.shared.container.viewContext
+//        let settings = AppSettings()
+//        let now = Date()
+//
+//        // Get pending notifications
+//        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+//            let pendingIDs = Set(requests.map(\.identifier))
+//            var didSchedule = false
+//
+//            // === TIME-BASED ===
+//            if let dateDue = self.dateDue,
+//               let alertDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeMaintenance, to: dateDue),
+//               dateDue > now, alertDate > now {
+//
+//                if !pendingIDs.contains(self.timeBasedNotificationIdentifier) && !self.notificationScheduled {
+//                    self.scheduleNotificationOnDate(alertDate, for: vehicle) {
+//                        didSchedule = true
+//                        self.saveNotificationFlagIfNeeded(didSchedule, context: context)
+//                    }
+//                }
+//            } else {
+//                // Cancel time-based notifications, if no longer due
+//                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.timeBasedNotificationIdentifier])
+//            }
+//
+//            // === DISTANCE-BASED ===
+//            if let odometerDue = self.odometerDue {
+//                let distanceRemaining = odometerDue - vehicle.odometer
+//                if distanceRemaining <= settings.distanceBeforeMaintenance, distanceRemaining >= 0 {
+//                    if !pendingIDs.contains(self.distanceBasedNotificationIdentifier) && !self.notificationScheduled {
+//                        self.scheduleNotificationMomentarily(for: vehicle) {
+//                            didSchedule = true
+//                            self.saveNotificationFlagIfNeeded(didSchedule, context: context)
+//                        }
+//                    }
+//                } else {
+//                    // Cancel distance-based notifications, if no longer relevant
+//                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.distanceBasedNotificationIdentifier])
+//                }
+//            }
+//
+//            // If nothing was scheduled and both are no longer valid
+//            if !didSchedule && self.serviceStatus == .notDue {
+//                DispatchQueue.main.async {
+//                    let context = DataController.shared.container.viewContext
+//                    self.notificationScheduled = false
+//                    try? context.save()
+//                }
+//            }
+//        }
+//    }
     
     // Cancels any pending notifications for a given service (used before deleting a service)
-    func cancelPendingNotifications() {
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.timeBasedNotificationIdentifier, self.distanceBasedNotificationIdentifier])
-        let context = DataController.shared.container.viewContext
-        self.notificationScheduled = false
-        
-        try? context.save()
-        
-        print("Cancelled notifications")
-    }
+//    func cancelPendingNotifications() {
+//        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.timeBasedNotificationIdentifier, self.distanceBasedNotificationIdentifier])
+//        let context = DataController.shared.container.viewContext
+//        self.notificationScheduled = false
+//        
+//        try? context.save()
+//        
+//        print("Cancelled notifications")
+//    }
     
     // Sets the notificationScheduled flag to true, when a notification is scheduled; extracted this into its own function to prevent duplication of code
-    private func saveNotificationFlagIfNeeded(_ didSchedule: Bool, context: NSManagedObjectContext) {
-        guard didSchedule else { return }
-        DispatchQueue.main.async {
-            self.notificationScheduled = true
-            try? context.save()
-        }
-    }
+//    private func saveNotificationFlagIfNeeded(_ didSchedule: Bool, context: NSManagedObjectContext) {
+//        guard didSchedule else { return }
+//        DispatchQueue.main.async {
+//            self.notificationScheduled = true
+//            try? context.save()
+//        }
+//    }
     
     // Schedule notification based on time interval
-    func scheduleNotificationOnDate(_ date: Date, for vehicle: Vehicle, completion: @escaping () -> Void) {
+//    func scheduleNotificationOnDate(_ date: Date, for vehicle: Vehicle, completion: @escaping () -> Void) {
+//        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+//            guard !requests.contains(where: { $0.identifier == self.timeBasedNotificationIdentifier }) else {
+//                completion()
+//                return
+//            }
+//
+//            let content = UNMutableNotificationContent()
+//            content.title = "Time for Maintenance!"
+//            content.body = "\(self.name) due soon for \(vehicle.name)"
+//            content.sound = .default
+//
+//            #if DEBUG
+//            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+//            #else
+//            let components = Calendar.current.dateComponents([.year, .month, .day, .hour], from: date)
+//            var dateComponents = components
+//            dateComponents.hour = 10 // Notify at 10 AM
+//            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+//            #endif
+//
+//            let request = UNNotificationRequest(identifier: self.timeBasedNotificationIdentifier, content: content, trigger: trigger)
+//            UNUserNotificationCenter.current().add(request)
+//            
+//            print("Scheduled time-based notification for \(date.formatted(date: .numeric, time: .omitted))")
+//            
+//            completion()
+//        }
+//    }
+//    
+//    // Schedule notification with 30-second delay, based on distance interval
+//    func scheduleNotificationMomentarily(for vehicle: Vehicle, completion: @escaping () -> Void) {
+//        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+//            guard !requests.contains(where: { $0.identifier == self.distanceBasedNotificationIdentifier }) else {
+//                completion()
+//                return
+//            }
+//
+//            let content = UNMutableNotificationContent()
+//            content.title = "Time for Maintenance!"
+//            content.body = "\(self.name) due soon for \(vehicle.name)"
+//            content.sound = .default
+//
+//            #if DEBUG
+//            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+//            #else
+//            let delaySeconds: TimeInterval = 30
+//            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: delaySeconds, repeats: false)
+//            #endif
+//
+//            let request = UNNotificationRequest(identifier: self.distanceBasedNotificationIdentifier, content: content, trigger: trigger)
+//            UNUserNotificationCenter.current().add(request)
+//            
+//            print("Scheduled distance-based notification for tomorrow")
+//            
+//            completion()
+//        }
+//    }
+}
+
+enum NotificationScheduler {
+    // MARK: Time-Based
+    static func scheduleTimeBased(for service: Service, vehicle: Vehicle, on date: Date) {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-            guard !requests.contains(where: { $0.identifier == self.timeBasedNotificationIdentifier }) else {
-                completion()
+            guard !requests.contains(where: { $0.identifier == service.timeBasedNotificationIdentifier }) else {
                 return
             }
 
             let content = UNMutableNotificationContent()
             content.title = "Time for Maintenance!"
-            content.body = "\(self.name) due soon for \(vehicle.name)"
+            content.body = "\(service.name) due soon for \(vehicle.name)"
             content.sound = .default
 
             #if DEBUG
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
             #else
-            let components = Calendar.current.dateComponents([.year, .month, .day, .hour], from: date)
-            var dateComponents = components
-            dateComponents.hour = 10 // Notify at 10 AM
-            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
             #endif
 
-            let request = UNNotificationRequest(identifier: self.timeBasedNotificationIdentifier, content: content, trigger: trigger)
+            let request = UNNotificationRequest(
+                identifier: service.timeBasedNotificationIdentifier,
+                content: content,
+                trigger: trigger
+            )
+
             UNUserNotificationCenter.current().add(request)
-            
-            print("Scheduled time-based notification for \(date.formatted(date: .numeric, time: .omitted))")
-            
-            completion()
+            print("Scheduled time-based notification for \(service.name)")
         }
     }
-    
-    // Schedule notification with 30-second delay, based on distance interval
-    func scheduleNotificationMomentarily(for vehicle: Vehicle, completion: @escaping () -> Void) {
+
+    static func cancelTimeBased(for service: Service) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(
+            withIdentifiers: [service.timeBasedNotificationIdentifier]
+        )
+    }
+
+    // MARK: Distance-Based
+    static func scheduleDistanceBased(for service: Service, vehicle: Vehicle) {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-            guard !requests.contains(where: { $0.identifier == self.distanceBasedNotificationIdentifier }) else {
-                completion()
+            guard !requests.contains(where: { $0.identifier == service.distanceBasedNotificationIdentifier }) else {
                 return
             }
 
             let content = UNMutableNotificationContent()
-            content.title = "Time for Maintenance!"
-            content.body = "\(self.name) due soon for \(vehicle.name)"
+            content.title = "Maintenance Due Soon!"
+            content.body = "\(service.name) will be due soon for \(vehicle.name)"
             content.sound = .default
 
             #if DEBUG
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
             #else
+            // Fires soon after condition is met — doesn't repeat
             let delaySeconds: TimeInterval = 30
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: delaySeconds, repeats: false)
             #endif
 
-            let request = UNNotificationRequest(identifier: self.distanceBasedNotificationIdentifier, content: content, trigger: trigger)
+            let request = UNNotificationRequest(
+                identifier: service.distanceBasedNotificationIdentifier,
+                content: content,
+                trigger: trigger
+            )
+
             UNUserNotificationCenter.current().add(request)
-            
-            print("Scheduled distance-based notification for tomorrow")
-            
-            completion()
+            print("Scheduled distance-based notification for \(service.name)")
         }
+    }
+
+    static func cancelDistanceBased(for service: Service) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(
+            withIdentifiers: [service.distanceBasedNotificationIdentifier]
+        )
     }
 }

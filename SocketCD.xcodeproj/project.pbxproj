@@ -44,6 +44,8 @@
 		9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */; };
 		9E7507572BF50FB9000E25BD /* OnboardingTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7507562BF50FB9000E25BD /* OnboardingTips.swift */; };
 		9E7507592BF68C84000E25BD /* EmptyVehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */; };
+		9E7EF3FB2EC3899000E1E5D1 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */; };
+		9E7EF3FD2EC38E6000E1E5D1 /* NotificationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */; };
 		9E87C5B62E4235CF001BE562 /* FormFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E87C5B52E4235CF001BE562 /* FormFooterView.swift */; };
 		9E916A442E464B7800E10B42 /* CSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E916A432E464B7800E10B42 /* CSVExporter.swift */; };
 		9E97B2752BD2C694002B1E9F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */; };
@@ -159,6 +161,8 @@
 		9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectorView.swift; sourceTree = "<group>"; };
 		9E7507562BF50FB9000E25BD /* OnboardingTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTips.swift; sourceTree = "<group>"; };
 		9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyVehicleListView.swift; sourceTree = "<group>"; };
+		9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationObserver.swift; sourceTree = "<group>"; };
 		9E87C5B52E4235CF001BE562 /* FormFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFooterView.swift; sourceTree = "<group>"; };
 		9E916A432E464B7800E10B42 /* CSVExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporter.swift; sourceTree = "<group>"; };
 		9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -314,6 +318,8 @@
 				9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */,
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
+				9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */,
+				9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */,
 				9E02BAF92E45237C00D45FA3 /* Export */,
 				9E87C5B52E4235CF001BE562 /* FormFooterView.swift */,
 				9E1528842EB917DB005170AB /* FormHeaderView.swift */,
@@ -698,6 +704,7 @@
 				9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */,
 				9EEAC4EC2BA3749E0053C65E /* PhotoGridView.swift in Sources */,
 				9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */,
+				9E7EF3FD2EC38E6000E1E5D1 /* NotificationObserver.swift in Sources */,
 				9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */,
 				9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */,
 				9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */,
@@ -711,6 +718,7 @@
 				9E916A442E464B7800E10B42 /* CSVExporter.swift in Sources */,
 				9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */,
 				9EEAC4CF2BA258290053C65E /* VehicleImageView.swift in Sources */,
+				9E7EF3FB2EC3899000E1E5D1 /* NotificationManager.swift in Sources */,
 				9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */,
 				9EEAC4F52BA37A270053C65E /* RepairsListView.swift in Sources */,
 				9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */,

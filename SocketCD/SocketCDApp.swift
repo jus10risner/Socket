@@ -14,6 +14,10 @@ struct SocketCDApp: App {
     @StateObject var settings = AppSettings()
     let dataController = DataController.shared
     
+    init() {
+        _ = NotificationObserver.shared // Start observing right away
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -22,8 +26,14 @@ struct SocketCDApp: App {
                 .environmentObject(settings)
                 .task { AppearanceController.shared.setAppearance() }
         }
-        .onChange(of: scenePhase) {
+        .onChange(of: scenePhase) { _, newPhase in
             dataController.save()
+            
+            if newPhase == .active {
+                Task {
+                    await NotificationManager.shared.refreshAllNotifications()
+                }
+            }
         }
     }
 }

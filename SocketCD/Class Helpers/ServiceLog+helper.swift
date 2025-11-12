@@ -97,7 +97,7 @@ extension ServiceLog {
                let draftOdometer = draftServiceLog.odometer,
                draftOdometer > vehicle.odometer {
                 vehicle.odometer = draftOdometer
-                service.updateNotifications(vehicle: vehicle)
+//                service.updateNotifications(vehicle: vehicle)
             }
                 }
 

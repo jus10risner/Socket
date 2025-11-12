@@ -76,7 +76,7 @@ extension ServiceRecord {
 
         if let vehicle = service.vehicle, let draftOdometer = draftServiceLog.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer
-            service.updateNotifications(vehicle: vehicle)
+//            service.updateNotifications(vehicle: vehicle)
         }
         
         try? context.save()

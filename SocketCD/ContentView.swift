@@ -36,9 +36,9 @@ struct ContentView: View {
         }
         .navigationSplitViewStyle(.balanced)
         .onAppear {
-            for vehicle in vehicles {
-                vehicle.updateAllServiceNotifications()
-            }
+//            for vehicle in vehicles {
+//                vehicle.updateAllServiceNotifications()
+//            }
             
             if let lastSelectedVehicle {
                 selectedVehicle = lastSelectedVehicle

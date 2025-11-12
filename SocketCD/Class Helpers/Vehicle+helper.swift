@@ -248,7 +248,7 @@ extension Vehicle {
         self.colorComponents = colorComponents
         self.photo = draftVehicle.photo
         
-        self.updateAllServiceNotifications()
+//        self.updateAllServiceNotifications()
         
         try? context.save()
     }
@@ -287,7 +287,7 @@ extension Vehicle {
             serviceRecord.serviceLog = baselineLog
         }
         
-        self.updateAllServiceNotifications()
+//        self.updateAllServiceNotifications()
         
         try? context.save()
     }
@@ -306,7 +306,7 @@ extension Vehicle {
         
         if let odometer = draftRepair.odometer, odometer > self.odometer {
             self.odometer = odometer
-            self.updateAllServiceNotifications()
+//            self.updateAllServiceNotifications()
         }
         
         try? context.save()
@@ -327,7 +327,7 @@ extension Vehicle {
         
         if let odometer = draftFillup.odometer, odometer > self.odometer {
             self.odometer = odometer
-            self.updateAllServiceNotifications()
+//            self.updateAllServiceNotifications()
         }
         
         try? context.save()
@@ -350,16 +350,16 @@ extension Vehicle {
     // MARK: - Other Methods
     
     // Checks to see when all notifications are due for this vehicle, and schedules them if necessary
-    func updateAllServiceNotifications() {
-        UNUserNotificationCenter.current().getNotificationSettings { permissions in
-            guard permissions.authorizationStatus == .authorized else {
-                print("Notifications not authorized.")
-                return
-            }
-
-            for service in self.sortedServicesArray {
-                service.updateNotifications(vehicle: self)
-            }
-        }
-    }
+//    func updateAllServiceNotifications() {
+//        UNUserNotificationCenter.current().getNotificationSettings { permissions in
+//            guard permissions.authorizationStatus == .authorized else {
+//                print("Notifications not authorized.")
+//                return
+//            }
+//
+////            for service in self.sortedServicesArray {
+////                service.updateNotifications(vehicle: self)
+////            }
+//        }
+//    }
 }

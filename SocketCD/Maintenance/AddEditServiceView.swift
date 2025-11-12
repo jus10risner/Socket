@@ -164,7 +164,13 @@ struct AddEditServiceView: View {
             .alert("Delete Service", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let service {
-                        service.cancelPendingNotifications()
+//                        service.cancelPendingNotifications()
+                        let ids = [
+                            service.timeBasedNotificationIdentifier,
+                            service.distanceBasedNotificationIdentifier
+                        ]
+                        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids)
+                        
                         DataController.shared.delete(service)
                     }
                     
