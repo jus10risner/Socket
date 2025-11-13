@@ -24,6 +24,8 @@ public struct ImageViewer: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack {
+                Color.black
+                
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fit)

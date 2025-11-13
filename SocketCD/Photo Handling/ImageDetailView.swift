@@ -15,34 +15,32 @@ struct ImageDetailView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                ImageViewer(image: Image(uiImage: image))
-                
-                VStack {
-                    Color.clear
-                        .background(.thickMaterial, in: Rectangle())
-                        .edgesIgnoringSafeArea(.top)
-                        .frame(maxWidth: .infinity, maxHeight: .zero)
+            ImageViewer(image: Image(uiImage: image))
+                .overlay(alignment: .top) {
+                    if #unavailable(iOS 26) {
+                        Color.clear
+                            .background(.ultraThinMaterial, in: Rectangle())
+                            .edgesIgnoringSafeArea(.top)
+                            .frame(maxWidth: .infinity, maxHeight: .zero)
+                            .preferredColorScheme(.dark)
+                    }
+                }
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        if let imageURL {
+                            ShareLink("Share Image", item: imageURL)
+                                .tint(Color.white)
+                        }
+                    }
                     
-                    Spacer()
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    if let imageURL {
-                        ShareLink("Share Image", item: imageURL)
-                            .adaptiveTint()
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Dismiss", systemImage: "xmark") {
+                            dismiss()
+                        }
+                        .tint(Color.white)
                     }
                 }
-                
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Dismiss", systemImage: "xmark") {
-                        dismiss()
-                    }
-                    .adaptiveTint()
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
         }
         .task {
             await createImageURL()
