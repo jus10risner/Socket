@@ -8,6 +8,13 @@
 import SwiftUI
 
 extension Color {
+    // Determines whether a color is a light shade, using luminosity
+    var isLightColor: Bool {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0
+        UIColor(self).getRed(&r, green: &g, blue: &b, alpha: nil)
+        return (0.299 * r + 0.587 * g + 0.114 * b) > 0.7
+    }
+    
     // Allows mixing of system colors on iOS 17 (18 has a built-in method for doing this); used to create the appTheme color
     func mix(with color: Color, by percentage: Double) -> Color {
         let clampedPercentage = min(max(percentage, 0), 1)

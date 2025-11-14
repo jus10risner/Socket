@@ -34,7 +34,7 @@ struct VehicleListRowView: View {
                 .clipShape(ContainerRelativeShape())
                 .overlay(
                     ContainerRelativeShape()
-                        .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
+                        .stroke(Color.secondary.opacity(0.5), lineWidth: 0.25)
                 )
             
             HStack {

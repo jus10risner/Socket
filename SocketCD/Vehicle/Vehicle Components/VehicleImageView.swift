@@ -19,14 +19,15 @@ struct VehicleImageView: View {
     var body: some View {
         GeometryReader { geo in
             if let backgroundColor {
-                ZStack {
-                    backgroundColor
-                    
-                    Image(systemName: "car.fill")
-                        .font(.system(size: 50))
-                        .foregroundStyle(.ultraThickMaterial)
-                }
-                .environment(\.colorScheme, .light)
+                let isLightColor = backgroundColor.isLightColor
+                
+                backgroundColor
+                    .overlay {
+                        Image(systemName: "car.fill")
+                            .font(.system(size: 70))
+                            .foregroundStyle(isLightColor ? .ultraThinMaterial : .regularMaterial)
+                            .colorScheme(isLightColor ? .dark : .light)
+                    }
             } else if let carPhoto, let uiImage = carPhoto.converted {
                 Image(uiImage: uiImage)
                     .resizable()
