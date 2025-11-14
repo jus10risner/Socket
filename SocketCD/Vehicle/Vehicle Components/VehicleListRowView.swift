@@ -34,7 +34,7 @@ struct VehicleListRowView: View {
                 .clipShape(ContainerRelativeShape())
                 .overlay(
                     ContainerRelativeShape()
-                        .stroke(Color.secondary.opacity(0.2), lineWidth: 0.5)
+                        .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
                 )
             
             HStack {
@@ -64,7 +64,7 @@ struct VehicleListRowView: View {
         .padding(.bottom, 10)
         .background {
             RoundedRectangle.adaptive
-                .fill(colorScheme == .dark ? Color.gray.opacity(0.3) : Color(.secondarySystemGroupedBackground))
+                .fill(colorScheme == .dark ? Color(.tertiarySystemGroupedBackground) : Color(.secondarySystemGroupedBackground))
                 .strokeBorder(isPad && isSelected ? Color.accent : Color.secondary.opacity(0.5), lineWidth: isPad && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
         }
         .containerShape(RoundedRectangle.adaptive)
