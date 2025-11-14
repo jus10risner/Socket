@@ -36,9 +36,17 @@ struct AddPhotoButton: View {
             Label("Add Photo", systemImage: "photo")
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
-        .onChange(of: selectedImages) { loadSelectedImages() }
+        .onChange(of: selectedImages) {
+            Task {
+                await loadSelectedImages()
+            }
+        }
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImages, matching: .images)
-        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: verifyAndAppend) {
+        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: {
+            Task {
+                await verifyAndAppend()
+            }
+        }) {
             CameraCapture(image: $capturedImage, isPresented: $cameraViewModel.showingCamera)
                 .ignoresSafeArea()
         }
@@ -67,29 +75,28 @@ struct AddPhotoButton: View {
     // MARK: - Methods
     
     // Verifies an image captured via the camera, then appends it to the photos array
-    private func verifyAndAppend() {
-        Task {
-            if let selectedImage = capturedImage, let newPhoto = Photo.create(from: selectedImage, in: context) {
-                photos.append(newPhoto)
-            }
+    private func verifyAndAppend() async {
+        if let selectedImage = capturedImage, let newPhoto = Photo.create(from: selectedImage, in: context) {
+            photos.append(newPhoto)
         }
     }
     
     // Verifies images captured via the PhotosPicker, then appends them to the photos array
-    private func loadSelectedImages() {
+    private func loadSelectedImages() async {
+        defer { selectedImages.removeAll() }
+        
         for item in selectedImages {
-            Task {
-                guard let data = try? await item.loadTransferable(type: Data.self),
-                      let uiImage = UIImage(data: data),
-                      let newPhoto = Photo.create(from: uiImage, in: context) else {
-                    return
+            do {
+                if let data = try await item.loadTransferable(type: Data.self),
+                    let uiImage = UIImage(data: data),
+                    let newPhoto = Photo.create(from: uiImage, in: context) {
+                    photos.append(newPhoto)
+                } else {
+                    showingPhotoError = true
                 }
-
-                photos.append(newPhoto)
+            } catch {
+                showingPhotoError = true
             }
         }
-
-        // Clear selection after loading
-        selectedImages.removeAll()
     }
 }

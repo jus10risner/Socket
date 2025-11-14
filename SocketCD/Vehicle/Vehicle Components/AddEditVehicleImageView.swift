@@ -29,13 +29,18 @@ struct AddEditVehicleImageView: View {
             
             photoMenu
         }
-//        .animation(.default, value: draftVehicle.photo)
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImage, matching: .images)
-        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: verifyAndAdd) {
+        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: {
+            Task { await verifyAndAdd() }
+        }) {
             CameraCapture(image: $capturedImage, isPresented: $cameraViewModel.showingCamera)
                 .ignoresSafeArea()
         }
-        .onChange(of: selectedImage) { loadSelectedImage() }
+        .onChange(of: selectedImage) {
+            Task {
+                await loadSelectedImage()
+            }
+        }
         .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -84,9 +89,7 @@ struct AddEditVehicleImageView: View {
                 
                 if draftVehicle.photo != nil {
                     Button("Delete Photo", systemImage: "xmark.circle.fill") {
-//                        withAnimation {
-                            draftVehicle.photo = nil
-//                        }
+                        draftVehicle.photo = nil
                     }
                     .buttonStyle(.plain)
                     .labelStyle(.iconOnly)
@@ -99,7 +102,6 @@ struct AddEditVehicleImageView: View {
         }
         .aspectRatio(2, contentMode: .fit)
         .frame(maxWidth: 300)
-//        .animation(nil, value: draftVehicle.photo)
     }
     
     private var photoMenu: some View {
@@ -115,40 +117,38 @@ struct AddEditVehicleImageView: View {
             }
         }
         .buttonStyle(.borderedProminent)
-//        .foregroundStyle(Color.white)
         .frame(maxWidth: .infinity)
     }
     
     // MARK: - Methods
     
     // Verifies that a valid image has been captured via the camera, then converts it to binary data
-    private func verifyAndAdd() {
-        Task {
-            if let capturedImage {
-                let newPhoto = Photo.create(from: capturedImage, in: context)
-                
-//                withAnimation {
-                    draftVehicle.photo = newPhoto
-//                }
-            }
+    private func verifyAndAdd() async {
+        if let capturedImage {
+            let newPhoto = Photo.create(from: capturedImage, in: context)
+            
+            draftVehicle.photo = newPhoto
         }
     }
     
     // Verifies that a valid image has been selected via the PhotosPicker, then converts it to binary data
-    private func loadSelectedImage() {
-        Task {
-            guard let selectedImage else { return }
-            
+    private func loadSelectedImage() async {
+        guard let selectedImage else { return }
+
+        defer { self.selectedImage = nil } // Runs just before exiting the scope of the function
+
+        do {
             if let data = try await selectedImage.loadTransferable(type: Data.self),
-                let uiImage = UIImage(data: data) {
+               let uiImage = UIImage(data: data) {
                 let newPhoto = Photo.create(from: uiImage, in: context)
-                
-//                withAnimation {
-                    draftVehicle.photo = newPhoto
-//                }
-                
-                self.selectedImage = nil
+                draftVehicle.photo = newPhoto
+            } else {
+                // Could not decode image data
+                showingPhotoError = true
             }
+        } catch {
+            // Handle errors thrown by loadTransferable
+            showingPhotoError = true
         }
     }
 }
@@ -156,3 +156,4 @@ struct AddEditVehicleImageView: View {
 #Preview {
     AddEditVehicleImageView(draftVehicle: DraftVehicle())
 }
+
