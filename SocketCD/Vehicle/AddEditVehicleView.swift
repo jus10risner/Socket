@@ -29,7 +29,7 @@ struct AddEditVehicleView: View {
             Form {
                 Section {
                     AddEditVehicleImageView(draftVehicle: draftVehicle)
-                        .listRowInsets(EdgeInsets())
+                        .listRowInsets(EdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1))
                         .listRowBackground(Color.clear)
                 }
                 
