@@ -23,7 +23,7 @@ struct AddPhotoButton: View {
     
     var body: some View {
         Menu {
-            Button("Choose Photos", systemImage: "photo.on.rectangle") {
+            Button("Photo Library", systemImage: "photo.on.rectangle") {
                 showingPhotosPicker = true
             }
             
@@ -33,9 +33,15 @@ struct AddPhotoButton: View {
                 }
             }
         } label: {
-            Label("Add Photo", systemImage: "photo")
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            Label {
+                Text("Add Photo...")
+            } icon: {
+                Image(systemName: "photo")
+                    .foregroundStyle(Color.accent)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
+        .tint(Color.primary)
         .onChange(of: selectedImages) {
             Task {
                 await loadSelectedImages()

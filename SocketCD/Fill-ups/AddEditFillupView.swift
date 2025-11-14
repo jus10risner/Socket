@@ -156,6 +156,7 @@ struct AddEditFillupView: View {
             .labelsHidden()
         }
         .buttonStyle(.plain)
+        .tint(Color.primary)
     }
 }
 
