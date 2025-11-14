@@ -52,7 +52,7 @@ struct AddEditRepairView: View {
                     }
                     
                     LabeledInput(label: "Cost") {
-                        TextField("Optional", value: $draftRepair.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        TextField("Optional", value: $draftRepair.cost, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.decimalPad)
                     }
                 }

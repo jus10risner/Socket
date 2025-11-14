@@ -58,7 +58,7 @@ struct AddEditFillupView: View {
                     }
                     
                     LabeledContent {
-                        TextField("Optional", value: $draftFillup.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        TextField("Optional", value: $draftFillup.cost, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.decimalPad)
                             .foregroundStyle(Color.primary)
                             .multilineTextAlignment(.trailing)

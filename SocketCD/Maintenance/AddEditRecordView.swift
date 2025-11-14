@@ -66,7 +66,7 @@ struct AddEditRecordView: View {
                     }
                     
                     LabeledInput(label: "Cost") {
-                        TextField("Optional", value: $draftServiceLog.cost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        TextField("Optional", value: $draftServiceLog.cost, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.decimalPad)
                     }
                 }
