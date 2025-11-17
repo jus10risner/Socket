@@ -48,7 +48,7 @@ class DraftServiceLog: ObservableObject {
     
     // Determines whether the required information is present
     var canBeSaved: Bool {
-        odometer != nil && !selectedServiceIDs.isEmpty
+        odometer.hasValue && !selectedServiceIDs.isEmpty
     }
     
     // Returns the names of all selected services as a String

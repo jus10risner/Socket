@@ -43,7 +43,7 @@ class DraftFillup: ObservableObject {
     
     // Determines whether the required information is present
     var canBeSaved: Bool {
-        odometer != nil && volume != nil
+        odometer.hasValue && volume.hasValue
     }
     
     // Returns either the price per volume unit, or the total cost of the fill-up, based on the user's selection in Settings

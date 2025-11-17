@@ -32,6 +32,6 @@ class DraftRepair: ObservableObject {
     
     // Determines whether the required information is present
     var canBeSaved: Bool {
-        name.count > 0 && odometer != nil
+        !name.isBlank && odometer.hasValue
     }
 }

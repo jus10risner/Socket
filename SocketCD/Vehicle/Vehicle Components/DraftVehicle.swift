@@ -28,6 +28,6 @@ class DraftVehicle: ObservableObject {
     
     // Determines whether the required information is present
     var canBeSaved: Bool {
-        name != "" && odometer != nil
+        !name.isBlank && odometer.hasValue
     }
 }
