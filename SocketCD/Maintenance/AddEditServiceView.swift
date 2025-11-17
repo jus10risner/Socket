@@ -50,13 +50,15 @@ struct AddEditServiceView: View {
                 Section(footer: Text("Track by distance, time, or both.")) {
                     formItem(headline: "This service should be performed every:") {
                         HStack {
-                            TextField("5,000", value: $draftService.distanceInterval, format: .number.decimalSeparator(strategy: .automatic))
+                            TextField("5,000", text: optionalIntFieldBinding($draftService.distanceInterval))
+                                .keyboardType(.numberPad)
                                 .fixedSize()
                             
                             Text("\(settings.distanceUnit.abbreviated) or")
                             
-                            TextField("6", value: $draftService.timeInterval, format: .number)
-                                .fixedSize()
+                            TextField("6", text: optionalIntFieldBinding($draftService.timeInterval))
+                            .keyboardType(.numberPad)
+                            .fixedSize()
                             
                             MonthsYearsToggle(monthsInterval: $draftService.monthsInterval, timeInterval: Int(draftService.timeInterval ?? 0))
                         }
@@ -78,7 +80,7 @@ struct AddEditServiceView: View {
                             }
                             .pickerStyle(.segmented)
                         }
-//                        
+                        
                         if loggingService {
                             formItem(headline: "When was this service last performed?", subheadline: "This will be added to service history.") {
                                 
@@ -190,6 +192,9 @@ struct AddEditServiceView: View {
         }
     }
     
+    // MARK: - Methods
+    
+    // Defines the header and padding for the service interval and 'Start Tracking From' sections
     private func formItem<Content: View>(headline: String, subheadline: String? = nil, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 15) {
             VStack(alignment: .leading) {
@@ -205,6 +210,23 @@ struct AddEditServiceView: View {
             content()
         }
         .padding(.vertical, 5)
+    }
+    
+    // Allows optional Int values to be displayed as blank fields if the value is either nil or 0 (for better UX)
+    private func optionalIntFieldBinding(_ value: Binding<Int?>) -> Binding<String> {
+        Binding(
+            get: {
+                guard let v = value.wrappedValue, v != 0 else { return "" }
+                return String(v)
+            },
+            set: { newValue in
+                if let intValue = Int(newValue), intValue != 0 {
+                    value.wrappedValue = intValue
+                } else {
+                    value.wrappedValue = nil
+                }
+            }
+        )
     }
 }
 
