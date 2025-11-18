@@ -81,8 +81,16 @@ struct MaintenanceListView: View {
                 .tint(Color.primary)
             }
             
-            AdaptiveToolbarButton(title: "Log Service", tint: Color.maintenanceTheme, disabled: services.isEmpty) {
-                showingLogService = true
+            AdaptiveToolbarButton {
+                Button {
+                    showingLogService = true
+                } label: {
+                    Label("Log Service", systemImage: "plus")
+                }
+                .tint(Color.maintenanceTheme)
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.circle) // defines button shape for iOS 17 & 18
+                .disabled(services.isEmpty)
             }
             
             if #available(iOS 26, *) {

@@ -46,8 +46,13 @@ struct RepairsListView: View {
             AddEditRepairView(vehicle: vehicle)
         }
         .toolbar {
-            AdaptiveToolbarButton(title: "Add Repair", tint: Color.repairsTheme) {
-                showingAddRepair = true
+            AdaptiveToolbarButton {
+                Button("Add Repair", systemImage: "plus") {
+                    showingAddRepair = true
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.circle)
+                .tint(Color.repairsTheme)
             }
             
             if #available(iOS 26, *) {
