@@ -37,7 +37,6 @@ struct AddPhotoButton: View {
                 Text("Add Photo...")
             } icon: {
                 Image(systemName: "photo")
-                    .foregroundStyle(Color.accent)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
