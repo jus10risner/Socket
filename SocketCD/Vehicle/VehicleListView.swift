@@ -36,25 +36,13 @@ struct VehicleListView: View {
                         try? context.save()
                     }
                     .listRowSeparator(.hidden)
-                    
-                    
-                    //            if showingOnboardingText == true {
-                    //                onboardingTipText
-                    //            }
                 }
             }
         }
-//        .scrollContentBackground(.hidden)
-//        .background(Color(.systemGroupedBackground))
         .navigationTitle("Vehicles")
         .navigationBarTitleDisplayMode(.large)
         .listRowSpacing(5)
         .scrollIndicators(.hidden)
-//        .onAppear {
-//            if vehicles.count == 1 && settings.onboardingTipsAlreadyPresented == false {
-//                showingOnboardingText = true
-//            }
-//        }
         .sheet(isPresented: $showingSettings) {
             AppSettingsView()
         }
@@ -82,44 +70,11 @@ struct VehicleListView: View {
         }
     }
     
-    
-    // MARK: - Views
-    
-    // Tip that displays immediately after the first vehicle has been added, until another view is shown
-//    private var onboardingTipText: some View {
-//        Section {
-//            ZStack {
-//                RoundedRectangle(cornerRadius: 10)
-//                    .foregroundStyle(Color.socketPurple)
-//                    .accessibilityElement()
-//                
-//                VStack(alignment: .leading, spacing: 20) {
-//                    Text("You can swipe on a vehicle, to quickly add fill-ups or make changes to that vehicle, right from this screen.")
-//                    
-//                    Text("When you're ready, tap your vehicle to begin adding maintenance services, repairs, and more.")
-//                }
-//                .padding(30)
-//                .font(.subheadline)
-//                .foregroundStyle(Color.white)
-//                .accessibilityElement(children: .combine)
-//            }
-//            .padding(.top, 30)
-//            .listRowSeparator(.hidden)
-//            .listRowBackground(Color.customBackground)
-//        }
-//    }
-    
     // MARK: - Methods
     
     
 //    var iCloudContainerAvailable: Bool {
 //        FileManager.default.ubiquityIdentityToken != nil
-//    }
-    
-//    func updateNotifications() {
-//        for vehicle in vehicles {
-//            vehicle.updateAllServiceNotifications()
-//        }
 //    }
     
     // Persists the order of vehicles, after moving
