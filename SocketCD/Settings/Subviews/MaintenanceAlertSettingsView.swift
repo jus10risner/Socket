@@ -34,6 +34,12 @@ struct MaintenanceAlertSettingsView: View {
         }
         .navigationTitle("Maintenance Alerts")
         .navigationBarTitleDisplayMode(.inline)
+        .onDisappear {
+            Task {
+                // reschedules notifications, if values are changed on this view
+                await NotificationManager.shared.refreshAllNotifications()
+            }
+        }
     }
 }
 
