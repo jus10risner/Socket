@@ -7,19 +7,19 @@
 
 import TipKit
 
-struct DashboardTip: Tip {
-    var title: Text {
-        Text("Welcome to the Dashboard")
-    }
-    
-    var message: Text? {
-        Text("Tap the action button on a card to add or edit info, or tap the card itself to view details.")
-    }
-    
-    var image: Image? {
-        Image(systemName: "rectangle.3.group.fill")
-    }
-}
+//struct DashboardTip: Tip {
+//    var title: Text {
+//        Text("Welcome to the Dashboard")
+//    }
+//    
+//    var message: Text? {
+//        Text("Tap the action button on a card to add or edit info, or tap the card itself to view details.")
+//    }
+//    
+//    var image: Image? {
+//        Image(systemName: "rectangle.3.group.fill")
+//    }
+//}
 
 struct LogServiceTip: Tip {
     var title: Text {
@@ -28,7 +28,7 @@ struct LogServiceTip: Tip {
     
     var message: Text? {
         Text("""
-            Tap here to set up a new maintenance service.
+            Tap the **book** button to set up a new maintenance service.
             
             Tap the **plus** button each time you complete a service to create a service log.
             """)
@@ -46,7 +46,7 @@ struct ServiceLogTip: Tip {
     }
     
     var message: Text? {
-        Text("Select one or multiple services to log. They will share all notes, photos, and details you enter here.")
+        Text("Select one or more services to log. All services you select will share the information entered here.")
     }
     
     var image: Image? {
