@@ -42,7 +42,7 @@ struct SocketCDApp: App {
             
             if newPhase == .active {
                 Task {
-                    await NotificationManager.shared.refreshAllNotifications()
+                    await NotificationManager.shared.refreshAllNotifications() // Checks to see if any notifications need to be canceled or scheduled
                 }
             }
         }

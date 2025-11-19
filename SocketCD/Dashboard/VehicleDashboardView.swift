@@ -91,8 +91,6 @@ struct VehicleDashboardView: View {
                     }
                 }
                 .disabled(newOdometerValue == nil)
-            }, message: {
-                Text("Enter the current odometer reading for this vehicle.")
             })
             .toolbar {
                 vehicleToolbar
@@ -115,21 +113,17 @@ struct VehicleDashboardView: View {
         }
     }
     
-    private var timelineButton: some View {
-        Button {
-            activeSheet = .showTimeline
-        } label: {
-            Label("Activity Timeline", systemImage: "list.bullet")
-            Text("Maintenance and Repairs")
-        }
-    }
-    
     @ToolbarContentBuilder
     private var vehicleToolbar: some ToolbarContent {
         ToolbarItem {
             Menu("Vehicle Options", systemImage: "ellipsis") {
                 if !vehicle.groupedServiceAndRepairTimeline.isEmpty {
-                    timelineButton
+                    Button {
+                        activeSheet = .showTimeline
+                    } label: {
+                        Label("Activity Timeline", systemImage: "list.bullet")
+                        Text("Maintenance and Repairs")
+                    }
                 }
                 
                 exportMenu
@@ -215,6 +209,7 @@ struct ShareItem: Identifiable {
     let url: URL
 }
 
+// Sheet options for VehicleDashboardView
 enum ActiveSheet: String, Identifiable {
     case logService, addRepair, addFillup, addCustomInfo, editVehicle, showTimeline
     
