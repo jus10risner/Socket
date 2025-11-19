@@ -51,7 +51,7 @@ struct AddEditRecordView: View {
                         LabeledInput(label: "Services") {
                             Group {
                                 if draftServiceLog.selectedServiceIDs.isEmpty {
-                                    Text("Tap to Select")
+                                    Text("Choose")
                                 } else {
                                     Text(draftServiceLog.selectedServiceNames(from: vehicle))
                                 }

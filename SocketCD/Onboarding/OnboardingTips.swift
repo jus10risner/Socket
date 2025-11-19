@@ -42,11 +42,11 @@ struct LogServiceTip: Tip {
 
 struct ServiceLogTip: Tip {
     var title: Text {
-        Text("Log Multiple Services")
+        Text("Choose Services")
     }
     
     var message: Text? {
-        Text("Select one or more services to log. They will share all notes, photos, and details you enter.")
+        Text("Select one or multiple services to log. They will share all notes, photos, and details you enter here.")
     }
     
     var image: Image? {
