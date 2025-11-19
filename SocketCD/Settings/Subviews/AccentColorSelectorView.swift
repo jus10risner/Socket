@@ -11,21 +11,21 @@ import SwiftUI
 struct AccentColorSelectorView: View {
     @EnvironmentObject var settings: AppSettings
     
-    let columns = [GridItem(.adaptive(minimum: 50), spacing: 10)]
-    
     var body: some View {
         List {
-            Section(footer: Text("Used for buttons and highlights throughout the app.")) {
-                LazyVGrid(columns: columns, spacing: 10) {
-                    
+            Section {
+                Picker("Accent Color", selection: $settings.accentColor) {
                     defaultAccentButton
                     
-                    alternateAccentButtonsGrid
+                    alternateAccentButtons
                 }
-                .buttonStyle(.plain)
-                .font(.largeTitle.bold())
+                .pickerStyle(.inline)
+                .labelsHidden()
+            } footer: {
+                Text("Used for buttons and highlights throughout the app.")
             }
         }
+        .buttonStyle(.plain)
         .navigationTitle("Accent Color")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -38,25 +38,34 @@ struct AccentColorSelectorView: View {
         Button {
             settings.accentColor = nil
         } label: {
-            Label("Default Accent", systemImage: settings.accentColor == nil ? "checkmark.circle.fill" : "circle.fill")
-                .labelStyle(.iconOnly)
-                .imageScale(.large)
-                .foregroundStyle(Color.accent)
-//                .foregroundStyle(LinearGradient(stops: [Gradient.Stop(color: .indigo, location: 0.1), Gradient.Stop(color: .blue, location: 0.4), Gradient.Stop(color: .orange, location: 0.7), Gradient.Stop(color: .mint, location: 1)], startPoint: .leading, endPoint: .trailing))
+            Label {
+                Text("Socket Purple")
+            } icon: {
+                Image(systemName: "circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.accent)
+            }
+            .padding(5)
         }
+        .tag(nil as AccentColors?)
     }
     
     // Buttons to select alternate accent color
-    private var alternateAccentButtonsGrid: some View {
+    private var alternateAccentButtons: some View {
         ForEach(AccentColors.allCases, id: \.self) { color in
             Button {
                 settings.accentColor = color
             } label: {
-                Label(color.rawValue, systemImage: settings.accentColor == color ? "checkmark.circle.fill" : "circle.fill")
-                    .labelStyle(.iconOnly)
-                    .imageScale(.large)
-                    .foregroundStyle(settings.colorValue(for: color))
+                Label {
+                    Text(color.rawValue.capitalized)
+                } icon: {
+                    Image(systemName: "circle.fill")
+                        .font(.title)
+                        .foregroundStyle(settings.colorValue(for: color))
+                }
+                .padding(5)
             }
+            .tag(color as AccentColors?)
         }
     }
 }
