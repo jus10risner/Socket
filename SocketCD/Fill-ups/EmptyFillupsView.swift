@@ -31,9 +31,10 @@ struct EmptyFillupsView: View {
                 
                 Adding fill-ups regularly also keeps your odometer current, so Socket can alert you when maintenance is due.
                 """)
+                .fixedSize(horizontal: false, vertical: true)
                 .font(.subheadline)
                 .padding(20)
-                .frame(width: 350)
+                .padding(.vertical, 40)
                 .presentationCompactAdaptation(.popover)
             }
         }

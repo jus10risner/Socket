@@ -31,9 +31,10 @@ struct EmptyRepairsView: View {
                 
                 Want a reminder to do something again? Add it to Maintenance.
                 """)
+                .fixedSize(horizontal: false, vertical: true)
                 .font(.subheadline)
                 .padding(20)
-                .frame(width: 350)
+                .padding(.vertical, 40)
                 .presentationCompactAdaptation(.popover)
             }
         }

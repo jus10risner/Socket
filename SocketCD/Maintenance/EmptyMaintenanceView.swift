@@ -19,7 +19,7 @@ struct EmptyMaintenanceView: View {
                     .foregroundStyle(Color(.maintenanceTheme))
             }
         } description: {
-            Text("Tap the book button at the top of the screen to set up a service.")
+            Text("Tap the book button to set up a service.")
                 .accessibilityHidden(true)
         } actions: {
             Button("Learn More") {
@@ -32,9 +32,10 @@ struct EmptyMaintenanceView: View {
                 
                 After you set up a new maintenance service, Socket can notify you each time it's due.
                 """)
+                .fixedSize(horizontal: false, vertical: true)
                 .font(.subheadline)
                 .padding(20)
-                .frame(width: 350)
+                .padding(.vertical, 40)
                 .presentationCompactAdaptation(.popover)
             }
         }

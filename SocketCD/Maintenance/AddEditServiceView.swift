@@ -19,6 +19,7 @@ struct AddEditServiceView: View {
     @State private var showingDuplicateNameError = false
     @State private var loggingService = true
     @State private var showingDeleteAlert = false
+    @State private var showingMoreInfo = false
     
     // MARK: - Input
     private let vehicle: Vehicle?
@@ -98,7 +99,7 @@ struct AddEditServiceView: View {
                                     .keyboardType(.decimalPad)
                             }
                         } else {
-                            formItem(headline: "Define a starting point for this service.", subheadline: "This will not be added to service history.") {
+                            formItem(headline: "Define a starting point for this service.", hasInfoButton: true, subheadline: "This will not be added to service history.") {
                                 DatePicker("Date", selection: $draftServiceLog.date, displayedComponents: .date)
                                     .foregroundStyle(Color.secondary)
                             }
@@ -195,11 +196,32 @@ struct AddEditServiceView: View {
     // MARK: - Methods
     
     // Defines the header and padding for the service interval and 'Start Tracking From' sections
-    private func formItem<Content: View>(headline: String, subheadline: String? = nil, @ViewBuilder content: () -> Content) -> some View {
+    private func formItem<Content: View>(headline: String, hasInfoButton: Bool = false, subheadline: String? = nil, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 15) {
             VStack(alignment: .leading) {
-                Text(headline)
-                    .font(.subheadline.bold())
+                HStack {
+                    Text(headline)
+                        .font(.subheadline.bold())
+                    
+                    if hasInfoButton {
+                        Button("More Info", systemImage: "info.circle") {
+                            showingMoreInfo = true
+                        }
+                        .labelStyle(.iconOnly)
+                        .popover(isPresented: $showingMoreInfo) {
+                            Text("""
+                                If this is a new vehicle or you don’t know when this service was last performed, select this option.
+                                
+                                Socket will use the values you enter to calculate when the service is due.
+                                """)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .font(.subheadline)
+                                .padding(20)
+                                .padding(.vertical, 40)
+                                .presentationCompactAdaptation(.popover)
+                        }
+                    }
+                }
                 if let subheadline {
                     Text(subheadline)
                         .font(.caption)
