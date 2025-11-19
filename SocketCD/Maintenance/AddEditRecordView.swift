@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct AddEditRecordView: View {
     // MARK: - Environment
@@ -57,6 +58,7 @@ struct AddEditRecordView: View {
                             }
                             .multilineTextAlignment(.leading)
                         }
+                        .popoverTip(ServiceLogTip())
                     }
                     
                     LabeledInput(label: "Odometer") {

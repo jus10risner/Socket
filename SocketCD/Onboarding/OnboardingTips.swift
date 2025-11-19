@@ -21,41 +21,22 @@ struct DashboardTip: Tip {
     }
 }
 
-struct MaintenanceListTip: Tip {
-    var title: Text {
-        Text("Log Maintenance")
-    }
-    
-    var message: Text? {
-//        Text("""
-//            Tap the **book** button to set up a new maintenance service.
-//            
-//            Tap the **plus** button each time you complete an existing service to log it.
-//            """)
-        Text("Tap to set up a new maintenance service.")
-    }
-    
-    var image: Image? {
-        Image(systemName: "checklist.unchecked")
-    }
-}
-
 struct LogServiceTip: Tip {
     var title: Text {
-        Text("Log Maintenance")
+        Text("Logging Maintenance")
     }
     
     var message: Text? {
-//        Text("Tap the **plus** button each time you complete a service to log it.")
         Text("""
-            Tap the **book** button to set up a new maintenance service.
+            Tap here to set up a new maintenance service.
             
-            Tap the **plus** button each time you complete an existing service to log it.
+            Tap the **plus** button each time you complete a service to create a service log.
             """)
+        .accessibilityLabel("Tap the Set Up New Service button to define a new maintenance service. Tap the Log Service button each time you complete an existing service to create a service log.")
     }
     
     var image: Image? {
-        Image(systemName: "plus.circle.fill")
+        Image(systemName: "hand.tap.fill")
     }
 }
 
@@ -69,6 +50,6 @@ struct ServiceLogTip: Tip {
     }
     
     var image: Image? {
-        Image(systemName: "circle.grid.2x2.topleft.checkmark.filled")
+        Image(systemName: "checkmark.circle.fill")
     }
 }

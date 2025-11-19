@@ -34,6 +34,7 @@ struct SelectedServicesListView: View {
             }
             .textCase(nil)
         }
+        .onAppear { ServiceLogTip().invalidate(reason: .actionPerformed) }
     }
     
     private func toggleSelection(for service: Service) {

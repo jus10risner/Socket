@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct MaintenanceListView: View {
     @Environment(\.dismiss) var dismiss
@@ -70,6 +71,8 @@ struct MaintenanceListView: View {
             ToolbarItem {
                 Button {
                     showingAddService = true
+                    
+                    LogServiceTip().invalidate(reason: .actionPerformed)
                 } label: {
                     Label(title: {
                         Text("Set Up New Service")
@@ -79,11 +82,16 @@ struct MaintenanceListView: View {
                 }
 //                .adaptiveTint()
                 .tint(Color.primary)
+                .buttonStyle(.plain)
+                .popoverTip(LogServiceTip())
+                .tipImageSize(.init(width: 44, height: 44))
             }
             
             AdaptiveToolbarButton {
                 Button {
                     showingLogService = true
+                    
+                    LogServiceTip().invalidate(reason: .actionPerformed)
                 } label: {
                     Label("Log Service", systemImage: "plus")
                 }
