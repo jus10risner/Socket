@@ -13,7 +13,6 @@ struct MaintenanceListView: View {
     @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
     
-    // Used to populate the services list
     @FetchRequest var services: FetchedResults<Service>
     
     init(vehicle: Vehicle) {
@@ -42,9 +41,11 @@ struct MaintenanceListView: View {
         }
         .navigationTitle("Maintenance")
         .listRowSpacing(5)
-        .onAppear { requestNotificationPermission() }
-        .onChange(of: Array(services)) { requestNotificationPermission() }
-//        .onChange(of: vehicle.odometer) { vehicle.updateAllServiceNotifications() }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                requestNotificationPermission()
+            }
+        }
         .sheet(isPresented: $showingAddService) {
             AddEditServiceView(vehicle: vehicle)
         }
@@ -92,12 +93,12 @@ struct MaintenanceListView: View {
     
     // MARK: - Methods
     
-    // Asks the user for permission to display notifications, when appropriate
+    // Asks the user for permission to display notifications
     func requestNotificationPermission() {
         let center = UNUserNotificationCenter.current()
         
         center.getNotificationSettings { settings in
-            if settings.authorizationStatus == .notDetermined && services.count > 0 {
+            if settings.authorizationStatus == .notDetermined {
                 center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
                     if success {
                         print("Notification permission granted.")
