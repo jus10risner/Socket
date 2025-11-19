@@ -35,10 +35,6 @@ struct VehicleDashboardView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                TipView(DashboardTip())
-                    .tipBackground(Color.accent.opacity(0.2))
-                    .tint(Color.accent)
-                
                 LazyVGrid(columns: columns, spacing: 5) {
                     HStack(spacing: 5) {
                         odometerDashboardCard
@@ -50,6 +46,10 @@ struct VehicleDashboardView: View {
                     
                     FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
                 }
+                
+//                TipView(DashboardTip())
+//                    .tipBackground(Color(.tertiarySystemBackground))
+//                    .tint(Color.accent)
                 
                 CustomInfoSection(vehicle: vehicle, columns: columns, activeSheet: $activeSheet)
                     .padding(.top, 30)
