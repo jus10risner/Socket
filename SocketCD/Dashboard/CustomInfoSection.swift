@@ -15,9 +15,9 @@ struct CustomInfoSection: View {
     @Binding var activeSheet: ActiveSheet?
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 5) {
             Text("Custom Info")
-                .font(.headline)
+                .font(.title3.bold())
                 .padding(.leading)
             
             LazyVGrid(columns: columns, spacing: 5) {
