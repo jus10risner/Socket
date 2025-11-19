@@ -28,7 +28,7 @@ struct FillupsCard: View {
     }
     
     var body: some View {
-        DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: Color(.fillupsTheme), buttonLabel: "Add Fill-up", buttonSymbol: "plus.circle.fill") {
+        DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: Color(.fillupsTheme), buttonLabel: "Add Fill-up", buttonSymbol: "plus") {
             activeSheet = .addFillup
         } content: {
             HStack(alignment: .bottom) {

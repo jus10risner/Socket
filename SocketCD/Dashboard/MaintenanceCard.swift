@@ -27,7 +27,7 @@ struct MaintenanceCard: View {
     }
     
     var body: some View {
-        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: Color(.maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus.circle.fill", disableButton: vehicle.sortedServicesArray.count < 1) {
+        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: Color(.maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus", disableButton: vehicle.sortedServicesArray.count < 1) {
             activeSheet = .logService
         } content: {
             if let service = nextDueService {

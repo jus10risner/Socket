@@ -99,7 +99,7 @@ struct VehicleDashboardView: View {
     }
     
     private var odometerDashboardCard: some View {
-        DashboardCard(title: "Odometer", systemImage: "car.fill", accentColor: Color.accent, buttonLabel: "Update Odometer", buttonSymbol: "pencil.circle.fill") {
+        DashboardCard(title: "Odometer", systemImage: "car.fill", accentColor: Color.accent, buttonLabel: "Update Odometer", buttonSymbol: "pencil") {
             showingUpdateOdometerAlert = true
         } content: {
             HStack(alignment: .firstTextBaseline, spacing: 3) {
