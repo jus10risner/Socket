@@ -208,6 +208,8 @@ struct AddEditServiceView: View {
                             showingMoreInfo = true
                         }
                         .labelStyle(.iconOnly)
+                        .foregroundStyle(settings.selectedAccent())
+                        .buttonStyle(.plain)
                         .popover(isPresented: $showingMoreInfo) {
                             Text("""
                                 If this is a new vehicle or you don’t know when this service was last performed, select this option.
