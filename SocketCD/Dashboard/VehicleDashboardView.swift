@@ -9,6 +9,7 @@ import SwiftUI
 import TipKit
 
 struct VehicleDashboardView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @EnvironmentObject var settings: AppSettings
     @StateObject var draftVehicle = DraftVehicle()
     @ObservedObject var vehicle: Vehicle
@@ -36,7 +37,13 @@ struct VehicleDashboardView: View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 5) {
-                    HStack(spacing: 5) {
+                    if horizontalSizeClass == .compact {
+                        HStack(spacing: 5) {
+                            odometerDashboardCard
+                            
+                            RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                        }
+                    } else {
                         odometerDashboardCard
                         
                         RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
