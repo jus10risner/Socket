@@ -83,7 +83,7 @@ struct VehicleDashboardView: View {
             .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
                 TextField("\(draftVehicle.odometer ?? 0)", value: $newOdometerValue, format: .number.decimalSeparator(strategy: .automatic))
                     .keyboardType(.numberPad)
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) { newOdometerValue = nil }
                 Button("Save") {
                     if let newOdometer = newOdometerValue {
                         draftVehicle.odometer = newOdometer
@@ -91,6 +91,8 @@ struct VehicleDashboardView: View {
                     }
                 }
                 .disabled(newOdometerValue == nil)
+            }, message: {
+                Text("Enter the current odometer value.")
             })
             .toolbar {
                 vehicleToolbar
