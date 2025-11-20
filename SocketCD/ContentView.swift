@@ -36,10 +36,6 @@ struct ContentView: View {
         }
         .navigationSplitViewStyle(.balanced)
         .onAppear {
-//            for vehicle in vehicles {
-//                vehicle.updateAllServiceNotifications()
-//            }
-            
             if let lastSelectedVehicle {
                 selectedVehicle = lastSelectedVehicle
             } else if UIDevice.current.userInterfaceIdiom == .pad {
@@ -55,103 +51,22 @@ struct ContentView: View {
     // MARK: - Views
     
     private var emptyDetailListView: some View {
-        ContentUnavailableView("No Vehicle Selected", systemImage: "car.2.fill", description: Text("Choose a vehicle to see details here."))
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text(" ")
-                        .opacity(0)
-                }
+        Group {
+            if vehicles.isEmpty {
+                ContentUnavailableView("Add a Vehicle", systemImage: "arrow.left", description: Text("To get started, add a vehicle to your list."))
+                    .symbolEffect(.pulse)
+            } else {
+                ContentUnavailableView("No Vehicle Selected", systemImage: "car.2.fill", description: Text("Choose a vehicle to see details here."))
             }
-            .navigationBarTitleDisplayMode(.large)
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(" ")
+                    .opacity(0)
+            }
+        }
+        .navigationBarTitleDisplayMode(.large)
     }
-    
-//    private var homeView: some View {
-//        NavigationStack {
-//            VehicleListView(selectedVehicle: $selectedVehicle, showingOnboardingText: $showingOnboardingText)
-//                .overlay {
-//                    if vehicles.isEmpty {
-//                        EmptyVehicleListView()
-//                    }
-//                }
-//                .scrollContentBackground(.hidden)
-//                .background(Color(.customBackground))
-//                .navigationTitle("Vehicles")
-//                .onAppear { checkForViewsToBeShownOnLaunch() }
-//                .onChange(of: notificationBadgeNumber) {
-//                    // Sets the app icon's notification badge number
-////                    UIApplication.shared.applicationIconBadgeNumber = notificationBadgeNumber
-//                    UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)
-//                }
-//                .onChange(of: [settings.daysBeforeMaintenance, settings.distanceBeforeMaintenance]) {
-//                    setUpNotifications(cancelPending: true)
-//                }
-//                .onChange(of: selectedVehicle) {
-//                    if settings.onboardingTipsAlreadyPresented == false {
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-//                            showingOnboardingText = false
-//                            settings.onboardingTipsAlreadyPresented = true
-//                        }
-//                    }
-//                    
-//                    DispatchQueue.main.async {
-//                        // Ensures that all devices syncing via iCloud have the same local notifications
-//                        setUpNotifications(cancelPending: false)
-//                    }
-//                }
-//                .sheet(item: $selectedVehicle) { vehicle in
-//                    // Needs to be here, rather than on VehicleListView, for ShareLink to work properly
-//                    VehicleTabView(vehicle: vehicle)
-//                }
-//                .sheet(isPresented: $showingSettings) { AppSettingsView() }
-//                .sheet(isPresented: $showingAddVehicle, onDismiss: { checkOnboardingTipsStatus() }) { AddEditVehicleView() }
-//                .sheet(isPresented: $settings.welcomeViewPresented) { WelcomeView() }
-//                .overlay {
-//                    if showingOnboardingTip {
-//                        OnboardingTips(showingOnboardingTip: $showingOnboardingTip, vehicle: vehicles[0])
-//                    }
-//                }
-//                .toolbar {
-//                    #if DEBUG
-//                    ToolbarItemGroup(placement: .topBarLeading) {
-//                        dataController.cloudContainerAvailable ? Image(systemName: "checkmark.icloud") : Image(systemName: "xmark.icloud")
-//                        
-//                        Button {
-//                            settings.welcomeViewPresented = true
-//                            settings.onboardingTipsAlreadyPresented = false
-//                        } label: {
-//                            Image(systemName: "sparkles")
-//                        }
-//                    }
-//                    #endif
-//                    
-//                    ToolbarItemGroup(placement: .topBarTrailing) {
-//                        Group {
-//                            Button {
-//                                showingAddVehicle = true
-//                            } label: {
-//                                Image(systemName: "plus")
-//                                    .accessibilityLabel("Add a Vehicle")
-//                            }
-//                            
-//                            Button {
-//                                showingSettings = true
-//                            } label: {
-//                                Image(systemName: "gearshape")
-//                                    .accessibilityLabel("Settings")
-//                            }
-//                        }
-//                    }
-//                }
-//                // Fires only if there is a problem loading or saving Core Data persistent stores
-//                .alert("No Data Found", isPresented: $dataController.isShowingDataError) {
-//                    Button("OK", role: .cancel) { }
-//                } message: {
-//                    Text("\nThere was a problem loading data. \n\nIf your device is low on storage space, try deleting some unused apps, then restart Socket. \n\nPlease reinstall Socket, if the issue persists.")
-//                }
-//
-//        }
-//        .tint(.primary)
-//    }
     
     
     // MARK: - Computed Properties
@@ -167,18 +82,6 @@ struct ContentView: View {
         let servicesDue = allServices.filter { $0.serviceStatus == .due || $0.serviceStatus == .overDue }
         
         return servicesDue.count
-        
-//        var count = 0
-//
-//        for vehicle in vehicles {
-//            for service in vehicle.sortedServicesArray {
-//                if service.serviceStatus == .due || service.serviceStatus == .overDue {
-//                    count += 1
-//                }
-//            }
-//        }
-//        
-//        return count
     }
     
     
@@ -220,19 +123,6 @@ struct ContentView: View {
             }
         }
     }
-    
-    // Schedules local notifications, if appropriate
-//    func setUpNotifications(cancelPending: Bool) {
-//        for vehicle in vehicles {
-//            if cancelPending == true {
-//                for service in vehicle.sortedServicesArray {
-//                    service.cancelPendingNotifications()
-//                }
-//            }
-//            
-//            vehicle.updateAllNotifications()
-//        }
-//    }
 }
 
 #Preview {
