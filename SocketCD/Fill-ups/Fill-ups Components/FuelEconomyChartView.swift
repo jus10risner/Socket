@@ -81,42 +81,35 @@ struct FuelEconomyChartView: View {
     // The horizontal scale of the chart
     private var xRange: ClosedRange<Date> {
         let calendar = Calendar.current
-        
-        guard
-            let earliestDate = data.first?.date,
-            let latestDate = data.last?.date
-        else {
+
+        guard let latestDate = data.last?.date else {
             return Date()...Date()
         }
-        
-        let startOfLatestMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: latestDate)) ?? latestDate
+
+        // Anchor to the start of the latest month
+        let startOfLatestMonth = calendar.date(
+            from: calendar.dateComponents([.year, .month], from: latestDate)
+        ) ?? latestDate
+
+        // End is the start of the next month after the latest month
         let endOfLatestMonth = calendar.date(byAdding: .month, value: 1, to: startOfLatestMonth) ?? latestDate
 
+        // Compute start based on the selected range
         let start: Date
-        let end: Date = endOfLatestMonth
-        
         switch selectedDateRange {
         case .sixMonths:
-            if let sixMonthsBack = calendar.date(byAdding: .month, value: -5, to: startOfLatestMonth),
-               let earliestMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: earliestDate)) {
-                start = max(sixMonthsBack, earliestMonth)
-            } else {
-                start = earliestDate
-            }
-            
+            start = calendar.date(byAdding: .month, value: -5, to: startOfLatestMonth) ?? startOfLatestMonth
         case .year:
-            if let oneYearBack = calendar.date(byAdding: .year, value: -1, to: startOfLatestMonth),
-               let earliestMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: earliestDate)) {
-                start = max(oneYearBack, earliestMonth)
-            } else {
-                start = earliestDate
-            }
-            
+            start = calendar.date(byAdding: .year, value: -1, to: startOfLatestMonth) ?? startOfLatestMonth
         case .all:
-            start = calendar.date(from: calendar.dateComponents([.year, .month], from: earliestDate)) ?? earliestDate
+            if let earliestDate = data.first?.date {
+                start = calendar.date(from: calendar.dateComponents([.year, .month], from: earliestDate)) ?? earliestDate
+            } else {
+                start = startOfLatestMonth
+            }
         }
-        
-        return start...end
+
+        return start...endOfLatestMonth
     }
     
     // The vertical scale of the chart
