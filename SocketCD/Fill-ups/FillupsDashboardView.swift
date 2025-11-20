@@ -27,6 +27,7 @@ struct FillupsDashboardView: View {
     @State private var showingFuelEconomyInfo = false
     @State private var selectedDateRange: DateRange = .sixMonths
     @State private var showingAverage: Bool = false
+    @State private var data: [Fillup]? = nil
     
     var body: some View {
         ZStack {
@@ -38,33 +39,25 @@ struct FillupsDashboardView: View {
                         VStack(spacing: 15) {
                             latestFillupInfo
                             
-                            if data.count == 0 {
-                                emptyChartView
-                            } else {
-                                Button {
-                                    showingAverage.toggle()
-                                } label: {
-                                    Text("Average: \(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                                        .font(.subheadline)
-                                        .foregroundStyle(showingAverage ? Color.white : Color.primary)
-                                        .padding(.vertical, 9)
-                                        .padding(.horizontal, 15)
-                                        .background(
-                                            RoundedRectangle.adaptive
-                                                .fill(showingAverage ? Color.fillupsTheme : Color.clear)
-                                                .stroke(showingAverage ? Color.clear : Color.secondary, lineWidth: 0.5)
-                                        )
-                                }
-                                .buttonStyle(.plain)
-                                
-                                FuelEconomyChartView(data: data, averageFuelEconomy: averageFuelEconomy, selectedDateRange: $selectedDateRange, showingAverage: $showingAverage)
-                                
-                                Picker("Date Range", selection: $selectedDateRange) {
-                                    ForEach(DateRange.allCases, id: \.self) {
-                                        Text($0.rawValue)
+                            if let data {
+                                if data.count == 0 {
+                                    emptyChartView
+                                } else {
+                                    averageFuelEconomyButton
+                                    
+                                    FuelEconomyChartView(data: data, averageFuelEconomy: averageFuelEconomy, selectedDateRange: $selectedDateRange, showingAverage: $showingAverage)
+                                    
+                                    Picker("Date Range", selection: $selectedDateRange) {
+                                        ForEach(DateRange.allCases, id: \.self) {
+                                            Text($0.rawValue)
+                                        }
                                     }
+                                    .pickerStyle(.segmented)
                                 }
-                                .pickerStyle(.segmented)
+                            } else {
+                                // Placeholder for when data hasn't loaded yet (prevents UI jump)
+                                Color(.systemGroupedBackground).opacity(0.3)
+                                    .frame(minHeight: 200)
                             }
                         }
                         .padding(15) // Maintains correct padding in iOS 17/18
@@ -83,6 +76,12 @@ struct FillupsDashboardView: View {
             }
         }
         .navigationTitle("Fill-ups")
+        .task {
+            updateData(for: selectedDateRange)
+        }
+        .onChange(of: selectedDateRange) {
+            updateData(for: selectedDateRange)
+        }
         .sheet(isPresented: $showingAddFillup) { AddEditFillupView(vehicle: vehicle) }
         .toolbar {
             AdaptiveToolbarButton {
@@ -162,6 +161,24 @@ struct FillupsDashboardView: View {
         }
     }
     
+    private var averageFuelEconomyButton: some View {
+        Button {
+            showingAverage.toggle()
+        } label: {
+            Text("Average: \(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                .font(.subheadline)
+                .foregroundStyle(showingAverage ? Color.white : Color.primary)
+                .padding(.vertical, 9)
+                .padding(.horizontal, 15)
+                .background(
+                    RoundedRectangle.adaptive
+                        .fill(showingAverage ? Color.fillupsTheme : Color.clear)
+                        .stroke(showingAverage ? Color.clear : Color.secondary, lineWidth: 0.5)
+                )
+        }
+        .buttonStyle(.plain)
+    }
+    
     // Displayed when no data points exist to place on the chart
     private var emptyChartView: some View {
         let isFullTank = fillups.contains(where: { $0.fillType == .fullTank })
@@ -202,15 +219,33 @@ struct FillupsDashboardView: View {
         )
     }
     
-    // Determines which data points to plot (excludes those with fuel economy of 0)
-    private var data: [Fillup] {
+    // Returns the average fuel economy for a given set of fill-ups
+    private var averageFuelEconomy: Double {
+        guard let data, !data.isEmpty else { return 0 }
+        let total = data.map { $0.fuelEconomy(settings: settings) }.reduce(0, +)
+        
+        return total / Double(data.count)
+    }
+    
+    
+    // MARK: - Methods
+    
+    // Updates the data array by calling computeData()
+    private func updateData(for range: DateRange) {
+        Task {
+            let result = await computeData(for: range)
+            data = result
+        }
+    }
+
+    // Returns all fill-ups with a fuel economy that is not 0
+    private func computeData(for range: DateRange) async -> [Fillup] {
         let calendar = Calendar.current
         guard let latestDate = fillups.compactMap(\.date).max() else { return [] }
 
-        // Start of latest month
         let startOfLatestMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: latestDate)) ?? latestDate
-        
         let cutoff: Date?
+        
         switch selectedDateRange {
         case .sixMonths:
             cutoff = calendar.date(byAdding: .month, value: -5, to: startOfLatestMonth)
@@ -226,14 +261,6 @@ struct FillupsDashboardView: View {
                 (cutoff.map { fillup.date >= $0 } ?? true)
             }
             .sorted(by: { $0.date < $1.date })
-    }
-    
-    // Returns the average fuel economy for a given set of fill-ups
-    private var averageFuelEconomy: Double {
-        guard !data.isEmpty else { return 0 }
-        let total = data.map { $0.fuelEconomy(settings: settings) }.reduce(0, +)
-        
-        return total / Double(data.count)
     }
 }
 

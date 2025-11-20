@@ -63,6 +63,7 @@ struct FuelEconomyChartView: View {
                     .foregroundStyle(Color.fillupsTheme)
             }
         }
+        .animation(.easeInOut, value: data)
         .animation(.easeInOut, value: selectedDateRange)
         .animation(.easeInOut, value: showingAverage)
         .chartYScale(domain: yRange)
