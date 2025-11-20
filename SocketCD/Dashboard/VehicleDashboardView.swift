@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import TipKit
 
 struct VehicleDashboardView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -53,10 +52,6 @@ struct VehicleDashboardView: View {
                     
                     FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
                 }
-                
-//                TipView(DashboardTip())
-//                    .tipBackground(Color(.tertiarySystemBackground))
-//                    .tint(Color.accent)
                 
                 CustomInfoSection(vehicle: vehicle, columns: columns, activeSheet: $activeSheet)
                     .padding(.top, 30)

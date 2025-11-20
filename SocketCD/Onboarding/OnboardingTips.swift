@@ -7,20 +7,6 @@
 
 import TipKit
 
-//struct DashboardTip: Tip {
-//    var title: Text {
-//        Text("Welcome to the Dashboard")
-//    }
-//    
-//    var message: Text? {
-//        Text("Tap the action button on a card to add or edit info, or tap the card itself to view details.")
-//    }
-//    
-//    var image: Image? {
-//        Image(systemName: "rectangle.3.group.fill")
-//    }
-//}
-
 struct LogServiceTip: Tip {
     var title: Text {
         Text("Logging Maintenance")
