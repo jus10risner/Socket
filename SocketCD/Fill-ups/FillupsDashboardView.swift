@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FillupsDashboardView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
     
@@ -57,7 +58,7 @@ struct FillupsDashboardView: View {
                             } else {
                                 // Placeholder for when data hasn't loaded yet (prevents UI jump)
                                 Color(.systemGroupedBackground).opacity(0.3)
-                                    .frame(minHeight: 200)
+                                    .frame(minHeight: horizontalSizeClass == .regular ? 350 : 200)
                             }
                         }
                         .padding(15) // Maintains correct padding in iOS 17/18
@@ -207,7 +208,7 @@ struct FillupsDashboardView: View {
             .multilineTextAlignment(.center)
         }
         .padding(.horizontal)
-        .frame(height: 200)
+        .frame(height: horizontalSizeClass == .regular ? 350 : 200)
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle.adaptive

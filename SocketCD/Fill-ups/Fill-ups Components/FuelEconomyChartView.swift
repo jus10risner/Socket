@@ -9,6 +9,7 @@ import Charts
 import SwiftUI
 
 struct FuelEconomyChartView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject private var settings: AppSettings
     let data: [Fillup]
     let averageFuelEconomy: Double
@@ -71,7 +72,7 @@ struct FuelEconomyChartView: View {
         .chartXAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
         .chartXScale(domain: xRange)
         .chartXSelection(value: $selectedDate)
-        .frame(minHeight: 200)
+        .frame(height: horizontalSizeClass == .regular ? 350 : 200)
         .chartPlotStyle { proxy in
             proxy
                 .background(Color(.systemGroupedBackground).opacity(0.3))
