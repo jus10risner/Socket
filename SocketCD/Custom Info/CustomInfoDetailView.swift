@@ -9,33 +9,34 @@ import SwiftUI
 
 struct CustomInfoDetailView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var settings: AppSettings
     @ObservedObject var customInfo: CustomInfo
     
-    @State private var copyHint = "Tap to copy"
+    @State private var copySymbol: CopySymbol = .tapToCopy
     @State private var showingEditCustomInfo = false
     
     var body: some View {
         List {
             if !customInfo.detail.isEmpty {
-                Section(footer: Text(copyHint)) {
+                Section(footer: Text("Tap to copy")) {
                     LabeledContent(customInfo.detail) {
-                        Button("Copy to clipboard", systemImage: "document.on.document") {
+                        Button("Copy to clipboard", systemImage: copySymbol.rawValue) {
                             let pasteBoard = UIPasteboard.general
                             pasteBoard.string = customInfo.detail
-                            copyHint = "Copied!"
+                            copySymbol = .copied
                             
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copyHint = "Tap to copy" }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copySymbol = .tapToCopy }
                         }
                         .labelStyle(.iconOnly)
+                        .frame(height: 20)
+                        .contentTransition(.symbolEffect(.replace.downUp.wholeSymbol, options: .nonRepeating))
                     }
                 }
-                .textCase(nil)
             }
             
             FormFooterView(note: customInfo.note, photos: customInfo.sortedPhotosArray)
         }
         .navigationTitle(customInfo.label)
-//        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingEditCustomInfo) {
             AddEditCustomInfoView(customInfo: customInfo) {
                 dismiss()
@@ -50,6 +51,10 @@ struct CustomInfoDetailView: View {
             }
         }
     }
+    
+    enum CopySymbol: String {
+        case tapToCopy = "document.on.document", copied = "checkmark"
+    }
 }
 
 #Preview {
@@ -59,4 +64,5 @@ struct CustomInfoDetailView: View {
     customInfo.detail = "ABC 123"
     
     return CustomInfoDetailView(customInfo: customInfo)
+        .environmentObject(AppSettings())
 }
