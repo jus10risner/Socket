@@ -22,12 +22,12 @@ final class NotificationManager: ObservableObject {
 
         let context = DataController.shared.container.viewContext
         let vehicles = (try? context.fetch(Vehicle.fetchRequest())) ?? []
+        
+        for vehicle in vehicles {
+            guard let services = vehicle.services as? Set<Service> else { continue }
 
-        vehicles.forEach { vehicle in
-            (vehicle.services ?? []).forEach { service in
-                if let service = service as? Service {
-                    service.evaluateNotifications(for: vehicle)
-                }
+            for service in services {
+                await service.evaluateNotifications(for: vehicle)
             }
         }
     }
