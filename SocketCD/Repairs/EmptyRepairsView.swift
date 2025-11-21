@@ -26,16 +26,11 @@ struct EmptyRepairsView: View {
             }
             .tint(Color(.repairsTheme))
             .popover(isPresented: $showingMoreInfo) {
-                Text("""
-                Repairs, like replacing brake pads or a failing alternator, are done as-needed rather than on a schedule. 
-                
-                Want a reminder to do something again? Add it to Maintenance.
-                """)
-                .fixedSize(horizontal: false, vertical: true)
-                .font(.subheadline)
-                .padding(20)
-                .padding(.vertical, 40)
-                .presentationCompactAdaptation(.popover)
+                PopoverContent(text: """
+                    Repairs, like replacing brake pads or a failing alternator, are done as-needed rather than on a schedule. 
+                    
+                    Want a reminder to do something again? Add it to Maintenance.
+                    """)
             }
         }
         .background(Color(.systemGroupedBackground))

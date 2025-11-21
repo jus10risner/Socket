@@ -26,16 +26,11 @@ struct EmptyFillupsView: View {
             }
             .tint(Color(.fillupsTheme))
             .popover(isPresented: $showingMoreInfo) {
-                Text("""
-                Socket tracks your fuel economy over time to help you drive efficiently and spot trends that might signal a problem. 
-                
-                Adding fill-ups regularly also keeps your odometer current, so Socket can alert you when maintenance is due.
-                """)
-                .fixedSize(horizontal: false, vertical: true)
-                .font(.subheadline)
-                .padding(20)
-                .padding(.vertical, 40)
-                .presentationCompactAdaptation(.popover)
+                PopoverContent(text: """
+                    Socket tracks your fuel economy over time to help you drive efficiently and spot trends that might signal a problem. 
+                    
+                    Adding fill-ups regularly also keeps your odometer current, so Socket can alert you when maintenance is due.
+                    """)
             }
         }
         .background(Color(.systemGroupedBackground))

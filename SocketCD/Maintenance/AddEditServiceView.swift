@@ -211,16 +211,11 @@ struct AddEditServiceView: View {
                         .foregroundStyle(settings.selectedAccent())
                         .buttonStyle(.plain)
                         .popover(isPresented: $showingMoreInfo) {
-                            Text("""
+                            PopoverContent(text: """
                                 If this is a new vehicle or you don’t know when this service was last performed, select this option.
                                 
                                 Socket will use the values you enter to calculate when the service is due.
                                 """)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .font(.subheadline)
-                                .padding(20)
-                                .padding(.vertical, 40)
-                                .presentationCompactAdaptation(.popover)
                         }
                     }
                 }

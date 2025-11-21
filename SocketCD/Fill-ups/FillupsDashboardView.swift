@@ -149,11 +149,7 @@ struct FillupsDashboardView: View {
                         .buttonStyle(.borderless)
                         .tint(Color.fillupsTheme)
                         .popover(isPresented: $showingFuelEconomyInfo) {
-                            Text("Fuel economy is calculated only when there are at least two **Full Tank** fill-ups. Partial or missed fill-ups are not included.")
-                                .font(.subheadline)
-                                .padding()
-                                .frame(width: 300)
-                                .presentationCompactAdaptation(.popover)
+                            PopoverContent(text: "Fuel economy is calculated only when there are at least two Full Tank fill-ups. Partial or missed fill-ups are not included.")
                         }
                     }
                 }

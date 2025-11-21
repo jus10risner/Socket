@@ -27,16 +27,11 @@ struct EmptyMaintenanceView: View {
             }
             .tint(Color(.maintenanceTheme))
             .popover(isPresented: $showingMoreInfo) {
-                Text("""
-                Keep your vehicle running smoothly with regular maintenance, like oil changes and air filter replacements.
-                
-                After you set up a new maintenance service, Socket can notify you each time it's due.
-                """)
-                .fixedSize(horizontal: false, vertical: true)
-                .font(.subheadline)
-                .padding(20)
-                .padding(.vertical, 40)
-                .presentationCompactAdaptation(.popover)
+                PopoverContent(text: """
+                    Keep your vehicle running smoothly with regular maintenance, like oil changes and air filter replacements.
+                    
+                    After you set up a new maintenance service, Socket can notify you each time it's due.
+                    """)
             }
         }
         .background(Color(.systemGroupedBackground))
