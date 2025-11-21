@@ -52,10 +52,10 @@ struct TimelineView: View {
                                 }
                             }
                         }
+                        .padding(.vertical, 5)
                     }
                 }
             }
-            .listRowSpacing(5)
             .navigationTitle("Activity Timeline")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

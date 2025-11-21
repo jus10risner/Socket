@@ -26,19 +26,26 @@ struct RepairsListView: View {
     
     var body: some View {
         ZStack {
-            if vehicle.sortedRepairsArray.isEmpty {
+            if repairs.isEmpty {
                 EmptyRepairsView()
             } else {
                 List {
-                    ForEach(repairs, id: \.id) { repair in
-                        NavigationLink {
-                            RepairDetailView(repair: repair)
-                        } label: {
-                            listRowItem(repair: repair)
+                    ForEach(repairsByYear, id: \.year) { section in
+                        Section {
+                            ForEach(section.repairs, id: \.id) { repair in
+                                NavigationLink {
+                                    RepairDetailView(repair: repair)
+                                } label: {
+                                    listRowItem(repair: repair)
+                                }
+                            }
+                        } header: {
+                            Text("\(section.year.formatted(.number.grouping(.never)))")
+                                .foregroundStyle(Color.repairsTheme)
                         }
+                        .headerProminence(.increased)
                     }
                 }
-                .listRowSpacing(5)
             }
         }
         .navigationTitle("Repairs")
@@ -66,18 +73,31 @@ struct RepairsListView: View {
     
     // Repairs list row label
     private func listRowItem(repair: Repair) -> some View {
-        VStack(alignment: .leading) {
-            Text(repair.name)
-                .font(.headline)
-
-            HStack(spacing: 5) {
-                Text(repair.date.formatted(date: .numeric, time: .omitted))
-                Text("•")
+        HStack {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(repair.date.formatted(.dateTime.month(.abbreviated).day()))
+                    .font(.callout.bold())
+                
                 Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                    .font(.caption2)
+                    .foregroundStyle(Color.secondary)
             }
-            .font(.caption)
-            .foregroundStyle(.secondary)
+            .frame(minWidth: 65, alignment: .leading)
+            
+            Divider()
+            
+            Text(repair.name)
         }
+        .padding(.vertical, 5)
+    }
+    
+    var repairsByYear: [(year: Int, repairs: [Repair])] {
+        let calendar = Calendar.current
+        let grouped = Dictionary(grouping: repairs) { repair in
+            calendar.component(.year, from: repair.date)
+        }
+        return grouped.sorted { $0.key > $1.key }
+            .map { (year: $0.key, repairs: $0.value) }
     }
 }
 
@@ -90,3 +110,4 @@ struct RepairsListView: View {
     return RepairsListView(vehicle: vehicle)
         .environmentObject(AppSettings())
 }
+
