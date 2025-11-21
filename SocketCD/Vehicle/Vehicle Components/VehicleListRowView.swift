@@ -28,6 +28,17 @@ struct VehicleListRowView: View {
     }
     
     var body: some View {
+        if settings.listShouldBeCompact {
+            compactListItem
+        } else {
+            regularListItem
+        }
+    }
+    
+    
+    // MARK: - Views
+    
+    private var regularListItem: some View {
         VStack(spacing: 10) {
             vehicleImage
                 .aspectRatio(2, contentMode: .fit)
@@ -72,10 +83,52 @@ struct VehicleListRowView: View {
         .listRowBackground(Color.clear)
     }
     
+    private var compactListItem: some View {
+        HStack {
+            vehicleImage
+                .imageScale(.small)
+                .frame(height: 75)
+                .aspectRatio(1.5, contentMode: .fit)
+                .fixedSize(horizontal: true, vertical: false)
+                .clipShape(ContainerRelativeShape())
+                .overlay(
+                    ContainerRelativeShape()
+                        .stroke(Color.secondary.opacity(0.5), lineWidth: 0.25)
+                )
+            
+            VStack(alignment: .leading, spacing: 0) {
+                Text(vehicle.name)
+                    .font(.subheadline.bold())
+                    .lineLimit(3)
+                
+                
+                Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
+                    .font(.caption)
+                    .foregroundStyle(Color.secondary)
+            }
+            
+            Spacer()
+            
+            if badgeNumber != 0 {
+                Image(systemName: "\(badgeNumber).circle.fill")
+                    .imageScale(.large)
+                    .foregroundStyle(Color.white, Color.red)
+                    .accessibilityLabel("\(badgeNumber) services due for this vehicle.")
+                    .padding(.trailing, 5)
+            }
+        }
+        .padding(5)
+        .background {
+            RoundedRectangle.adaptive
+                .fill(Color(.tertiarySystemBackground))
+                .strokeBorder(isPad && isSelected ? Color.secondary : Color.secondary.opacity(0.5), lineWidth: isPad && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
+        }
+        .containerShape(RoundedRectangle.adaptive)
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.clear)
+    }
     
-    // MARK: - Views
-    
-    var vehicleImage: some View {
+    private var vehicleImage: some View {
         Group {
             if let carPhoto = vehicle.photo {
                 VehicleImageView(carPhoto: carPhoto)
@@ -88,7 +141,7 @@ struct VehicleListRowView: View {
     // MARK: - Computed Properties
     
     // Calculates the number of services that are due for the given vehicle
-    var badgeNumber: Int {
+    private var badgeNumber: Int {
         return services.filter({ $0.serviceStatus == .due || $0.serviceStatus == .overDue }).count
     }
 }

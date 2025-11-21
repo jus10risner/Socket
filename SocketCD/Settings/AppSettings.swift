@@ -29,6 +29,13 @@ class AppSettings: ObservableObject {
     
     @AppStorage("appAppearance") var appAppearance: AppearanceOptions = .automatic
     
+    @AppStorage("vehicleCardIsCompact") var vehicleCardIsCompact: Bool?
+    
+    // Used to set the default vehicleCardIsCompact value to true for iPad and false for iPhone (for different default styles)
+    var listShouldBeCompact: Bool {
+        vehicleCardIsCompact ?? (UIDevice.current.userInterfaceIdiom == .pad)
+    }
+    
     
     // MARK: - Onboarding & What's New
     

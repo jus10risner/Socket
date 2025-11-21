@@ -18,12 +18,12 @@ struct AppSettingsView: View {
         NavigationStack {
             Form {
                 Section("General") {
-                    NavigationLink(destination: MaintenanceAlertSettingsView()) {
-                        rowLabel(title: "Maintenance Alerts", symbol: "clock")
-                    }
-                    
                     NavigationLink(destination: FuelCostSettingsView()) {
                         rowLabel(title: "Fuel Cost", symbol: "fuelpump")
+                    }
+                    
+                    NavigationLink(destination: MaintenanceAlertSettingsView()) {
+                        rowLabel(title: "Maintenance Alerts", symbol: "clock")
                     }
                     
                     NavigationLink(destination: UnitsOfMeasureSettingsView()) {
@@ -42,6 +42,10 @@ struct AppSettingsView: View {
                     
                     NavigationLink(destination: appearanceSettings) {
                         rowLabel(title: "Appearance", symbol: "circle.lefthalf.filled")
+                    }
+                    
+                    NavigationLink(destination: vehicleListSettings) {
+                        rowLabel(title: "Vehicle List Style", symbol: "rectangle.grid.1x2")
                     }
                 }
                 
@@ -99,6 +103,27 @@ struct AppSettingsView: View {
             }
         }
         .navigationTitle("Appearance")
+        .navigationBarTitleDisplayMode(.inline)
+        .pickerStyle(.inline)
+    }
+    
+    private var vehicleListSettings: some View {
+        List {
+            Section(footer: Text("Choose how cards appear in the Vehicles list.")) {
+                Picker("Vehicle List Style", selection: Binding(
+                    get: { settings.listShouldBeCompact },
+                    set: { settings.vehicleCardIsCompact = $0 }
+                )) {
+                    Text("Compact")
+                        .tag(true)
+                    
+                    Text("Regular")
+                        .tag(false)
+                }
+                .labelsHidden()
+            }
+        }
+        .navigationTitle("Vehicle List Style")
         .navigationBarTitleDisplayMode(.inline)
         .pickerStyle(.inline)
     }
