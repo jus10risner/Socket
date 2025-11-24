@@ -111,8 +111,8 @@ struct AppSettingsView: View {
         List {
             Section(footer: Text("Choose how cards appear in the Vehicles list.")) {
                 Picker("Vehicle List Style", selection: Binding(
-                    get: { settings.listShouldBeCompact },
-                    set: { settings.vehicleCardIsCompact = $0 }
+                    get: { settings.vehicleListShouldBeCompact },
+                    set: { settings.vehicleListIsCompact = $0 }
                 )) {
                     Text("Compact")
                         .tag(true)

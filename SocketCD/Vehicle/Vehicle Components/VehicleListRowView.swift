@@ -28,7 +28,7 @@ struct VehicleListRowView: View {
     }
     
     var body: some View {
-        if settings.listShouldBeCompact {
+        if settings.vehicleListShouldBeCompact {
             compactListItem
         } else {
             regularListItem

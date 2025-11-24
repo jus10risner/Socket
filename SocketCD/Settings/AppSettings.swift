@@ -9,8 +9,6 @@ import SwiftUI
 
 class AppSettings: ObservableObject {
     
-    static let shared = AppSettings()
-    
     // MARK: - AppSettingsView
     
     @AppStorage("distanceUnit") var distanceUnit: DistanceUnits = .miles
@@ -29,11 +27,11 @@ class AppSettings: ObservableObject {
     
     @AppStorage("appAppearance") var appAppearance: AppearanceOptions = .automatic
     
-    @AppStorage("vehicleCardIsCompact") var vehicleCardIsCompact: Bool?
+    @AppStorage("vehicleListIsCompact") var vehicleListIsCompact: Bool?
     
     // Used to set the default vehicleCardIsCompact value to true for iPad and false for iPhone (for different default styles)
-    var listShouldBeCompact: Bool {
-        vehicleCardIsCompact ?? (UIDevice.current.userInterfaceIdiom == .pad)
+    var vehicleListShouldBeCompact: Bool {
+        vehicleListIsCompact ?? (UIDevice.current.userInterfaceIdiom == .pad)
     }
     
     
@@ -51,33 +49,13 @@ class AppSettings: ObservableObject {
     
     // MARK: - Helpers
     
+    // Returns either the user's selected accent color, or the default accent color
     func selectedAccent() -> Color {
         if let accentColor {
             return accentColor.value
         } else {
-            return Color.indigo.mix(with: .cyan, by: 0.2) // Same as Color.accent (keeping here for mix reference)
-        }
-    }
-    
-    // Converts AccentColors Strings into Color values; used for the accent color selector in AppSettings
-    func colorValue(for accentColor: AccentColors) -> Color {
-        switch accentColor {
-        case .red:
-            Color.red
-        case .orange:
-            Color.orange
-        case .yellow:
-            Color.yellow
-        case .green:
-            Color.green
-        case .blue:
-            Color.blue
-        case .purple:
-            Color.purple
-        case .cyan:
-            Color.cyan
-        case .mint:
-            Color.mint
+            return Color.accent
+//            Color.indigo.mix(with: .cyan, by: 0.2) (keeping here for mix reference)
         }
     }
     
