@@ -14,7 +14,7 @@ struct InformationItemView: View {
     let accentColor: Color
     
     var body: some View {
-        HStack(alignment: .center) {
+        HStack(alignment: .top) {
             Image(systemName: imageName)
                 .font(.title)
                 .foregroundColor(accentColor)

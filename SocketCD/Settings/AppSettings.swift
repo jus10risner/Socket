@@ -38,10 +38,10 @@ class AppSettings: ObservableObject {
     // MARK: - Onboarding & What's New
     
     // Shows WelcomeView immediately on first launch of app; toggles to false on dismiss
-    @AppStorage("welcomeViewPresented") var welcomeViewPresented: Bool = true
+    @AppStorage("welcomeViewPresented") var welcomeViewShouldPresent: Bool = true
     
-    // Toggles to true when OnboardingTips has been shown
-    @AppStorage("onboardingTipsPresented") var onboardingTipsAlreadyPresented: Bool = false
+    // Used to determine whether the user has agreed to the terms of use
+    @AppStorage("termsOfUseAccepted") var termsOfUseAccepted: Bool = false
     
     // Used to determine whether the user has launched the app since the most recent update was released
     @AppStorage("savedAppVersion") var savedAppVersion: String = ""

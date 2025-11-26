@@ -9,15 +9,12 @@ import SwiftUI
 
 struct VehicleListView: View {
     @Environment(\.managedObjectContext) var context
-    @Environment(\.dismiss) var dismiss
     @Binding var selectedVehicle: Vehicle?
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
     @State private var showingAddVehicle = false
     @State private var showingSettings = false
-    
-    @Binding var showingOnboardingText: Bool // Unused, for now
     
     var body: some View {
         Group {
@@ -99,5 +96,5 @@ struct VehicleListView: View {
     vehicle.name = "My Car"
     vehicle.odometer = 12345
     
-    return VehicleListView(selectedVehicle: .constant(vehicle), showingOnboardingText: .constant(true))
+    return VehicleListView(selectedVehicle: .constant(vehicle))
 }

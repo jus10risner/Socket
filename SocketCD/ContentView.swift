@@ -14,9 +14,8 @@ struct ContentView: View {
     
     @AppStorage("lastSelectedVehicleID") var lastSelectedVehicleID: String = ""
     
+    @State private var onboardingSheet: ActiveOnboardingSheet?
     @State private var selectedVehicle: Vehicle?
-    @State private var showingOnboardingTip = false
-    @State private var showingOnboardingText = false
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
     
     var body: some View {
@@ -36,6 +35,8 @@ struct ContentView: View {
         }
         .navigationSplitViewStyle(.balanced)
         .onAppear {
+//            checkForOnboardingViewsToShow()
+            
             if let lastSelectedVehicle {
                 selectedVehicle = lastSelectedVehicle
             } else if UIDevice.current.userInterfaceIdiom == .pad {
@@ -45,6 +46,24 @@ struct ContentView: View {
         .onChange(of: selectedVehicle) { _ , value in
             lastSelectedVehicleID = value?.id?.uuidString ?? ""
         }
+        .sheet(item: $onboardingSheet) { sheet in
+            switch sheet {
+            case .welcome:
+                WelcomeView()
+                    .onDisappear {
+                        settings.welcomeViewShouldPresent = false
+                        settings.savedAppVersion = AppInfo().version
+                        print("Welcome dismissed! App version updated!")
+                    }
+            case .whatsNew:
+                WhatsNewView()
+                    .onDisappear {
+                        settings.savedAppVersion = AppInfo().version
+                        print("What's New dismissed! App version updated!")
+                    }
+            }
+        }
+
     }
     
     
@@ -87,42 +106,24 @@ struct ContentView: View {
     
     // MARK: - Methods
     
-    // Check to see if any informational views (welcome/update/tips) should be shown
-    func checkForViewsToBeShownOnLaunch() {
-        // Removes delivered notifications from Notification Center
-        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+    func checkForOnboardingViewsToShow() {
+        let currentAppVersion = AppInfo().version
+        let lastRunAppVersion = settings.savedAppVersion
         
-        checkForVersionUpdate()
-    }
-    
-    // Checks app's version number, to determine whether to show What's New View (in the future)
-    func checkForVersionUpdate() {
-        let version = AppInfo().version
-        let savedVersion = settings.savedAppVersion
-        
-        if savedVersion == version {
-            print("Version up to date! \(savedVersion)")
-        } else {
-            settings.savedAppVersion = version
-            print("Version updated to \(version)")
-            
-            if settings.welcomeViewPresented == false {
-                // Show What's New view
-            }
+        if settings.welcomeViewShouldPresent {
+            onboardingSheet = .welcome
+            print("Showing Welcome view")
+        } else if lastRunAppVersion != currentAppVersion {
+            onboardingSheet = .whatsNew
+            print("Showing What's New view")
         }
     }
+}
+
+private enum ActiveOnboardingSheet: String, Identifiable {
+    case welcome, whatsNew
     
-    // Checks to see whether to show OnboardingTips
-    func checkOnboardingTipsStatus() {
-        if settings.welcomeViewPresented == false && settings.onboardingTipsAlreadyPresented == false {
-            if vehicles.count == 1 {
-                showingOnboardingTip = true
-                showingOnboardingText = true
-            } else if vehicles.count > 1 {
-                settings.onboardingTipsAlreadyPresented = true
-            }
-        }
-    }
+    var id: String { rawValue }
 }
 
 #Preview {
