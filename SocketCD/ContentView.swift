@@ -20,8 +20,8 @@ struct ContentView: View {
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
-            VehicleListView(selectedVehicle: $selectedVehicle, showingOnboardingText: $showingOnboardingText)
-//                .toolbar(removing: .sidebarToggle)
+            VehicleListView(selectedVehicle: $selectedVehicle)
+                .toolbar(removing: .sidebarToggle)
                 .onChange(of: notificationBadgeNumber) {
                     // Sets the app icon's notification badge number
                     UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)
@@ -35,7 +35,7 @@ struct ContentView: View {
         }
         .navigationSplitViewStyle(.balanced)
         .onAppear {
-//            checkForOnboardingViewsToShow()
+            checkForOnboardingViewsToShow()
             
             if let lastSelectedVehicle {
                 selectedVehicle = lastSelectedVehicle
@@ -106,7 +106,7 @@ struct ContentView: View {
     
     // MARK: - Methods
     
-    func checkForOnboardingViewsToShow() {
+    private func checkForOnboardingViewsToShow() {
         let currentAppVersion = AppInfo().version
         let lastRunAppVersion = settings.savedAppVersion
         
