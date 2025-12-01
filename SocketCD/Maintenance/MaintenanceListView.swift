@@ -41,11 +41,6 @@ struct MaintenanceListView: View {
         }
         .navigationTitle("Maintenance")
         .listRowSpacing(5)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                requestNotificationPermission()
-            }
-        }
         .sheet(isPresented: $showingAddService) {
             AddEditServiceView(vehicle: vehicle)
         }
@@ -85,28 +80,6 @@ struct MaintenanceListView: View {
                 ToolbarItem(placement: .principal) {
                     Text(vehicle.name)
                         .multilineTextAlignment(.center)
-                }
-            }
-        }
-    }
-
-    
-    // MARK: - Methods
-    
-    // Asks the user for permission to display notifications
-    func requestNotificationPermission() {
-        let center = UNUserNotificationCenter.current()
-        
-        center.getNotificationSettings { settings in
-            if settings.authorizationStatus == .notDetermined {
-                center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                    if success {
-                        print("Notification permission granted.")
-                    } else if let error = error {
-                        print("Notification permission error: \(error.localizedDescription)")
-                    } else {
-                        print("Notification permission not granted.")
-                    }
                 }
             }
         }

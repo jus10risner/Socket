@@ -46,7 +46,7 @@ struct ContentView: View {
         .onChange(of: selectedVehicle) { _ , value in
             lastSelectedVehicleID = value?.id?.uuidString ?? ""
         }
-        .sheet(item: $onboardingSheet) { sheet in
+        .sheet(item: $onboardingSheet, onDismiss: requestNotificationPermission) { sheet in
             switch sheet {
             case .welcome:
                 WelcomeView()
@@ -63,7 +63,6 @@ struct ContentView: View {
                     }
             }
         }
-
     }
     
     
@@ -116,6 +115,25 @@ struct ContentView: View {
         } else if lastRunAppVersion != currentAppVersion {
             onboardingSheet = .whatsNew
             print("Showing What's New view")
+        }
+    }
+    
+    // Asks the user for permission to display notifications
+    private func requestNotificationPermission() {
+        let center = UNUserNotificationCenter.current()
+        
+        center.getNotificationSettings { settings in
+            if settings.authorizationStatus == .notDetermined {
+                center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                    if success {
+                        print("Notification permission granted.")
+                    } else if let error = error {
+                        print("Notification permission error: \(error.localizedDescription)")
+                    } else {
+                        print("Notification permission not granted.")
+                    }
+                }
+            }
         }
     }
 }
