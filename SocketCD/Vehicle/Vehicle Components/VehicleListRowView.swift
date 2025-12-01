@@ -38,6 +38,7 @@ struct VehicleListRowView: View {
     
     // MARK: - Views
     
+    // Standard vehicle card with large image and vertical layout
     private var regularListItem: some View {
         VStack(spacing: 10) {
             vehicleImage
@@ -48,26 +49,21 @@ struct VehicleListRowView: View {
                         .stroke(Color.secondary.opacity(0.5), lineWidth: 0.25)
                 )
             
-            HStack {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(vehicle.name)
-                        .font(.headline)
-                        .lineLimit(1)
-                    
-                    
-                    Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
-                        .font(.caption)
-                        .foregroundStyle(Color.secondary)
-                }
+            VStack(alignment: .leading, spacing: 0) {
+                let title = Text(vehicle.name)
+                    + (badgeNumber != 0
+                       ? Text(" ") + Text(Image(systemName: "\(badgeNumber).circle.fill")).foregroundStyle(Color.red)
+                        : Text(""))
                 
-                Spacer()
+                title
+                    .font(.headline)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
-                if badgeNumber != 0 {
-                    Image(systemName: "\(badgeNumber).circle.fill")
-                        .imageScale(.large)
-                        .foregroundStyle(Color.white, Color.red)
-                        .accessibilityLabel("\(badgeNumber) services due for this vehicle.")
-                }
+                
+                Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
+                    .font(.caption)
+                    .foregroundStyle(Color.secondary)
             }
             .padding(.horizontal)
         }
@@ -83,11 +79,12 @@ struct VehicleListRowView: View {
         .listRowBackground(Color.clear)
     }
     
+    // Compact vehicle card, with small image and horizontal layout
     private var compactListItem: some View {
         HStack {
             vehicleImage
                 .imageScale(.small)
-                .frame(height: 75)
+                .frame(width: 100, height: 75)
                 .aspectRatio(1.5, contentMode: .fit)
                 .fixedSize(horizontal: true, vertical: false)
                 .clipShape(ContainerRelativeShape())
@@ -97,24 +94,19 @@ struct VehicleListRowView: View {
                 )
             
             VStack(alignment: .leading, spacing: 0) {
-                Text(vehicle.name)
+                let title = Text(vehicle.name)
+                    + (badgeNumber != 0
+                       ? Text(" ") + Text(Image(systemName: "\(badgeNumber).circle.fill")).foregroundStyle(Color.red)
+                        : Text(""))
+
+                title
                     .font(.subheadline.bold())
-                    .lineLimit(3)
-                
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
                     .font(.caption)
                     .foregroundStyle(Color.secondary)
-            }
-            
-            Spacer()
-            
-            if badgeNumber != 0 {
-                Image(systemName: "\(badgeNumber).circle.fill")
-                    .imageScale(.large)
-                    .foregroundStyle(Color.white, Color.red)
-                    .accessibilityLabel("\(badgeNumber) services due for this vehicle.")
-                    .padding(.trailing, 5)
             }
         }
         .padding(5)
