@@ -11,13 +11,16 @@ struct PopoverContent: View {
     let text: String
     
     var body: some View {
-        Text(text)
-            .fixedSize(horizontal: false, vertical: true)
-            .font(.subheadline)
-            .padding()
-            .padding(.vertical, 40)
-            .frame(maxWidth: 350)
-            .presentationCompactAdaptation(.popover)
+        ScrollView {
+            Text(text)
+                .font(.subheadline)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding()
+                .presentationCompactAdaptation(.popover)
+        }
+        .frame(minHeight: 100, maxHeight: 400)
+        .frame(minWidth: 300, idealWidth: 350, maxWidth: 400)
     }
 }
 
