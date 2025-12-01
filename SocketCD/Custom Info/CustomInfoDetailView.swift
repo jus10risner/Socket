@@ -28,7 +28,7 @@ struct CustomInfoDetailView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copySymbol = .tapToCopy }
                         }
                         .labelStyle(.iconOnly)
-                        .frame(height: 20)
+                        .frame(minHeight: 20)
                         .contentTransition(.symbolEffect(.replace.downUp.wholeSymbol, options: .nonRepeating))
                     }
                 }

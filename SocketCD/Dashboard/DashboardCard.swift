@@ -68,7 +68,7 @@ struct DashboardCard<Content: View>: View {
                     .disabled(disableButton)
             }
         }
-        .frame(height: 80)
+        .frame(minHeight: 80)
         .padding()
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
         .contentShape(Rectangle())
