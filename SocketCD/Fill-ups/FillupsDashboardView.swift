@@ -208,7 +208,7 @@ struct FillupsDashboardView: View {
             .multilineTextAlignment(.center)
         }
         .padding(.horizontal)
-        .frame(height: horizontalSizeClass == .regular ? 350 : 200)
+        .frame(minHeight: horizontalSizeClass == .regular ? 350 : 200)
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle.adaptive
