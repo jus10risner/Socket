@@ -36,11 +36,20 @@ struct VehicleDashboardView: View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 5) {
+                    // Uses the appropriate view style (primarily for large dynamic type sizes on iPhone)
                     if horizontalSizeClass == .compact {
-                        HStack(spacing: 5) {
-                            odometerDashboardCard
+                        ViewThatFits {
+                            HStack(spacing: 5) {
+                                odometerDashboardCard
+                                
+                                RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                            }
                             
-                            RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                            LazyVGrid(columns: columns, spacing: 5) {
+                                odometerDashboardCard
+                                
+                                RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                            }
                         }
                     } else {
                         odometerDashboardCard
