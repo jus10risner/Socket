@@ -31,7 +31,7 @@ struct FillupsCard: View {
         DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: Color(.fillupsTheme), buttonLabel: "Add Fill-up", buttonSymbol: "plus") {
             activeSheet = .addFillup
         } content: {
-            HStack(alignment: .bottom) {
+            HStack {
                 if fillups.count > 0 {
                     TrendArrowView(fillups: fillups)
                 }
