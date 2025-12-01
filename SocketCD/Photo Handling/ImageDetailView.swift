@@ -41,6 +41,7 @@ struct ImageDetailView: View {
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)
+                .statusBarHidden()
         }
         .task {
             await createImageURL()
