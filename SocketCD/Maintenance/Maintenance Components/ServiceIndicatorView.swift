@@ -26,7 +26,10 @@ struct ServiceIndicatorView: View {
                                 .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                             
                             Image(systemName: "exclamationmark")
-                                .font(.title3.bold())
+                                .resizable()
+                                .scaledToFit()
+                                .bold()
+                                .padding(5)
                                 .foregroundStyle(Color.red)
                                 .symbolEffect(.pulse, options: .nonRepeating)
                         }
