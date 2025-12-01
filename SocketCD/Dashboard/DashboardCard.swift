@@ -31,15 +31,9 @@ struct DashboardCard<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                HStack(spacing: 3) {
-                    Image(systemName: headerSymbol)
-                        .frame(width: 20)
-                    
-                    Text(title)
-                }
-                .foregroundStyle(accentColor)
-                .font(.subheadline.bold())
-                .accessibilityLabel(title)
+                Label(title, systemImage: headerSymbol)
+                    .foregroundStyle(accentColor)
+                    .font(.headline)
                 
                 Spacer()
                 
@@ -64,7 +58,6 @@ struct DashboardCard<Content: View>: View {
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.circle)
                     .tint(accentColor)
-//                    .padding([.bottom, .trailing], -2)
                     .disabled(disableButton)
             }
         }
