@@ -49,21 +49,25 @@ struct VehicleListRowView: View {
                         .stroke(Color.secondary.opacity(0.5), lineWidth: 0.25)
                 )
             
-            VStack(alignment: .leading, spacing: 0) {
-                let title = Text(vehicle.name)
-                    + (badgeNumber != 0
-                       ? Text(" ") + Text(Image(systemName: "\(badgeNumber).circle.fill")).foregroundStyle(Color.red)
-                        : Text(""))
+            HStack {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(vehicle.name)
+                        .font(.headline)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    
+                    Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
+                        .font(.caption)
+                        .foregroundStyle(Color.secondary)
+                }
                 
-                title
-                    .font(.headline)
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                
-                Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
-                    .font(.caption)
-                    .foregroundStyle(Color.secondary)
+                if badgeNumber != 0 {
+                    Spacer(minLength: 0)
+                    
+                    Image(systemName: "\(badgeNumber).circle.fill")
+                        .foregroundStyle(Color.white, Color.red)
+                }
             }
             .padding(.horizontal)
         }
@@ -94,15 +98,17 @@ struct VehicleListRowView: View {
                 )
             
             VStack(alignment: .leading, spacing: 0) {
-                let title = Text(vehicle.name)
-                    + (badgeNumber != 0
-                       ? Text(" ") + Text(Image(systemName: "\(badgeNumber).circle.fill")).foregroundStyle(Color.red)
-                        : Text(""))
-
-                title
-                    .font(.subheadline.bold())
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack(alignment: .lastTextBaseline, spacing: 3) {
+                    Text(vehicle.name)
+                        .font(.subheadline.bold())
+                        .multilineTextAlignment(.leading)
+                    
+                    if badgeNumber != 0 {
+                        Image(systemName: "\(badgeNumber).circle.fill")
+                            .foregroundStyle(Color.white, Color.red)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("\(vehicle.odometer) \(settings.distanceUnit.abbreviated)")
                     .font(.caption)
