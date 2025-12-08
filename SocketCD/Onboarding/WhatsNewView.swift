@@ -60,7 +60,9 @@ struct WhatsNewView: View {
             }
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(isPresented: $showingTermsOfUse) {
-                TermsOfUseView()
+                TermsOfUseView {
+                    dismiss()
+                }
             }
         }
     }
