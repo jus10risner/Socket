@@ -26,6 +26,7 @@ struct EmptyVehicleListView: View {
             if monitor.isSyncing == true {
                 VStack(spacing: 10) {
                     ProgressView()
+                        .tint(Color.primary)
                     
                     Text("Checking for iCloud data")
                         .font(.caption)
