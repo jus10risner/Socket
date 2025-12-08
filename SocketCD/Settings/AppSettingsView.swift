@@ -49,7 +49,7 @@ struct AppSettingsView: View {
                     }
                 }
                 
-                Section("More") {
+                Section {
                     contactButton
                     
                     Link(destination: URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009?action=write-review")!, label: {
@@ -59,13 +59,11 @@ struct AppSettingsView: View {
                     ShareLink(item: appStoreURL) {
                         rowLabel(title: "Share Socket", symbol: "square.and.arrow.up")
                     }
+                } header: {
+                    Text("More")
+                } footer: {
+                    Text("Version \(AppInfo().version)")
                 }
-                
-                Text("Version \(AppInfo().version)")
-                    .font(.subheadline)
-                    .foregroundStyle(Color.secondary)
-                    .listRowBackground(Color(.systemGroupedBackground))
-                    .frame(maxWidth: .infinity)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
