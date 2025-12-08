@@ -56,22 +56,8 @@ extension Repair {
         
         if let vehicle = self.vehicle, let draftOdometer = draftRepair.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer
-//            vehicle.updateAllServiceNotifications()
         }
-        
-//        if let odometer = draftRepair.odometer {
-//            if odometer > vehicle.odometer {
-//                vehicle.odometer = odometer
-//            }
-//        }
         
         try? context.save()
     }
-    
-//    func delete() {
-//        let context = DataController.shared.container.viewContext
-//        
-//        context.delete(self)
-//        try? context.save()
-//    }
 }

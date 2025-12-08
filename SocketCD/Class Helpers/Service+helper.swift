@@ -289,10 +289,6 @@ extension Service {
         self.monthsInterval = draftService.monthsInterval
         self.note = draftService.serviceNote
         
-//        if let vehicle = self.vehicle {
-//            self.updateNotifications(vehicle: vehicle)
-//        }
-        
         try? context.save()
     }
     
@@ -334,7 +330,6 @@ extension Service {
                let draftOdo = draftServiceLog.odometer,
                draftOdo > vehicle.odometer {
                 vehicle.odometer = draftOdo
-//                svc.updateNotifications(vehicle: vehicle)
             }
         }
         
