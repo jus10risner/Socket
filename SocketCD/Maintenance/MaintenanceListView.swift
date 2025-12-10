@@ -10,7 +10,6 @@ import TipKit
 
 struct MaintenanceListView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
     
     @FetchRequest var services: FetchedResults<Service>
@@ -93,5 +92,4 @@ struct MaintenanceListView: View {
     vehicle.odometer = 12345
     
     return MaintenanceListView(vehicle: vehicle)
-        .environmentObject(AppSettings())
 }
