@@ -78,10 +78,10 @@ struct FillupsDashboardView: View {
         }
         .navigationTitle("Fill-ups")
         .task {
-            updateData(for: selectedDateRange)
+            updateData()
         }
         .onChange(of: selectedDateRange) {
-            updateData(for: selectedDateRange)
+            updateData()
         }
         .sheet(isPresented: $showingAddFillup) { AddEditFillupView(vehicle: vehicle) }
         .toolbar {
@@ -228,15 +228,15 @@ struct FillupsDashboardView: View {
     // MARK: - Methods
     
     // Updates the data array by calling computeData()
-    private func updateData(for range: DateRange) {
+    private func updateData() {
         Task {
-            let result = await computeData(for: range)
+            let result = await computeData()
             data = result
         }
     }
 
     // Returns all fill-ups with a fuel economy that is not 0
-    private func computeData(for range: DateRange) async -> [Fillup] {
+    private func computeData() async -> [Fillup] {
         let calendar = Calendar.current
         guard let latestDate = fillups.compactMap(\.date).max() else { return [] }
 
