@@ -15,6 +15,8 @@ struct SocketCDApp: App {
     @StateObject var settings = AppSettings()
     let dataController = DataController.shared
     
+    @State private var showingStoreError = false
+    
     init() {
         _ = NotificationObserver.shared // Start observing right away
     }
@@ -35,6 +37,16 @@ struct SocketCDApp: App {
 
                     // Configure TipKit
                     try? Tips.configure()
+                }
+                .onReceive(dataController.$persistentStoreError) { error in
+                    showingStoreError = (error != nil)
+                }
+                .alert("Unable to Load Data", isPresented: $showingStoreError) {
+                    Button("Close Socket", role: .destructive) {
+                        exit(EXIT_FAILURE)
+                    }
+                } message: {
+                    Text(dataController.persistentStoreError?.localizedDescription ?? "Unknown error")
                 }
         }
         .onChange(of: scenePhase) { _, newPhase in

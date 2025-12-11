@@ -13,6 +13,8 @@ import SwiftUI
 final class DataController: ObservableObject {
     // MARK: - Shared instance
     static let shared = DataController()
+    
+    @Published var persistentStoreError: Error?
 
     // MARK: - Persistent container
     let container: NSPersistentCloudKitContainer
@@ -52,7 +54,10 @@ final class DataController: ObservableObject {
         // ✅ Load store synchronously so local data is immediately available
         container.loadPersistentStores { storeDescription, error in
             if let error = error {
-                fatalError("Failed to load store: \(error)")
+                DispatchQueue.main.async {
+                    self.persistentStoreError = error
+                }
+                print("❌ Failed to load persistent store:", error)
             } else {
                 print("✅ Loaded persistent store: \(storeDescription.url?.absoluteString ?? "")")
             }
