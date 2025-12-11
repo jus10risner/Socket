@@ -10,7 +10,6 @@ import SwiftUI
 struct WelcomeView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     
     @State private var showingTermsOfUse = false
     
@@ -82,5 +81,4 @@ struct WelcomeView: View {
 
 #Preview {
     WelcomeView()
-        .environmentObject(AppSettings())
 }

@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct RepairsListView: View {
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
+    let settings = AppSettings.shared
     
     @FetchRequest var repairs: FetchedResults<Repair>
     
@@ -108,6 +108,5 @@ struct RepairsListView: View {
     vehicle.odometer = 12345
     
     return RepairsListView(vehicle: vehicle)
-        .environmentObject(AppSettings())
 }
 

@@ -98,7 +98,7 @@ struct CSVExporter {
             let volumeString = String(format: "%.2f", fillup.volume) // 2 decimals for volume
             let priceString = String(format: "%.2f", fillup.pricePerUnit ?? 0) // 2 decimals for price
             let tripString = String(fillup.tripDistance)
-            let fuelEconomyString = String(format: "%.1f", fillup.fuelEconomy(settings: settings))
+            let fuelEconomyString = String(format: "%.1f", fillup.fuelEconomy())
             let totalCostString = String(format: "%.2f", fillup.totalCost ?? 0)
             let fullTankString = fillup.fillType == .partialFill ? "No" : "Yes"
             let noteString = escape(fillup.note)
@@ -131,8 +131,6 @@ struct CSVExporter {
 
     // MARK: - Export all records in one CSV file
     static func exportAllRecords(for vehicle: Vehicle) -> URL? {
-        let settings = AppSettings()
-        
         let fileName = "\(vehicle.name) All Records.csv"
         let tempDirectory = NSTemporaryDirectory()
         let fileURL = URL(fileURLWithPath: tempDirectory, isDirectory: true).appendingPathComponent(fileName)
@@ -231,7 +229,7 @@ struct CSVExporter {
                     name: nil,
                     cost: fillup.totalCost ?? 0,
                     trip: fillup.tripDistance,
-                    fuelEconomy: fillup.fuelEconomy(settings: settings),
+                    fuelEconomy: fillup.fuelEconomy(),
                     fullTank: fillup.fillType == .partialFill ? false : true,
                     note: fillup.note
                 )

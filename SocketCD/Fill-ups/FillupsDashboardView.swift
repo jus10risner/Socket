@@ -10,8 +10,8 @@ import SwiftUI
 struct FillupsDashboardView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
+    let settings = AppSettings.shared
     
     @FetchRequest var fillups: FetchedResults<Fillup>
     
@@ -118,7 +118,7 @@ struct FillupsDashboardView: View {
             .font(.headline)
             
             if let latestFillup = fillups.first {
-                let economy = latestFillup.fuelEconomy(settings: settings)
+                let economy = latestFillup.fuelEconomy()
                 
                 if economy > 0 {
                     HStack(alignment: .firstTextBaseline, spacing: 3) {
@@ -219,7 +219,7 @@ struct FillupsDashboardView: View {
     // Returns the average fuel economy for a given set of fill-ups
     private var averageFuelEconomy: Double {
         guard let data, !data.isEmpty else { return 0 }
-        let total = data.map { $0.fuelEconomy(settings: settings) }.reduce(0, +)
+        let total = data.map { $0.fuelEconomy() }.reduce(0, +)
         
         return total / Double(data.count)
     }
@@ -254,7 +254,7 @@ struct FillupsDashboardView: View {
 
         return fillups
             .filter { fillup in
-                fillup.fuelEconomy(settings: settings) != 0 &&
+                fillup.fuelEconomy() != 0 &&
                 (cutoff.map { fillup.date >= $0 } ?? true)
             }
             .sorted(by: { $0.date < $1.date })
@@ -268,5 +268,4 @@ struct FillupsDashboardView: View {
     vehicle.odometer = 12345
     
     return FillupsDashboardView(vehicle: vehicle)
-        .environmentObject(AppSettings())
 }

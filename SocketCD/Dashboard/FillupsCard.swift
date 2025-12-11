@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct FillupsCard: View {
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
     
     @Binding var activeSheet: ActiveSheet?
     @Binding var selectedSection: AppSection?
+    let settings = AppSettings.shared
     
     @FetchRequest var fillups: FetchedResults<Fillup>
     
@@ -43,8 +43,8 @@ struct FillupsCard: View {
                             .foregroundStyle(Color.secondary)
                         
                         Group {
-                            if fillup.fuelEconomy(settings: settings) > 0 {
-                                Text("\(fillup.fuelEconomy(settings: settings), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
+                            if fillup.fuelEconomy() > 0 {
+                                Text("\(fillup.fuelEconomy(), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
                             } else {
                                 switch fillup.fillType {
                                 case .fullTank:
@@ -78,5 +78,4 @@ struct FillupsCard: View {
     vehicle.odometer = 12345
     
     return FillupsCard( vehicle: vehicle, activesheet: .constant(nil), selectedSection: .constant(nil))
-        .environmentObject(AppSettings())
 }

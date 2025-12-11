@@ -90,7 +90,7 @@ extension Fillup {
     }
     
     // Calculates fuel economy, when appropriate (returns 0 otherwise)
-    func fuelEconomy(settings: AppSettings) -> Double {
+    func fuelEconomy() -> Double {
         guard let fillups = vehicle?.sortedFillupsArray,
               fillups.count > 1,
               fillType == .fullTank else {
@@ -117,7 +117,7 @@ extension Fillup {
         
         guard totalDistance > 0, totalVolume > 0 else { return 0 }
 
-        switch settings.fuelEconomyUnit {
+        switch AppSettings.shared.fuelEconomyUnit {
         case .L100km:
             return (totalVolume / Double(totalDistance)) * 100
         default:

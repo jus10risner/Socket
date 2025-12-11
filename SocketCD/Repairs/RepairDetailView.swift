@@ -9,8 +9,8 @@ import SwiftUI
 
 struct RepairDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var repair: Repair
+    let settings = AppSettings.shared
     
     @State private var showingEditRepair = false
     
@@ -55,5 +55,4 @@ struct RepairDetailView: View {
     repair.odometer = 12345
     
     return RepairDetailView(repair: repair)
-        .environmentObject(AppSettings())
 }

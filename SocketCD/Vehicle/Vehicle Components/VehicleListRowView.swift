@@ -9,9 +9,9 @@ import SwiftUI
 
 struct VehicleListRowView: View {
     @Environment(\.managedObjectContext) var context
-    @EnvironmentObject var settings: AppSettings
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var vehicle: Vehicle
+    let settings = AppSettings.shared
     let isSelected: Bool
     let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     
@@ -151,5 +151,4 @@ struct VehicleListRowView: View {
     vehicle.odometer = 12345
     
     return VehicleListRowView(vehicle: vehicle, isSelected: true)
-        .environmentObject(AppSettings())
 }

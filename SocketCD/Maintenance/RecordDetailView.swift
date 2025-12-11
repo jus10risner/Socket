@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct RecordDetailView: View {
-    @EnvironmentObject var settings: AppSettings
     @Environment(\.dismiss) var dismiss
     @ObservedObject var record: ServiceRecord
+    let settings = AppSettings.shared
     let vehicle: Vehicle
     let service: Service
     
@@ -59,5 +59,4 @@ struct RecordDetailView: View {
     record.odometer = 12345
     
     return RecordDetailView(record: record, vehicle: vehicle, service: service)
-        .environmentObject(AppSettings())
 }

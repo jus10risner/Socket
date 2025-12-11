@@ -10,7 +10,7 @@ import SwiftUI
 struct AddEditServiceView: View {
     // MARK: - Environment
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
+    let settings = AppSettings.shared
     
     // MARK: - State
     @StateObject var draftService = DraftService()
@@ -262,5 +262,4 @@ struct AddEditServiceView: View {
     service.monthsInterval = false
     
     return AddEditServiceView(vehicle: vehicle, service: service)
-        .environmentObject(AppSettings())
 }

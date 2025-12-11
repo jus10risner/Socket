@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CustomInfoSection: View {
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
+    let settings = AppSettings.shared
     let columns: [GridItem]
     
     @Binding var activeSheet: ActiveSheet?
@@ -81,5 +81,4 @@ struct CustomInfoSection: View {
     vehicle.odometer = 12345
     
     return CustomInfoSection(vehicle: vehicle, columns: [], activeSheet: .constant(nil))
-        .environmentObject(AppSettings())
 }

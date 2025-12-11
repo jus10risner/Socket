@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TimelineView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
+    let settings = AppSettings.shared
     let vehicle: Vehicle
     
     var body: some View {
@@ -85,5 +85,4 @@ struct TimelineView: View {
     vehicle.odometer = 12345
     
     return TimelineView(vehicle: vehicle)
-        .environmentObject(AppSettings())
 }

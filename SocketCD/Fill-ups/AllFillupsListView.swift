@@ -9,8 +9,8 @@ import SwiftUI
 
 struct AllFillupsListView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var vehicle: Vehicle
+    let settings = AppSettings.shared
     
     @FetchRequest var fillups: FetchedResults<Fillup>
     
@@ -43,7 +43,7 @@ struct AllFillupsListView: View {
                             if fillup == fillups.last(where: { $0.fillType == .fullTank }) {
                                 listRowLabel(symbol: "circle.fill", text: "First Full Tank")
                             } else {
-                                Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                                Text("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
                             }
                         }
                     }
@@ -76,5 +76,4 @@ struct AllFillupsListView: View {
     vehicle.odometer = 12345
     
     return AllFillupsListView(vehicle: vehicle)
-        .environmentObject(AppSettings())
 }

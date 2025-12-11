@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CustomInfoDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var customInfo: CustomInfo
     
     @State private var copySymbol: CopySymbol = .tapToCopy
@@ -64,5 +63,4 @@ struct CustomInfoDetailView: View {
     customInfo.detail = "ABC 123"
     
     return CustomInfoDetailView(customInfo: customInfo)
-        .environmentObject(AppSettings())
 }

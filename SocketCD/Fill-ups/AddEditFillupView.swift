@@ -10,7 +10,7 @@ import SwiftUI
 struct AddEditFillupView: View {
     // MARK: - Environment
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
+    let settings = AppSettings.shared
     
     // MARK: - State
     @StateObject var draftFillup = DraftFillup()
@@ -169,5 +169,4 @@ struct AddEditFillupView: View {
     let fillup = Fillup(context: context)
     
     return AddEditFillupView(vehicle: vehicle, fillup: fillup)
-        .environmentObject(AppSettings())
 }

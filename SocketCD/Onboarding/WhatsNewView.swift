@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct WhatsNewView: View {
-    @EnvironmentObject var settings: AppSettings
     @Environment(\.dismiss) var dismiss
+    let settings = AppSettings.shared
     
     @State private var showingTermsOfUse = false
     
@@ -70,5 +70,4 @@ struct WhatsNewView: View {
 
 #Preview {
     WhatsNewView()
-        .environmentObject(AppSettings())
 }

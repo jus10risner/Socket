@@ -9,25 +9,45 @@ import SwiftUI
 
 class AppSettings: ObservableObject {
     
+    static let shared = AppSettings()
+    
     // MARK: - AppSettingsView
     
-    @AppStorage("distanceUnit") var distanceUnit: DistanceUnits = .miles
+    @AppStorage("distanceUnit") var distanceUnit: DistanceUnits = .miles {
+        willSet { objectWillChange.send() }
+    }
     
-    @AppStorage("fuelEconomyUnit") var fuelEconomyUnit: FuelEconomyUnits = .mpg
+    @AppStorage("fuelEconomyUnit") var fuelEconomyUnit: FuelEconomyUnits = .mpg {
+        willSet { objectWillChange.send() }
+    }
     
-    @AppStorage("fillupCostType") var fillupCostType: FillupCostTypes = .perUnit
+    @AppStorage("fillupCostType") var fillupCostType: FillupCostTypes = .perUnit {
+        willSet { objectWillChange.send() }
+    }
     
-    @AppStorage("showCalculatedCost") var showCalculatedCost: Bool = false // Determines whether to show total or per-unit cost alongside the fillupCostType preference
+    @AppStorage("showCalculatedCost") var showCalculatedCost: Bool = false { // Determines whether to show total or per-unit cost alongside the fillupCostType preference
+        willSet { objectWillChange.send() }
+    }
     
-    @AppStorage("distanceBeforeMaintenance") var distanceBeforeMaintenance: Int = 500
+    @AppStorage("distanceBeforeMaintenance") var distanceBeforeMaintenance: Int = 500 {
+        willSet { objectWillChange.send() }
+    }
     
-    @AppStorage("daysBeforeMaintenance") var daysBeforeMaintenance: Int = 14
+    @AppStorage("daysBeforeMaintenance") var daysBeforeMaintenance: Int = 14 {
+        willSet { objectWillChange.send() }
+    }
     
-    @AppStorage("accentColor") var accentColor: AccentColors?
+    @AppStorage("accentColor") var accentColor: AccentColors? {
+        willSet { objectWillChange.send() }
+    }
     
-    @AppStorage("appAppearance") var appAppearance: AppearanceOptions = .automatic
+    @AppStorage("appAppearance") var appAppearance: AppearanceOptions = .automatic {
+        willSet { objectWillChange.send() }
+    }
     
-    @AppStorage("vehicleListIsCompact") var vehicleListIsCompact: Bool?
+    @AppStorage("vehicleListIsCompact") var vehicleListIsCompact: Bool? {
+        willSet { objectWillChange.send() }
+    }
     
     // Used to set the default vehicleCardIsCompact value to true for iPad and false for iPhone (for different default styles)
     var vehicleListShouldBeCompact: Bool {

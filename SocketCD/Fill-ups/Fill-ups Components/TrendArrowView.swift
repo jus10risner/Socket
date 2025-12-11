@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct TrendArrowView: View {
-    @EnvironmentObject var settings: AppSettings
+    let settings = AppSettings.shared
     let fillups: FetchedResults<Fillup>
     
     @State private var animatingTrendArrow = false
     
     private var latestFillupFuelEconomy: Double {
-        fillups.first?.fuelEconomy(settings: settings) ?? 0
+        fillups.first?.fuelEconomy() ?? 0
     }
     
     private var previousFillupFuelEconomy: Double {
-        fillups[1].fuelEconomy(settings: settings)
+        fillups[1].fuelEconomy()
     }
     
     var body: some View {

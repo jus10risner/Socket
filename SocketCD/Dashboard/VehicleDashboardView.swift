@@ -9,10 +9,10 @@ import SwiftUI
 
 struct VehicleDashboardView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @EnvironmentObject var settings: AppSettings
     @StateObject var draftVehicle = DraftVehicle()
     @ObservedObject var vehicle: Vehicle
     @Binding var selectedVehicle: Vehicle? // Used primarily to dismiss this view if the vehicle is deleted
+    let settings = AppSettings.shared
     
     init(vehicle: Vehicle, selectedVehicle: Binding<Vehicle?>) {
         _draftVehicle = StateObject(wrappedValue: DraftVehicle(vehicle: vehicle))
@@ -236,5 +236,4 @@ enum ActiveSheet: String, Identifiable {
     vehicle.odometer = 12345
     
     return VehicleDashboardView(vehicle: vehicle, selectedVehicle: .constant(vehicle))
-        .environmentObject(AppSettings())
 }

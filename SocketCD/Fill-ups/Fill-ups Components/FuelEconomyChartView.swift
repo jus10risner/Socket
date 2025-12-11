@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FuelEconomyChartView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @EnvironmentObject private var settings: AppSettings
+    let settings = AppSettings.shared
     let data: [Fillup]
     let averageFuelEconomy: Double
     
@@ -27,9 +27,9 @@ struct FuelEconomyChartView: View {
     var body: some View {
         Chart {
             ForEach(data) { fillup in
-                LineMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
+                LineMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy()))
                 
-                PointMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy(settings: settings)))
+                PointMark(x: .value("Date", fillup.date), y: .value("Fuel Economy", fillup.fuelEconomy()))
                     .opacity(data.count == 1 ? 1 : 0) // Vislble only when a single data point is available; also serves to make animation between data sets more fluid
             }
             .foregroundStyle(showingAverage ? Color.secondary.opacity(0.5) : Color.fillupsTheme)
@@ -39,7 +39,7 @@ struct FuelEconomyChartView: View {
                     .foregroundStyle(Color.secondary.opacity(0.3))
                     .annotation(position: .top, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
                         VStack(spacing: 2) {
-                            Text("\(selectedFillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                            Text("\(selectedFillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
                                 .font(.headline)
                             
                             Text(selectedFillup.date.formatted(date: .numeric, time: .omitted))
@@ -55,7 +55,7 @@ struct FuelEconomyChartView: View {
                         )
                     }
                 
-                PointMark(x: .value("Date", selectedFillup.date), y: .value("Fuel Economy", selectedFillup.fuelEconomy(settings: settings)))
+                PointMark(x: .value("Date", selectedFillup.date), y: .value("Fuel Economy", selectedFillup.fuelEconomy()))
                     .foregroundStyle(Color(.fillupsTheme))
             }
             
@@ -115,7 +115,7 @@ struct FuelEconomyChartView: View {
     
     // The vertical scale of the chart
     private var yRange: ClosedRange<Double> {
-        let values = data.map { $0.fuelEconomy(settings: settings) }
+        let values = data.map { $0.fuelEconomy() }
         guard let minValue = values.min(), let maxValue = values.max() else { return 0...10 } // default to 0...5 if values is empty
         
         let step: Double = 10 // The number to round by

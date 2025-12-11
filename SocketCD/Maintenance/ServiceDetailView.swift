@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ServiceDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
     @ObservedObject var service: Service
+    let settings = AppSettings.shared
     let vehicle: Vehicle
     
     @State private var showingAddRecord = false
@@ -122,5 +122,4 @@ struct ServiceDetailView: View {
     service.note = "Filter: AX204"
     
     return ServiceDetailView(service: service, vehicle: vehicle)
-        .environmentObject(AppSettings())
 }

@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct FillupDetailView: View {
-    @EnvironmentObject var settings: AppSettings
     @Environment(\.dismiss) var dismiss
     @ObservedObject var fillup: Fillup
+    let settings = AppSettings.shared
     
     @State private var showingEditFillup = false
     @State private var showingFuelEconomyInfo = false
@@ -35,8 +35,8 @@ struct FillupDetailView: View {
                 }
                 
                 LabeledContent {
-                    if fillup.fuelEconomy(settings: settings) != 0 {
-                        Text("\(fillup.fuelEconomy(settings: settings), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                    if fillup.fuelEconomy() != 0 {
+                        Text("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
                     } else {
                         switch fillup.fillType {
                         case .fullTank:
@@ -50,7 +50,7 @@ struct FillupDetailView: View {
                 } label: {
                     HStack {
                         Text("Fuel Economy")
-                        if fillup.fuelEconomy(settings: settings) == 0 {
+                        if fillup.fuelEconomy() == 0 {
                             infoButton
                         }
                     }
@@ -100,5 +100,4 @@ struct FillupDetailView: View {
     fillup.pricePerUnit = 3.569
     
     return FillupDetailView(fillup: fillup)
-        .environmentObject(AppSettings())
 }
