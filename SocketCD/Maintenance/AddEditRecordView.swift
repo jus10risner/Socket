@@ -17,7 +17,6 @@ struct AddEditRecordView: View {
     
     // MARK: - State
     @StateObject var draftServiceLog = DraftServiceLog()
-    @FocusState var isInputActive: Bool
     @State private var showingDeleteAlert = false
     
     // MARK: - Input
@@ -64,7 +63,6 @@ struct AddEditRecordView: View {
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftServiceLog.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
-                            .focused($isInputActive)
                     }
                     
                     LabeledInput(label: "Cost") {
@@ -83,14 +81,6 @@ struct AddEditRecordView: View {
             .scrollDismissesKeyboard(.interactively)
             .listRowSpacing(0) // Added to prevent list row spacing when launched from swipe action on MaintenanceListView
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                if record == nil {
-                    // Show keyboard after a short delay, when adding a new record
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                        isInputActive = true
-                    }
-                }
-            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(record != nil ? "Done" : "Add", systemImage: "checkmark") {
@@ -122,7 +112,6 @@ struct AddEditRecordView: View {
             .alert("Delete Record", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let record {
-//                        service.cancelPendingNotifications()
                         let ids = [
                             service.timeBasedNotificationIdentifier,
                             service.distanceBasedNotificationIdentifier

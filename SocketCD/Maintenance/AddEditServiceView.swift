@@ -132,7 +132,7 @@ struct AddEditServiceView: View {
             .onAppear {
                 if service == nil {
                     // Show keyboard after a short delay, when adding a new service
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    DispatchQueue.main.async {
                         isInputActive = true
                     }
                 }

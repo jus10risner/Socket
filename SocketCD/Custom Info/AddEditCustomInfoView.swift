@@ -59,7 +59,7 @@ struct AddEditCustomInfoView: View {
             .onAppear {
                 if customInfo == nil {
                     // Show keyboard after a short delay, when adding new custom info
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    DispatchQueue.main.async {
                         isInputActive = true
                     }
                 }

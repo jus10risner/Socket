@@ -69,7 +69,7 @@ struct AddEditRepairView: View {
             .onAppear {
                 if repair == nil {
                     // Show keyboard after a short delay, when adding a new repair
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    DispatchQueue.main.async {
                         isInputActive = true
                     }
                 }
