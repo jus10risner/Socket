@@ -84,7 +84,7 @@ struct AddEditRecordView: View {
             .listRowSpacing(0) // Added to prevent list row spacing when launched from swipe action on MaintenanceListView
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
-                if record == nil && draftServiceLog.selectedServiceIDs.isEmpty {
+                if record == nil && !draftServiceLog.selectedServiceIDs.isEmpty {
                     // Show keyboard automatically, when adding a new service log
                     DispatchQueue.main.async {
                         isInputActive = true
