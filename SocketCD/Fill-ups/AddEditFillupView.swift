@@ -90,7 +90,7 @@ struct AddEditFillupView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if fillup == nil {
-                    // Show keyboard after a short delay, when adding a new fill-up
+                    // Show keyboard automatically, when adding a new fill-up
                     DispatchQueue.main.async {
                         isInputActive = true
                     }

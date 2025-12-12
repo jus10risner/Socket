@@ -17,6 +17,7 @@ struct AddEditRecordView: View {
     
     // MARK: - State
     @StateObject var draftServiceLog = DraftServiceLog()
+    @FocusState var isInputActive: Bool
     @State private var showingDeleteAlert = false
     
     // MARK: - Input
@@ -63,6 +64,7 @@ struct AddEditRecordView: View {
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftServiceLog.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
+                            .focused($isInputActive)
                     }
                     
                     LabeledInput(label: "Cost") {
@@ -81,6 +83,14 @@ struct AddEditRecordView: View {
             .scrollDismissesKeyboard(.interactively)
             .listRowSpacing(0) // Added to prevent list row spacing when launched from swipe action on MaintenanceListView
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                if record == nil && draftServiceLog.selectedServiceIDs.isEmpty {
+                    // Show keyboard automatically, when adding a new service log
+                    DispatchQueue.main.async {
+                        isInputActive = true
+                    }
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(record != nil ? "Done" : "Add", systemImage: "checkmark") {

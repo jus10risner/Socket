@@ -20,8 +20,6 @@ struct AddEditVehicleView: View {
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
-    @FocusState var isInputActive: Bool
-    
     @State private var showingDuplicateNameError = false
     
     var body: some View {
@@ -37,7 +35,6 @@ struct AddEditVehicleView: View {
                     LabeledInput(label: "Vehicle Name") {
                         TextField("Required", text: $draftVehicle.name)
                             .textInputAutocapitalization(.words)
-                            .focused($isInputActive)
                     }
                     
                     LabeledInput(label: "Odometer") {
@@ -48,14 +45,6 @@ struct AddEditVehicleView: View {
             }
             .navigationTitle(vehicle != nil ? "Edit Vehicle" : "New Vehicle")
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                if vehicle == nil {
-                    // Show keyboard after a short delay, when adding a new vehicle
-                    DispatchQueue.main.async {
-                        isInputActive = true
-                    }
-                }
-            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }

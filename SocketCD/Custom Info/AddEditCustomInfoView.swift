@@ -58,7 +58,7 @@ struct AddEditCustomInfoView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if customInfo == nil {
-                    // Show keyboard after a short delay, when adding new custom info
+                    // Show keyboard automatically, when adding new custom info
                     DispatchQueue.main.async {
                         isInputActive = true
                     }

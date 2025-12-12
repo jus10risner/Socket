@@ -68,7 +68,7 @@ struct AddEditRepairView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if repair == nil {
-                    // Show keyboard after a short delay, when adding a new repair
+                    // Show keyboard automatically, when adding a new repair
                     DispatchQueue.main.async {
                         isInputActive = true
                     }

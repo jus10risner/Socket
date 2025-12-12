@@ -131,7 +131,7 @@ struct AddEditServiceView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if service == nil {
-                    // Show keyboard after a short delay, when adding a new service
+                    // Show keyboard automatically, when adding a new service
                     DispatchQueue.main.async {
                         isInputActive = true
                     }
