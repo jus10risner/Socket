@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct VehicleDashboardView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -35,6 +36,9 @@ struct VehicleDashboardView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
+                TipView(DashboardTip())
+                    .tipBackground(Color(.tertiarySystemBackground))
+                
                 LazyVGrid(columns: columns, spacing: 5) {
                     // Uses the appropriate view style (primarily for large dynamic type sizes on iPhone)
                     if horizontalSizeClass == .compact {
