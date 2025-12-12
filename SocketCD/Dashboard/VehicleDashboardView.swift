@@ -68,7 +68,9 @@ struct VehicleDashboardView: View {
                 
                 CustomInfoSection(vehicle: vehicle, columns: columns, activeSheet: $activeSheet)
                     .padding(.top, 30)
+                    .padding(.bottom, 5)
             }
+            .scrollIndicators(.hidden)
             .padding(.horizontal)
             .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))

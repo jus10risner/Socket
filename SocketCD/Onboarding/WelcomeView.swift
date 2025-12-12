@@ -58,7 +58,7 @@ struct WelcomeView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal, 20)
-                .padding(.top, 5)
+                .padding(.vertical, 5)
             }
             .padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad ? 20 : 0)
             .interactiveDismissDisabled()

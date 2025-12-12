@@ -74,6 +74,7 @@ struct FillupsDashboardView: View {
                         }
                     }
                 }
+                .scrollIndicators(.hidden)
             }
         }
         .navigationTitle("Fill-ups")
