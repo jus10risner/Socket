@@ -31,7 +31,7 @@ struct AppSettingsView: View {
                     }
                 }
                 
-                Section("Appearance") {
+                Section("Styling") {
                     NavigationLink(destination: AccentColorSelectorView()) {
                         rowLabel(title: "Accent Color", symbol: "paintbrush")
                     }
