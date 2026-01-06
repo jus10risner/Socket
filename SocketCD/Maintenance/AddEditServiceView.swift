@@ -167,7 +167,6 @@ struct AddEditServiceView: View {
             .alert("Delete Service", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let service {
-//                        service.cancelPendingNotifications()
                         let ids = [
                             service.timeBasedNotificationIdentifier,
                             service.distanceBasedNotificationIdentifier
@@ -205,6 +204,7 @@ struct AddEditServiceView: View {
                     
                     if hasInfoButton {
                         Button("More Info", systemImage: "info.circle") {
+                            isInputActive = false
                             showingMoreInfo = true
                         }
                         .labelStyle(.iconOnly)

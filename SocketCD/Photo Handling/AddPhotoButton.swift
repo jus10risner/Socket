@@ -24,6 +24,7 @@ struct AddPhotoButton: View {
     var body: some View {
         Menu {
             Button("Photo Library", systemImage: "photo.on.rectangle") {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) // Dismisses keyboard, if visible
                 showingPhotosPicker = true
             }
             

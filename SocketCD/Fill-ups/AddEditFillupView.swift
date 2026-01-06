@@ -74,7 +74,10 @@ struct AddEditFillupView: View {
                     
                     fillTypePicker
                 } footer: {
-                    Button("About fill types...") { showingFillTypeInfo = true }
+                    Button("About fill types...") {
+                        isInputActive = false
+                        showingFillTypeInfo = true
+                    }
                         .font(.footnote)
                 }
                 
