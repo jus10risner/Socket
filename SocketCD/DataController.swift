@@ -95,6 +95,13 @@ final class DataController: ObservableObject {
 
     func delete(_ object: NSManagedObject) {
         let context = container.viewContext
+        
+        // If the object being deleted is a vehicle, cancel all associated notifications
+        if let vehicle = object as? Vehicle {
+            print("Cancelling notifications")
+            vehicle.cancelAllServiceNotifications()
+        }
+        
         context.delete(object)
         do {
             try context.save()

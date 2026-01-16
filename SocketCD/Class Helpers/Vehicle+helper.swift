@@ -183,8 +183,6 @@ extension Vehicle {
         self.colorComponents = colorComponents
         self.photo = draftVehicle.photo
         
-//        self.updateAllServiceNotifications()
-        
         try? context.save()
     }
     
@@ -221,8 +219,6 @@ extension Vehicle {
             
             serviceRecord.serviceLog = baselineLog
         }
-        
-//        self.updateAllServiceNotifications()
         
         try? context.save()
     }
@@ -279,5 +275,13 @@ extension Vehicle {
         newCustomInfo.photos = NSSet(array: draftCustomInfo.photos)
         
         try? context.save()
+    }
+    
+    // Cancels all scheduled notifications for all services associated with this vehicle
+    func cancelAllServiceNotifications() {
+        for service in self.sortedServicesArray {
+            NotificationScheduler.cancelTimeBased(for: service)
+            NotificationScheduler.cancelDistanceBased(for: service)
+        }
     }
 }
