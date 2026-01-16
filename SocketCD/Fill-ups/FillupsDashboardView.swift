@@ -174,7 +174,7 @@ struct FillupsDashboardView: View {
                         .stroke(showingAverage ? Color.clear : Color.secondary, lineWidth: 0.5)
                 )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.borderless)
     }
     
     // Displayed when no data points exist to place on the chart
