@@ -25,7 +25,6 @@ struct VehicleDashboardView: View {
     @State private var activeSheet: ActiveSheet?
     @State private var showingUpdateOdometerAlert = false
     @State private var newOdometerValue: Int? = nil
-    @State private var showingDeleteAlert = false
     
     @State private var exportURL: URL?
     @State private var shareItem: ShareItem?
@@ -89,7 +88,7 @@ struct VehicleDashboardView: View {
                 case .addCustomInfo:
                     AddEditCustomInfoView(vehicle: vehicle)
                 case .editVehicle:
-                    AddEditVehicleView(vehicle: vehicle)
+                    AddEditVehicleView(vehicle: vehicle, onDelete: { selectedVehicle = nil })
                 case .showTimeline:
                     TimelineView(vehicle: vehicle)
                 }
@@ -140,7 +139,7 @@ struct VehicleDashboardView: View {
                     Button {
                         activeSheet = .showTimeline
                     } label: {
-                        Label("Activity Timeline", systemImage: "list.bullet")
+                        Label("Full Timeline", systemImage: "list.bullet")
                         Text("Maintenance and Repairs")
                     }
                 }
@@ -150,25 +149,12 @@ struct VehicleDashboardView: View {
                 Divider()
                 
                 Button("Edit Vehicle", systemImage: "pencil") { activeSheet = .editVehicle }
-                
-                Button(role: .destructive) { showingDeleteAlert = true } label: {
-                    Label("Delete Vehicle", systemImage: "trash")
-                        .tint(Color.red)
-                }
             }
             .adaptiveTint()
             .confirmationDialog("Which paper size do you prefer?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
                 Button("A4") { exportPDF(pageSize: .a4) }
                 
                 Button("US Letter") { exportPDF(pageSize: .usLetter) }
-                
-                Button("Cancel", role: .cancel) { }
-            }
-            .confirmationDialog("Permanently delete \(vehicle.name) and all of its records? \nThis action cannot be undone.", isPresented: $showingDeleteAlert, titleVisibility: .visible) {
-                Button("Delete", role: .destructive) {
-                    DataController.shared.delete(vehicle)
-                    selectedVehicle = nil
-                }
                 
                 Button("Cancel", role: .cancel) { }
             }
@@ -201,7 +187,7 @@ struct VehicleDashboardView: View {
             }
             
             Section("Spreadsheet (CSV)") {
-                csvExportButton(title: "All Records") { CSVExporter.exportAllRecords(for: vehicle) }
+                csvExportButton(title: "All Vehicle Records") { CSVExporter.exportAllRecords(for: vehicle) }
                 csvExportButton(title: "Fill-ups") { CSVExporter.exportFillups(for: vehicle) }
                 csvExportButton(title: "Maintenance and Repairs") { CSVExporter.exportMaintenanceAndRepairs(for: vehicle) }
             }

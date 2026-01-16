@@ -56,7 +56,7 @@ struct TimelineView: View {
                     }
                 }
             }
-            .navigationTitle("Activity Timeline")
+            .navigationTitle("Timeline")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 Button("Done", systemImage: "xmark") {

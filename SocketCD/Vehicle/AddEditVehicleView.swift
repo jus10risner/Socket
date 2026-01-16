@@ -12,15 +12,18 @@ struct AddEditVehicleView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var draftVehicle = DraftVehicle()
     private let vehicle: Vehicle?
+    private let onDelete: (() -> Void)?
     
-    init(vehicle: Vehicle? = nil) {
+    init(vehicle: Vehicle? = nil, onDelete: (() -> Void)? = nil) {
         self.vehicle = vehicle
+        self.onDelete = onDelete
         _draftVehicle = StateObject(wrappedValue: DraftVehicle(vehicle: vehicle))
     }
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
     @State private var showingDuplicateNameError = false
+    @State private var showingDeleteAlert = false
     
     var body: some View {
         NavigationStack {
@@ -40,6 +43,12 @@ struct AddEditVehicleView: View {
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftVehicle.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
+                    }
+                }
+                
+                if vehicle != nil {
+                    Button("Delete Vehicle", role: .destructive) {
+                        showingDeleteAlert = true
                     }
                 }
             }
@@ -74,6 +83,23 @@ struct AddEditVehicleView: View {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Please choose a different name.")
+            }
+            .alert("Delete Vehicle", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    if let vehicle = vehicle {
+                        DataController.shared.delete(vehicle)
+                    }
+                    
+                    dismiss()
+                    
+                    // Dismisses VehicleDashboardView, after a short delay, to avoid jumping immediately back to VehicleListView
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        onDelete?()
+                    }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Permanently delete this vehicle and all of its records? This action cannot be undone.")
             }
         }
     }
