@@ -47,11 +47,7 @@ struct FuelEconomyChartView: View {
                 )
                 .opacity(chartPoints.count == 1 ? 1 : 0)
             }
-            .foregroundStyle(
-                showingAverage
-                ? Color.secondary.opacity(0.5)
-                : Color.fillupsTheme
-            )
+            .foregroundStyle(showingAverage ? Color.secondary.opacity(0.5) : Color.fillupsTheme)
 
             if let selectedPoint {
                 RuleMark(x: .value("Selected Fill-up", selectedPoint.date))
@@ -91,10 +87,9 @@ struct FuelEconomyChartView: View {
                 .foregroundStyle(Color.fillupsTheme)
             }
 
-            if showingAverage {
-                RuleMark(y: .value("Average", averageFuelEconomy))
-                    .foregroundStyle(Color.fillupsTheme)
-            }
+            RuleMark(y: .value("Average", averageFuelEconomy))
+                .foregroundStyle(Color.fillupsTheme)
+                .opacity(showingAverage ? 1 : 0)
         }
         .animation(.easeInOut, value: data)
         .animation(.easeInOut, value: selectedDateRange)
