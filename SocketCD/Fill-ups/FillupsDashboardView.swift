@@ -44,9 +44,9 @@ struct FillupsDashboardView: View {
                                 if data.count == 0 {
                                     emptyChartView
                                 } else {
-                                    averageFuelEconomyButton
-                                    
                                     FuelEconomyChartView(data: data, averageFuelEconomy: averageFuelEconomy, selectedDateRange: $selectedDateRange, showingAverage: $showingAverage)
+                                    
+                                    averageFuelEconomyButton
                                     
                                     Picker("Date Range", selection: $selectedDateRange) {
                                         ForEach(DateRange.allCases, id: \.self) {
