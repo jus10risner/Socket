@@ -1,5 +1,6 @@
 <div align="center">
-  <img src='https://github.com/jus10risner/jus10risner.github.io/blob/main/docs/assets/socket-app-icon.png?raw=true' height='100'>
+  <img width="100" height="100" alt="socket-app-icon" src="https://github.com/user-attachments/assets/e50521f8-36bd-4323-8952-4cade2ce111f" />
+
   <h1>Socket: Car Care Tracker</h1>
   <p>Easily log and manage vehicle care, with this simple, user-friendly app that looks and feels right at home on iPhone.</p>
   
