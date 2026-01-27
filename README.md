@@ -33,8 +33,8 @@ Seeing an opportunity to build the app I was looking for, I started learning the
 ## Details
 
 - Built almost entirely using SwiftUI
-  - `UIViewControllerRepresentable` was used to make the following UIKit-only features (as of iOS 15.0) available in SwiftUI:
-    - `UIActivityViewController` for sharing photos and exporting records
+  - `UIViewControllerRepresentable` was used to make the following UIKit-only features available in SwiftUI:
+    - `UIActivityViewController` for exporting records in a way that ShareLink doesn't currently support (using a `.sheet(item:)` modifier)
     - `UIImagePickerController` for using the camera capture feature
 - Core Data used for persistence
   - `NSPersistentCloudKitContainer` used to both persist data locally and sync to iCloud
