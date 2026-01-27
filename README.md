@@ -2,7 +2,7 @@
   <img width="100" height="100" alt="socket-app-icon" src="https://github.com/user-attachments/assets/e50521f8-36bd-4323-8952-4cade2ce111f" />
 
   <h1>Socket: Car Care Tracker</h1>
-  <p>Easily log and manage vehicle care, with this simple, user-friendly app that looks and feels right at home on iPhone.</p>
+  <p>A simple, user-friendly car care tracker, made with SwiftUI</p>
   
 <img width="750" height="500" alt="web-image-rounded-corners" src="https://github.com/user-attachments/assets/f12cbd84-fb95-45e1-b710-60e1ea35c1c5" />
   <br>
@@ -38,3 +38,4 @@ Seeing an opportunity to build the app I was looking for, I started learning the
     - `UIImagePickerController` for using the camera capture feature
 - Core Data used for persistence
   - `NSPersistentCloudKitContainer` used to both persist data locally and sync to iCloud
+- TipKit used for onboarding tips
