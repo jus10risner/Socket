@@ -129,6 +129,11 @@ struct VehicleDashboardView: View {
                     .foregroundStyle(Color.secondary)
             }
         }
+        .accessibilityAction(.default) {
+            showingUpdateOdometerAlert = true
+        }
+        .accessibilityHint("Update Odometer")
+        .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
     }
     
     @ToolbarContentBuilder

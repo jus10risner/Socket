@@ -49,8 +49,26 @@ struct MaintenanceCard: View {
                     .foregroundStyle(Color.secondary)
             }
         }
+        .accessibilityLabel(accessibilityLabel)
         .onTapGesture {
             selectedSection = .maintenance
+        }
+        .accessibilityAction(named: "Add Service Log", {
+            activeSheet = .logService
+        })
+        .accessibilityAction {
+            selectedSection = .maintenance
+        }
+    }
+    
+    // Returns the correct label for VoiceOver to read
+    private var accessibilityLabel: String {
+        let headline = "Maintenance: "
+        
+        if let service = nextDueService {
+            return headline + service.name + service.nextDueDescription(currentOdometer: vehicle.odometer)
+        } else {
+            return headline + "Tap to get started"
         }
     }
     

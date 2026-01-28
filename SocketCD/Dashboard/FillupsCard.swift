@@ -65,8 +65,46 @@ struct FillupsCard: View {
                 }
             }
         }
+        .accessibilityLabel(accessibilityLabel)
         .onTapGesture {
             selectedSection = .fillups
+        }
+        .accessibilityAction(named: "Add Fill-up", {
+            activeSheet = .addFillup
+        })
+        .accessibilityAction {
+            selectedSection = .fillups
+        }
+    }
+    
+    // Returns the correct label for VoiceOver to read
+    private var accessibilityLabel: String {
+        let headline = "Fill-ups: "
+        
+        if let fillup = vehicle.sortedFillupsArray.first {
+            return headline + "Latest fill-up: \(fillup.date.formatted(date: .numeric, time: .omitted)) \(fuelEconomyValue)"
+        } else {
+            return headline + "Nothing logged yet"
+        }
+    }
+    
+    // Returns the fuel economy value to read, if one exists (for VoiceOver)
+    private var fuelEconomyValue: String {
+        if let fillup = vehicle.sortedFillupsArray.first {
+            if fillup.fuelEconomy() > 0 {
+                return "\(fillup.fuelEconomy().formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)"
+            } else {
+                switch fillup.fillType {
+                case .fullTank:
+                    return fillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "Full Tank"
+                case .partialFill:
+                    return "Partial Fill"
+                case .missedFill:
+                    return "Full Tank (Reset)"
+                }
+            }
+        } else {
+            return ""
         }
     }
 }

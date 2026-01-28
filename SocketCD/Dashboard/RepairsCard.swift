@@ -32,8 +32,26 @@ struct RepairsCard: View {
                     .foregroundStyle(Color.secondary)
             }
         }
+        .accessibilityLabel(accessibilityLabel)
         .onTapGesture {
             selectedSection = .repairs
+        }
+        .accessibilityAction(named: "Add Repair", {
+            activeSheet = .addRepair
+        })
+        .accessibilityAction {
+            selectedSection = .repairs
+        }
+    }
+    
+    // Returns the correct label for VoiceOver to read
+    private var accessibilityLabel: String {
+        let headline = "Repairs: "
+        
+        if let repair = vehicle.sortedRepairsArray.first {
+            return headline + "Latest: \(repair.date.formatted(date: .numeric, time: .omitted))"
+        } else {
+            return headline + "No entries"
         }
     }
 }

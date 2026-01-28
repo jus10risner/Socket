@@ -65,6 +65,7 @@ struct DashboardCard<Content: View>: View {
         .padding()
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
         .contentShape(Rectangle())
+        .accessibilityElement()
     }
 }
 
