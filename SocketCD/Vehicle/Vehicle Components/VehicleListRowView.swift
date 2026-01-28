@@ -81,6 +81,9 @@ struct VehicleListRowView: View {
         .containerShape(RoundedRectangle.adaptive)
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
+        .accessibilityElement()
+        .accessibilityLabel(vehicle.name + "\(vehicle.odometer)" + "\(settings.distanceUnit)")
+        .accessibilityHint("\(badgeNumber != 0 ? "Service Due" : "")")
     }
     
     // Compact vehicle card, with small image and horizontal layout
@@ -124,6 +127,9 @@ struct VehicleListRowView: View {
         .containerShape(RoundedRectangle.adaptive)
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
+        .accessibilityElement()
+        .accessibilityLabel(vehicle.name + "\(vehicle.odometer)" + "\(settings.distanceUnit)")
+        .accessibilityHint("\(badgeNumber != 0 ? "Service Due" : "")")
     }
     
     private var vehicleImage: some View {
