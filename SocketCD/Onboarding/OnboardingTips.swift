@@ -28,28 +28,14 @@ struct LogServiceTip: Tip {
     
     var message: Text? {
         Text("""
-            Tap the **book** button to set up a new maintenance service.
-            
-            Tap the **plus** button each time you complete a service to create a service log.
+            Tap to set up a maintenance service.
+
+            After setup, use the **plus** button to create service logs.
             """)
-        .accessibilityLabel("Tap the Set Up New Service button to define a new maintenance service. Tap the Log Service button each time you complete an existing service to create a service log.")
+        .accessibilityLabel("Set up a maintenance service.")
     }
     
     var image: Image? {
         Image(systemName: "hand.tap.fill")
-    }
-}
-
-struct ServiceLogTip: Tip {
-    var title: Text {
-        Text("Choose Services")
-    }
-    
-    var message: Text? {
-        Text("Select one or more services to log. All services you select will share the information entered here.")
-    }
-    
-    var image: Image? {
-        Image(systemName: "checkmark.circle.fill")
     }
 }

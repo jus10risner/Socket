@@ -51,14 +51,13 @@ struct AddEditRecordView: View {
                         LabeledInput(label: "Services") {
                             Group {
                                 if draftServiceLog.selectedServiceIDs.isEmpty {
-                                    Text("Choose")
+                                    Text("Select")
                                 } else {
                                     Text(draftServiceLog.selectedServiceNames(from: vehicle))
                                 }
                             }
                             .multilineTextAlignment(.leading)
                         }
-                        .popoverTip(ServiceLogTip())
                     }
                     
                     LabeledInput(label: "Odometer") {

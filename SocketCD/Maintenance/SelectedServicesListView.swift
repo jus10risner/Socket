@@ -13,7 +13,7 @@ struct SelectedServicesListView: View {
     
     var body: some View {
         List {
-            Section("Choose the services to log") {
+            Section {
                 ForEach(vehicle.sortedServicesArray.sorted { $0.name < $1.name }) { service in
                     Button {
                         toggleSelection(for: service)
@@ -31,10 +31,13 @@ struct SelectedServicesListView: View {
                         .foregroundStyle(Color.primary)
                     }
                 }
+            } header: {
+                Text("Services to include")
+            } footer: {
+                Text("Details in the service log form apply to all selected services.")
             }
             .textCase(nil)
         }
-        .onAppear { ServiceLogTip().invalidate(reason: .actionPerformed) }
     }
     
     private func toggleSelection(for service: Service) {
