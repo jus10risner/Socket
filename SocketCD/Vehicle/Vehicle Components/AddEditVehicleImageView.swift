@@ -61,6 +61,12 @@ struct AddEditVehicleImageView: View {
         } message: {
             Text("There was a problem saving that image. Please try another image.")
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(
+            draftVehicle.photo != nil
+            ? Text("Vehicle photo is shown.")
+            : Text("No photo selected. Current color is shown.")
+        )
     }
     
     

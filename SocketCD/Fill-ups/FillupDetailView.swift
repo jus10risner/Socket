@@ -37,6 +37,7 @@ struct FillupDetailView: View {
                 LabeledContent {
                     if fillup.fuelEconomy() != 0 {
                         Text("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                            .accessibilityLabel("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.fullName)")
                     } else {
                         switch fillup.fillType {
                         case .fullTank:
@@ -55,6 +56,7 @@ struct FillupDetailView: View {
                         }
                     }
                 }
+                .accessibilityElement(children: .combine)
                 
                 LabeledContent("Total Cost", value: (fillup.totalCost ?? 0).asCurrency())
             }

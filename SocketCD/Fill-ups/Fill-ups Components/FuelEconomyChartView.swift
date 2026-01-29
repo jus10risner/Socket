@@ -40,12 +40,15 @@ struct FuelEconomyChartView: View {
                     x: .value("Date", point.date),
                     y: .value("Fuel Economy", point.value)
                 )
+                .accessibilityHidden(true)
 
                 PointMark(
                     x: .value("Date", point.date),
                     y: .value("Fuel Economy", point.value)
                 )
                 .opacity(chartPoints.count == 1 ? 1 : 0)
+                .accessibilityLabel("\(point.date.formatted(.dateTime.month().day().year()))")
+                .accessibilityValue("\(point.value, specifier: "%.1f") \(settings.fuelEconomyUnit.fullName)")
             }
             .foregroundStyle(showingAverage ? Color.secondary.opacity(0.5) : Color.fillupsTheme)
 
@@ -79,17 +82,20 @@ struct FuelEconomyChartView: View {
                                 .stroke(Color.secondary, lineWidth: 0.5)
                         )
                     }
+                    .accessibilityHidden(true)
 
                 PointMark(
                     x: .value("Date", selectedPoint.date),
                     y: .value("Fuel Economy", selectedPoint.value)
                 )
                 .foregroundStyle(Color.fillupsTheme)
+                .accessibilityHidden(true)
             }
 
             RuleMark(y: .value("Average", averageFuelEconomy))
                 .foregroundStyle(Color.fillupsTheme)
                 .opacity(showingAverage ? 1 : 0)
+                .accessibilityHidden(true)
         }
         .animation(.easeInOut, value: data)
         .animation(.easeInOut, value: selectedDateRange)

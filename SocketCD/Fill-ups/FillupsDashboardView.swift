@@ -49,8 +49,11 @@ struct FillupsDashboardView: View {
                                     averageFuelEconomyButton
                                     
                                     Picker("Date Range", selection: $selectedDateRange) {
-                                        ForEach(DateRange.allCases, id: \.self) {
-                                            Text($0.rawValue)
+                                        ForEach(DateRange.allCases, id: \.self) { range in
+                                            Text(range.rawValue)
+                                                .tag(range)
+                                                .accessibilityLabel(range.accessibilityLabel)
+                                                .accessibilityHint("Selects the range for fuel economy data.")
                                         }
                                     }
                                     .pickerStyle(.segmented)
@@ -84,7 +87,7 @@ struct FillupsDashboardView: View {
         .onChange(of: selectedDateRange) {
             updateData()
         }
-        .sheet(isPresented: $showingAddFillup) { AddEditFillupView(vehicle: vehicle) }
+        .sheet(isPresented: $showingAddFillup, onDismiss: updateData) { AddEditFillupView(vehicle: vehicle) }
         .toolbar {
             AdaptiveToolbarButton {
                 Button("Add Fill-up", systemImage: "plus") {
@@ -129,6 +132,7 @@ struct FillupsDashboardView: View {
                         Text("\(settings.fuelEconomyUnit.rawValue)")
                             .font(.title3.bold())
                             .foregroundStyle(Color.secondary)
+                            .accessibilityLabel(settings.fuelEconomyUnit.fullName)
                     }
                 } else {
                     HStack(spacing: 3) {
@@ -157,6 +161,7 @@ struct FillupsDashboardView: View {
                 }
             }
         }
+        .accessibilityElement(children: .combine)
     }
     
     private var averageFuelEconomyButton: some View {
@@ -173,8 +178,10 @@ struct FillupsDashboardView: View {
                         .fill(showingAverage ? Color.fillupsTheme : Color.clear)
                         .stroke(showingAverage ? Color.clear : Color.secondary, lineWidth: 0.5)
                 )
+                .accessibilityLabel("Average fuel economy: \(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.fullName)")
         }
         .buttonStyle(.borderless)
+        .accessibilityRemoveTraits(.isButton)
     }
     
     // Displayed when no data points exist to place on the chart
@@ -186,6 +193,7 @@ struct FillupsDashboardView: View {
                 .font(.system(size: 40))
                 .foregroundStyle(Color(.fillupsTheme))
                 .frame(height: 50)
+                .accessibilityHidden(true)
             
             Group {
                 if isFullTank {
@@ -215,6 +223,7 @@ struct FillupsDashboardView: View {
             RoundedRectangle.adaptive
                 .fill(Color(.tertiarySystemGroupedBackground))
         )
+        .accessibilityElement(children: .combine)
     }
     
     // Returns the average fuel economy for a given set of fill-ups

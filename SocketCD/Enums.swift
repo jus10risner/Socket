@@ -25,6 +25,17 @@ enum FillType: String, CaseIterable {
 
 enum DateRange: String, CaseIterable {
     case sixMonths = "6M", year = "1Y", all = "ALL"
+    
+    var accessibilityLabel: String {
+        switch self {
+        case .sixMonths:
+            return "Last 6 months"
+        case .year:
+            return "Last year"
+        case .all:
+            return "All Time"
+        }
+    }
 }
 
 
@@ -91,6 +102,17 @@ enum FuelEconomyUnits: String, CaseIterable {
             return "Gallon"
         default: 
             return "Liter"
+        }
+    }
+    
+    var fullName: String {
+        switch self {
+        case .mpg: 
+            return "Miles per Gallon"
+        case .kmL: 
+            return "Kilometers per Liter"
+        case .L100km: 
+            return "Liters per 100km"
         }
     }
 }

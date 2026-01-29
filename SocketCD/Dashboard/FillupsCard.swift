@@ -92,7 +92,7 @@ struct FillupsCard: View {
     private var fuelEconomyValue: String {
         if let fillup = vehicle.sortedFillupsArray.first {
             if fillup.fuelEconomy() > 0 {
-                return "\(fillup.fuelEconomy().formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)"
+                return "\(fillup.fuelEconomy().formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.fullName)"
             } else {
                 switch fillup.fillType {
                 case .fullTank:

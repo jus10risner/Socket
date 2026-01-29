@@ -44,6 +44,7 @@ struct AllFillupsListView: View {
                                 listRowLabel(symbol: "circle.fill", text: "First Full Tank")
                             } else {
                                 Text("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
+                                    .accessibilityLabel("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.fullName)")
                             }
                         }
                     }
@@ -65,6 +66,7 @@ struct AllFillupsListView: View {
             
             Text(text)
         }
+        .accessibilityElement()
         .accessibilityLabel(text)
     }
 }

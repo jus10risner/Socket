@@ -37,6 +37,7 @@ struct VehicleImageView: View {
                     .accessibilityLabel("Vehicle Photo")
             }
         }
+        .accessibilityHidden(true)
     }
 }
 

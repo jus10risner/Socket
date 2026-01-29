@@ -82,8 +82,9 @@ struct VehicleListRowView: View {
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
         .accessibilityElement()
-        .accessibilityLabel(vehicle.name + "\(vehicle.odometer)" + "\(settings.distanceUnit)")
+        .accessibilityLabel("\(vehicle.name)." + "\(vehicle.odometer)" + "\(settings.distanceUnit)")
         .accessibilityHint("\(badgeNumber != 0 ? "Service Due" : "")")
+        .accessibilityAddTraits(.isButton)
     }
     
     // Compact vehicle card, with small image and horizontal layout
@@ -128,8 +129,9 @@ struct VehicleListRowView: View {
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
         .accessibilityElement()
-        .accessibilityLabel(vehicle.name + "\(vehicle.odometer)" + "\(settings.distanceUnit)")
+        .accessibilityLabel("\(vehicle.name)." + "\(vehicle.odometer)" + "\(settings.distanceUnit)")
         .accessibilityHint("\(badgeNumber != 0 ? "Service Due" : "")")
+        .accessibilityAddTraits(.isButton)
     }
     
     private var vehicleImage: some View {
@@ -158,3 +160,4 @@ struct VehicleListRowView: View {
     
     return VehicleListRowView(vehicle: vehicle, isSelected: true)
 }
+
