@@ -31,12 +31,11 @@ struct SelectedServicesListView: View {
                         .foregroundStyle(Color.primary)
                     }
                 }
-            } header: {
-                Text("Services to include")
             } footer: {
                 Text("Details in the service log form apply to all selected services.")
             }
-            .textCase(nil)
+            .navigationTitle("Services to Include")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     
