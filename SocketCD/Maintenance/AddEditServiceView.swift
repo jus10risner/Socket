@@ -48,24 +48,63 @@ struct AddEditServiceView: View {
                         .focused($isInputActive)
                 }
                 
-                Section(footer: Text("Track by distance, time, or both.")) {
-                    formItem(headline: "This service should be performed every:") {
-                        HStack {
-                            TextField("5,000", text: optionalIntFieldBinding($draftService.distanceInterval))
-                                .keyboardType(.numberPad)
-                                .fixedSize()
-                            
-                            Text("\(settings.distanceUnit.abbreviated) or")
-                            
-                            TextField("6", text: optionalIntFieldBinding($draftService.timeInterval))
+                Section {
+                    formItem(headline: "This service should be performed every:", subheadline: "Enter a distance, a time interval, or both.") {
+                        ViewThatFits(in: .horizontal) {
+                            HStack {
+                                TextField("5,000", text: optionalIntFieldBinding($draftService.distanceInterval))
+                                    .keyboardType(.numberPad)
+                                    .fixedSize()
+                                    .accessibilityLabel("Distance interval")
+                                    .accessibilityHint("Enter the number of " + settings.distanceUnit.rawValue)
+
+                                Text("\(String(describing: settings.distanceUnit.abbreviated)) or")
+                                    .accessibilityHidden(true)
+
+                                TextField("6", text: optionalIntFieldBinding($draftService.timeInterval))
+                                    .keyboardType(.numberPad)
+                                    .fixedSize()
+                                    .accessibilityLabel("Time interval")
+                                    .accessibilityHint("Enter the number of months or years")
+
+                                MonthsYearsToggle(
+                                    monthsInterval: $draftService.monthsInterval,
+                                    timeInterval: Int(draftService.timeInterval ?? 0)
+                                )
+                            }
+                            .textFieldStyle(.roundedBorder)
+                            .multilineTextAlignment(.center)
                             .keyboardType(.numberPad)
-                            .fixedSize()
                             
-                            MonthsYearsToggle(monthsInterval: $draftService.monthsInterval, timeInterval: Int(draftService.timeInterval ?? 0))
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    TextField("5,000", text: optionalIntFieldBinding($draftService.distanceInterval))
+                                        .keyboardType(.numberPad)
+                                        .fixedSize()
+                                        .accessibilityLabel("Distance interval")
+                                        .accessibilityHint("Enter the number of " + settings.distanceUnit.rawValue)
+                                    
+                                    Text("\(String(describing: settings.distanceUnit.abbreviated)) or")
+                                        .accessibilityHidden(true)
+                                }
+
+                                HStack {
+                                    TextField("6", text: optionalIntFieldBinding($draftService.timeInterval))
+                                        .keyboardType(.numberPad)
+                                        .fixedSize()
+                                        .accessibilityLabel("Time interval")
+                                        .accessibilityHint("Enter the number of months or years")
+                                    
+                                    MonthsYearsToggle(
+                                        monthsInterval: $draftService.monthsInterval,
+                                        timeInterval: Int(draftService.timeInterval ?? 0)
+                                    )
+                                }
+                            }
+                            .textFieldStyle(.roundedBorder)
+                            .multilineTextAlignment(.center)
+                            .keyboardType(.numberPad)
                         }
-                        .textFieldStyle(.roundedBorder)
-                        .multilineTextAlignment(.center)
-                        .keyboardType(.numberPad)
                     }
                 }
                 
@@ -201,6 +240,7 @@ struct AddEditServiceView: View {
                 HStack {
                     Text(headline)
                         .font(.subheadline.bold())
+                        .accessibilityHint(subheadline ?? "")
                     
                     if hasInfoButton {
                         Button("More Info", systemImage: "info.circle") {
@@ -223,6 +263,7 @@ struct AddEditServiceView: View {
                     Text(subheadline)
                         .font(.caption)
                         .foregroundColor(.secondary)
+                        .accessibilityHidden(true)
                 }
             }
             
@@ -263,3 +304,4 @@ struct AddEditServiceView: View {
     
     return AddEditServiceView(vehicle: vehicle, service: service)
 }
+

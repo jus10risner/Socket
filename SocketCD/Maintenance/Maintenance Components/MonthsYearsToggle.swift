@@ -11,22 +11,36 @@ struct MonthsYearsToggle: View {
     @Binding var monthsInterval: Bool
     let timeInterval: Int?
     
+    @State private var flipped: Bool = false
+    
     @State private var boxRotation = 0.001 // Using 0.0 here causes error: "ignoring singular matrix..." on iOS 16+
     @State private var textRotation = 0.0 // ""
     
     var body: some View {
         Button {
             flipButton()
+            monthsInterval.toggle()
         } label: {
-            if monthsInterval == true {
-                Text(timeInterval == 1 ? "month" : "months")
-            } else {
-                Text(timeInterval == 1 ? "year" : "years")
-            }
+            Text(labelText)
         }
         .buttonStyle(.bordered)
         .rotation3DEffect(.degrees(textRotation), axis: (x: 0, y: 1, z: 0))
         .rotation3DEffect(.degrees(boxRotation), axis: (x: 0, y: 1, z: 0))
+        .accessibilityLabel("Time unit")
+        .accessibilityValue(accessibilityValue)
+        .accessibilityHint("Double-tap to switch between months and years.")
+    }
+    
+    private var labelText: String {
+        monthsInterval
+            ? (timeInterval == 1 ? "month" : "months")
+            : (timeInterval == 1 ? "year" : "years")
+    }
+
+    private var accessibilityValue: String {
+        monthsInterval
+            ?  timeInterval == 1 ? "month" : "months"
+            :  timeInterval == 1 ? "year" : "years"
     }
     
     // MARK: - Methods
@@ -48,10 +62,6 @@ struct MonthsYearsToggle: View {
                 textRotation += 180
             } else {
                 textRotation -= 180
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration / 2) {
-                monthsInterval.toggle()
             }
         }
     }
