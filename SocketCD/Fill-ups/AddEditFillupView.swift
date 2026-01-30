@@ -63,14 +63,26 @@ struct AddEditFillupView: View {
                             .foregroundStyle(Color.primary)
                             .multilineTextAlignment(.trailing)
                     } label: {
-                        Text(settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
-                        
-                        if settings.showCalculatedCost {
-                            Text(settings.fillupCostType == .perUnit ? "Total: \(calculatedCost)" : "Per \(settings.fuelEconomyUnit.volumeUnit): \(calculatedCost)")
-                                .font(.caption)
+                        Group {
+                            Text(settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
+                            
+                            if settings.showCalculatedCost {
+                                Text(settings.fillupCostType == .perUnit ? "Total: \(calculatedCost)" : "Per \(settings.fuelEconomyUnit.volumeUnit): \(calculatedCost)")
+                                    .font(.caption)
+                            }
                         }
+                        .accessibilityHidden(true)
                     }
                     .foregroundStyle(Color.secondary)
+                    .accessibilityLabel(settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
+                    .accessibilityHint(
+                        settings.showCalculatedCost && draftFillup.cost != nil
+                        ? (settings.fillupCostType == .perUnit
+                           ? "Total cost for this fill-up: \(calculatedCost)"
+                           : "Cost per \(settings.fuelEconomyUnit.volumeUnit) for this fill-up: \(calculatedCost)")
+                        : ""
+                    )
+                    
                     
                     fillTypePicker
                 } footer: {
@@ -78,7 +90,8 @@ struct AddEditFillupView: View {
                         isInputActive = false
                         showingFillTypeInfo = true
                     }
-                        .font(.footnote)
+                    .font(.footnote)
+                    .accessibilityLabel("About fill types")
                 }
                 
                 FormFooterView (
@@ -151,7 +164,7 @@ struct AddEditFillupView: View {
     // Allows the user to specify a fill type for a given fill-up
     private var fillTypePicker: some View {
         LabeledInput(label: "Fill Type") {
-            Picker("Select a Fill Type", selection: $draftFillup.fillType) {
+            Picker("", selection: $draftFillup.fillType) {
                 ForEach(FillType.allCases, id: \.self) { fillupType in
                     Text(fillupType.rawValue)
                 }
