@@ -36,6 +36,7 @@ struct AddPhotoButton: View {
         } label: {
             Label {
                 Text("Add Photo...")
+                    .accessibilityLabel("Add Photo")
             } icon: {
                 Image(systemName: "photo")
             }

@@ -46,6 +46,7 @@ struct TimelineView: View {
                                             }
                                         }
                                         .imageScale(.small)
+                                        .accessibilityElement()
                                         
                                         Text(item.displayName)
                                     }
@@ -53,6 +54,7 @@ struct TimelineView: View {
                             }
                         }
                         .padding(.vertical, 5)
+                        .accessibilityElement(children: .combine)
                     }
                 }
             }
