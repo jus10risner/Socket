@@ -38,4 +38,9 @@ struct LogServiceTip: Tip {
     var image: Image? {
         Image(systemName: "hand.tap.fill")
     }
+    
+    var options: [any Option] {
+        // Tip will only appear once before it is automatically invalidated.
+        MaxDisplayCount(1)
+    }
 }
