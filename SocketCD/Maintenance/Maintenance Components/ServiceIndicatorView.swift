@@ -41,7 +41,6 @@ struct ServiceIndicatorView: View {
                     }
                 }
             }
-            .animation(.easeInOut(duration: 0.5).delay(0.5), value: remainingValue)
             .task(id: [vehicle.odometer, service.serviceRecords?.count]) {
                 loadRemainingValue()
             }
@@ -52,7 +51,9 @@ struct ServiceIndicatorView: View {
     
     private func loadRemainingValue() {
         Task {
-            remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
+            withAnimation(.default.delay(0.5)) {
+                remainingValue = 1.0 - service.progress(currentOdometer: vehicle.odometer)
+            }
         }
     }
 }
