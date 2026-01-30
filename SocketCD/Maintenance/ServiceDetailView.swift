@@ -35,6 +35,7 @@ struct ServiceDetailView: View {
                             
                             Text(serviceNextDueInfo)
                         }
+                        .accessibilityElement(children: .combine)
                     } else {
                         Text("Unknown")
                     }
@@ -75,7 +76,6 @@ struct ServiceDetailView: View {
                 Button("Add Service Log", systemImage: "plus") {
                     showingAddRecord = true
                 }
-//                .adaptiveTint()
                 .tint(.primary)
             }
         }
@@ -107,7 +107,8 @@ struct ServiceDetailView: View {
             .font(.caption.bold())
             .padding(.horizontal, 2)
             .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder())
-            .accessibilityLabel("Odometer")
+            .accessibilityElement()
+            .accessibilityLabel("At Odometer")
     }
 }
 

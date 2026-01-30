@@ -42,6 +42,7 @@ struct FormHeaderView<Content: View>: View {
                             .foregroundStyle(Color.secondary)
                     }
                 }
+                .accessibilityElement(children: .combine)
                 
                 content()
             }
