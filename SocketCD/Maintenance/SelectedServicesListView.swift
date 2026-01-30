@@ -32,9 +32,9 @@ struct SelectedServicesListView: View {
                     }
                 }
             } footer: {
-                Text("Details in the service log form apply to all selected services.")
+                Text("Selected services will share the details (odometer, cost, etc.) that you enter in the form.")
             }
-            .navigationTitle("Services to Include")
+            .navigationTitle("Services Performed")
             .navigationBarTitleDisplayMode(.inline)
         }
     }

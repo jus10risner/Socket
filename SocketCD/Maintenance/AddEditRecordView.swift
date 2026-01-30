@@ -48,7 +48,7 @@ struct AddEditRecordView: View {
                     NavigationLink {
                         SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
                     } label: {
-                        LabeledInput(label: "Services") {
+                        LabeledInput(label: "Services Performed") {
                             Group {
                                 if draftServiceLog.selectedServiceIDs.isEmpty {
                                     Text("Select")
