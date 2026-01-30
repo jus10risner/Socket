@@ -21,6 +21,8 @@ struct UnitsOfMeasureSettingsView: View {
             Picker("Fuel Economy", selection: $settings.fuelEconomyUnit) {
                 ForEach(FuelEconomyUnits.allCases, id: \.self) {
                     Text($0.rawValue)
+                        .tag($0)
+                        .accessibilityLabel($0.fullName)
                 }
             }
         }
