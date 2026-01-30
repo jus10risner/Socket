@@ -50,8 +50,6 @@ struct MaintenanceListView: View {
             ToolbarItem {
                 Button {
                     showingAddService = true
-                    
-                    LogServiceTip().invalidate(reason: .actionPerformed)
                 } label: {
                     Label("Set up New Service", image: "book.badge.plus")
                 }
@@ -64,8 +62,6 @@ struct MaintenanceListView: View {
             AdaptiveToolbarButton {
                 Button {
                     showingLogService = true
-                    
-                    LogServiceTip().invalidate(reason: .actionPerformed)
                 } label: {
                     Label("Log Service", systemImage: "plus")
                 }
