@@ -19,29 +19,37 @@ struct CustomInfoDetailView: View {
             if !customInfo.detail.isEmpty {
                 Section(footer: Text("Tap to copy")) {
                     LabeledContent(customInfo.detail) {
-                        Button("Copy to clipboard", systemImage: copySymbol.rawValue) {
+                        Button {
                             let pasteBoard = UIPasteboard.general
                             pasteBoard.string = customInfo.detail
                             copySymbol = .copied
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copySymbol = .tapToCopy }
+                        } label: {
+                            Label("Copy to clipboard", systemImage: copySymbol.rawValue)
+                                .labelStyle(.iconOnly)
+                                .frame(width: 25, height: 25)
+                                .contentTransition(.symbolEffect(.replace.downUp.wholeSymbol, options: .nonRepeating))
                         }
-                        .labelStyle(.iconOnly)
-                        .frame(minHeight: 25)
-                        .contentTransition(.symbolEffect(.replace.downUp.wholeSymbol, options: .nonRepeating))
                     }
                 }
             }
             
             FormFooterView(note: customInfo.note, photos: customInfo.sortedPhotosArray)
         }
-        .navigationTitle(customInfo.label)
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingEditCustomInfo) {
             AddEditCustomInfoView(customInfo: customInfo) {
                 dismiss()
             }
         }
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(customInfo.label)
+                    .font(.headline)
+                    .multilineTextAlignment(.center)
+            }
+            
             ToolbarItem {
                 Button("Edit") {
                     showingEditCustomInfo = true
@@ -52,7 +60,7 @@ struct CustomInfoDetailView: View {
     }
     
     enum CopySymbol: String {
-        case tapToCopy = "document.on.document", copied = "checkmark"
+        case tapToCopy = "doc.on.doc", copied = "checkmark"
     }
 }
 
