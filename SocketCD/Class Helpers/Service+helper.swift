@@ -186,27 +186,48 @@ extension Service {
     
     // Returns progress toward this service as a value between 0 (just reset) and 1 (overdue)
     func progress(currentOdometer: Int) -> CGFloat {
-       // Distance-based progress
-        let odometerProgress: CGFloat
-        
-        if let milesLeft = milesUntilDue(currentOdometer: currentOdometer), distanceInterval > 0 {
-           odometerProgress = max(0, CGFloat(milesLeft) / CGFloat(distanceInterval))
-        } else {
-           odometerProgress = 0
+        let now = Date()
+
+        // --- Distance inputs ---
+        let milesLeft = milesUntilDue(currentOdometer: currentOdometer)
+        let distanceProgress: CGFloat = {
+            guard let milesLeft, distanceInterval > 0 else { return 0 }
+
+            return max(0, CGFloat(milesLeft) / CGFloat(distanceInterval))
+        }()
+
+        // --- Time inputs ---
+        let daysUntilDateDue: Int? = dateDue.flatMap {
+            Calendar.current.dateComponents([.day], from: now, to: $0).day
         }
 
-        // Time-based progress
-        let timeProgress: CGFloat
-        
-        if let daysLeft = daysUntilDue() {
-           let totalDays: CGFloat = monthsInterval ? CGFloat(timeInterval * 30) : CGFloat(timeInterval * 365)
-           timeProgress = max(0, CGFloat(daysLeft) / totalDays)
-        } else {
-           timeProgress = 0
-        }
+        let totalDays: CGFloat = {
+            monthsInterval
+                ? CGFloat(timeInterval * 30)
+                : CGFloat(timeInterval * 365)
+        }()
 
-        // Progress is the greater of the two, capped at 1
-        return min(1, max(odometerProgress, timeProgress))
+        let timeProgress: CGFloat = {
+            guard let daysLeft = daysUntilDateDue, totalDays > 0 else { return 0 }
+
+            return max(0, CGFloat(daysLeft) / totalDays)
+        }()
+
+        // --- Decide which arrives first ---
+        let estimatedMileageDays = milesLeft.map { max(0, $0 / 30) } // same assumption as estimator
+
+        let useDistance: Bool = {
+            switch (daysUntilDateDue, estimatedMileageDays) {
+            case let (d?, e?): return e <= d
+            case (nil, _?):    return true
+            case (_?, nil):    return false
+            default:           return true
+            }
+        }()
+
+        let selectedProgress = useDistance ? distanceProgress : timeProgress
+
+        return min(1, selectedProgress)
     }
     
     // Returns a string that describes when service is next due (or by how much service is overdue). Used on VehicleDashboardView and MaintenanceListView
