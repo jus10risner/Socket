@@ -22,25 +22,28 @@ struct AddPhotoButton: View {
     @State private var selectedImages: [PhotosPickerItem] = []
     
     var body: some View {
-        Menu {
-            Button("Photo Library", systemImage: "photo.on.rectangle") {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) // Dismisses keyboard, if visible
-                showingPhotosPicker = true
-            }
-            
-            Button("Take Photo", systemImage: "camera") {
-                Task {
-                    await cameraViewModel.requestCameraAccessAndAvailability()
-                }
-            }
+        LabeledContent { // LabeledContent is used to keep the label visible and take up the full list row
+            Color.clear
         } label: {
-            Label {
-                Text("Add Photo...")
+            Label("Add Photo...", systemImage: "photo.on.rectangle")
+                .accessibilityHidden(true)
+        }
+        .overlay { // Menu is inside an overlay with no visible label, to prevent iOS 26's morph animation on the label (doesn't look good in a list row)
+            Menu {
+                Button("Photo Library", systemImage: "photo.on.rectangle") {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) // Dismisses keyboard, if visible
+                    showingPhotosPicker = true
+                }
+                
+                Button("Take Photo", systemImage: "camera") {
+                    Task {
+                        await cameraViewModel.requestCameraAccessAndAvailability()
+                    }
+                }
+            } label: {
+                Color.clear
                     .accessibilityLabel("Add Photo")
-            } icon: {
-                Image(systemName: "photo")
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
         .tint(Color.primary)
         .onChange(of: selectedImages) {
