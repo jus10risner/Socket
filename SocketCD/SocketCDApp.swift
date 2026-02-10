@@ -31,7 +31,7 @@ struct SocketCDApp: App {
                     AppearanceController.shared.setAppearance()
                     
                     #if DEBUG
-                    // Reset the datastore for testing purposes
+                    // Reset the datastore to allow testing on-device
                     try? Tips.resetDatastore()
                     #endif
 
