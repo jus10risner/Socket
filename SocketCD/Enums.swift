@@ -93,12 +93,12 @@ enum DistanceUnits: String, CaseIterable {
 }
 
 enum FuelEconomyUnits: String, CaseIterable {
-    case mpg = "mpg", kmL = "km/L", L100km = "L/100km"
+    case mpg = "mpg", kmL = "km/L", L100km = "L/100km", kmGal = "km/gal"
     
     // Returns the fuel volume unit for the user's selected fuel economy units
     var volumeUnit: String {
         switch self {
-        case .mpg: 
+        case .mpg, .kmGal:
             return "Gallon"
         default: 
             return "Liter"
@@ -109,10 +109,12 @@ enum FuelEconomyUnits: String, CaseIterable {
         switch self {
         case .mpg: 
             return "Miles per Gallon"
-        case .kmL: 
+        case .kmL:
             return "Kilometers per Liter"
         case .L100km: 
             return "Liters per 100km"
+        case .kmGal:
+            return "Kilometers per Gallon"
         }
     }
 }
