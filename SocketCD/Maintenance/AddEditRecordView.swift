@@ -45,18 +45,25 @@ struct AddEditRecordView: View {
                     DatePicker("Service Date", selection: $draftServiceLog.date, displayedComponents: .date)
                         .foregroundStyle(Color.secondary)
                     
-                    NavigationLink {
-                        SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
-                    } label: {
-                        LabeledInput(label: "Services Performed") {
-                            Group {
-                                if draftServiceLog.selectedServiceIDs.isEmpty {
-                                    Text("Select")
-                                } else {
-                                    Text(draftServiceLog.selectedServiceNames(from: vehicle))
+                    if let record, record.serviceLog == nil {
+                        // If a pre-2.0 record exists, don't show SelectedServicesListview (doesn't save selection)
+                        LabeledInput(label: "Service Performed") {
+                            Text(service.name)
+                        }
+                    } else {
+                        NavigationLink {
+                            SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
+                        } label: {
+                            LabeledInput(label: "Services Performed") {
+                                Group {
+                                    if draftServiceLog.selectedServiceIDs.isEmpty {
+                                        Text("Select")
+                                    } else {
+                                        Text(draftServiceLog.selectedServiceNames(from: vehicle))
+                                    }
                                 }
+                                .multilineTextAlignment(.leading)
                             }
-                            .multilineTextAlignment(.leading)
                         }
                     }
                     
