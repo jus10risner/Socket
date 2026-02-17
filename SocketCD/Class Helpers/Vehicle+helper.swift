@@ -99,7 +99,7 @@ extension Vehicle {
         // Collect all ServiceLogs from the service records
         let logsSet: Set<ServiceLog> = Set(
             servicesSet
-                .flatMap { $0.sortedServiceRecordsArray }
+                .flatMap { $0.sortedServiceRecordsArray.filter { $0.serviceLog?.isBaseline != true } }
                 .compactMap { $0.serviceLog }
         )
 
