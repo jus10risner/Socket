@@ -41,6 +41,17 @@
                ReferencedContainer = "container:SocketCD.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9E1448B62F4A4ECB00311BAE"
+               BuildableName = "SocketTests.xctest"
+               BlueprintName = "SocketTests"
+               ReferencedContainer = "container:SocketCD.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
