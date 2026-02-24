@@ -23,12 +23,6 @@ struct ServiceTests {
             logOdometer: 7500
         )
         
-        do {
-            try context.save()
-        } catch let error {
-            print("Error saving context: \(error)")
-        }
-        
         // Then
         #expect(service.serviceStatus == .notDue, "Service should not be due if last log is within the service interval")
     }
@@ -44,12 +38,6 @@ struct ServiceTests {
             logDate: Calendar.current.date(byAdding: .month, value: -11, to: Date.now) ?? Date.now,
             logOdometer: 5200
         )
-        
-        do {
-            try context.save()
-        } catch let error {
-            print("Error saving context: \(error)")
-        }
         
         // Then
         #expect(service.serviceStatus == .due, "Service should be due if last log is within the service interval and within the alert range (from AppSettings)")
