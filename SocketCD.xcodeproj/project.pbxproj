@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -52,6 +52,10 @@
 		9E9C05AC2E26984B00E9C0E2 /* CenteredLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */; };
 		9E9ED3A62E12E7BF00EB89F8 /* FuelEconomyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */; };
 		9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */; };
+		9EAEDF982F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAEDF932F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift */; };
+		9EAEDF992F4DFC5D005D29C6 /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAEDF942F4DFC5D005D29C6 /* ServiceTests.swift */; };
+		9EAEDF9A2F4DFC5D005D29C6 /* VehicleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAEDF962F4DFC5D005D29C6 /* VehicleTests.swift */; };
+		9EAEDF9D2F4E057B005D29C6 /* TestDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAEDF9C2F4E057B005D29C6 /* TestDataController.swift */; };
 		9EB025362E4E5CB7008B4AC7 /* Primary.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB025352E4E5CB7008B4AC7 /* Primary.icon */; };
 		9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */; };
 		9EDCA2442ED0E19D005B1C5A /* PopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */; };
@@ -156,6 +160,7 @@
 		9E6A53452BADD68A00F75D49 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectorView.swift; sourceTree = "<group>"; };
 		9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyVehicleListView.swift; sourceTree = "<group>"; };
+		9E7A4A5B2F4E0A260021AA4E /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationObserver.swift; sourceTree = "<group>"; };
 		9E87C5B52E4235CF001BE562 /* FormFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFooterView.swift; sourceTree = "<group>"; };
@@ -168,6 +173,10 @@
 		9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartView.swift; sourceTree = "<group>"; };
 		9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendArrowView.swift; sourceTree = "<group>"; };
 		9EAEDF7F2F4CDAB8005D29C6 /* SocketCDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocketCDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EAEDF932F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataDiagnosticTests.swift; sourceTree = "<group>"; };
+		9EAEDF942F4DFC5D005D29C6 /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
+		9EAEDF962F4DFC5D005D29C6 /* VehicleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleTests.swift; sourceTree = "<group>"; };
+		9EAEDF9C2F4E057B005D29C6 /* TestDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataController.swift; sourceTree = "<group>"; };
 		9EB025352E4E5CB7008B4AC7 /* Primary.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Primary.icon; sourceTree = "<group>"; };
 		9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Monochrome.icon; sourceTree = "<group>"; };
 		9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContent.swift; sourceTree = "<group>"; };
@@ -225,10 +234,6 @@
 		9EEAC52B2BA4CD150053C65E /* AddEditRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditRecordView.swift; sourceTree = "<group>"; };
 		9EF60B5F2E58C3320039D57A /* DashboardCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		9EAEDF802F4CDAB8005D29C6 /* SocketCDTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SocketCDTests; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		9EAEDF7C2F4CDAB8005D29C6 /* Frameworks */ = {
@@ -348,6 +353,17 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
+		9EAEDF972F4DFC5D005D29C6 /* SocketCDTests */ = {
+			isa = PBXGroup;
+			children = (
+				9EAEDF9C2F4E057B005D29C6 /* TestDataController.swift */,
+				9EAEDF932F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift */,
+				9EAEDF942F4DFC5D005D29C6 /* ServiceTests.swift */,
+				9EAEDF962F4DFC5D005D29C6 /* VehicleTests.swift */,
+			);
+			path = SocketCDTests;
+			sourceTree = "<group>";
+		};
 		9EB025372E4E5D30008B4AC7 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -369,9 +385,10 @@
 		9EEAC4722BA0F9C20053C65E = {
 			isa = PBXGroup;
 			children = (
+				9E7A4A5B2F4E0A260021AA4E /* TestPlan.xctestplan */,
 				9EB025372E4E5D30008B4AC7 /* Icons */,
 				9EEAC47D2BA0F9C20053C65E /* SocketCD */,
-				9EAEDF802F4CDAB8005D29C6 /* SocketCDTests */,
+				9EAEDF972F4DFC5D005D29C6 /* SocketCDTests */,
 				9EEAC47C2BA0F9C20053C65E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -574,9 +591,6 @@
 			dependencies = (
 				9EAEDF842F4CDAB9005D29C6 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				9EAEDF802F4CDAB8005D29C6 /* SocketCDTests */,
-			);
 			name = SocketCDTests;
 			packageProductDependencies = (
 			);
@@ -670,6 +684,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9EAEDF982F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift in Sources */,
+				9EAEDF9D2F4E057B005D29C6 /* TestDataController.swift in Sources */,
+				9EAEDF992F4DFC5D005D29C6 /* ServiceTests.swift in Sources */,
+				9EAEDF9A2F4DFC5D005D29C6 /* VehicleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

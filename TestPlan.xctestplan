@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "3E412804-11F2-4062-BC09-E0ADA1117160",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:SocketCD.xcodeproj",
+        "identifier" : "9EAEDF7E2F4CDAB8005D29C6",
+        "name" : "SocketCDTests"
+      }
+    }
+  ],
+  "version" : 1
+}
