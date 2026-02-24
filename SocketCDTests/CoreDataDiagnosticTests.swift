@@ -12,12 +12,16 @@ import Testing
 @Suite("Core Data diagnostics")
 struct CoreDataDiagnosticsTests {
     @Test func `Model/Entity availability` () throws {
-        let controller = DataController.unitTest
+        // Given
+        let controller = TestDataController()
         let context = controller.container.viewContext
 
-        // Verify the model contains your expected entity
+        // When
+        // Verify the model contains the expected entity
         let model = context.persistentStoreCoordinator?.managedObjectModel
         let entityNames = model?.entities.map { $0.name ?? "" } ?? []
+        
+        // Then
         #expect(entityNames.contains("Vehicle"), "Vehicle entity not found in loaded model. Entity names: \(entityNames)")
     }
 }
