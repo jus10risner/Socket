@@ -356,6 +356,7 @@
 		9EAEDF972F4DFC5D005D29C6 /* SocketCDTests */ = {
 			isa = PBXGroup;
 			children = (
+				9E7A4A5B2F4E0A260021AA4E /* TestPlan.xctestplan */,
 				9EAEDF9C2F4E057B005D29C6 /* TestDataController.swift */,
 				9EAEDF932F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift */,
 				9EAEDF942F4DFC5D005D29C6 /* ServiceTests.swift */,
@@ -385,7 +386,6 @@
 		9EEAC4722BA0F9C20053C65E = {
 			isa = PBXGroup;
 			children = (
-				9E7A4A5B2F4E0A260021AA4E /* TestPlan.xctestplan */,
 				9EB025372E4E5D30008B4AC7 /* Icons */,
 				9EEAC47D2BA0F9C20053C65E /* SocketCD */,
 				9EAEDF972F4DFC5D005D29C6 /* SocketCDTests */,
