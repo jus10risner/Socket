@@ -140,14 +140,20 @@ extension Service {
         }
         
         if let dateDue = self.dateDue {
-            let difference = Calendar.current.dateComponents([.day], from: Date.now, to: dateDue)
+            let calendar = Calendar.current
+                
+            // Normalize both dates to midnight
+            let startOfToday = calendar.startOfDay(for: .now)
+            let startOfDueDate = calendar.startOfDay(for: dateDue)
+            
+            let difference = calendar.dateComponents([.day], from: startOfToday, to: startOfDueDate)
             
             if let daysRemaining = difference.day {
-                if daysRemaining <= settings.daysBeforeMaintenance && dateDue >= Date.now {
+                if daysRemaining <= settings.daysBeforeMaintenance && startOfDueDate >= startOfToday {
                     dateStatus = .due
-                } else if dateDue < Date.now {
+                } else if startOfDueDate < startOfToday {
                     dateStatus = .overDue
-                } else if daysRemaining > settings.daysBeforeMaintenance {
+                } else {
                     dateStatus = .notDue
                 }
             }
