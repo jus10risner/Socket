@@ -207,6 +207,7 @@ struct ServiceTests {
             
             // Then
             let fetched = try context.fetch(Service.fetchRequest()).first!
+            
             #expect(fetched.name == "Test Service")
             #expect(fetched.distanceInterval == 8000)
             #expect(fetched.timeInterval == 1)

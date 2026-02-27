@@ -51,7 +51,7 @@ struct RepairTests {
         #expect(repairs.count == 1)
     }
 
-    @Test func `Default values for computed properties` () throws {
+    @Test func `Default values and property setters/getters` () throws {
         // Given
         let controller = TestDataController()
         let context = controller.container.viewContext
@@ -59,24 +59,16 @@ struct RepairTests {
         // When
         let repair = Repair(context: context)
         
-        // Then - Assume all `_` fields are nil by default on a new Repair
+        // Defaults
         #expect(repair.date.timeIntervalSinceNow < 1) // Defaults to 'now'
         #expect(repair.name == "")
         #expect(repair.odometer == 0)
         #expect(repair.cost == 0)
         #expect(repair.note == "")
         #expect(repair.sortedPhotosArray.isEmpty)
-    }
-
-    @Test func `Setting and getting name, date, odometer, note` () throws {
-        // Given
-        let controller = TestDataController()
-        let context = controller.container.viewContext
         
-        // When
-        let repair = Repair(context: context)
+        // Setters
         let testDate = Date()
-        
         repair.date = testDate
         repair.name = "Brake Job"
         repair.odometer = 42000
