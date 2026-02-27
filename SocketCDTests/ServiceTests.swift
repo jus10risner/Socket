@@ -12,6 +12,8 @@ import Testing
 @Suite("Service Tests")
 struct ServiceTests {
     
+    // MARK: - Service Status Coverage
+    
     @Suite("Service Status By Odometer")
     struct ServiceStatusByOdometerTests {
         @Test func `Service status not due`() {
@@ -165,8 +167,9 @@ struct ServiceTests {
         }
     }
     
+    // MARK: - Property/Method Coverage
     
-    @Suite("Service Helper - Exhaustive Tests")
+    @Suite("Service Property/Method Coverage")
     struct ServiceHelperExhaustiveTests {
         @Test func `Default values and property setters/getters`() throws {
             // Given
@@ -350,6 +353,8 @@ struct ServiceTests {
         }
     }
 }
+
+// MARK: - Helpers
 
 // Returns a service containing a service log, using the provided testingStatus and testCase values
 private func createTestService(context: NSManagedObjectContext, testingStatus: ServiceStatus, testCase: TestCase) -> Service {
