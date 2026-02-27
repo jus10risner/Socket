@@ -30,11 +30,8 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:TestPlan.xctestplan"
+            reference = "container:SocketCDTests/TestPlan.xctestplan"
             default = "YES">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:TestPlan.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

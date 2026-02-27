@@ -25,6 +25,7 @@
 		9E328E102E33B99600FF25B5 /* PDFExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */; };
 		9E328E122E3CF7A600FF25B5 /* LabeledInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */; };
 		9E35034C2E1FE3300032F845 /* VehicleDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */; };
+		9E4CC2D12F51E60B001F7F51 /* RepairTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */; };
 		9E5270E02E8AF82300EFDCB8 /* FuelCostSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */; };
 		9E5270E22E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */; };
 		9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */; };
@@ -144,6 +145,7 @@
 		9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInput.swift; sourceTree = "<group>"; };
 		9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDashboardView.swift; sourceTree = "<group>"; };
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
+		9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairTests.swift; sourceTree = "<group>"; };
 		9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelCostSettingsView.swift; sourceTree = "<group>"; };
 		9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsOfMeasureSettingsView.swift; sourceTree = "<group>"; };
 		9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceLog+helper.swift"; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 				9EAEDF9C2F4E057B005D29C6 /* TestDataController.swift */,
 				9EAEDF932F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift */,
 				9EAEDF942F4DFC5D005D29C6 /* ServiceTests.swift */,
+				9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */,
 				9EAEDF962F4DFC5D005D29C6 /* VehicleTests.swift */,
 			);
 			path = SocketCDTests;
@@ -688,6 +691,7 @@
 				9EAEDF9D2F4E057B005D29C6 /* TestDataController.swift in Sources */,
 				9EAEDF992F4DFC5D005D29C6 /* ServiceTests.swift in Sources */,
 				9EAEDF9A2F4DFC5D005D29C6 /* VehicleTests.swift in Sources */,
+				9E4CC2D12F51E60B001F7F51 /* RepairTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
