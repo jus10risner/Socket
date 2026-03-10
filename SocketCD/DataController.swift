@@ -19,10 +19,8 @@ final class DataController: ObservableObject {
     // MARK: - Persistent container
     let container: NSPersistentCloudKitContainer
 
-    // MARK: - Preview / Unit Test instances
+    // MARK: - Preview instance
     static let preview: DataController = DataController(inMemory: true)
-
-    static let unitTest: DataController = DataController(inMemory: true)
 
     // MARK: - Initializer
     init(inMemory: Bool = false) {

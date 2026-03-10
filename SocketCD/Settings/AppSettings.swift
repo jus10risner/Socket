@@ -75,7 +75,6 @@ class AppSettings: ObservableObject {
             return accentColor.value
         } else {
             return Color.accent
-//            Color.indigo.mix(with: .cyan, by: 0.2) (keeping here for mix reference)
         }
     }
     

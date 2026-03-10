@@ -43,5 +43,5 @@ struct InformationItemView: View {
 }
 
 #Preview {
-    InformationItemView(title: "Maintain Vehicles", description: "Get reminders when routine maintenance services are due.", imageName: "book.and.wrench", accentColor: Color.indigo.mix(with: .cyan, by: 0.2))
+    InformationItemView(title: "Maintain Vehicles", description: "Get reminders when routine maintenance services are due.", imageName: "book.and.wrench", accentColor: Color.accent)
 }
