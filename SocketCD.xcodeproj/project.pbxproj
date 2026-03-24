@@ -367,6 +367,7 @@
 				9EEAC4F12BA379DE0053C65E /* Repairs */,
 				9EEAC5042BA38B660053C65E /* Fill-ups */,
 				9EEAC4E22BA364090053C65E /* Custom Info */,
+				9EEAC4C42BA2537A0053C65E /* Onboarding */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -452,7 +453,6 @@
 				9EEAC4802BA0F9C20053C65E /* ContentView.swift */,
 				9E73B2F02F72F7FE00ED04F1 /* Features */,
 				9EEAC4BA2BA1F1BF0053C65E /* Settings */,
-				9EEAC4C42BA2537A0053C65E /* Onboarding */,
 				9EEAC4942BA1E87D0053C65E /* Class Helpers */,
 				9E73B2F12F72F8B000ED04F1 /* Shared */,
 				9EEAC48F2BA1036F0053C65E /* DataController.swift */,
