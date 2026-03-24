@@ -288,13 +288,18 @@
 			path = "Vehicle Components";
 			sourceTree = "<group>";
 		};
-		9E189E2D2BD00C3800095EC2 /* UIKit Views */ = {
+		9E189E2D2BD00C3800095EC2 /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				9EEAC4A62BA1EF720053C65E /* ActivityView.swift */,
 				9EEAC4B22BA1F08F0053C65E /* CameraCapture.swift */,
+				9E87C5B52E4235CF001BE562 /* FormFooterView.swift */,
+				9E1528842EB917DB005170AB /* FormHeaderView.swift */,
+				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
+				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
+				9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */,
 			);
-			path = "UIKit Views";
+			path = Components;
 			sourceTree = "<group>";
 		};
 		9E189E2E2BD00F8400095EC2 /* Repairs Components */ = {
@@ -313,25 +318,15 @@
 			path = "Custom Info Components";
 			sourceTree = "<group>";
 		};
-		9E189E302BD0100900095EC2 /* Misc. */ = {
+		9E189E302BD0100900095EC2 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
-				9EEAC4992BA1ED8C0053C65E /* AppearanceController.swift */,
-				9E6A53452BADD68A00F75D49 /* AppInfo.swift */,
 				9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */,
-				9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */,
 				9E18D94D2EBE3A910097CBAC /* AdaptiveToolbarButton.swift */,
+				9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */,
 				9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */,
-				9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */,
-				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
-				9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */,
-				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
-				9E6EA6B42EC4DAE20060E25F /* Notifications */,
-				9E02BAF92E45237C00D45FA3 /* Export */,
-				9E87C5B52E4235CF001BE562 /* FormFooterView.swift */,
-				9E1528842EB917DB005170AB /* FormHeaderView.swift */,
 			);
-			path = Misc.;
+			path = Modifiers;
 			sourceTree = "<group>";
 		};
 		9E5270E32E8AF97600EFDCB8 /* Subviews */ = {
@@ -353,6 +348,51 @@
 				9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */,
 			);
 			path = Notifications;
+			sourceTree = "<group>";
+		};
+		9E73B2EF2F72F7E500ED04F1 /* Dashboard Components */ = {
+			isa = PBXGroup;
+			children = (
+				9EF60B5F2E58C3320039D57A /* DashboardCard.swift */,
+			);
+			path = "Dashboard Components";
+			sourceTree = "<group>";
+		};
+		9E73B2F02F72F7FE00ED04F1 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				9EF60B612E58C42F0039D57A /* Dashboard */,
+				9EEAC4C92BA256400053C65E /* Vehicle */,
+				9EEAC51A2BA4A1A60053C65E /* Maintenance */,
+				9EEAC4F12BA379DE0053C65E /* Repairs */,
+				9EEAC5042BA38B660053C65E /* Fill-ups */,
+				9EEAC4E22BA364090053C65E /* Custom Info */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		9E73B2F12F72F8B000ED04F1 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				9E189E2D2BD00C3800095EC2 /* Components */,
+				9EB025402E54C7AC008B4AC7 /* Extensions */,
+				9E189E302BD0100900095EC2 /* Modifiers */,
+				9EEAC4AF2BA1F05E0053C65E /* Photo Handling */,
+				9E73B2F22F72F94E00ED04F1 /* Utilities */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		9E73B2F22F72F94E00ED04F1 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				9E6A53452BADD68A00F75D49 /* AppInfo.swift */,
+				9EEAC4992BA1ED8C0053C65E /* AppearanceController.swift */,
+				9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */,
+				9E02BAF92E45237C00D45FA3 /* Export */,
+				9E6EA6B42EC4DAE20060E25F /* Notifications */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		9EAEDF972F4DFC5D005D29C6 /* SocketCDTests */ = {
@@ -410,19 +450,11 @@
 			children = (
 				9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */,
 				9EEAC4802BA0F9C20053C65E /* ContentView.swift */,
-				9EF60B612E58C42F0039D57A /* Dashboard */,
-				9EEAC4C92BA256400053C65E /* Vehicle */,
-				9EEAC51A2BA4A1A60053C65E /* Maintenance */,
-				9EEAC4F12BA379DE0053C65E /* Repairs */,
-				9EEAC5042BA38B660053C65E /* Fill-ups */,
-				9EEAC4E22BA364090053C65E /* Custom Info */,
+				9E73B2F02F72F7FE00ED04F1 /* Features */,
 				9EEAC4BA2BA1F1BF0053C65E /* Settings */,
 				9EEAC4C42BA2537A0053C65E /* Onboarding */,
-				9EEAC4AF2BA1F05E0053C65E /* Photo Handling */,
 				9EEAC4942BA1E87D0053C65E /* Class Helpers */,
-				9E189E2D2BD00C3800095EC2 /* UIKit Views */,
-				9E189E302BD0100900095EC2 /* Misc. */,
-				9EB025402E54C7AC008B4AC7 /* Extensions */,
+				9E73B2F12F72F8B000ED04F1 /* Shared */,
 				9EEAC48F2BA1036F0053C65E /* DataController.swift */,
 				9EEAC4972BA1E99F0053C65E /* Enums.swift */,
 				9EEAC48C2BA0FA280053C65E /* SocketDataModel.xcdatamodeld */,
@@ -573,7 +605,7 @@
 				9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */,
 				9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */,
 				9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */,
-				9EF60B5F2E58C3320039D57A /* DashboardCard.swift */,
+				9E73B2EF2F72F7E500ED04F1 /* Dashboard Components */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
