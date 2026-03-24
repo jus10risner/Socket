@@ -117,7 +117,7 @@ extension Fillup {
         
         guard totalDistance > 0, totalVolume > 0 else { return 0 }
 
-        switch AppSettings.shared.fuelEconomyUnit {
+        switch AppSettingsStore.shared.fuelEconomyUnit {
         case .L100km:
             return (totalVolume / Double(totalDistance)) * 100
         default:

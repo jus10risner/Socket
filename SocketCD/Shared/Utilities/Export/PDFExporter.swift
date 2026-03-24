@@ -25,7 +25,7 @@ enum PDFPaperSize {
 
 struct PDFExporter {
     static func export(vehicle: Vehicle, paperSize: PDFPaperSize) -> URL? {
-        let settings = AppSettings()
+        let settings = AppSettingsStore()
         
         let pageRect = paperSize.rect
         let fileName = "\(vehicle.name) Records.pdf"

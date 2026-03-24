@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TrendArrowView: View {
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     let fillups: FetchedResults<Fillup>
     
     @State private var animatingTrendArrow = false

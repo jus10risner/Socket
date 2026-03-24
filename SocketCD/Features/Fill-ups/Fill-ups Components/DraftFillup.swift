@@ -8,7 +8,7 @@
 import Foundation
 
 class DraftFillup: ObservableObject {
-    private let settings: AppSettings
+    private let settings: AppSettingsStore
     var id: UUID? = nil
     
     @Published var date: Date = Date.now
@@ -20,7 +20,7 @@ class DraftFillup: ObservableObject {
     @Published var photos: [Photo] = []
     
     // Initializes with an optional Fillup, for use in add/edit context
-    init(fillup: Fillup? = nil, settings: AppSettings = AppSettings()) {
+    init(fillup: Fillup? = nil, settings: AppSettingsStore = AppSettingsStore()) {
         self.settings = settings
         
         if let fillup {

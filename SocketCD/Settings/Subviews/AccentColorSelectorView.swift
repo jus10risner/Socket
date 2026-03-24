@@ -9,7 +9,7 @@ import CoreData
 import SwiftUI
 
 struct AccentColorSelectorView: View {
-    @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var settings: AppSettingsStore
     
     var body: some View {
         List {
@@ -49,5 +49,5 @@ struct AccentColorSelectorView: View {
 
 #Preview {
     AccentColorSelectorView()
-        .environmentObject(AppSettings())
+        .environmentObject(AppSettingsStore())
 }

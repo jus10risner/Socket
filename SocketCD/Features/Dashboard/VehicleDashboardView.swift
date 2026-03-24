@@ -13,7 +13,7 @@ struct VehicleDashboardView: View {
     @StateObject var draftVehicle = DraftVehicle()
     @ObservedObject var vehicle: Vehicle
     @Binding var selectedVehicle: Vehicle? // Used primarily to dismiss this view if the vehicle is deleted
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     init(vehicle: Vehicle, selectedVehicle: Binding<Vehicle?>) {
         _draftVehicle = StateObject(wrappedValue: DraftVehicle(vehicle: vehicle))

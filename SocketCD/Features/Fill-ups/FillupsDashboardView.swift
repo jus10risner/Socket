@@ -11,7 +11,7 @@ struct FillupsDashboardView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     @FetchRequest var fillups: FetchedResults<Fillup>
     

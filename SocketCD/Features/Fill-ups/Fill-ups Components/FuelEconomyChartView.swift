@@ -11,7 +11,7 @@ import SwiftUI
 
 struct FuelEconomyChartView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
 
     let data: [Fillup]
     let averageFuelEconomy: Double

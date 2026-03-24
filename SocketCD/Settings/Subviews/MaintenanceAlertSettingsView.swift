@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MaintenanceAlertSettingsView: View {
-    @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var settings: AppSettingsStore
     
     var body: some View {
         List {
@@ -27,7 +27,7 @@ struct MaintenanceAlertSettingsView: View {
             Section(footer: Text("Manage Socket’s notification preferences in the Settings app.")) {
                 Button("Notification Settings") {
                     Task {
-                        await AppSettings.openSocketSettings()
+                        await AppSettingsStore.openSocketSettings()
                     }
                 }
             }
@@ -45,5 +45,5 @@ struct MaintenanceAlertSettingsView: View {
 
 #Preview {
     MaintenanceAlertSettingsView()
-        .environmentObject(AppSettings())
+        .environmentObject(AppSettingsStore())
 }

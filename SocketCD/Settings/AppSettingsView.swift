@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppSettingsView: View {
-    @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var settings: AppSettingsStore
     @Environment(\.dismiss) var dismiss
     let appStoreURL: URL = URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009")!
     
@@ -156,5 +156,5 @@ struct AppSettingsView: View {
 
 #Preview {
     AppSettingsView()
-        .environmentObject(AppSettings())
+        .environmentObject(AppSettingsStore())
 }

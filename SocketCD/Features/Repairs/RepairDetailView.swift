@@ -10,7 +10,7 @@ import SwiftUI
 struct RepairDetailView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var repair: Repair
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     @State private var showingEditRepair = false
     

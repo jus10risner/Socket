@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UnitsOfMeasureSettingsView: View {
-    @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var settings: AppSettingsStore
     
     var body: some View {
         List {
@@ -34,5 +34,5 @@ struct UnitsOfMeasureSettingsView: View {
 
 #Preview {
     UnitsOfMeasureSettingsView()
-        .environmentObject(AppSettings())
+        .environmentObject(AppSettingsStore())
 }

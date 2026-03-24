@@ -120,7 +120,7 @@ extension Service {
     
     // Returns the service status of a service, and schedules a notification, when appropriate
     var serviceStatus: ServiceStatus {
-        let settings = AppSettings()
+        let settings = AppSettingsStore()
         
         var mileageStatus = ServiceStatus.notDue
         var dateStatus = ServiceStatus.notDue
@@ -238,7 +238,7 @@ extension Service {
     
     // Returns a string that describes when service is next due (or by how much service is overdue). Used on VehicleDashboardView and MaintenanceListView
     func nextDueDescription(currentOdometer: Int) -> String {
-        let settings = AppSettings()
+        let settings = AppSettingsStore()
 
         // Compute values once
         let days = daysUntilDue() ?? 0
@@ -285,7 +285,7 @@ extension Service {
     
     // A String describing the service interval for a given service
     var intervalDescription: String {
-        let settings = AppSettings()
+        let settings = AppSettingsStore()
         var components: [String] = []
 
         if distanceInterval != 0 {
@@ -370,7 +370,7 @@ extension Service {
     @MainActor
     func evaluateNotifications(for vehicle: Vehicle) async {
         let now = Date()
-        let settings = AppSettings()
+        let settings = AppSettingsStore()
         let context = DataController.shared.container.viewContext
 
         // --- TIME-BASED ---

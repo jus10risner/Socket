@@ -45,7 +45,7 @@ struct ServiceTests {
             )
             
             // Then
-            #expect(service.serviceStatus == .due, "Service should be due if last log is within the service interval and within the alert range (from AppSettings)")
+            #expect(service.serviceStatus == .due, "Service should be due if last log is within the service interval and within the alert range (from AppSettingsStore)")
         }
         
         @Test func `Service status overDue` () {
@@ -96,7 +96,7 @@ struct ServiceTests {
             )
             
             // Then
-            #expect(service.serviceStatus == .due, "Service should be due if last log is within the service interval and within the alert range (from AppSettings)")
+            #expect(service.serviceStatus == .due, "Service should be due if last log is within the service interval and within the alert range (from AppSettingsStore)")
         }
         
         @Test func `Service status overDue` () {
@@ -147,7 +147,7 @@ struct ServiceTests {
             )
             
             // Then
-            #expect(service.serviceStatus == .due, "Service should be due if last log is within the service interval and within the alert range (from AppSettings)")
+            #expect(service.serviceStatus == .due, "Service should be due if last log is within the service interval and within the alert range (from AppSettingsStore)")
         }
         
         @Test func `Service status should be overdue` () {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TermsOfUseView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var settings: AppSettingsStore
     let onAgree: () -> Void
     
     @State private var showingAlert: Bool = false
@@ -73,5 +73,5 @@ struct TermsOfUseView: View {
 
 #Preview {
     TermsOfUseView(onAgree: {})
-        .environmentObject(AppSettings())
+        .environmentObject(AppSettingsStore())
 }

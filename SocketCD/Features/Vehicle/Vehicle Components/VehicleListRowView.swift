@@ -11,7 +11,7 @@ struct VehicleListRowView: View {
     @Environment(\.managedObjectContext) var context
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     let isSelected: Bool
     let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     

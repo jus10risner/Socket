@@ -12,7 +12,7 @@ import TipKit
 @main
 struct SocketCDApp: App {
     @Environment(\.scenePhase) var scenePhase
-    @StateObject var settings = AppSettings()
+    @StateObject var settings = AppSettingsStore()
     let dataController = DataController.shared
     
     @State private var showingStoreError = false

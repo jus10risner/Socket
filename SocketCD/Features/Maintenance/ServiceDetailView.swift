@@ -10,7 +10,7 @@ import SwiftUI
 struct ServiceDetailView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var service: Service
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     let vehicle: Vehicle
     
     @State private var showingAddRecord = false

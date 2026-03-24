@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CustomInfoSection: View {
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     let columns: [GridItem]
     
     @Binding var activeSheet: ActiveSheet?

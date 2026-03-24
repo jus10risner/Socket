@@ -10,7 +10,7 @@ import SwiftUI
 struct AddEditServiceView: View {
     // MARK: - Environment
     @Environment(\.dismiss) var dismiss
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     // MARK: - State
     @StateObject var draftService = DraftService()

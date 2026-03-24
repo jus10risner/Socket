@@ -10,7 +10,7 @@ import SwiftUI
 struct AllFillupsListView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     @FetchRequest var fillups: FetchedResults<Fillup>
     

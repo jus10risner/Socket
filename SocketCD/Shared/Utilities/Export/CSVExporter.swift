@@ -70,7 +70,7 @@ struct CSVExporter {
     
     // MARK: - Export only fill-up records
     static func exportFillups(for vehicle: Vehicle) -> URL? {
-        let settings = AppSettings()
+        let settings = AppSettingsStore()
         
         let filename = "\(vehicle.name) Fill-ups.csv"
         let tempDirectory = NSTemporaryDirectory()

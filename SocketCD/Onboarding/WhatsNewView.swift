@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WhatsNewView: View {
     @Environment(\.dismiss) var dismiss
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     @State private var showingTermsOfUse = false
     

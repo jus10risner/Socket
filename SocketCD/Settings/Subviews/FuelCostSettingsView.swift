@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FuelCostSettingsView: View {
-    @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var settings: AppSettingsStore
     
     var body: some View {
         List {
@@ -37,5 +37,5 @@ struct FuelCostSettingsView: View {
 
 #Preview {
     FuelCostSettingsView()
-        .environmentObject(AppSettings())
+        .environmentObject(AppSettingsStore())
 }

@@ -10,7 +10,7 @@ import SwiftUI
 struct AddEditFillupView: View {
     // MARK: - Environment
     @Environment(\.dismiss) var dismiss
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     // MARK: - State
     @StateObject var draftFillup = DraftFillup()

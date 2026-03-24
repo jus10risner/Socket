@@ -10,7 +10,7 @@ import SwiftUI
 struct FillupDetailView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var fillup: Fillup
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     @State private var showingEditFillup = false
     @State private var showingFuelEconomyInfo = false

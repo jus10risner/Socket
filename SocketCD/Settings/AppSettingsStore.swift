@@ -1,5 +1,5 @@
 //
-//  AppSettings.swift
+//  AppSettingsStore.swift
 //  SocketCD
 //
 //  Created by Justin Risner on 3/13/24.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-class AppSettings: ObservableObject {
+class AppSettingsStore: ObservableObject {
     
-    static let shared = AppSettings()
+    static let shared = AppSettingsStore()
     
     // MARK: - AppSettingsView
     

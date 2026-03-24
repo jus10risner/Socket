@@ -49,7 +49,7 @@ struct AddEditVehicleImageView: View {
         .alert("No Camera Access", isPresented: $cameraViewModel.showingCameraAccessAlert) {
             Button("Go to Settings") {
                 Task {
-                    await AppSettings.openSocketSettings()
+                    await AppSettingsStore.openSocketSettings()
                 }
             }
             Button("Cancel", role: .cancel) { }

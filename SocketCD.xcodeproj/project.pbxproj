@@ -78,7 +78,7 @@
 		9EEAC4B92BA1F1180053C65E /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4B82BA1F1180053C65E /* ImageDetailView.swift */; };
 		9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4BB2BA1F1CA0053C65E /* AccentColorSelectorView.swift */; };
 		9EEAC4BE2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4BD2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift */; };
-		9EEAC4C12BA24EEC0053C65E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4C02BA24EEC0053C65E /* AppSettings.swift */; };
+		9EEAC4C12BA24EEC0053C65E /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4C02BA24EEC0053C65E /* AppSettingsStore.swift */; };
 		9EEAC4C62BA253950053C65E /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4C52BA253950053C65E /* WelcomeView.swift */; };
 		9EEAC4CB2BA256570053C65E /* AddEditVehicleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4CA2BA256570053C65E /* AddEditVehicleView.swift */; };
 		9EEAC4CD2BA2571E0053C65E /* Vehicle+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4CC2BA2571E0053C65E /* Vehicle+helper.swift */; };
@@ -201,7 +201,7 @@
 		9EEAC4B82BA1F1180053C65E /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
 		9EEAC4BB2BA1F1CA0053C65E /* AccentColorSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentColorSelectorView.swift; sourceTree = "<group>"; };
 		9EEAC4BD2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceAlertSettingsView.swift; sourceTree = "<group>"; };
-		9EEAC4C02BA24EEC0053C65E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		9EEAC4C02BA24EEC0053C65E /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		9EEAC4C52BA253950053C65E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		9EEAC4CA2BA256570053C65E /* AddEditVehicleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditVehicleView.swift; sourceTree = "<group>"; };
 		9EEAC4CC2BA2571E0053C65E /* Vehicle+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vehicle+helper.swift"; sourceTree = "<group>"; };
@@ -505,8 +505,8 @@
 		9EEAC4BA2BA1F1BF0053C65E /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				9EEAC4C02BA24EEC0053C65E /* AppSettingsStore.swift */,
 				9EEAC49B2BA1EE440053C65E /* AppSettingsView.swift */,
-				9EEAC4C02BA24EEC0053C65E /* AppSettings.swift */,
 				9E5270E32E8AF97600EFDCB8 /* Subviews */,
 			);
 			path = Settings;
@@ -802,7 +802,7 @@
 				9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */,
 				9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */,
 				9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */,
-				9EEAC4C12BA24EEC0053C65E /* AppSettings.swift in Sources */,
+				9EEAC4C12BA24EEC0053C65E /* AppSettingsStore.swift in Sources */,
 				9EEAC4CB2BA256570053C65E /* AddEditVehicleView.swift in Sources */,
 				9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */,
 				9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */,

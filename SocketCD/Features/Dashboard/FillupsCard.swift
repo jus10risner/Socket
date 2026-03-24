@@ -12,7 +12,7 @@ struct FillupsCard: View {
     
     @Binding var activeSheet: ActiveSheet?
     @Binding var selectedSection: AppSection?
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     @FetchRequest var fillups: FetchedResults<Fillup>
     

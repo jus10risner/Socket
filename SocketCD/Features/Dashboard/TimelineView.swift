@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TimelineView: View {
     @Environment(\.dismiss) var dismiss
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     let vehicle: Vehicle
     
     var body: some View {

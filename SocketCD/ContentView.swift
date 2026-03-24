@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var settings: AppSettingsStore
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
@@ -145,5 +145,5 @@ private enum ActiveOnboardingSheet: String, Identifiable {
 
 #Preview {
     ContentView()
-        .environmentObject(AppSettings())
+        .environmentObject(AppSettingsStore())
 }

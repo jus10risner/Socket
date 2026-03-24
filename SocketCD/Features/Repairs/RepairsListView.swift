@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RepairsListView: View {
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettings.shared
+    let settings = AppSettingsStore.shared
     
     @FetchRequest var repairs: FetchedResults<Repair>
     
