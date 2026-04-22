@@ -469,79 +469,105 @@ extension Service {
 }
 
 enum NotificationScheduler {
-    // MARK: Time-Based
-    // Schedules a time-based notification once per due date
-    static func scheduleTimeBased(for service: Service, vehicle: Vehicle, on date: Date) {
+    private static func schedule(identifier: String, title: String, body: String, date: Date?) {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-            guard !requests.contains(where: { $0.identifier == service.timeBasedNotificationIdentifier }) else {
+            guard !requests.contains(where: { $0.identifier == identifier }) else {
                 return
             }
 
+            // Define notification content
             let content = UNMutableNotificationContent()
-            content.title = "Time for Maintenance!"
-            content.body = "\(service.name) due soon for \(vehicle.name)"
+            content.title = title
+            content.body = body
             content.sound = .default
 
+            // Set up trigger
             #if DEBUG
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
             #else
-            let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
-            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+            let calendar = Calendar.current
+            let trigger: UNNotificationTrigger
+
+            if let date {
+                // Time-based: schedule on the provided date at 9 AM local time
+                var components = calendar.dateComponents([.year, .month, .day], from: date)
+                components.hour = 9
+                components.minute = 0
+                trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+            } else {
+                // Distance-based (or general fallback): schedule at the next 9 AM local time
+                let now = Date()
+                var targetDate = now
+                
+                if calendar.component(.hour, from: now) >= 9 {
+                    targetDate = calendar.date(byAdding: .day, value: 1, to: now)!
+                }
+                
+                var components = calendar.dateComponents([.year, .month, .day], from: targetDate)
+                components.hour = 9
+                components.minute = 0
+                trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+            }
             #endif
 
+            // Create notification request
             let request = UNNotificationRequest(
-                identifier: service.timeBasedNotificationIdentifier,
+                identifier: identifier,
                 content: content,
                 trigger: trigger
             )
 
+            // Schedule notification
             UNUserNotificationCenter.current().add(request)
-            print("Scheduled time-based notification for \(service.name)")
         }
+    }
+    
+    // MARK: Time-Based
+    // Pass the computed alert date from evaluateNotifications
+    static func scheduleTimeBased(for service: Service, vehicle: Vehicle, on date: Date) {
+        let title = "Upcoming Maintenance"
+        let body = "\(service.name) is due soon for \(vehicle.name)"
+        
+        schedule(
+            identifier: service.timeBasedNotificationIdentifier,
+            title: title,
+            body: body,
+            date: date
+        )
+        
+        print("Scheduled time-based notification for \(service.name) on \(date.formatted(date: .abbreviated, time: .omitted))")
     }
 
     static func cancelTimeBased(for service: Service) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(
             withIdentifiers: [service.timeBasedNotificationIdentifier]
         )
+        
+        print("Canceled time-based notification for \(service.name)")
     }
-
+    
     // MARK: Distance-Based
-    // Schedules a distance-based notification once per due odometer value
+    // Uses the default “next 9 AM” behavior by passing date: nil
     static func scheduleDistanceBased(for service: Service, vehicle: Vehicle) {
-        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-            guard !requests.contains(where: { $0.identifier == service.distanceBasedNotificationIdentifier }) else {
-                return
-            }
-
-            let content = UNMutableNotificationContent()
-            content.title = "Maintenance Due Soon!"
-            content.body = "\(service.name) will be due soon for \(vehicle.name)"
-            content.sound = .default
-
-            #if DEBUG
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-            #else
-            // 30-minute delay
-            let delaySeconds: TimeInterval = 30 * 60
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: delaySeconds, repeats: false)
-            #endif
-
-            let request = UNNotificationRequest(
-                identifier: service.distanceBasedNotificationIdentifier,
-                content: content,
-                trigger: trigger
-            )
-
-            UNUserNotificationCenter.current().add(request)
-            print("Scheduled distance-based notification for \(service.name)")
-        }
+        let title = "Upcoming Maintenance"
+        let body = "\(service.name) is due soon for \(vehicle.name)"
+        
+        schedule(
+            identifier: service.distanceBasedNotificationIdentifier,
+            title: title,
+            body: body,
+            date: nil
+        )
+        
+        print("Scheduled distance-based notification for \(service.name)")
     }
 
     static func cancelDistanceBased(for service: Service) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(
             withIdentifiers: [service.distanceBasedNotificationIdentifier]
         )
+        
+        print("Canceled distance-based notification for \(service.name)")
     }
 }
 
