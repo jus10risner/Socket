@@ -373,12 +373,34 @@ extension Service {
         let settings = AppSettingsStore()
         let context = DataController.shared.container.viewContext
 
-        // --- TIME-BASED ---
-        if let dateDue = self.dateDue,
-           let alertDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeMaintenance, to: dateDue),
-           dateDue > now, alertDate > now {
-            if lastScheduledNotificationDate != dateDue {
+        // TIME-BASED
+        // If there is a dateDue value (indicating time-based service tracking), evaluate
+        if let dateDue = self.dateDue {
+            let alertDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeMaintenance, to: dateDue)
+
+            let isValid = {
+                guard let alertDate else { return false }
+                return dateDue > now && alertDate > now
+            }()
+
+            // Invalid → cancel + clear (only if something exists)
+            guard isValid else {
+                if lastScheduledNotificationDate != nil {
+                    NotificationScheduler.cancelTimeBased(for: self)
+
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.lastScheduledNotificationDate = nil
+                        try? context.save()
+                    }
+                }
+                return
+            }
+
+            // Valid → schedule if needed
+            if lastScheduledNotificationDate != dateDue, let alertDate {
                 NotificationScheduler.scheduleTimeBased(for: self, vehicle: vehicle, on: alertDate)
+
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.lastScheduledNotificationDate = dateDue
@@ -386,9 +408,10 @@ extension Service {
                 }
             }
         } else {
-            // Cancel and clear when there is no due date, or it's no longer valid
-            NotificationScheduler.cancelTimeBased(for: self)
+            // No dateDue → only clean up if previously scheduled
             if lastScheduledNotificationDate != nil {
+                NotificationScheduler.cancelTimeBased(for: self)
+
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.lastScheduledNotificationDate = nil
@@ -397,33 +420,43 @@ extension Service {
             }
         }
 
-        // --- DISTANCE-BASED ---
+        // DISTANCE-BASED
+        // If there is an odometerDue value (indicating distance-based service tracking), evaluate
         if let odometerDue = self.odometerDue {
             let remaining = odometerDue - vehicle.odometer
-            if remaining <= settings.distanceBeforeMaintenance, remaining >= 0 {
-                if lastScheduledNotificationOdometer != odometerDue {
-                    NotificationScheduler.scheduleDistanceBased(for: self, vehicle: vehicle)
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.lastScheduledNotificationOdometer = odometerDue
-                        try? context.save()
-                    }
-                }
-            } else {
-                // Out of range: cancel and clear
-                NotificationScheduler.cancelDistanceBased(for: self)
+
+            let isValid = remaining <= settings.distanceBeforeMaintenance && remaining >= 0
+
+            // Invalid → cancel ONLY if something exists
+            guard isValid else {
                 if lastScheduledNotificationOdometer != nil {
+                    NotificationScheduler.cancelDistanceBased(for: self)
+
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
                         self.lastScheduledNotificationOdometer = nil
                         try? context.save()
                     }
                 }
+                return
             }
+
+            // Valid → schedule ONLY if needed
+            if lastScheduledNotificationOdometer != odometerDue {
+                NotificationScheduler.scheduleDistanceBased(for: self, vehicle: vehicle)
+
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.lastScheduledNotificationOdometer = odometerDue
+                    try? context.save()
+                }
+            }
+
         } else {
-            // No odometer due: cancel and clear
-            NotificationScheduler.cancelDistanceBased(for: self)
+            // No odometerDue → clean up ONLY if previously scheduled
             if lastScheduledNotificationOdometer != nil {
+                NotificationScheduler.cancelDistanceBased(for: self)
+
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.lastScheduledNotificationOdometer = nil
