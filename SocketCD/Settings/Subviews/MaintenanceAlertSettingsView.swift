@@ -10,6 +10,10 @@ import SwiftUI
 struct MaintenanceAlertSettingsView: View {
     @EnvironmentObject var settings: AppSettingsStore
     
+    // Track initial values for change detection
+    @State private var initialDistanceBefore: Int = 0
+    @State private var initialDaysBefore: Int = 0
+    
     var body: some View {
         List {
             Section(footer: Text("When Socket should alert you of upcoming maintenance services")) {
@@ -34,10 +38,20 @@ struct MaintenanceAlertSettingsView: View {
         }
         .navigationTitle("Maintenance Alerts")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            // Capture initial values for comparison
+            initialDistanceBefore = settings.distanceBeforeMaintenance
+            initialDaysBefore = settings.daysBeforeMaintenance
+        }
         .onDisappear {
+            // Only reschedule if values actually changed
+            let distanceChanged = settings.distanceBeforeMaintenance != initialDistanceBefore
+            let daysChanged = settings.daysBeforeMaintenance != initialDaysBefore
+
+            guard distanceChanged || daysChanged else { return }
+
             Task {
-                // reschedules notifications, if values are changed on this view
-                await NotificationManager.shared.refreshAllNotifications()
+                await NotificationManager.shared.cancelAndRescheduleAllNotifications()
             }
         }
     }
