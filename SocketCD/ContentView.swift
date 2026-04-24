@@ -104,16 +104,36 @@ struct ContentView: View {
     
     // MARK: - Methods
     
+    // Splits the app version number into an array of Int (used in checkForOnboardingViewsToShow)
+    private func parseVersion(_ version: String) -> [Int] {
+        version.split(separator: ".").compactMap { Int($0) }
+    }
+    
+    // Determines whether to display onboarding views and which to display
     private func checkForOnboardingViewsToShow() {
-        let currentAppVersion = AppInfo().version
-        let lastRunAppVersion = settings.savedAppVersion
+        let current = parseVersion(AppInfo().version)
+        let previous = parseVersion(settings.savedAppVersion)
+        
+        // Are the app versions different?
+        let isDifferent = current != previous
+        
+        // Do the versions have the same major and minor versions (e.g. 2.1)?
+        let sameMajorMinor: Bool = {
+            guard current.count >= 2, previous.count >= 2 else { return false }
+            return current[0] == previous[0] && current[1] == previous[1]
+        }()
+        
+        // Are the versions different, but with the same major and minor versions (e.g. 2.1.1 vs 2.1.2)?
+        let isPatchUpdate = isDifferent && sameMajorMinor
         
         if settings.welcomeViewShouldPresent {
             onboardingSheet = .welcome
             print("Showing Welcome view")
-        } else if lastRunAppVersion != currentAppVersion {
+        } else if isDifferent && !isPatchUpdate {
             onboardingSheet = .whatsNew
             print("Showing What's New view")
+        } else {
+            print("No onboarding sheet necessary")
         }
     }
     
