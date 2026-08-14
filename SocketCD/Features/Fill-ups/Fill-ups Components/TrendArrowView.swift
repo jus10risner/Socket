@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 7/1/25.
 //
 
+import CoreData
 import SwiftUI
 
 struct TrendArrowView: View {

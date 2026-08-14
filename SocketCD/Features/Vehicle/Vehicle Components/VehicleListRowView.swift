@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 4/24/24.
 //
 
+import CoreData
 import SwiftUI
 
 struct VehicleListRowView: View {

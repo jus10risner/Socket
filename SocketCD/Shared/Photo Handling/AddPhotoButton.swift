@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import CoreData
 import PhotosUI
 import SwiftUI
 

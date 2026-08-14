@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 3/14/24.
 //
 
+import CoreData
 import SwiftUI
 
 struct RepairsListView: View {

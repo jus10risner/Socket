@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 3/12/24.
 //
 
+import CoreData
 import SwiftUI
 
 struct ContentView: View {

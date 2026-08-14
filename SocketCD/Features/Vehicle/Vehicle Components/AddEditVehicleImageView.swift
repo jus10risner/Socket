@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 4/5/24.
 //
 
+import CoreData
 import PhotosUI
 import SwiftUI
 

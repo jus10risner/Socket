@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 3/15/24.
 //
 
+import CoreData
 import SwiftUI
 
 struct AllFillupsListView: View {

@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 3/13/24.
 //
 
+import CoreData
 import SwiftUI
 
 struct AddEditVehicleView: View {
