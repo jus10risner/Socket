@@ -7,109 +7,127 @@
 
 import SwiftUI
 
-// Source: https://stackoverflow.com/questions/58341820/isnt-there-an-easy-way-to-pinch-to-zoom-in-an-image-in-swiftui
-public struct ImageViewer: View {
-    let image: Image
+struct ImageViewer: View {
+    private static let maximumScale: CGFloat = 5
+    private static let doubleTapScale: CGFloat = 2.5
+
+    let image: UIImage
+    @Binding var isZoomed: Bool
 
     @State private var scale: CGFloat = 1
-    @State private var lastScale: CGFloat = 1
+    @State private var startingScale: CGFloat = 1
+    @State private var offset: CGSize = .zero
+    @State private var startingOffset: CGSize = .zero
 
-    @State private var offset: CGPoint = .zero
-    @State private var lastTranslation: CGSize = .zero
-
-    public init(image: Image) {
-        self.image = image
-    }
-
-    public var body: some View {
+    var body: some View {
         GeometryReader { proxy in
-            ZStack {
-                Color.black
-                
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .scaleEffect(scale)
-                    .offset(x: offset.x, y: offset.y)
-                    .gesture(makeDragGesture(size: proxy.size))
-                    .gesture(makeMagnificationGesture(size: proxy.size))
-                
-                // Added to allow double-tap to zoom out -JR
-                    .onTapGesture(count: 2) {
-                        withAnimation {
-                            scale = 1
-                            offset = .zero
-                        }
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFit()
+                .scaleEffect(scale)
+                .offset(offset)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .contentShape(Rectangle())
+                .clipped()
+                .simultaneousGesture(magnificationGesture(in: proxy.size))
+                .simultaneousGesture(
+                    panGesture(in: proxy.size),
+                    isEnabled: isZoomed
+                )
+                .onTapGesture(count: 2) {
+                    toggleZoom(in: proxy.size)
+                }
+                .onChange(of: isZoomed) { _, isZoomed in
+                    if !isZoomed {
+                        resetZoom()
                     }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .edgesIgnoringSafeArea(.all)
+                }
+                .onChange(of: proxy.size) { _, size in
+                    setOffset(clampedOffset(offset, at: scale, in: size))
+                }
         }
     }
-    
-    // MARK: - Methods
 
-    private func makeMagnificationGesture(size: CGSize) -> some Gesture {
-        MagnificationGesture()
+    private func magnificationGesture(in size: CGSize) -> some Gesture {
+        MagnifyGesture()
             .onChanged { value in
-                let delta = value / lastScale
-                lastScale = value
-
-                // To minimize jittering
-                if abs(1 - delta) > 0.01 {
-                    scale *= delta
-                }
+                scale = min(max(startingScale * value.magnification, 1), Self.maximumScale)
+                isZoomed = scale > 1
             }
             .onEnded { _ in
-                lastScale = 1
-                if scale < 1 {
-                    withAnimation {
-                        scale = 1
-                    }
-                }
-                adjustMaxOffset(size: size)
+                startingScale = scale
+                setOffset(clampedOffset(offset, at: scale, in: size))
             }
     }
 
-    private func makeDragGesture(size: CGSize) -> some Gesture {
+    private func panGesture(in size: CGSize) -> some Gesture {
         DragGesture()
             .onChanged { value in
-                let diff = CGPoint(
-                    x: value.translation.width - lastTranslation.width,
-                    y: value.translation.height - lastTranslation.height
+                offset = CGSize(
+                    width: startingOffset.width + value.translation.width,
+                    height: startingOffset.height + value.translation.height
                 )
-                offset = .init(x: offset.x + diff.x, y: offset.y + diff.y)
-                lastTranslation = value.translation
             }
             .onEnded { _ in
-                adjustMaxOffset(size: size)
+                withAnimation(.snappy) {
+                    setOffset(clampedOffset(offset, at: scale, in: size))
+                }
             }
     }
 
-    private func adjustMaxOffset(size: CGSize) {
-        let maxOffsetX = (size.width * (scale - 1)) / 2
-        let maxOffsetY = (size.height * (scale - 1)) / 2
-
-        var newOffsetX = offset.x
-        var newOffsetY = offset.y
-
-        if abs(newOffsetX) > maxOffsetX {
-            newOffsetX = maxOffsetX * (abs(newOffsetX) / newOffsetX)
-        }
-        if abs(newOffsetY) > maxOffsetY {
-            newOffsetY = maxOffsetY * (abs(newOffsetY) / newOffsetY)
-        }
-
-        let newOffset = CGPoint(x: newOffsetX, y: newOffsetY)
-        if newOffset != offset {
-            withAnimation {
-                offset = newOffset
+    private func toggleZoom(in size: CGSize) {
+        withAnimation(.snappy) {
+            if isZoomed {
+                resetZoom()
+            } else {
+                scale = Self.doubleTapScale
+                startingScale = scale
+                setOffset(clampedOffset(.zero, at: scale, in: size))
+                isZoomed = true
             }
         }
-        self.lastTranslation = .zero
+    }
+
+    private func resetZoom() {
+        scale = 1
+        startingScale = 1
+        setOffset(.zero)
+        isZoomed = false
+    }
+
+    private func setOffset(_ newOffset: CGSize) {
+        offset = newOffset
+        startingOffset = newOffset
+    }
+
+    private func clampedOffset(_ proposedOffset: CGSize, at scale: CGFloat, in containerSize: CGSize) -> CGSize {
+        let fittedSize = fittedImageSize(in: containerSize)
+        let maximumX = max(0, (fittedSize.width * scale - containerSize.width) / 2)
+        let maximumY = max(0, (fittedSize.height * scale - containerSize.height) / 2)
+
+        return CGSize(
+            width: min(max(proposedOffset.width, -maximumX), maximumX),
+            height: min(max(proposedOffset.height, -maximumY), maximumY)
+        )
+    }
+
+    private func fittedImageSize(in containerSize: CGSize) -> CGSize {
+        guard image.size.width > 0, image.size.height > 0 else { return .zero }
+
+        let fittingScale = min(
+            containerSize.width / image.size.width,
+            containerSize.height / image.size.height
+        )
+        return CGSize(
+            width: image.size.width * fittingScale,
+            height: image.size.height * fittingScale
+        )
     }
 }
 
 #Preview {
-    ImageViewer(image: Image("example"))
+    ImageViewer(
+        image: UIImage(imageLiteralResourceName: "example"),
+        isZoomed: .constant(false)
+    )
 }

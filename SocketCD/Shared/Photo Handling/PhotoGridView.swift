@@ -5,14 +5,15 @@
 //  Created by Justin Risner on 3/14/24.
 //
 
+import CoreData
 import SwiftUI
 
 struct PhotoGridView: View {
     private let editablePhotos: Binding<[Photo]>?
     private let readOnlyPhotos: [Photo]
-    
-    private let isEditable: Bool
-    @State private var selectedPhoto: Photo?
+
+    @Namespace private var photoTransition
+    @State private var selectedPhoto: SelectedPhoto?
     
     private let columns = [GridItem(.adaptive(minimum: 150), spacing: 5)]
     
@@ -20,55 +21,26 @@ struct PhotoGridView: View {
         editablePhotos?.wrappedValue ?? readOnlyPhotos
     }
     
-    // MARK: - Initializers
-        
-    // Editable: pass a Binding<[Photo]>
     init(photos: Binding<[Photo]>) {
         self.editablePhotos = photos
         self.readOnlyPhotos = []
-        self.isEditable = true
     }
-    
-    // Read-only: pass an array directly
+
     init(photos: [Photo]) {
         self.editablePhotos = nil
         self.readOnlyPhotos = photos
-        self.isEditable = false
     }
-    
-    // MARK: - Body
+
     var body: some View {
         LazyVGrid(columns: columns, spacing: 5) {
-            ForEach(photos, id: \.id) { photo in
-                ZStack(alignment: .topTrailing) {
-                    RoundedRectangle.adaptive
-                        .fill(Color.clear)
-                        .aspectRatio(1.5, contentMode: .fit)
-                        .overlay {
-                            if let uiImage = photo.converted {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .contentShape(Rectangle())
-                            } else {
-                                Color.clear
-                            }
-                        }
-                        .clipShape(RoundedRectangle.adaptive)
-                        .overlay {
-                            RoundedRectangle.adaptive
-                                .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
-                        }
-                        .onTapGesture {
-                            if !isEditable {
-                                selectedPhoto = photo
-                            }
-                        }
-                    
-                    if isEditable {
+            ForEach(photos, id: \.objectID) { photo in
+                if editablePhotos != nil {
+                    ZStack(alignment: .topTrailing) {
+                        PhotoThumbnail(photo: photo)
+
                         Button("Delete Image", systemImage: "xmark.circle.fill") {
                             withAnimation {
-                                delete(photo: photo)
+                                delete(photo)
                             }
                         }
                         .buttonStyle(.plain)
@@ -78,25 +50,58 @@ struct PhotoGridView: View {
                         .foregroundStyle(.white, .gray)
                         .padding(5)
                     }
+                } else {
+                    Button {
+                        selectedPhoto = SelectedPhoto(id: photo.objectID)
+                    } label: {
+                        PhotoThumbnail(photo: photo)
+                            .matchedTransitionSource(id: photo.objectID, in: photoTransition)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
-            .id(UUID()) // prevents flicker when deleting
         }
-        .fullScreenCover(item: $selectedPhoto) { photo in
-            if let uiImage = photo.converted {
-                ImageDetailView(image: uiImage)
-            } else {
-                Text("Image unavailable")
-                    .font(.headline)
-                    .padding()
-            }
+        .fullScreenCover(item: $selectedPhoto) { selection in
+            ImageDetailView(
+                photos: photos,
+                selectedPhotoID: selection.id,
+                transitionNamespace: photoTransition
+            )
         }
     }
     
-    // Deletes a given photo from the photos array
-    private func delete(photo: Photo) {
+    private func delete(_ photo: Photo) {
         guard let binding = editablePhotos else { return }
-        binding.wrappedValue.removeAll { $0.id == photo.id }
+        binding.wrappedValue.removeAll { $0.objectID == photo.objectID }
+    }
+}
+
+private struct SelectedPhoto: Identifiable {
+    let id: NSManagedObjectID
+}
+
+private struct PhotoThumbnail: View {
+    let photo: Photo
+
+    var body: some View {
+        RoundedRectangle.adaptive
+            .fill(Color.clear)
+            .aspectRatio(1.5, contentMode: .fit)
+            .overlay {
+                if let uiImage = photo.converted {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .contentShape(Rectangle())
+                } else {
+                    Color.clear
+                }
+            }
+            .clipShape(RoundedRectangle.adaptive)
+            .overlay {
+                RoundedRectangle.adaptive
+                    .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
+            }
     }
 }
 
