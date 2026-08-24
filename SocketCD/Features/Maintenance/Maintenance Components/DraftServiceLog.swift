@@ -16,6 +16,7 @@ class DraftServiceLog: ObservableObject {
     @Published var cost: Double? = nil
     @Published var note: String = ""
     @Published var photos: [Photo] = []
+    @Published var documents: [AttachedDocument] = []
     @Published var selectedServiceIDs: Set<UUID> = []
     
     
@@ -33,6 +34,7 @@ class DraftServiceLog: ObservableObject {
                 cost = log.cost
                 note = log.note
                 photos = log.sortedPhotosArray
+                documents = log.sortedDocumentsArray
                 selectedServiceIDs = Set(log.sortedServicesArray.compactMap { $0.id })
             } else {
                 id = UUID()
@@ -41,6 +43,7 @@ class DraftServiceLog: ObservableObject {
                 cost = record.cost
                 note = record.note
                 photos = record.sortedPhotosArray
+                documents = record.sortedDocumentsArray
                 if let serviceID = record.service?.id { selectedServiceIDs = [serviceID] }
             }
         }

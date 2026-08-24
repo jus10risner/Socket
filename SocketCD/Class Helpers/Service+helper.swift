@@ -335,6 +335,7 @@ extension Service {
         log.cost = draftServiceLog.cost
         log.note = draftServiceLog.note
         log.photos = NSSet(array: draftServiceLog.photos)
+        log.documents = NSSet(array: draftServiceLog.documents)
 
         // Resolve selected services from IDs
         let selectedServices = draftServiceLog.selectedServiceIDs.compactMap { id in
@@ -570,4 +571,3 @@ enum NotificationScheduler {
         print("Canceled distance-based notification for \(service.name)")
     }
 }
-

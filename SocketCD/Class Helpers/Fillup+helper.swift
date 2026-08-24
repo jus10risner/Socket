@@ -46,6 +46,11 @@ extension Fillup {
             $0.timeStamp < $1.timeStamp
         }
     }
+
+    var sortedDocumentsArray: [AttachedDocument] {
+        let set = documents as? Set<AttachedDocument> ?? []
+        return set.sorted { $0.timeStamp < $1.timeStamp }
+    }
     
     // MARK: - Computed Properties
     
@@ -146,6 +151,7 @@ extension Fillup {
         self.fillType = draftFillup.fillType
         self.note = draftFillup.note
         self.photos = NSSet(array: draftFillup.photos)
+        self.documents = NSSet(array: draftFillup.documents)
         
         if let vehicle = self.vehicle, let draftOdometer = draftFillup.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer

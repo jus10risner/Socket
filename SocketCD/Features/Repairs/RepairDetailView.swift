@@ -28,7 +28,11 @@ struct RepairDetailView: View {
                 LabeledContent("Cost", value: (repair.cost ?? 0).asCurrency())
             }
             
-            FormFooterView(note: repair.note, photos: repair.sortedPhotosArray)
+            FormFooterView(
+                note: repair.note,
+                photos: repair.sortedPhotosArray,
+                documents: repair.sortedDocumentsArray
+            )
         }
         .navigationTitle("Repair Details")
         .navigationBarTitleDisplayMode(.inline)

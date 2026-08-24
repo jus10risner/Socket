@@ -61,7 +61,11 @@ struct FillupDetailView: View {
                 LabeledContent("Total Cost", value: (fillup.totalCost ?? 0).asCurrency())
             }
             
-            FormFooterView(note: fillup.note, photos: fillup.sortedPhotosArray)
+            FormFooterView(
+                note: fillup.note,
+                photos: fillup.sortedPhotosArray,
+                documents: fillup.sortedDocumentsArray
+            )
         }
         .navigationTitle("Fill-up Details")
         .navigationBarTitleDisplayMode(.inline)

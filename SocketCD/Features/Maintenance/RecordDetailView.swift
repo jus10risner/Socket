@@ -28,7 +28,11 @@ struct RecordDetailView: View {
                 LabeledContent("Cost", value: (record.effectiveCost ?? 0).asCurrency())
             }
             
-            FormFooterView(note: record.effectiveNote, photos: record.effectivePhotos)
+            FormFooterView(
+                note: record.effectiveNote,
+                photos: record.effectivePhotos,
+                documents: record.effectiveDocuments
+            )
         }
         .navigationTitle("Log Details")
         .navigationBarTitleDisplayMode(.inline)

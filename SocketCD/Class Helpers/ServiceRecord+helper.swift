@@ -37,6 +37,11 @@ extension ServiceRecord {
         }
         
     }
+
+    var sortedDocumentsArray: [AttachedDocument] {
+        let set = documents as? Set<AttachedDocument> ?? []
+        return set.sorted { $0.timeStamp < $1.timeStamp }
+    }
     
     // MARK: - Effective values (prefers serviceLog values, but falls back to serviceRecord values for older entries)
     var effectiveDate: Date {
@@ -62,6 +67,14 @@ extension ServiceRecord {
             return sortedPhotosArray
         }
     }
+
+    var effectiveDocuments: [AttachedDocument] {
+        if let log = serviceLog {
+            return log.sortedDocumentsArray
+        } else {
+            return sortedDocumentsArray
+        }
+    }
     
     // MARK: - CRUD Methods
     
@@ -73,6 +86,7 @@ extension ServiceRecord {
         self.cost = draftServiceLog.cost
         self.note = draftServiceLog.note
         self.photos = NSSet(array: draftServiceLog.photos)
+        self.documents = NSSet(array: draftServiceLog.documents)
 
         if let vehicle = service.vehicle, let draftOdometer = draftServiceLog.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer

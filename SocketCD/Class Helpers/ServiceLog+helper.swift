@@ -36,6 +36,11 @@ extension ServiceLog {
             $0.timeStamp < $1.timeStamp
         }
     }
+
+    var sortedDocumentsArray: [AttachedDocument] {
+        let set = documents as? Set<AttachedDocument> ?? []
+        return set.sorted { $0.timeStamp < $1.timeStamp }
+    }
     
     var sortedServicesArray: [Service] {
         let recordsSet = records as? Set<ServiceRecord> ?? []
@@ -54,6 +59,7 @@ extension ServiceLog {
         self.cost = draftServiceLog.cost
         self.note = draftServiceLog.note
         self.photos = NSSet(array: draftServiceLog.photos)
+        self.documents = NSSet(array: draftServiceLog.documents)
 
         let existingRecords = (records as? Set<ServiceRecord>) ?? []
 

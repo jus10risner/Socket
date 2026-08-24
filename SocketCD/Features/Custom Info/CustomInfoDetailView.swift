@@ -35,7 +35,11 @@ struct CustomInfoDetailView: View {
                 }
             }
             
-            FormFooterView(note: customInfo.note, photos: customInfo.sortedPhotosArray)
+            FormFooterView(
+                note: customInfo.note,
+                photos: customInfo.sortedPhotosArray,
+                documents: customInfo.sortedDocumentsArray
+            )
         }
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingEditCustomInfo) {

@@ -14,6 +14,7 @@ class DraftCustomInfo: ObservableObject {
     @Published var detail: String = ""
     @Published var note: String = ""
     @Published var photos: [Photo] = []
+    @Published var documents: [AttachedDocument] = []
     
     // Initializes with an optional Custom Info, for use in add/edit context
     init(customInfo: CustomInfo? = nil) {
@@ -23,11 +24,12 @@ class DraftCustomInfo: ObservableObject {
             detail = customInfo.detail
             note = customInfo.note
             photos = customInfo.sortedPhotosArray
+            documents = customInfo.sortedDocumentsArray
         }
     }
     
     // Determines whether the required information is present
     var canBeSaved: Bool {
-        label != "" && (detail != "" || !photos.isEmpty)
+        label != "" && (detail != "" || !photos.isEmpty || !documents.isEmpty)
     }
 }

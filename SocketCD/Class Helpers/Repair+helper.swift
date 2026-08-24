@@ -41,6 +41,11 @@ extension Repair {
             $0.timeStamp < $1.timeStamp
         }
     }
+
+    var sortedDocumentsArray: [AttachedDocument] {
+        let set = documents as? Set<AttachedDocument> ?? []
+        return set.sorted { $0.timeStamp < $1.timeStamp }
+    }
     
     // MARK: - CRUD Methods
     
@@ -53,6 +58,7 @@ extension Repair {
         self.cost = draftRepair.cost
         self.note = draftRepair.note
         self.photos = NSSet(array: draftRepair.photos)
+        self.documents = NSSet(array: draftRepair.documents)
         
         if let vehicle = self.vehicle, let draftOdometer = draftRepair.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer

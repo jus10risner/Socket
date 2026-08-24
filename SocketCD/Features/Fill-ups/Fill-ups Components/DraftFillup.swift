@@ -18,6 +18,7 @@ class DraftFillup: ObservableObject {
     @Published var fillType: FillType = .fullTank
     @Published var note: String = ""
     @Published var photos: [Photo] = []
+    @Published var documents: [AttachedDocument] = []
     
     // Initializes with an optional Fillup, for use in add/edit context
     init(fillup: Fillup? = nil, settings: AppSettingsStore = AppSettingsStore()) {
@@ -31,6 +32,7 @@ class DraftFillup: ObservableObject {
             fillType = fillup.fillType
             note = fillup.note
             photos = fillup.sortedPhotosArray
+            documents = fillup.sortedDocumentsArray
             
             switch settings.fillupCostType {
             case .perUnit:

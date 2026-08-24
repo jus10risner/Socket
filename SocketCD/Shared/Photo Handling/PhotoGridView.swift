@@ -9,32 +9,18 @@ import CoreData
 import SwiftUI
 
 struct PhotoGridView: View {
-    private let editablePhotos: Binding<[Photo]>?
-    private let readOnlyPhotos: [Photo]
+    @Binding var photos: [Photo]
+    let isEditable: Bool
 
     @Namespace private var photoTransition
     @State private var selectedPhoto: SelectedPhoto?
     
     private let columns = [GridItem(.adaptive(minimum: 150), spacing: 5)]
     
-    private var photos: [Photo] {
-        editablePhotos?.wrappedValue ?? readOnlyPhotos
-    }
-    
-    init(photos: Binding<[Photo]>) {
-        self.editablePhotos = photos
-        self.readOnlyPhotos = []
-    }
-
-    init(photos: [Photo]) {
-        self.editablePhotos = nil
-        self.readOnlyPhotos = photos
-    }
-
     var body: some View {
         LazyVGrid(columns: columns, spacing: 5) {
             ForEach(photos, id: \.objectID) { photo in
-                if editablePhotos != nil {
+                if isEditable {
                     ZStack(alignment: .topTrailing) {
                         PhotoThumbnail(photo: photo)
 
@@ -71,8 +57,7 @@ struct PhotoGridView: View {
     }
     
     private func delete(_ photo: Photo) {
-        guard let binding = editablePhotos else { return }
-        binding.wrappedValue.removeAll { $0.objectID == photo.objectID }
+        photos.removeAll { $0.objectID == photo.objectID }
     }
 }
 
@@ -109,5 +94,5 @@ private struct PhotoThumbnail: View {
     let context = DataController.preview.container.viewContext
     let photo = Photo.create(from: UIImage(imageLiteralResourceName: "example"), in: context)
     
-    PhotoGridView(photos: photo.map { [$0] } ?? [])
+    PhotoGridView(photos: .constant(photo.map { [$0] } ?? []), isEditable: false)
 }

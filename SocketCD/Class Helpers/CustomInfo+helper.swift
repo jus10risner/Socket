@@ -32,6 +32,11 @@ extension CustomInfo {
         }
         
     }
+
+    var sortedDocumentsArray: [AttachedDocument] {
+        let set = documents as? Set<AttachedDocument> ?? []
+        return set.sorted { $0.timeStamp < $1.timeStamp }
+    }
     
     // MARK: - CRUD Methods
     
@@ -42,6 +47,7 @@ extension CustomInfo {
         self.detail = draftCustomInfo.detail
         self.note = draftCustomInfo.note
         self.photos = NSSet(array: draftCustomInfo.photos)
+        self.documents = NSSet(array: draftCustomInfo.documents)
         
         try? context.save()
     }

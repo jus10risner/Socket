@@ -16,6 +16,7 @@ class DraftRepair: ObservableObject {
     @Published var cost: Double? = nil
     @Published var note: String = ""
     @Published var photos: [Photo] = []
+    @Published var documents: [AttachedDocument] = []
     
     // Initializes with an optional Repair, for use in add/edit context
     init(repair: Repair? = nil) {
@@ -27,6 +28,7 @@ class DraftRepair: ObservableObject {
             cost = repair.cost
             note = repair.note
             photos = repair.sortedPhotosArray
+            documents = repair.sortedDocumentsArray
         }
     }
     

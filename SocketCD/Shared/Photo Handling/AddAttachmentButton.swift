@@ -1,5 +1,5 @@
 //
-//  AddPhotoButton.swift
+//  AddAttachmentButton.swift
 //  SocketCD
 //
 //  Created by Justin Risner on 3/14/24.
@@ -9,27 +9,31 @@ import AVFoundation
 import CoreData
 import PhotosUI
 import SwiftUI
+import UniformTypeIdentifiers
 
-struct AddPhotoButton: View {
+struct AddAttachmentButton: View {
     @Environment(\.managedObjectContext) var context
     @StateObject private var cameraViewModel = CameraViewModel()
     
     @Binding var photos: [Photo]
+    @Binding var documents: [AttachedDocument]
     
     @State private var showingPhotosPicker = false
+    @State private var showingDocumentPicker = false
     @State private var showingPhotoError = false
+    @State private var showingDocumentError = false
     
     @State private var capturedImage: UIImage?
     @State private var selectedImages: [PhotosPickerItem] = []
     
     var body: some View {
-        LabeledContent { // LabeledContent is used to keep the label visible and take up the full list row
+        LabeledContent {
             Color.clear
         } label: {
-            Label("Add Photo...", systemImage: "photo.on.rectangle")
+            Label("Add Attachment...", systemImage: "paperclip")
                 .accessibilityHidden(true)
         }
-        .overlay { // Menu is inside an overlay with no visible label, to prevent iOS 26's morph animation on the label (doesn't look good in a list row)
+        .overlay {
             Menu {
                 Button("Photo Library", systemImage: "photo.on.rectangle") {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) // Dismisses keyboard, if visible
@@ -41,9 +45,14 @@ struct AddPhotoButton: View {
                         await cameraViewModel.requestCameraAccessAndAvailability()
                     }
                 }
+
+                Button("Choose PDF", systemImage: "doc") {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    showingDocumentPicker = true
+                }
             } label: {
                 Color.clear
-                    .accessibilityLabel("Add Photo")
+                    .accessibilityLabel("Add Attachment")
             }
         }
         .tint(Color.primary)
@@ -53,6 +62,12 @@ struct AddPhotoButton: View {
             }
         }
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImages, matching: .images)
+        .fileImporter(
+            isPresented: $showingDocumentPicker,
+            allowedContentTypes: [.pdf],
+            allowsMultipleSelection: true,
+            onCompletion: importDocuments
+        )
         .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: {
             Task {
                 await verifyAndAppend()
@@ -81,6 +96,11 @@ struct AddPhotoButton: View {
         } message: {
             Text("There was a problem saving that image. Please try another image.")
         }
+        .alert("Document Error", isPresented: $showingDocumentError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("There was a problem saving that PDF. Please try another document.")
+        }
     }
     
     // MARK: - Methods
@@ -108,6 +128,17 @@ struct AddPhotoButton: View {
             } catch {
                 showingPhotoError = true
             }
+        }
+    }
+
+    private func importDocuments(_ result: Result<[URL], Error>) {
+        do {
+            let urls = try result.get()
+            for url in urls {
+                documents.append(try AttachedDocument.create(from: url, in: context))
+            }
+        } catch {
+            showingDocumentError = true
         }
     }
 }

@@ -82,6 +82,7 @@ struct AddEditRecordView: View {
                 FormFooterView (
                     note: $draftServiceLog.note,
                     photos: $draftServiceLog.photos,
+                    documents: $draftServiceLog.documents,
                     deleteButtonTitle: "Delete Service Log",
                     onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
                 )

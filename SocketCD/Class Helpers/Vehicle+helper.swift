@@ -234,6 +234,7 @@ extension Vehicle {
         newRepair.cost = draftRepair.cost
         newRepair.note = draftRepair.note
         newRepair.photos = NSSet(array: draftRepair.photos)
+        newRepair.documents = NSSet(array: draftRepair.documents)
         
         if let odometer = draftRepair.odometer, odometer > self.odometer {
             self.odometer = odometer
@@ -255,6 +256,7 @@ extension Vehicle {
         newFillup.fillType = draftFillup.fillType
         newFillup.note = draftFillup.note
         newFillup.photos = NSSet(array: draftFillup.photos)
+        newFillup.documents = NSSet(array: draftFillup.documents)
         
         if let odometer = draftFillup.odometer, odometer > self.odometer {
             self.odometer = odometer
@@ -273,6 +275,7 @@ extension Vehicle {
         newCustomInfo.detail = draftCustomInfo.detail
         newCustomInfo.note = draftCustomInfo.note
         newCustomInfo.photos = NSSet(array: draftCustomInfo.photos)
+        newCustomInfo.documents = NSSet(array: draftCustomInfo.documents)
         
         try? context.save()
     }
