@@ -47,6 +47,8 @@ struct PhotoGridView: View {
                 }
             }
         }
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
         .fullScreenCover(item: $selectedPhoto) { selection in
             ImageDetailView(
                 photos: photos,
