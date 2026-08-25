@@ -20,7 +20,7 @@ struct ReadOnlyDocumentPreview: View {
                 .navigationTitle(title)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    ToolbarItemGroup {
+                    ToolbarItem {
                         ShareLink(
                             item: PDFShareItem(data: documentData, fileName: title),
                             preview: SharePreview(
@@ -31,16 +31,13 @@ struct ReadOnlyDocumentPreview: View {
                             Label("Share Document", systemImage: "square.and.arrow.up")
                         }
                     }
-                    
-                    if #available(iOS 26.0, *) {
-                        ToolbarSpacer(.fixed)
-                    }
 
-                    ToolbarItem {
+                    ToolbarItem(placement: .cancellationAction) {
                         Button("Done", systemImage: "xmark", action: onDismiss)
                     }
                 }
         }
+        .tint(.primary)
     }
     
     private var sharePreviewImage: Image {
