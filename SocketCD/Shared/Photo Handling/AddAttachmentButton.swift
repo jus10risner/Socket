@@ -52,7 +52,7 @@ struct AddAttachmentButton: View {
                         }
                     }
 
-                    Button("Choose PDF", systemImage: "doc") {
+                    Button("Choose PDF", systemImage: "document") {
                         UIApplication.shared
                             .sendAction(
                                 #selector(UIResponder.resignFirstResponder),

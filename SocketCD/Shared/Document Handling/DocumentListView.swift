@@ -15,7 +15,8 @@ struct DocumentListView: View {
         ForEach(documents.sorted { $0.timeStamp < $1.timeStamp }, id: \.objectID) { document in
             if isEditable {
                 HStack {
-                    Label(document.fileName, systemImage: "doc.text.image")
+                    Label(document.fileName, systemImage: "document")
+                        .labelStyle(.titleOnly)
                         .lineLimit(1)
 
                     Spacer()
@@ -50,11 +51,10 @@ private struct ReadOnlyDocumentRow: View {
         Button {
             preview()
         } label: {
-            Label(document.fileName, systemImage: "doc.text.image")
+            Label(document.fileName, systemImage: "document")
                 .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .tint(.primary)
         }
-        .buttonStyle(.plain)
         .fullScreenCover(item: $previewItem) { item in
             ReadOnlyDocumentPreview(
                 document: item.document,

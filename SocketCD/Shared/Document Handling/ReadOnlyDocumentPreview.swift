@@ -42,7 +42,7 @@ struct ReadOnlyDocumentPreview: View {
     
     private var sharePreviewImage: Image {
         guard let firstPage = document.page(at: 0) else {
-            return Image(systemName: "doc.text.image")
+            return Image(systemName: "document")
         }
 
         let thumbnail = firstPage.thumbnail(
