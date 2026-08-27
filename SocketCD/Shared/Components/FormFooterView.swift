@@ -41,26 +41,80 @@ struct FormFooterView: View {
         self.onDelete = nil
     }
 
+    private var hasAttachments: Bool {
+        !photos.wrappedValue.isEmpty || !documents.wrappedValue.isEmpty
+    }
+
+    private var hasPhotosAndDocuments: Bool {
+        !photos.wrappedValue.isEmpty && !documents.wrappedValue.isEmpty
+    }
+
+    private var editableDetailsSection: some View {
+        Section("Details") {
+            HStack(alignment: .top) {
+                Image(systemName: "text.justify.leading")
+                    .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
+                
+                TextField("Note", text: note, axis: .vertical)
+            }
+
+            if !hasAttachments {
+                AddAttachmentButton(photos: photos, documents: documents)
+            }
+        }
+    }
+
     var body: some View {
         if isEditable {
-            TextField("Note", text: note, axis: .vertical)
-        } else if !note.wrappedValue.isEmpty {
-            Section("Note") {
-                Text(note.wrappedValue)
-                    .textSelection(.enabled)
+            if hasAttachments {
+                editableDetailsSection
+                    .listSectionSpacing(8)
+            } else {
+                editableDetailsSection
+            }
+
+            if hasAttachments {
+                AttachmentsView(
+                    photos: photos,
+                    documents: documents,
+                    isEditable: true,
+                    showsDetailsHeader: false
+                )
+            }
+        } else if !note.wrappedValue.isEmpty || hasAttachments {
+            if !note.wrappedValue.isEmpty {
+                Section("Details") {
+                    Text(note.wrappedValue)
+                        .textSelection(.enabled)
+                }
+            }
+
+            if hasAttachments {
+                if note.wrappedValue.isEmpty {
+                    AttachmentsView(
+                        photos: photos,
+                        documents: documents,
+                        isEditable: false,
+                        showsDetailsHeader: !hasPhotosAndDocuments
+                    )
+                } else {
+                    AttachmentsView(
+                        photos: photos,
+                        documents: documents,
+                        isEditable: false,
+                        showsDetailsHeader: false
+                    )
+                    .listSectionSpacing(8)
+                }
             }
         }
 
-        if isEditable || !photos.wrappedValue.isEmpty || !documents.wrappedValue.isEmpty {
-            AttachmentsView(
-                photos: photos,
-                documents: documents,
-                isEditable: isEditable
-            )
-        }
-
         if let deleteButtonTitle, let onDelete {
-            Button(deleteButtonTitle, role: .destructive, action: onDelete)
+            Section {
+                Button(deleteButtonTitle, role: .destructive, action: onDelete)
+            }
+            .listSectionSpacing(.default)
         }
     }
 }
@@ -69,6 +123,7 @@ private struct AttachmentsView: View {
     @Binding var photos: [Photo]
     @Binding var documents: [AttachedDocument]
     let isEditable: Bool
+    let showsDetailsHeader: Bool
 
     @State private var selectedCategory = AttachmentCategory.photos
 
@@ -106,23 +161,22 @@ private struct AttachmentsView: View {
 
     @ViewBuilder
     private var editableAttachments: some View {
-        if photos.isEmpty && !documents.isEmpty {
-            Section {
-                AddAttachmentButton(photos: $photos, documents: $documents)
-                documentList
-            }
+        if photos.isEmpty {
+            primaryAttachmentSection
         } else {
-            Section {
-                AddAttachmentButton(photos: $photos, documents: $documents)
-            }
+            primaryAttachmentSection
+                .listSectionSpacing(8)
 
-            if !photos.isEmpty {
-                photoSection
-                    .listSectionSpacing(8)
-            }
+            photoSection
+        }
+    }
+
+    private var primaryAttachmentSection: some View {
+        Section {
+            AddAttachmentButton(photos: $photos, documents: $documents)
 
             if !documents.isEmpty {
-                documentSection
+                documentList
             }
         }
     }
@@ -139,30 +193,48 @@ private struct AttachmentsView: View {
                         .tag(AttachmentCategory.documents)
                 }
                 .pickerStyle(.segmented)
-                .labelsHidden()
+//                .labelsHidden()
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
             }
 
             if selectedCategory == .photos {
                 photoSection
-                    .listSectionSpacing(8)
+                    .listSectionSpacing(3)
             } else {
                 documentSection
-                    .listSectionSpacing(8)
+                    .listSectionSpacing(3)
             }
-        } else if !photos.isEmpty {
-            photoSection
         } else {
-            documentSection
+            singleAttachmentSection
+        }
+    }
+
+    @ViewBuilder
+    private var singleAttachmentSection: some View {
+        if showsDetailsHeader {
+            Section("Details") {
+                singleAttachmentContent
+            }
+        } else {
+            Section {
+                singleAttachmentContent
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var singleAttachmentContent: some View {
+        if !photos.isEmpty {
+            PhotoGridView(photos: $photos, isEditable: isEditable)
+        } else {
+            documentList
         }
     }
 
     private var photoSection: some View {
         Section {
             PhotoGridView(photos: $photos, isEditable: isEditable)
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
         }
     }
 
