@@ -6,7 +6,9 @@
 //
 
 import CoreData
+import CoreTransferable
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ImageDetailView: View {
     @Environment(\.dismiss) private var dismiss
@@ -15,8 +17,6 @@ struct ImageDetailView: View {
     private let transitionNamespace: Namespace.ID
 
     @State private var selectedPhotoID: NSManagedObjectID
-    @State private var scrolledPhotoID: NSManagedObjectID?
-    @State private var imageURL: URL?
     @State private var isZoomed = false
 
     init(
@@ -27,7 +27,6 @@ struct ImageDetailView: View {
         self.pages = photos.map { PhotoPage(id: $0.objectID, image: $0.converted) }
         self.transitionNamespace = transitionNamespace
         self._selectedPhotoID = State(initialValue: selectedPhotoID)
-        self._scrolledPhotoID = State(initialValue: selectedPhotoID)
     }
 
     var body: some View {
@@ -39,10 +38,10 @@ struct ImageDetailView: View {
                 PhotoPager(
                     pages: pages,
                     selectedPhotoID: $selectedPhotoID,
-                    scrolledPhotoID: $scrolledPhotoID,
                     isZoomed: $isZoomed
                 )
             }
+            .ignoresSafeArea()
             .toolbar {
                 if pages.count > 1 {
                     ToolbarItem(placement: .principal) {
@@ -53,9 +52,15 @@ struct ImageDetailView: View {
                 }
 
                 ToolbarItem(placement: .primaryAction) {
-                    if let imageURL {
-                        ShareLink("Share Image", item: imageURL)
-                            .tint(.white)
+                    if let shareablePhoto, let image = selectedPage?.image {
+                        ShareLink(
+                            item: shareablePhoto,
+                            preview: SharePreview("Photo", image: Image(uiImage: image))
+                        ) {
+                            Label("Share Image", systemImage: "square.and.arrow.up")
+                        }
+                        .labelStyle(.iconOnly)
+                        .tint(.white)
                     }
                 }
 
@@ -68,44 +73,31 @@ struct ImageDetailView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
             .statusBarHidden()
-            .task(id: selectedPhotoID) {
+            .onChange(of: currentPhotoID) {
                 isZoomed = false
-                updateShareURL()
             }
-            .onDisappear(perform: removeShareFile)
         }
-        .navigationTransition(.zoom(sourceID: selectedPhotoID, in: transitionNamespace))
+        .navigationTransition(.zoom(sourceID: currentPhotoID, in: transitionNamespace))
+    }
+
+    private var currentPhotoID: NSManagedObjectID {
+        selectedPhotoID
     }
 
     private var selectedIndex: Int {
-        pages.firstIndex { $0.id == selectedPhotoID } ?? 0
+        pages.firstIndex { $0.id == currentPhotoID } ?? 0
     }
 
     private var selectedPage: PhotoPage? {
-        pages.first { $0.id == selectedPhotoID }
+        pages.first { $0.id == currentPhotoID }
     }
 
-    private func updateShareURL() {
-        removeShareFile()
+    private var shareablePhoto: ShareablePhoto? {
         guard let data = selectedPage?.image?.jpegData(compressionQuality: 0.8) else {
-            return
+            return nil
         }
 
-        let url = FileManager.default.temporaryDirectory
-            .appendingPathComponent("image-\(UUID().uuidString).jpg")
-
-        do {
-            try data.write(to: url)
-            imageURL = url
-        } catch {
-            imageURL = nil
-        }
-    }
-
-    private func removeShareFile() {
-        guard let imageURL else { return }
-        try? FileManager.default.removeItem(at: imageURL)
-        self.imageURL = nil
+        return ShareablePhoto(data: data)
     }
 }
 
@@ -113,29 +105,19 @@ private struct PhotoPager: View {
     let pages: [PhotoPage]
 
     @Binding var selectedPhotoID: NSManagedObjectID
-    @Binding var scrolledPhotoID: NSManagedObjectID?
     @Binding var isZoomed: Bool
 
     var body: some View {
         GeometryReader { proxy in
-            ScrollView(.horizontal) {
-                LazyHStack(spacing: 0) {
-                    ForEach(pages) { page in
-                        PhotoPageView(page: page, isZoomed: $isZoomed)
-                            .frame(width: proxy.size.width, height: proxy.size.height)
-                    }
+            TabView(selection: $selectedPhotoID) {
+                ForEach(pages) { page in
+                    PhotoPageView(page: page, isZoomed: $isZoomed)
+                        .frame(width: proxy.size.width, height: proxy.size.height)
+                        .tag(page.id)
                 }
-                .scrollTargetLayout()
             }
-            .scrollIndicators(.hidden)
-            .scrollTargetBehavior(.paging)
-            .scrollPosition(id: $scrolledPhotoID)
+            .tabViewStyle(.page(indexDisplayMode: .never))
             .scrollDisabled(isZoomed)
-            .onScrollPhaseChange { _, phase in
-                if phase == .idle, let scrolledPhotoID {
-                    selectedPhotoID = scrolledPhotoID
-                }
-            }
         }
     }
 }
@@ -157,6 +139,16 @@ private struct PhotoPageView: View {
 private struct PhotoPage: Identifiable {
     let id: NSManagedObjectID
     let image: UIImage?
+}
+
+private struct ShareablePhoto: Transferable, Sendable {
+    let data: Data
+
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: .jpeg) { photo in
+            photo.data
+        }
+    }
 }
 
 #Preview {
