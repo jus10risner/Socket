@@ -14,22 +14,15 @@ struct DocumentListView: View {
     var body: some View {
         ForEach(documents.sorted { $0.timeStamp < $1.timeStamp }, id: \.objectID) { document in
             if isEditable {
-                HStack {
-                    Label(document.fileName, systemImage: "document")
-                        .labelStyle(.titleOnly)
-                        .lineLimit(1)
-
-                    Spacer()
-
-                    Button("Delete Document", systemImage: "xmark.circle.fill") {
-                        delete(document)
+                Label(document.fileName, systemImage: "document")
+                    .labelStyle(.titleOnly)
+                    .lineLimit(1)
+                    .swipeActions(edge: .trailing) {
+                        Button("Remove", role: .destructive) {
+                            delete(document)
+                        }
+                        .tint(.red)
                     }
-                    .buttonStyle(.plain)
-                    .labelStyle(.iconOnly)
-                    .font(.title2)
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.white, .gray)
-                }
             } else {
                 ReadOnlyDocumentRow(document: document)
             }
