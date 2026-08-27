@@ -27,9 +27,18 @@ struct AddAttachmentButton: View {
     @State private var selectedImages: [PhotosPickerItem] = []
     
     var body: some View {
-        Label("Add Attachment...", systemImage: "paperclip")
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityHidden(true)
+        HStack {
+            Image(systemName: "paperclip")
+            
+            Text("Add Attachment...")
+        }
+        .foregroundStyle(.secondary)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityHidden(true)
+        
+//        Label("Add Attachment...", systemImage: "paperclip")
+//            .frame(maxWidth: .infinity, alignment: .leading)
+//            .accessibilityHidden(true)
             .overlay {
                 Menu {
                     Button("Choose Photo", systemImage: "photo.on.rectangle") {
