@@ -33,8 +33,7 @@ struct ImageDetailView: View {
         NavigationStack {
             ZStack {
                 Color.black
-                    .ignoresSafeArea()
-
+                
                 PhotoPager(
                     pages: pages,
                     selectedPhotoID: $selectedPhotoID,

@@ -28,7 +28,6 @@ struct ImageViewer: View {
                 .offset(offset)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .contentShape(Rectangle())
-                .clipped()
                 .simultaneousGesture(magnificationGesture(in: proxy.size))
                 .simultaneousGesture(
                     panGesture(in: proxy.size),
