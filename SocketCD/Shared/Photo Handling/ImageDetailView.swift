@@ -109,16 +109,37 @@ private struct PhotoPager: View {
 
     var body: some View {
         GeometryReader { proxy in
-            TabView(selection: $selectedPhotoID) {
-                ForEach(pages) { page in
-                    PhotoPageView(page: page, isZoomed: $isZoomed)
-                        .frame(width: proxy.size.width, height: proxy.size.height)
-                        .tag(page.id)
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 0) {
+                    ForEach(pages) { page in
+                        PhotoPageView(page: page, isZoomed: $isZoomed)
+                            .frame(width: proxy.size.width, height: proxy.size.height)
+                            .id(page.id)
+                    }
+                }
+                .scrollTargetLayout()
+            }
+            .scrollPosition(id: selectedPhotoIDBinding)
+            .onScrollTargetVisibilityChange(idType: NSManagedObjectID.self) { visiblePhotoIDs in
+                if let visiblePhotoID = visiblePhotoIDs.first {
+                    selectedPhotoID = visiblePhotoID
                 }
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+            .scrollTargetBehavior(.paging)
+            .scrollIndicators(.hidden)
             .scrollDisabled(isZoomed)
         }
+    }
+
+    private var selectedPhotoIDBinding: Binding<NSManagedObjectID?> {
+        Binding(
+            get: { selectedPhotoID },
+            set: { newValue in
+                if let newValue {
+                    selectedPhotoID = newValue
+                }
+            }
+        )
     }
 }
 
