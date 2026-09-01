@@ -9,11 +9,10 @@ import CoreData
 import SwiftUI
 
 struct AllFillupsListView: View {
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettingsStore.shared
     
-    @FetchRequest var fillups: FetchedResults<Fillup>
+    @FetchRequest private var fillups: FetchedResults<Fillup>
     
     init(vehicle: Vehicle) {
         self.vehicle = vehicle
@@ -30,25 +29,10 @@ struct AllFillupsListView: View {
                 NavigationLink {
                     FillupDetailView(fillup: fillup)
                 } label: {
-                    LabeledContent {
-                        Text(fillup.date.formatted(date: .numeric, time: .omitted))
-                    } label: {
-                        switch fillup.fillType {
-                        case .partialFill:
-                            listRowLabel(symbol: "circle.bottomhalf.filled", text: "Partial Fill")
-                            
-                        case .missedFill:
-                            listRowLabel(symbol: "circle.fill", text: "Full Tank (Reset)")
-                            
-                        case .fullTank:
-                            if fillup == fillups.last(where: { $0.fillType == .fullTank }) {
-                                listRowLabel(symbol: "circle.fill", text: "First Full Tank")
-                            } else {
-                                Text("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                                    .accessibilityLabel("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.fullName)")
-                            }
-                        }
-                    }
+                    FillupHistoryRow(
+                        fillup: fillup,
+                        isFirstFullTank: fillup == firstFullTank
+                    )
                 }
             }
         }
@@ -56,19 +40,9 @@ struct AllFillupsListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { if fillups.isEmpty { dismiss() }  }
     }
-    
-    
-    // MARK: - Views
-    
-    private func listRowLabel(symbol: String, text: String) -> some View {
-        HStack(spacing: 5) {
-            Image(systemName: symbol)
-                .foregroundStyle(Color(.fillupsTheme))
-            
-            Text(text)
-        }
-        .accessibilityElement()
-        .accessibilityLabel(text)
+
+    private var firstFullTank: Fillup? {
+        fillups.last { $0.fillType == .fullTank }
     }
 }
 

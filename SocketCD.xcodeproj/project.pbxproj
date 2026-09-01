@@ -30,6 +30,7 @@
 		9E36533D303C86C000BD9ADD /* DocumentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36533C303C86C000BD9ADD /* DocumentListView.swift */; };
 		9E4CC2D12F51E60B001F7F51 /* RepairTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */; };
 		9E5067CB3047395400744533 /* ChartPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5067CA3047395400744533 /* ChartPoint.swift */; };
+		9E5067CD3047429200744533 /* FillupHistoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5067CC3047429200744533 /* FillupHistoryRow.swift */; };
 		9E5270E02E8AF82300EFDCB8 /* FuelCostSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */; };
 		9E5270E22E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */; };
 		9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */; };
@@ -156,6 +157,7 @@
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairTests.swift; sourceTree = "<group>"; };
 		9E5067CA3047395400744533 /* ChartPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartPoint.swift; sourceTree = "<group>"; };
+		9E5067CC3047429200744533 /* FillupHistoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupHistoryRow.swift; sourceTree = "<group>"; };
 		9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelCostSettingsView.swift; sourceTree = "<group>"; };
 		9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsOfMeasureSettingsView.swift; sourceTree = "<group>"; };
 		9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceLog+helper.swift"; sourceTree = "<group>"; };
@@ -597,6 +599,7 @@
 			isa = PBXGroup;
 			children = (
 				9E620BF52BC04531005E16DD /* DraftFillup.swift */,
+				9E5067CC3047429200744533 /* FillupHistoryRow.swift */,
 				9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */,
 				9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */,
 				9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */,
@@ -851,6 +854,7 @@
 				9EEAC4E62BA364AA0053C65E /* CustomInfo+helper.swift in Sources */,
 				9EEAC5192BA48D720053C65E /* AddEditFillupView.swift in Sources */,
 				9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */,
+				9E5067CD3047429200744533 /* FillupHistoryRow.swift in Sources */,
 				9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */,
 				9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */,
 				9E87C5B62E4235CF001BE562 /* FormFooterView.swift in Sources */,
