@@ -24,16 +24,16 @@ enum FillType: String, CaseIterable {
 }
 
 enum DateRange: String, CaseIterable {
-    case sixMonths = "6M", year = "1Y", all = "ALL"
+    case threeMonths = "3M", sixMonths = "6M", year = "1Y"
     
     var accessibilityLabel: String {
         switch self {
+        case .threeMonths:
+            return "Three-month window"
         case .sixMonths:
-            return "Last 6 months"
+            return "Six-month window"
         case .year:
-            return "Last year"
-        case .all:
-            return "All Time"
+            return "One-year window"
         }
     }
 }

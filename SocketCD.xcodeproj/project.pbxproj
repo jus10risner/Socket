@@ -29,6 +29,7 @@
 		9E36533B303C86BF00BD9ADD /* ReadOnlyDocumentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36533A303C86BF00BD9ADD /* ReadOnlyDocumentPreview.swift */; };
 		9E36533D303C86C000BD9ADD /* DocumentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36533C303C86C000BD9ADD /* DocumentListView.swift */; };
 		9E4CC2D12F51E60B001F7F51 /* RepairTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */; };
+		9E5067CB3047395400744533 /* ChartPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5067CA3047395400744533 /* ChartPoint.swift */; };
 		9E5270E02E8AF82300EFDCB8 /* FuelCostSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */; };
 		9E5270E22E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */; };
 		9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */; };
@@ -62,6 +63,7 @@
 		9EAEDF9D2F4E057B005D29C6 /* TestDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAEDF9C2F4E057B005D29C6 /* TestDataController.swift */; };
 		9EB025362E4E5CB7008B4AC7 /* Primary.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB025352E4E5CB7008B4AC7 /* Primary.icon */; };
 		9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */; };
+		9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */; };
 		9EDCA2442ED0E19D005B1C5A /* PopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */; };
 		9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */; };
 		9EE5620D2BD9706600F5BE7E /* VehicleListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */; };
@@ -153,6 +155,7 @@
 		9E36533E303C86D300BD9ADD /* SocketDataModel_V3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SocketDataModel_V3.xcdatamodel; sourceTree = "<group>"; };
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairTests.swift; sourceTree = "<group>"; };
+		9E5067CA3047395400744533 /* ChartPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartPoint.swift; sourceTree = "<group>"; };
 		9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelCostSettingsView.swift; sourceTree = "<group>"; };
 		9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsOfMeasureSettingsView.swift; sourceTree = "<group>"; };
 		9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceLog+helper.swift"; sourceTree = "<group>"; };
@@ -188,6 +191,7 @@
 		9EAEDF9C2F4E057B005D29C6 /* TestDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataController.swift; sourceTree = "<group>"; };
 		9EB025352E4E5CB7008B4AC7 /* Primary.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Primary.icon; sourceTree = "<group>"; };
 		9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Monochrome.icon; sourceTree = "<group>"; };
+		9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartTests.swift; sourceTree = "<group>"; };
 		9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContent.swift; sourceTree = "<group>"; };
 		9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
 		9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListRowView.swift; sourceTree = "<group>"; };
@@ -422,6 +426,7 @@
 				9EAEDF942F4DFC5D005D29C6 /* ServiceTests.swift */,
 				9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */,
 				9EAEDF962F4DFC5D005D29C6 /* VehicleTests.swift */,
+				9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */,
 			);
 			path = SocketCDTests;
 			sourceTree = "<group>";
@@ -595,6 +600,7 @@
 				9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */,
 				9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */,
 				9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */,
+				9E5067CA3047395400744533 /* ChartPoint.swift */,
 			);
 			path = "Fill-ups Components";
 			sourceTree = "<group>";
@@ -738,6 +744,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9EAEDF982F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift in Sources */,
+				9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */,
 				9EAEDF9D2F4E057B005D29C6 /* TestDataController.swift in Sources */,
 				9EAEDF992F4DFC5D005D29C6 /* ServiceTests.swift in Sources */,
 				9EAEDF9A2F4DFC5D005D29C6 /* VehicleTests.swift in Sources */,
@@ -832,6 +839,7 @@
 				9E1AD90A2E8DB00900E60184 /* CustomInfoSection.swift in Sources */,
 				9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */,
 				9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */,
+				9E5067CB3047395400744533 /* ChartPoint.swift in Sources */,
 				9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */,
 				9E0B19B72EAA87C500E7A820 /* WhatsNewView.swift in Sources */,
 				9EEAC48E2BA0FA280053C65E /* SocketDataModel.xcdatamodeld in Sources */,
@@ -970,7 +978,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X8A236JXFT;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = risner.justin.SocketCDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -992,7 +1000,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X8A236JXFT;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = risner.justin.SocketCDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1014,7 +1022,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X8A236JXFT;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = risner.justin.SocketCDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

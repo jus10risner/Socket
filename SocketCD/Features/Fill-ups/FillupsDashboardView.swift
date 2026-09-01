@@ -9,72 +9,98 @@ import CoreData
 import SwiftUI
 
 struct FillupsDashboardView: View {
-    @Environment(\.dismiss) var dismiss
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettingsStore.shared
-    
+    @ObservedObject private var settings = AppSettingsStore.shared
+
     @FetchRequest var fillups: FetchedResults<Fillup>
-    
+
     init(vehicle: Vehicle) {
         self.vehicle = vehicle
         self._fillups = FetchRequest(
             entity: Fillup.entity(),
-            sortDescriptors: [NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)],
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \Fillup.date_, ascending: false)
+            ],
             predicate: NSPredicate(format: "vehicle == %@", vehicle)
         )
     }
-    
+
     @State private var showingAddFillup = false
-    @State private var showingFuelEconomyInfo = false
-    @State private var selectedDateRange: DateRange = .sixMonths
-    @State private var showingAverage: Bool = false
-    @State private var data: [Fillup]? = nil
-    
+    @State private var showingLatestExplanation = false
+    @State private var selectedDateRange: DateRange = .threeMonths
+    @State private var chartPoints: [ChartPoint]?
+    @State private var chartRefreshID = 0
+
     var body: some View {
         ZStack {
-            if vehicle.sortedFillupsArray.isEmpty {
+            if fillups.isEmpty {
                 EmptyFillupsView()
             } else {
                 List {
                     Section {
                         VStack(spacing: 15) {
-                            latestFillupInfo
-                            
-                            if let data {
-                                if data.count == 0 {
+                            if let chartPoints {
+                                if chartPoints.isEmpty {
                                     emptyChartView
                                 } else {
-                                    FuelEconomyChartView(data: data, averageFuelEconomy: averageFuelEconomy, selectedDateRange: $selectedDateRange, showingAverage: $showingAverage)
-                                    
-                                    averageFuelEconomyButton
-                                    
+                                    FuelEconomyChartView(
+                                        data: chartPoints,
+                                        selectedDateRange: $selectedDateRange
+                                    )
+
                                     Picker("Date Range", selection: $selectedDateRange) {
                                         ForEach(DateRange.allCases, id: \.self) { range in
                                             Text(range.rawValue)
                                                 .tag(range)
-                                                .accessibilityLabel(range.accessibilityLabel)
-                                                .accessibilityHint("Selects the range for fuel economy data.")
+                                                .accessibilityLabel(
+                                                    range.accessibilityLabel
+                                                )
                                         }
                                     }
                                     .pickerStyle(.segmented)
+                                    .accessibilityHint(
+                                        "Selects the range for fuel economy data."
+                                    )
                                 }
                             } else {
-                                // Placeholder for when data hasn't loaded yet (prevents UI jump)
                                 Color(.systemGroupedBackground).opacity(0.3)
-                                    .frame(minHeight: horizontalSizeClass == .regular ? 350 : 200)
+                                    .frame(
+                                        minHeight: horizontalSizeClass == .regular
+                                            ? 350
+                                            : 200
+                                    )
                             }
                         }
-                        .padding(15) // Maintains correct padding in iOS 17/18
+                        .padding(15)
+                        .listRowInsets(EdgeInsets())
+                    } footer: {
+                        if let latestUnavailableMessage {
+                            Button("Where’s my latest fill-up?") {
+                                showingLatestExplanation = true
+                            }
+                            .buttonStyle(.plain)
+                            .foregroundStyle(Color.fillupsTheme)
+                            .textCase(nil)
+                            .popover(
+                                isPresented: $showingLatestExplanation
+                            ) {
+                                PopoverContent(
+                                    text: latestUnavailableMessage
+                                )
+                            }
+                        }
                     }
-                    .listRowInsets(EdgeInsets())
-                    
+
                     Section {
                         NavigationLink {
                             AllFillupsListView(vehicle: vehicle)
                         } label: {
-                            Label("Fill-up History", systemImage: "clock.arrow.circlepath")
-                                .foregroundStyle(Color.primary)
+                            Label(
+                                "Fill-up History",
+                                systemImage: "clock.arrow.circlepath"
+                            )
+                            .foregroundStyle(Color.primary)
                         }
                     }
                 }
@@ -82,13 +108,15 @@ struct FillupsDashboardView: View {
             }
         }
         .navigationTitle("Fill-ups")
-        .task {
-            updateData()
+        .task(id: chartDataRevision) {
+            await updateChartData()
         }
-        .onChange(of: selectedDateRange) {
-            updateData()
+        .sheet(
+            isPresented: $showingAddFillup,
+            onDismiss: { chartRefreshID += 1 }
+        ) {
+            AddEditFillupView(vehicle: vehicle)
         }
-        .sheet(isPresented: $showingAddFillup, onDismiss: updateData) { AddEditFillupView(vehicle: vehicle) }
         .toolbar {
             AdaptiveToolbarButton {
                 Button("Add Fill-up", systemImage: "plus") {
@@ -98,7 +126,7 @@ struct FillupsDashboardView: View {
                 .buttonBorderShape(.circle)
                 .tint(Color.fillupsTheme)
             }
-            
+
             if #available(iOS 26, *) {
                 ToolbarItem(placement: .principal) {
                     Text(vehicle.name)
@@ -107,95 +135,110 @@ struct FillupsDashboardView: View {
             }
         }
     }
-    
-    
-    // MARK: - Views
-    
-    // Includes a "Learn More" popover, when fuel economy is 0
-    private var latestFillupInfo: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            LabeledContent("Latest Fill-up") {
-                guard let date = fillups.first?.date else { return Text("") }
-                    
-                return Text(date.formatted(date: .numeric, time: .omitted))
-                    .font(.subheadline)
-            }
-            .font(.headline)
-            
-            if let latestFillup = fillups.first {
-                let economy = latestFillup.fuelEconomy()
-                
-                if economy > 0 {
-                    HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        Text("\(economy, specifier: "%.1f")")
-                            .font(.title2.bold())
-                        
-                        Text("\(settings.fuelEconomyUnit.rawValue)")
-                            .font(.title3.bold())
-                            .foregroundStyle(Color.secondary)
-                            .accessibilityLabel(settings.fuelEconomyUnit.fullName)
-                    }
-                } else {
-                    HStack(spacing: 3) {
-                        Group {
-                            switch latestFillup.fillType {
-                            case .fullTank:
-                                Text(latestFillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "Full Tank")
-                            case .partialFill:
-                                Text("Partial Fill")
-                            case .missedFill:
-                                Text("Full Tank (Reset)")
-                            }
-                        }
-                        .font(.title2.bold())
-                        
-                        Button("Learn More", systemImage: "info.circle") {
-                            showingFuelEconomyInfo = true
-                        }
-                        .labelStyle(.iconOnly)
-                        .buttonStyle(.borderless)
-                        .tint(Color.fillupsTheme)
-                        .popover(isPresented: $showingFuelEconomyInfo) {
-                            PopoverContent(text: "Fuel economy is calculated only when there are at least two Full Tank fill-ups. Partial or missed fill-ups are not included.")
-                        }
-                    }
+
+    // MARK: - Chart Data
+
+    private var latestUnavailableMessage: String? {
+        guard let latestFillup = fillups.first,
+              let latestChartPoint = chartPoints?.last,
+              latestChartPoint.id != latestFillup.objectID
+        else {
+            return nil
+        }
+
+        return switch latestFillup.fillType {
+        case .partialFill:
+            "The latest fill-up was a partial fill, so fuel economy wasn’t calculated. Fuel economy will be calculated again after your next full tank fill-up."
+        case .missedFill:
+            "The latest fill-up was marked as missed, so fuel economy wasn’t calculated. Fuel economy will be calculated again after your next full tank fill-up."
+        case .fullTank:
+            "Fuel economy wasn’t available for the latest fill-up."
+        }
+    }
+
+    /// Changes when chart-relevant Core Data values or the display unit change.
+    private var chartDataRevision: Int {
+        var hasher = Hasher()
+        hasher.combine(chartRefreshID)
+        hasher.combine(settings.fuelEconomyUnit.rawValue)
+
+        for fillup in fillups {
+            hasher.combine(fillup.objectID)
+            hasher.combine(fillup.date_)
+            hasher.combine(fillup.odometer_)
+            hasher.combine(fillup.volume_)
+            hasher.combine(fillup.fillType_)
+        }
+
+        return hasher.finalize()
+    }
+
+    private func updateChartData() async {
+        guard let coordinator = vehicle.managedObjectContext?
+            .persistentStoreCoordinator
+        else {
+            chartPoints = []
+            return
+        }
+
+        let vehicleID = vehicle.objectID
+        let unit = settings.fuelEconomyUnit
+        let context = NSManagedObjectContext(
+            concurrencyType: .privateQueueConcurrencyType
+        )
+        context.persistentStoreCoordinator = coordinator
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+
+        do {
+            let points = try await context.perform {
+                guard let backgroundVehicle = try context.existingObject(
+                    with: vehicleID
+                ) as? Vehicle else {
+                    return [ChartPoint]()
                 }
-            }
-        }
-        .accessibilityElement(children: .combine)
-    }
-    
-    private var averageFuelEconomyButton: some View {
-        Button {
-            showingAverage.toggle()
-        } label: {
-            Text("Average: \(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                .font(.subheadline)
-                .foregroundStyle(showingAverage ? Color.white : Color.primary)
-                .padding(.vertical, 9)
-                .padding(.horizontal, 15)
-                .background(
-                    RoundedRectangle.adaptive
-                        .fill(showingAverage ? Color.fillupsTheme : Color.clear)
-                        .stroke(showingAverage ? Color.clear : Color.secondary, lineWidth: 0.5)
+
+                let request = Fillup.fetchRequest()
+                request.predicate = NSPredicate(
+                    format: "vehicle == %@",
+                    backgroundVehicle
                 )
-                .accessibilityLabel("Average fuel economy: \(averageFuelEconomy, specifier: "%.1f") \(settings.fuelEconomyUnit.fullName)")
+                request.sortDescriptors = [
+                    NSSortDescriptor(
+                        keyPath: \Fillup.date_,
+                        ascending: true
+                    )
+                ]
+                request.fetchBatchSize = 256
+                request.returnsObjectsAsFaults = false
+
+                let fillups = try context.fetch(request)
+                return ChartPoint.make(from: fillups, unit: unit)
+            }
+
+            try Task.checkCancellation()
+            chartPoints = points
+        } catch is CancellationError {
+            return
+        } catch {
+            chartPoints = []
+            print(
+                "⚠️ Failed to prepare fuel-economy chart data: \(error.localizedDescription)"
+            )
         }
-        .buttonStyle(.borderless)
-        .accessibilityRemoveTraits(.isButton)
     }
-    
-    // Displayed when no data points exist to place on the chart
+
+    // MARK: - Empty State
+
     private var emptyChartView: some View {
-        let isFullTank = fillups.contains(where: { $0.fillType == .fullTank })
-        
+        let isFullTank = fillups.contains { $0.fillType == .fullTank }
+
         return VStack(spacing: 5) {
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.system(size: 40))
                 .foregroundStyle(Color(.fillupsTheme))
                 .frame(height: 50)
                 .accessibilityHidden(true)
-            
+
             Group {
                 if isFullTank {
                     Text("Just one more fill-up")
@@ -205,12 +248,16 @@ struct FillupsDashboardView: View {
             }
             .font(.title2.bold())
             .foregroundStyle(Color.primary)
-            
+
             Group {
                 if isFullTank {
-                    Text("Add one more **Full Tank** fill-up to see your fuel economy chart.")
+                    Text(
+                        "Add one more **Full Tank** fill-up to see your fuel economy chart."
+                    )
                 } else {
-                    Text("Fuel economy can only be measured between **Full Tank** fill-ups.")
+                    Text(
+                        "Fuel economy can only be measured between **Full Tank** fill-ups."
+                    )
                 }
             }
             .font(.subheadline)
@@ -218,57 +265,15 @@ struct FillupsDashboardView: View {
             .multilineTextAlignment(.center)
         }
         .padding(.horizontal)
-        .frame(minHeight: horizontalSizeClass == .regular ? 350 : 200)
+        .frame(
+            minHeight: horizontalSizeClass == .regular ? 350 : 200
+        )
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle.adaptive
                 .fill(Color(.tertiarySystemGroupedBackground))
         )
         .accessibilityElement(children: .combine)
-    }
-    
-    // Returns the average fuel economy for a given set of fill-ups
-    private var averageFuelEconomy: Double {
-        guard let data, !data.isEmpty else { return 0 }
-        let total = data.map { $0.fuelEconomy() }.reduce(0, +)
-        
-        return total / Double(data.count)
-    }
-    
-    
-    // MARK: - Methods
-    
-    // Updates the data array by calling computeData()
-    private func updateData() {
-        Task {
-            let result = await computeData()
-            data = result
-        }
-    }
-
-    // Returns all fill-ups with a fuel economy that is not 0
-    private func computeData() async -> [Fillup] {
-        let calendar = Calendar.current
-        guard let latestDate = fillups.compactMap(\.date).max() else { return [] }
-
-        let startOfLatestMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: latestDate)) ?? latestDate
-        let cutoff: Date?
-        
-        switch selectedDateRange {
-        case .sixMonths:
-            cutoff = calendar.date(byAdding: .month, value: -5, to: startOfLatestMonth)
-        case .year:
-            cutoff = calendar.date(byAdding: .year, value: -1, to: startOfLatestMonth)
-        case .all:
-            cutoff = nil
-        }
-
-        return fillups
-            .filter { fillup in
-                fillup.fuelEconomy() != 0 &&
-                (cutoff.map { fillup.date >= $0 } ?? true)
-            }
-            .sorted(by: { $0.date < $1.date })
     }
 }
 
@@ -277,6 +282,6 @@ struct FillupsDashboardView: View {
     let vehicle = Vehicle(context: context)
     vehicle.name = "My Car"
     vehicle.odometer = 12345
-    
+
     return FillupsDashboardView(vehicle: vehicle)
 }
