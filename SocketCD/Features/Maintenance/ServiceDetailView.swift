@@ -55,7 +55,16 @@ struct ServiceDetailView: View {
                         NavigationLink {
                             RecordDetailView(record: record, vehicle: vehicle, service: service)
                         } label: {
-                            LabeledContent("\(record.effectiveOdometer) \(settings.distanceUnit.abbreviated)", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
+                            LabeledContent {
+                                Text("\(record.effectiveOdometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                                    .foregroundStyle(.secondary)
+                            } label: {
+                                Text(record.effectiveDate, format: .dateTime.month(.abbreviated).day().year())
+                            }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(
+                                "\(record.effectiveDate.formatted(date: .long, time: .omitted)), odometer \(record.effectiveOdometer.formatted()) \(settings.distanceUnit.rawValue)"
+                            )
                         }
                     }
                 }
