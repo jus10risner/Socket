@@ -20,7 +20,8 @@ struct FuelEconomyChartView: View {
     @State private var settledScrollPosition: Date = .now
     @State private var visibleDomainLength: TimeInterval = 60 * 60 * 24 * 183
     @State private var settledDomainLength: TimeInterval = 60 * 60 * 24 * 183
-    @State private var chartOpacity = 1.0
+    @State private var contentOpacity = 1.0
+    @State private var displayedDateRange: DateRange = .threeMonths
     @State private var rangeTransitionTask: Task<Void, Never>?
 
     private let settings = AppSettingsStore.shared
@@ -31,7 +32,6 @@ struct FuelEconomyChartView: View {
             header
 
             chart
-                .opacity(chartOpacity)
                 .frame(height: horizontalSizeClass == .regular ? 350 : 200)
         }
         .onAppear {
@@ -188,6 +188,7 @@ struct FuelEconomyChartView: View {
                         lineJoin: .round
                     )
                 )
+                .opacity(contentOpacity)
             }
 
             if data.count >= 3 {
@@ -208,6 +209,7 @@ struct FuelEconomyChartView: View {
                         endPoint: .bottom
                     )
                 )
+                .opacity(contentOpacity)
                 .accessibilityHidden(true)
             } else {
                 PointPlot(
@@ -217,6 +219,7 @@ struct FuelEconomyChartView: View {
                 )
                 .symbolSize(45)
                 .foregroundStyle(Color.fillupsTheme)
+                .opacity(contentOpacity)
                 .accessibilityHidden(true)
             }
 
@@ -226,6 +229,7 @@ struct FuelEconomyChartView: View {
                 )
                 .foregroundStyle(Color.secondary)
                 .lineStyle(StrokeStyle(lineWidth: 1))
+                .opacity(contentOpacity)
                 .accessibilityHidden(true)
             }
         }
@@ -233,20 +237,25 @@ struct FuelEconomyChartView: View {
         .chartYScale(domain: yAxisDomain)
         .chartXScale(
             domain: xAxisDomain,
-            range: .plotDimension(startPadding: 3, endPadding: 3)
+            range: .plotDimension(startPadding: 10, endPadding: 10)
         )
         .chartXAxis {
             AxisMarks(
                 values: .stride(
                     by: .month,
-                    count: selectedDateRange == .sixMonths ? 1 : 2
+                    count: displayedDateRange == .sixMonths ? 1 : 2
                 )
-            ) {
+            ) { value in
                 AxisGridLine(
                     stroke: StrokeStyle(lineWidth: 0.5, dash: [5, 5])
                 )
                 AxisTick()
-                AxisValueLabel(format: .dateTime.month(.abbreviated))
+                AxisValueLabel {
+                    if let date = value.as(Date.self) {
+                        Text(date, format: .dateTime.month(.abbreviated))
+                            .opacity(contentOpacity)
+                    }
+                }
             }
         }
         .chartYAxis {
@@ -339,7 +348,8 @@ struct FuelEconomyChartView: View {
     private func resetChartPosition() {
         rangeTransitionTask?.cancel()
         selectedDate = nil
-        chartOpacity = 1
+        contentOpacity = 1
+        displayedDateRange = selectedDateRange
         let newDomainLength = targetDomainLength
         let newScrollPosition = latestDate.addingTimeInterval(
             -newDomainLength
@@ -364,13 +374,14 @@ struct FuelEconomyChartView: View {
             settledDomainLength = newDomainLength
             scrollPosition = newScrollPosition
             settledScrollPosition = newScrollPosition
-            chartOpacity = 1
+            contentOpacity = 1
+            displayedDateRange = selectedDateRange
             return
         }
 
         rangeTransitionTask = Task { @MainActor in
             withAnimation(.easeOut(duration: 0.15)) {
-                chartOpacity = 0
+                contentOpacity = 0
             }
 
             try? await Task.sleep(for: .milliseconds(150))
@@ -378,12 +389,14 @@ struct FuelEconomyChartView: View {
 
             visibleDomainLength = newDomainLength
             scrollPosition = newScrollPosition
+            displayedDateRange = selectedDateRange
 
             withAnimation(.easeIn(duration: 0.2)) {
-                chartOpacity = 1
+                contentOpacity = 1
             }
         }
     }
+
 }
 
 private extension DateRange {

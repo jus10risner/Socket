@@ -62,6 +62,8 @@ struct FillupsDashboardView: View {
                                     .accessibilityHint(
                                         "Selects the range for fuel economy data."
                                     )
+
+                                    
                                 }
                             } else {
                                 Color(.systemGroupedBackground).opacity(0.3)
@@ -74,6 +76,9 @@ struct FillupsDashboardView: View {
                         }
                         .padding(15)
                         .listRowInsets(EdgeInsets())
+                        
+                        allTimeAverageFooter
+                        
                     } footer: {
                         if let latestUnavailableMessage {
                             Button("Where’s my latest fill-up?") {
@@ -137,6 +142,29 @@ struct FillupsDashboardView: View {
     }
 
     // MARK: - Chart Data
+
+    @ViewBuilder
+    private var allTimeAverageFooter: some View {
+        if let chartPoints,
+           let average = ChartPoint.aggregateFuelEconomy(
+               from: chartPoints,
+               unit: settings.fuelEconomyUnit
+           ),
+           let firstFillupDate = fillups.last?.date {
+            LabeledContent {
+                Text("\(average.formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)")
+                    .monospacedDigit()
+            } label: {
+                Text("All-time average")
+                Text("\(firstFillupDate.formatted(.dateTime.month(.abbreviated).year())) – Present")
+                    .font(.caption)
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(
+                "All-time average fuel economy, \(average.formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.fullName), from \(firstFillupDate.formatted(date: .long, time: .omitted)) to present"
+            )
+        }
+    }
 
     private var latestUnavailableMessage: String? {
         guard let latestFillup = fillups.first,
