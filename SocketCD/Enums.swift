@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - VehicleDashboardView
 
 enum AppSection: String, CaseIterable {
-    case maintenance, repairs, fillups
+    case maintenance, repairs, fillups, customInfo
 }
 
 // MARK: - Fill-ups
