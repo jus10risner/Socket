@@ -13,25 +13,14 @@ struct EmptyRepairsView: View {
     var body: some View {
         ContentUnavailableView {
             Label {
-                Text("No Repairs")
+                Text("Record what you fix")
             } icon: {
                 Image(systemName: "wrench.adjustable")
                     .foregroundStyle(Color(.repairsTheme))
             }
         } description: {
-            Text("Tap the plus button to add a repair.")
-        } actions: {
-            Button("Learn More") {
-                showingMoreInfo = true
-            }
-            .tint(Color(.repairsTheme))
-            .popover(isPresented: $showingMoreInfo) {
-                PopoverContent(text: """
-                    Repairs, like replacing brake pads or a failing alternator, are done as-needed rather than on a schedule. 
-                    
-                    Want a reminder to do something again? Add it to Maintenance.
-                    """)
-            }
+            Text("Use Repairs for unexpected fixes, like a flat tire or battery replacement. Add scheduled services to Maintenance.")
+            .font(.body)
         }
         .background(Color(.systemGroupedBackground))
     }

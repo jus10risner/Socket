@@ -13,26 +13,14 @@ struct EmptyMaintenanceView: View {
     var body: some View {
         ContentUnavailableView {
             Label {
-                Text("No Maintenance Services")
+                Text("Track your maintenance")
             } icon: {
                 Image(systemName: "book.and.wrench")
                     .foregroundStyle(Color(.maintenanceTheme))
             }
         } description: {
-            Text("Tap the book button to set up a service.")
-                .accessibilityHidden(true)
-        } actions: {
-            Button("Learn More") {
-                showingMoreInfo = true
-            }
-            .tint(Color(.maintenanceTheme))
-            .popover(isPresented: $showingMoreInfo) {
-                PopoverContent(text: """
-                    Keep your vehicle running smoothly with regular maintenance, like oil changes and air filter replacements.
-                    
-                    After you set up a new maintenance service, Socket can notify you each time it's due.
-                    """)
-            }
+            Text("Set up recurring services like oil changes or tire rotations. Once a service is set up, you can log each time you complete it and get reminders when it’s due.")
+                .font(.body)
         }
         .background(Color(.systemGroupedBackground))
     }

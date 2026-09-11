@@ -13,25 +13,14 @@ struct EmptyFillupsView: View {
     var body: some View {
         ContentUnavailableView {
             Label {
-                Text("No Fill-ups")
+                Text("Record your fill-ups")
             } icon: {
                 Image(systemName: "fuelpump")
                     .foregroundStyle(Color(.fillupsTheme))
             }
         } description: {
-            Text("Tap the plus button to add a fill-up.")
-        } actions: {
-            Button("Learn More") {
-                showingMoreInfo = true
-            }
-            .tint(Color(.fillupsTheme))
-            .popover(isPresented: $showingMoreInfo) {
-                PopoverContent(text: """
-                    Socket tracks your fuel economy over time to help you drive efficiently and spot trends that might signal a problem. 
-                    
-                    Adding fill-ups regularly also keeps your odometer current, so Socket can alert you when maintenance is due.
-                    """)
-            }
+            Text("Track your fuel economy over time to understand your vehicle's efficiency and spot changes that may need attention.")
+                .font(.body)
         }
         .background(Color(.systemGroupedBackground))
     }
