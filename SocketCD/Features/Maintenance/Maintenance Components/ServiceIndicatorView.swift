@@ -16,7 +16,7 @@ struct ServiceIndicatorView: View {
     var body: some View {
         Circle()
             .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
-            .frame(width: 30)
+            .frame(width: 33)
             .overlay {
                 if service.sortedServiceRecordsArray.count > 0 {
                     switch service.serviceStatus {
@@ -26,12 +26,10 @@ struct ServiceIndicatorView: View {
                                 .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                             
                             Image(systemName: "exclamationmark")
-                                .resizable()
-                                .scaledToFit()
+                                .imageScale(.large)
                                 .bold()
                                 .padding(5)
                                 .foregroundStyle(Color.red)
-                                .symbolEffect(.pulse, options: .nonRepeating)
                         }
                     default:
                         Circle()
