@@ -13,7 +13,7 @@ struct EmptyCustomInfoView: View {
             Label {
                 Text("Add what you need")
             } icon: {
-                Image(systemName: "info.circle")
+                Image(systemName: "bookmark")
                     .foregroundStyle(Color.accentColor)
             }
         } description: {
