@@ -51,7 +51,7 @@ struct CustomInfoListView: View {
                 }
             }
         }
-        .navigationTitle("Custom Info")
+//        .navigationTitle("Custom Info")
         .sheet(isPresented: $showingAddCustomInfo) {
             AddEditCustomInfoView(vehicle: vehicle)
         }
@@ -65,11 +65,8 @@ struct CustomInfoListView: View {
                 .tint(Color.accentColor)
             }
             
-            if #available(iOS 26, *) {
-                ToolbarItem(placement: .principal) {
-                    Text(vehicle.name)
-                        .multilineTextAlignment(.center)
-                }
+            ToolbarItem(placement: .principal) {
+                ToolbarTitleView(sectionTitle: "Custom Info", vehicleName: vehicle.name)
             }
         }
     }

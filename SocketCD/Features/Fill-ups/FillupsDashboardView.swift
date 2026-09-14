@@ -112,7 +112,7 @@ struct FillupsDashboardView: View {
                 .scrollIndicators(.hidden)
             }
         }
-        .navigationTitle("Fill-ups")
+//        .navigationTitle("Fill-ups")
         .task(id: chartDataRevision) {
             await updateChartData()
         }
@@ -132,11 +132,8 @@ struct FillupsDashboardView: View {
                 .tint(Color.fillupsTheme)
             }
 
-            if #available(iOS 26, *) {
-                ToolbarItem(placement: .principal) {
-                    Text(vehicle.name)
-                        .multilineTextAlignment(.center)
-                }
+            ToolbarItem(placement: .principal) {
+                ToolbarTitleView(sectionTitle: "Fill-ups", vehicleName: vehicle.name)
             }
         }
     }

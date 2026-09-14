@@ -39,7 +39,7 @@ struct MaintenanceListView: View {
                 }
             }
         }
-        .navigationTitle("Maintenance")
+//        .navigationTitle("Maintenance")
         .listRowSpacing(5)
         .sheet(isPresented: $showingAddService) {
             AddEditServiceView(vehicle: vehicle)
@@ -72,11 +72,8 @@ struct MaintenanceListView: View {
                 .disabled(services.isEmpty)
             }
             
-            if #available(iOS 26, *) {
-                ToolbarItem(placement: .principal) {
-                    Text(vehicle.name)
-                        .multilineTextAlignment(.center)
-                }
+            ToolbarItem(placement: .principal) {
+                ToolbarTitleView(sectionTitle: "Maintenance", vehicleName: vehicle.name)
             }
         }
     }

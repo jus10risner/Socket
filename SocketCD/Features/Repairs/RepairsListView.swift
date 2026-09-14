@@ -49,7 +49,7 @@ struct RepairsListView: View {
                 }
             }
         }
-        .navigationTitle("Repairs")
+//        .navigationTitle("Repairs")
         .sheet(isPresented: $showingAddRepair) {
             AddEditRepairView(vehicle: vehicle)
         }
@@ -63,11 +63,8 @@ struct RepairsListView: View {
                 .tint(Color.repairsTheme)
             }
             
-            if #available(iOS 26, *) {
-                ToolbarItem(placement: .principal) {
-                    Text(vehicle.name)
-                        .multilineTextAlignment(.center)
-                }
+            ToolbarItem(placement: .principal) {
+                ToolbarTitleView(sectionTitle: "Repairs", vehicleName: vehicle.name)
             }
         }
     }
