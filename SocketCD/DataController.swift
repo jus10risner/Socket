@@ -40,13 +40,10 @@ final class DataController: ObservableObject {
         description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
-        if !inMemory, FileManager.default.ubiquityIdentityToken != nil {
+        if !inMemory {
             description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
                 containerIdentifier: "iCloud.risner.justin.SocketCD"
             )
-        } else if !inMemory {
-            description.cloudKitContainerOptions = nil
-            print("⚠️ CloudKit unavailable — using local store only")
         }
 
         // ✅ Load store synchronously so local data is immediately available
