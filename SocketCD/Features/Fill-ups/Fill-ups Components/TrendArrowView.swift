@@ -5,41 +5,46 @@
 //  Created by Justin Risner on 7/1/25.
 //
 
-import CoreData
 import SwiftUI
 
 struct TrendArrowView: View {
-    let settings = AppSettingsStore.shared
-    let fillups: FetchedResults<Fillup>
+    let fuelEconomies: [Double]
     
     @State private var animatingTrendArrow = false
     
-    private var latestFillupFuelEconomy: Double {
-        fillups.first?.fuelEconomy() ?? 0
+    private var validFuelEconomies: [Double] {
+        fuelEconomies.lazy
+            .filter { $0 > 0 }
+            .prefix(2)
+            .map { $0 }
     }
     
-    private var previousFillupFuelEconomy: Double {
-        fillups[1].fuelEconomy()
+    private var latestFillupFuelEconomy: Double? {
+        validFuelEconomies.first
+    }
+    
+    private var previousFillupFuelEconomy: Double? {
+        validFuelEconomies.dropFirst().first
     }
     
     var body: some View {
         Circle()
             .frame(width: 35)
-            .foregroundStyle(Color(.tertiarySystemGroupedBackground))
+            .foregroundStyle(Color(.fillupsTheme).opacity(0.14))
             .overlay {
                 Group {
-                    if latestFillupFuelEconomy != 0 {
+                    if let latestFillupFuelEconomy, let previousFillupFuelEconomy {
                         if latestFillupFuelEconomy > previousFillupFuelEconomy {
-                            indicatorSymbol(systemName: "chevron.up", accessibilityLabel: "Fuel economy is up since your last fill-up")
-                                .offset(y: animatingTrendArrow ? 0 : 30)
+                            indicatorSymbol(systemName: "chevron.up", accessibilityLabel: "Fuel economy is up since your previous valid fill-up")
+                                .offset(y: animatingTrendArrow ? 0 : 35)
                         } else if latestFillupFuelEconomy < previousFillupFuelEconomy {
-                            indicatorSymbol(systemName: "chevron.down", accessibilityLabel: "Fuel economy is down since your last fill-up")
+                            indicatorSymbol(systemName: "chevron.down", accessibilityLabel: "Fuel economy is down since your previous valid fill-up")
                                 .offset(y: animatingTrendArrow ? 0 : -35)
                         } else {
-                            indicatorSymbol(systemName: "equal", accessibilityLabel: "Fuel economy is the same as your last fill-up")
+                            indicatorSymbol(systemName: "equal", accessibilityLabel: "Fuel economy is the same as your previous valid fill-up")
                         }
                     } else {
-                        indicatorSymbol(systemName: "minus", accessibilityLabel: "Fuel economy is not available for this fill-up")
+                        indicatorSymbol(systemName: "equal", accessibilityLabel: "No previous fuel economy value to compare")
                     }
                 }
                 .foregroundStyle(Color(.fillupsTheme))
@@ -52,7 +57,7 @@ struct TrendArrowView: View {
                 Circle()
                     .frame(width: 35)
             }
-            .onChange(of: Array(fillups)) {
+            .onChange(of: fuelEconomies) {
                 animateTrendArrow(shouldReset: true)
             }
     }
