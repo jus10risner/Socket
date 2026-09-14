@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct CardTextView: View {
+    let headline: String
+    let subheadline: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading, spacing: 0) {
+            Text(headline)
+                .font(.headline)
+            
+            Text(subheadline)
+                .font(.footnote.bold())
+                .foregroundStyle(Color.secondary)
+        }
     }
 }
 
 #Preview {
-    CardTextView()
+    CardTextView(headline: "No Fill-ups Logged", subheadline: "Add your first fill-up when you’re ready")
 }
