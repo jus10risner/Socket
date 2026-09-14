@@ -17,7 +17,7 @@ struct EmptyCustomInfoView: View {
                     .foregroundStyle(Color.accentColor)
             }
         } description: {
-            Text("Save anything you may want to reference later, such as a VIN or photo of your insurance paperwork.")
+            Text("Save anything you may want to reference later, such as a license plate number or photo of your insurance paperwork.")
                 .font(.body)
         }
         .background(Color(.systemGroupedBackground))
