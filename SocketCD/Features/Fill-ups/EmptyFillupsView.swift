@@ -13,7 +13,7 @@ struct EmptyFillupsView: View {
     var body: some View {
         ContentUnavailableView {
             Label {
-                Text("Record your fill-ups")
+                Text("Log your fuel")
             } icon: {
                 Image(systemName: "fuelpump")
                     .foregroundStyle(Color(.fillupsTheme))
