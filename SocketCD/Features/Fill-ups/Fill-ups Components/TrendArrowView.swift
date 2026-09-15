@@ -8,65 +8,63 @@
 import SwiftUI
 
 struct TrendArrowView: View {
-    let fuelEconomies: [Double]
+    let latestFuelEconomy: Double?
+    let previousFuelEconomy: Double?
     
     @State private var animatingTrendArrow = false
-    
-    private var validFuelEconomies: [Double] {
-        fuelEconomies.lazy
-            .filter { $0 > 0 }
-            .prefix(2)
-            .map { $0 }
-    }
-    
-    private var latestFillupFuelEconomy: Double? {
-        validFuelEconomies.first
-    }
-    
-    private var previousFillupFuelEconomy: Double? {
-        validFuelEconomies.dropFirst().first
-    }
     
     var body: some View {
         Circle()
             .frame(width: 35)
             .foregroundStyle(Color(.fillupsTheme).opacity(0.14))
             .overlay {
-                Group {
-                    if let latestFillupFuelEconomy, let previousFillupFuelEconomy {
-                        if latestFillupFuelEconomy > previousFillupFuelEconomy {
-                            indicatorSymbol(systemName: "chevron.up", accessibilityLabel: "Fuel economy is up since your previous valid fill-up")
-                                .offset(y: animatingTrendArrow ? 0 : 35)
-                        } else if latestFillupFuelEconomy < previousFillupFuelEconomy {
-                            indicatorSymbol(systemName: "chevron.down", accessibilityLabel: "Fuel economy is down since your previous valid fill-up")
-                                .offset(y: animatingTrendArrow ? 0 : -35)
-                        } else {
-                            indicatorSymbol(systemName: "equal", accessibilityLabel: "Fuel economy is the same as your previous valid fill-up")
-                        }
-                    } else {
-                        indicatorSymbol(systemName: "equal", accessibilityLabel: "No previous fuel economy value to compare")
-                    }
-                }
-                .foregroundStyle(Color(.fillupsTheme))
-                .scaledToFit()
-                .bold()
-                .padding(8)
+                indicatorSymbol
+                    .foregroundStyle(Color(.fillupsTheme))
+                    .scaledToFit()
+                    .bold()
+                    .padding(8)
             }
             .onAppear { animateTrendArrow(shouldReset: false) }
             .mask {
                 Circle()
                     .frame(width: 35)
             }
-            .onChange(of: fuelEconomies) {
+            .onChange(of: latestFuelEconomy) {
                 animateTrendArrow(shouldReset: true)
             }
     }
     
-    // Symbol to display inside the circle, along with an accessibility label to explain what the symbol means
-    private func indicatorSymbol(systemName: String, accessibilityLabel: String) -> some View {
+    private var indicatorSymbol: some View {
         Image(systemName: systemName)
             .resizable()
-            .accessibilityLabel(accessibilityLabel)
+            .offset(y: arrowOffset)
+            .accessibilityHidden(true)
+    }
+
+    private var systemName: String {
+        guard let latestFuelEconomy, let previousFuelEconomy else { return "equal" }
+
+        if latestFuelEconomy > previousFuelEconomy {
+            return "chevron.up"
+        } else if latestFuelEconomy < previousFuelEconomy {
+            return "chevron.down"
+        } else {
+            return "equal"
+        }
+    }
+
+    private var arrowOffset: CGFloat {
+        guard !animatingTrendArrow else { return 0 }
+
+        guard let latestFuelEconomy, let previousFuelEconomy else { return 0 }
+
+        if latestFuelEconomy > previousFuelEconomy {
+            return 35
+        } else if latestFuelEconomy < previousFuelEconomy {
+            return -35
+        } else {
+            return 0
+        }
     }
     
     // Animates trendArrow into view, with option to reset to it's original position off-screen (for animation after adding new fill-up)
