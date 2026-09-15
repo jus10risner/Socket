@@ -8,11 +8,55 @@
 import SwiftUI
 
 struct CustomInfoCard: View {
+    @ObservedObject var vehicle: Vehicle
+    
+    @Binding var activeSheet: ActiveSheet?
+    @Binding var selectedSection: AppSection?
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        DashboardCard(
+            title: "Custom Info",
+            color: .accent,
+            quickActionTitle: "Add Info",
+            accessibilityValue: accessibilityValue,
+            accessibilityHint: String(localized: "Opens custom info list")
+        ) {
+            selectedSection = .customInfo
+        } quickAction: {
+            activeSheet = .addCustomInfo
+        } visual: {
+            CardSymbolImage(symbolName: "bookmark.fill", color: .accent)
+        } detail: {
+            if vehicle.sortedCustomInfoArray.count > 0 {
+                CardTextView(
+                    headline: "\(vehicle.sortedServicesArray.count)",
+                    subheadline: "Items added"
+                )
+            } else {
+                CardTextView(
+                    headline: "No Custom Info Added",
+                    subheadline: "Save the details that matter to you"
+                )
+            }
+        }
+    }
+    
+    private var accessibilityValue: String {
+        let count = vehicle.sortedCustomInfoArray.count
+        
+        if count > 0 {
+            return String(localized: "\(count) items saved")
+        } else {
+            return String(localized: "No items saved")
+        }
     }
 }
 
 #Preview {
-    CustomInfoCard()
+    let context = DataController.preview.container.viewContext
+    let vehicle = Vehicle(context: context)
+    vehicle.name = "My Car"
+    vehicle.odometer = 12345
+    
+    return CustomInfoCard(vehicle: vehicle, activeSheet: .constant(nil), selectedSection: .constant(nil))
 }

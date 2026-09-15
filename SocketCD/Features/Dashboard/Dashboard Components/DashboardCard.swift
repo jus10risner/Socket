@@ -2,73 +2,103 @@
 //  DashboardCard.swift
 //  SocketCD
 //
-//  Created by Justin Risner on 8/22/25.
+//  Created by Justin Risner on 9/11/26.
 //
 
 import SwiftUI
 
-struct DashboardCard<Content: View>: View {
+struct DashboardCard<Visual: View, Detail: View>: View {
     let title: String
-    let headerSymbol: String
-    let accentColor: Color
-    let buttonLabel: String
-    let buttonSymbol: String
-    let disableButton: Bool
+    let color: Color
+    let quickActionTitle: String
+    let accessibilityValue: String
+    let accessibilityHint: String
+    var disableButton: Bool? = nil
+    let action: () -> Void
     let quickAction: () -> Void
-    let content: Content?
+    @ViewBuilder let visual: Visual
+    @ViewBuilder let detail: Detail
     
-    init(title: String, systemImage: String, accentColor: Color, buttonLabel: String, buttonSymbol: String, disableButton: Bool = false, quickAction: @escaping () -> Void, @ViewBuilder content: () -> Content? = { nil }) {
-        self.title = title
-        self.headerSymbol = systemImage
-        self.accentColor = accentColor
-        self.buttonLabel = buttonLabel
-        self.buttonSymbol = buttonSymbol
-        self.disableButton = disableButton
-        self.quickAction = quickAction
-        self.content = content()
-    }
+    @State private var feedbackTrigger = false
 
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Label(title, systemImage: headerSymbol)
-                    .foregroundStyle(accentColor)
-                    .font(.headline)
-                
-                Spacer()
-                
-                if buttonSymbol == "plus" {
-                    Image(systemName: "chevron.right")
-                        .font(.footnote)
-                        .foregroundStyle(Color.secondary)
+        ZStack(alignment: .bottomTrailing) {
+            Button(action: action) {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(title)
+                            .foregroundStyle(.secondary)
+                            .font(.headline)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .font(.footnote)
+                            .foregroundStyle(.tertiary)
+                    }
+                    
+                    Spacer()
+                    
+                    HStack(alignment: .bottom) {
+                        statusRow
+                        
+                        // Reserves space beneath the overlaid quick action button
+                        Spacer()
+                            .frame(width: 44)
+                    }
                 }
+                .frame(minHeight: 80)
+                .padding()
+                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
+            .accessibilityLabel(title)
+            .accessibilityValue(accessibilityValue)
+            .accessibilityHint(accessibilityHint)
             
-            Spacer()
-            
-            HStack(alignment: .bottom) {
-                if let content {
-                    content
-                }
-                
-                Spacer()
-                
-                Button(buttonLabel, systemImage: buttonSymbol, action: quickAction)
-                    .labelStyle(.iconOnly)
-                    .buttonStyle(.borderedProminent)
-                    .buttonBorderShape(.circle)
-                    .tint(accentColor)
-                    .disabled(disableButton)
+            Button {
+                feedbackTrigger.toggle()
+                quickAction()
+            } label: {
+                Label(quickActionTitle, systemImage: "plus")
             }
+            .labelStyle(.iconOnly)
+            .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.circle)
+            .tint(color)
+            .disabled(disableButton ?? false)
+            .sensoryFeedback(.impact(weight: .light), trigger: feedbackTrigger)
+            .padding()
         }
-        .frame(minHeight: 80)
-        .padding()
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
-        .contentShape(Rectangle())
-        .accessibilityElement()
+    }
+    
+    private var statusRow: some View {
+        HStack {
+            visual
+
+            detail
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 }
 
 #Preview {
-    DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: .blue, buttonLabel: "Add", buttonSymbol: "plus", quickAction: {}, content: {})
+    DashboardCard(title: "Maintenance", color: .green, quickActionTitle: "Log Service", accessibilityValue: "Due soon", accessibilityHint: "Tap to log", action: {}, quickAction: {}) {
+        Image(systemName: "book.and.wrench")
+            .foregroundStyle(.green)
+            .frame(width: 35, height: 35)
+            .background(.green.opacity(0.14), in: Circle())
+            .accessibilityHidden(true)
+    } detail: {
+        VStack(alignment: .leading) {
+            Text("Oil Change")
+                .font(.title3.bold())
+
+            Text("Due in 500 mi or 14 days.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+    .frame(height: 80)
 }

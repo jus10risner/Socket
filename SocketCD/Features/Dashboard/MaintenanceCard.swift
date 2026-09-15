@@ -28,48 +28,42 @@ struct MaintenanceCard: View {
     }
     
     var body: some View {
-        DashboardCard(title: "Maintenance", systemImage: "book.and.wrench.fill", accentColor: Color(.maintenanceTheme), buttonLabel: "Add Service Log", buttonSymbol: "plus", disableButton: vehicle.sortedServicesArray.count < 1) {
-            activeSheet = .logService
-        } content: {
-            if let service = nextDueService {
-                HStack {
+        DashboardCard(
+            title: "Maintenance",
+            color: Color(.maintenanceTheme),
+            quickActionTitle: "Add Service Log",
+            accessibilityValue: accessibilityValue,
+            accessibilityHint: String(localized: "Opens list of maintenance services"),
+            disableButton: vehicle.sortedServicesArray.count < 1) {
+                selectedSection = .maintenance
+            } quickAction: {
+                activeSheet = .logService
+            } visual: {
+                if let service = nextDueService {
                     ServiceIndicatorView(vehicle: vehicle, service: service)
-                    
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(service.name)
-                            .font(.headline)
-
-                        Text(service.nextDueDescription(currentOdometer: vehicle.odometer))
-                            .font(.footnote.bold())
-                            .foregroundStyle(Color.secondary)
-                    }
+                } else {
+                    CardSymbolImage(symbolName: "book.and.wrench.fill", color: Color(.maintenanceTheme))
                 }
-            } else {
-                Text("Tap to get started")
-                    .font(.headline)
-                    .foregroundStyle(Color.secondary)
+            } detail: {
+                if let service = nextDueService {
+                    CardTextView(
+                        headline: service.name,
+                        subheadline: service.nextDueDescription(currentOdometer: vehicle.odometer)
+                    )
+                } else {
+                    CardTextView(
+                        headline: "Tap to get started",
+                        subheadline: "Let’s set up your first service"
+                    )
+                }
             }
-        }
-        .accessibilityLabel(accessibilityLabel)
-        .onTapGesture {
-            selectedSection = .maintenance
-        }
-        .accessibilityAction(named: "Add Service Log", {
-            activeSheet = .logService
-        })
-        .accessibilityAction {
-            selectedSection = .maintenance
-        }
     }
     
-    // Returns the correct label for VoiceOver to read
-    private var accessibilityLabel: String {
-        let headline = "Maintenance: "
-        
+    private var accessibilityValue: String {
         if let service = nextDueService {
-            return headline + service.name + service.nextDueDescription(currentOdometer: vehicle.odometer)
+            return String(localized: "\(service.name) \(service.nextDueDescription(currentOdometer: vehicle.odometer))")
         } else {
-            return headline + "Tap to get started"
+            return String(localized: "No services set up")
         }
     }
     

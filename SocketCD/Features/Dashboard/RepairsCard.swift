@@ -14,44 +14,38 @@ struct RepairsCard: View {
     @Binding var selectedSection: AppSection?
     
     var body: some View {
-        DashboardCard(title: "Repairs", systemImage: "wrench.adjustable.fill", accentColor: Color(.repairsTheme), buttonLabel: "Add Repair", buttonSymbol: "plus") {
+        DashboardCard(
+            title: "Repairs",
+            color: Color(.repairsTheme),
+            quickActionTitle: "Add Repair",
+            accessibilityValue: accessibilityValue,
+            accessibilityHint: String(localized: "Opens the repair history")
+        ) {
+            selectedSection = .repairs
+        } quickAction: {
             activeSheet = .addRepair
-        } content: {
+        } visual: {
+            CardSymbolImage(symbolName: "wrench.adjustable.fill", color: Color(.repairsTheme))
+        } detail: {
             if let repair = vehicle.sortedRepairsArray.first {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Latest")
-                        .font(.footnote.bold())
-                        .foregroundStyle(Color.secondary)
-                    
-                    Text(repair.date.formatted(date: .numeric, time: .omitted))
-                        .font(.headline)
-                }
+                CardTextView(
+                    headline: "Latest",
+                    subheadline: repair.date.formatted(date: .numeric, time: .omitted)
+                )
             } else {
-                Text("No entries")
-                    .font(.headline)
-                    .foregroundStyle(Color.secondary)
+                CardTextView(
+                    headline: "No Repairs Logged",
+                    subheadline: "Your vehicle is on its best behavior"
+                )
             }
-        }
-        .accessibilityLabel(accessibilityLabel)
-        .onTapGesture {
-            selectedSection = .repairs
-        }
-        .accessibilityAction(named: "Add Repair", {
-            activeSheet = .addRepair
-        })
-        .accessibilityAction {
-            selectedSection = .repairs
         }
     }
     
-    // Returns the correct label for VoiceOver to read
-    private var accessibilityLabel: String {
-        let headline = "Repairs: "
-        
+    private var accessibilityValue: String {
         if let repair = vehicle.sortedRepairsArray.first {
-            return headline + "Latest: \(repair.date.formatted(date: .numeric, time: .omitted))"
+            return String(localized: "Latest: \(repair.date.formatted(date: .numeric, time: .omitted))")
         } else {
-            return headline + "No entries"
+            return "No repairs logged"
         }
     }
 }

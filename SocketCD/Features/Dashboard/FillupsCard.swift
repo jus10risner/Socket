@@ -29,84 +29,91 @@ struct FillupsCard: View {
     }
     
     var body: some View {
-        DashboardCard(title: "Fill-ups", systemImage: "fuelpump.fill", accentColor: Color(.fillupsTheme), buttonLabel: "Add Fill-up", buttonSymbol: "plus") {
-            activeSheet = .addFillup
-        } content: {
-            HStack {
-                if fillups.count > 0 {
-                    TrendArrowView(fillups: fillups)
-                }
-                
-                if let fillup = vehicle.sortedFillupsArray.first {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(fillup.date.formatted(date: .numeric, time: .omitted))
-                            .font(.footnote.bold())
-                            .foregroundStyle(Color.secondary)
-                        
-                        Group {
-                            if fillup.fuelEconomy() > 0 {
-                                Text("\(fillup.fuelEconomy(), format: .number.precision(.fractionLength(1))) \(settings.fuelEconomyUnit.rawValue)")
-                            } else {
-                                switch fillup.fillType {
-                                case .fullTank:
-                                    Text(fillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "Full Tank")
-                                case .partialFill:
-                                    Text("Partial Fill")
-                                case .missedFill:
-                                    Text("Full Tank (Reset)")
-                                }
-                            }
-                        }
-                        .font(.headline)
-                    }
-                } else {
-                    Text("Nothing logged yet")
-                        .font(.headline)
-                        .foregroundStyle(Color.secondary)
-                }
-            }
-        }
-        .accessibilityLabel(accessibilityLabel)
-        .onTapGesture {
+        DashboardCard(
+            title: "Fill-ups",
+            color: Color(.fillupsTheme),
+            quickActionTitle: "Add Fill-up",
+            accessibilityValue: accessibilityValue,
+            accessibilityHint: String(localized: "Opens fill-up history")
+        ) {
             selectedSection = .fillups
-        }
-        .accessibilityAction(named: "Add Fill-up", {
+        } quickAction: {
             activeSheet = .addFillup
-        })
-        .accessibilityAction {
-            selectedSection = .fillups
-        }
-    }
-    
-    // Returns the correct label for VoiceOver to read
-    private var accessibilityLabel: String {
-        let headline = "Fill-ups: "
-        
-        if let fillup = vehicle.sortedFillupsArray.first {
-            return headline + "Latest fill-up: \(fillup.date.formatted(date: .numeric, time: .omitted)) \(fuelEconomyValue)"
-        } else {
-            return headline + "Nothing logged yet"
-        }
-    }
-    
-    // Returns the fuel economy value to read, if one exists (for VoiceOver)
-    private var fuelEconomyValue: String {
-        if let fillup = vehicle.sortedFillupsArray.first {
-            if fillup.fuelEconomy() > 0 {
-                return "\(fillup.fuelEconomy().formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.fullName)"
+        } visual: {
+            if latestValidFillup != nil {
+                TrendArrowView(
+                    latestFuelEconomy: latestFuelEconomy,
+                    previousFuelEconomy: previousFuelEconomy
+                )
             } else {
-                switch fillup.fillType {
-                case .fullTank:
-                    return fillup == fillups.last(where: { $0.fillType == .fullTank }) ? "First Full Tank" : "Full Tank"
-                case .partialFill:
-                    return "Partial Fill"
-                case .missedFill:
-                    return "Full Tank (Reset)"
-                }
+                CardSymbolImage(symbolName: "fuelpump.fill", color: Color(.fillupsTheme))
             }
-        } else {
-            return ""
+        } detail: {
+            if let fillup = latestValidFillup {
+                CardTextView(
+                    headline: "\(Double(fillup.fuelEconomy()).formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)",
+                    subheadline: "Last calculated \(formattedFuelEconomyDate(fillup.date))"
+                )
+            } else {
+                CardTextView(
+                    headline: "No Fill-ups Logged",
+                    subheadline: "Add your first fill-up when you’re ready"
+                )
+            }
         }
+    }
+    
+    // Returns month/day if the latest fuel economy calculation was less than one year ago; otherwise returns month/day/year
+    private func formattedFuelEconomyDate(_ date: Date) -> String {
+        if Calendar.current.isDate(date, equalTo: .now, toGranularity: .year) {
+            date.formatted(.dateTime.month(.abbreviated).day())
+        } else {
+            date.formatted(.dateTime.month(.abbreviated).day().year())
+        }
+    }
+
+    private var latestValidFillup: Fillup? {
+        fillups.first { $0.fuelEconomy() > 0 }
+    }
+
+    private var validFuelEconomies: [Double] {
+        fillups.lazy
+            .map { $0.fuelEconomy() }
+            .filter { $0 > 0 }
+            .prefix(2)
+            .map { $0 }
+    }
+
+    private var latestFuelEconomy: Double? {
+        validFuelEconomies.first
+    }
+
+    private var previousFuelEconomy: Double? {
+        validFuelEconomies.dropFirst().first
+    }
+
+    private var fuelEconomyTrendDescription: String {
+        guard let latestFuelEconomy, let previousFuelEconomy else {
+            return String(localized: "No fuel economy trend available")
+        }
+
+        if latestFuelEconomy > previousFuelEconomy {
+            return String(localized: "Fuel economy is trending up")
+        } else if latestFuelEconomy < previousFuelEconomy {
+            return String(localized: "Fuel economy is trending down")
+        } else {
+            return String(localized: "Fuel economy is unchanged")
+        }
+    }
+
+    private var accessibilityValue: String {
+        guard let fillup = latestValidFillup else {
+            return String(localized: "No fill-ups logged")
+        }
+
+        let economy = fillup.fuelEconomy().formatted(.number.precision(.fractionLength(1)))
+        let date = formattedFuelEconomyDate(fillup.date)
+        return String(localized: "\(economy) \(settings.fuelEconomyUnit.fullName). \(fuelEconomyTrendDescription). Last calculated \(date)")
     }
 }
 
