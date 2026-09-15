@@ -37,43 +37,43 @@ struct VehicleDashboardView: View {
             ScrollView {
                 TipView(DashboardTip())
                     .tipBackground(Color(.tertiarySystemBackground))
-                
-                LazyVGrid(columns: columns, spacing: 5) {
-                    // Uses the appropriate view style (primarily for large dynamic type sizes on iPhone)
-                    if horizontalSizeClass == .compact {
-                        ViewThatFits {
-                            HStack(spacing: 5) {
-                                odometerDashboardCard
-                                
-                                RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
-                            }
-                            
-                            LazyVGrid(columns: columns, spacing: 5) {
-                                odometerDashboardCard
-                                
-                                RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
-                            }
-                        }
-                    } else {
-                        odometerDashboardCard
+                HStack {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(vehicle.name)
+                            .font(.largeTitle.bold())
+                            .lineLimit(2)
                         
-                        RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                        HStack(spacing: 10) {
+                            Text("\(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                                .font(.title3)
+                                .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                            
+                            Button("Update Odometer", systemImage: "pencil") {
+                                showingUpdateOdometerAlert = true
+                            }
+                            .labelStyle(.iconOnly)
+                            .buttonStyle(.bordered)
+                            .buttonBorderShape(.circle)
+                        }
                     }
                     
+                    Spacer()
+                }
+                
+                LazyVGrid(columns: columns, spacing: 5) {
                     MaintenanceCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
                     
                     FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
+                    
+                    RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                    
+                    CustomInfoCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
                 }
-                
-                CustomInfoSection(vehicle: vehicle, columns: columns, activeSheet: $activeSheet)
-                    .padding(.top, 30)
-                    .padding(.bottom, 5)
             }
             .scrollIndicators(.hidden)
             .padding(.horizontal)
             .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))
-            .navigationTitle(vehicle.name)
             .navigationDestination(item: $selectedSection) { section in
                 destinationView(for: section, vehicle: vehicle)
             }
@@ -114,26 +114,6 @@ struct VehicleDashboardView: View {
                 vehicleToolbar
             }
         }
-    }
-    
-    private var odometerDashboardCard: some View {
-        DashboardCard(title: "Odometer", systemImage: "car.fill", accentColor: Color.accent, buttonLabel: "Update Odometer", buttonSymbol: "pencil") {
-            showingUpdateOdometerAlert = true
-        } content: {
-            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text("\(vehicle.odometer.formatted())")
-                    .font(.headline)
-                
-                Text(settings.distanceUnit.abbreviated)
-                    .font(.footnote.bold())
-                    .foregroundStyle(Color.secondary)
-            }
-        }
-        .accessibilityAction(.default) {
-            showingUpdateOdometerAlert = true
-        }
-        .accessibilityHint("Update Odometer")
-        .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
     }
     
     @ToolbarContentBuilder
@@ -209,6 +189,8 @@ struct VehicleDashboardView: View {
             RepairsListView(vehicle: vehicle)
         case .fillups:
             FillupsDashboardView(vehicle: vehicle)
+        case .customInfo:
+            CustomInfoListView(vehicle: vehicle)
         }
     }
 }

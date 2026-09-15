@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9E00C4C62EBE9B8600B3E88F /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E00C4C52EBE9B8600B3E88F /* TermsOfUseView.swift */; };
 		9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */; };
+		9E07C1AC3053492500160E0A /* CustomInfoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07C1AB3053492500160E0A /* CustomInfoCard.swift */; };
 		9E0B19B52EAA7FF800E7A820 /* InformationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */; };
 		9E0B19B72EAA87C500E7A820 /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */; };
 		9E1528852EB917DB005170AB /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1528842EB917DB005170AB /* FormHeaderView.swift */; };
@@ -20,7 +21,6 @@
 		9E1AD9042E8DAB6000E60184 /* MaintenanceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */; };
 		9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */; };
 		9E1AD9082E8DAF7300E60184 /* RepairsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */; };
-		9E1AD90A2E8DB00900E60184 /* CustomInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9092E8DB00900E60184 /* CustomInfoSection.swift */; };
 		9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E235B912DFB58CA008F7327 /* CameraViewModel.swift */; };
 		9E328E102E33B99600FF25B5 /* PDFExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */; };
 		9E328E122E3CF7A600FF25B5 /* LabeledInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */; };
@@ -65,9 +65,14 @@
 		9EB025362E4E5CB7008B4AC7 /* Primary.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB025352E4E5CB7008B4AC7 /* Primary.icon */; };
 		9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */; };
 		9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */; };
+		9ED4DB763058597800C2A373 /* ToolbarTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED4DB753058597800C2A373 /* ToolbarTitleView.swift */; };
+		9ED4DB78305882F400C2A373 /* CardTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED4DB77305882F400C2A373 /* CardTextView.swift */; };
 		9EDCA2442ED0E19D005B1C5A /* PopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */; };
 		9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */; };
 		9EE5620D2BD9706600F5BE7E /* VehicleListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */; };
+		9EE97E81305446EE00F2AA5F /* CustomInfoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE97E80305446EE00F2AA5F /* CustomInfoListView.swift */; };
+		9EE97E833054486D00F2AA5F /* EmptyCustomInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE97E823054486D00F2AA5F /* EmptyCustomInfoView.swift */; };
+		9EE97E853054617400F2AA5F /* DashboardCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE97E843054617400F2AA5F /* DashboardCard.swift */; };
 		9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */; };
 		9EEAC4812BA0F9C20053C65E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4802BA0F9C20053C65E /* ContentView.swift */; };
 		9EEAC4862BA0F9C30053C65E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EEAC4852BA0F9C30053C65E /* Preview Assets.xcassets */; };
@@ -117,7 +122,7 @@
 		9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */; };
 		9EEAC52A2BA4CBB40053C65E /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */; };
 		9EEAC52C2BA4CD150053C65E /* AddEditRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC52B2BA4CD150053C65E /* AddEditRecordView.swift */; };
-		9EF60B602E58C3320039D57A /* DashboardCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF60B5F2E58C3320039D57A /* DashboardCard.swift */; };
+		9EF8CAEB3058435000D48986 /* CardSymbolImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF8CAEA3058435000D48986 /* CardSymbolImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +138,7 @@
 /* Begin PBXFileReference section */
 		9E00C4C52EBE9B8600B3E88F /* TermsOfUseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseView.swift; sourceTree = "<group>"; };
 		9E02BAF52E44FE1B00D45FA3 /* VehicleExportRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExportRecord.swift; sourceTree = "<group>"; };
+		9E07C1AB3053492500160E0A /* CustomInfoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInfoCard.swift; sourceTree = "<group>"; };
 		9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationItemView.swift; sourceTree = "<group>"; };
 		9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
 		9E1528842EB917DB005170AB /* FormHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHeaderView.swift; sourceTree = "<group>"; };
@@ -144,7 +150,6 @@
 		9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceCard.swift; sourceTree = "<group>"; };
 		9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupsCard.swift; sourceTree = "<group>"; };
 		9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairsCard.swift; sourceTree = "<group>"; };
-		9E1AD9092E8DB00900E60184 /* CustomInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInfoSection.swift; sourceTree = "<group>"; };
 		9E235B912DFB58CA008F7327 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		9E2F33372E4A42DA00EAB7B9 /* SocketDataModel_V2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SocketDataModel_V2.xcdatamodel; sourceTree = "<group>"; };
 		9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExporter.swift; sourceTree = "<group>"; };
@@ -194,9 +199,14 @@
 		9EB025352E4E5CB7008B4AC7 /* Primary.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Primary.icon; sourceTree = "<group>"; };
 		9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Monochrome.icon; sourceTree = "<group>"; };
 		9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartTests.swift; sourceTree = "<group>"; };
+		9ED4DB753058597800C2A373 /* ToolbarTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarTitleView.swift; sourceTree = "<group>"; };
+		9ED4DB77305882F400C2A373 /* CardTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextView.swift; sourceTree = "<group>"; };
 		9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContent.swift; sourceTree = "<group>"; };
 		9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
 		9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListRowView.swift; sourceTree = "<group>"; };
+		9EE97E80305446EE00F2AA5F /* CustomInfoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInfoListView.swift; sourceTree = "<group>"; };
+		9EE97E823054486D00F2AA5F /* EmptyCustomInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCustomInfoView.swift; sourceTree = "<group>"; };
+		9EE97E843054617400F2AA5F /* DashboardCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCard.swift; sourceTree = "<group>"; };
 		9EEAC47B2BA0F9C20053C65E /* SocketCD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocketCD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketCDApp.swift; sourceTree = "<group>"; };
 		9EEAC4802BA0F9C20053C65E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -247,7 +257,7 @@
 		9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditServiceView.swift; sourceTree = "<group>"; };
 		9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailView.swift; sourceTree = "<group>"; };
 		9EEAC52B2BA4CD150053C65E /* AddEditRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditRecordView.swift; sourceTree = "<group>"; };
-		9EF60B5F2E58C3320039D57A /* DashboardCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCard.swift; sourceTree = "<group>"; };
+		9EF8CAEA3058435000D48986 /* CardSymbolImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSymbolImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,6 +321,7 @@
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
 				9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */,
+				9ED4DB753058597800C2A373 /* ToolbarTitleView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -375,7 +386,9 @@
 		9E73B2EF2F72F7E500ED04F1 /* Dashboard Components */ = {
 			isa = PBXGroup;
 			children = (
-				9EF60B5F2E58C3320039D57A /* DashboardCard.swift */,
+				9EE97E843054617400F2AA5F /* DashboardCard.swift */,
+				9EF8CAEA3058435000D48986 /* CardSymbolImage.swift */,
+				9ED4DB77305882F400C2A373 /* CardTextView.swift */,
 			);
 			path = "Dashboard Components";
 			sourceTree = "<group>";
@@ -563,8 +576,10 @@
 		9EEAC4E22BA364090053C65E /* Custom Info */ = {
 			isa = PBXGroup;
 			children = (
+				9EE97E80305446EE00F2AA5F /* CustomInfoListView.swift */,
 				9EEAC4EF2BA376380053C65E /* AddEditCustomInfoView.swift */,
 				9EEAC4ED2BA374D70053C65E /* CustomInfoDetailView.swift */,
+				9EE97E823054486D00F2AA5F /* EmptyCustomInfoView.swift */,
 				9E189E2F2BD00F9500095EC2 /* Custom Info Components */,
 			);
 			path = "Custom Info";
@@ -628,7 +643,7 @@
 			children = (
 				9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */,
 				9E187C162EA158CC00FBDAC9 /* TimelineView.swift */,
-				9E1AD9092E8DB00900E60184 /* CustomInfoSection.swift */,
+				9E07C1AB3053492500160E0A /* CustomInfoCard.swift */,
 				9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */,
 				9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */,
 				9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */,
@@ -772,6 +787,7 @@
 				9E9C05AA2E218B2A00E9C0E2 /* ServiceIndicatorView.swift in Sources */,
 				9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */,
 				9EEAC4AE2BA1F0380053C65E /* SwiftUIExtensions.swift in Sources */,
+				9EE97E833054486D00F2AA5F /* EmptyCustomInfoView.swift in Sources */,
 				9EEAC4FB2BA37FDB0053C65E /* RepairDetailView.swift in Sources */,
 				9EEAC4812BA0F9C20053C65E /* ContentView.swift in Sources */,
 				9E18D94E2EBE3A910097CBAC /* AdaptiveToolbarButton.swift in Sources */,
@@ -791,6 +807,7 @@
 				9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */,
 				9E7EF3FD2EC38E6000E1E5D1 /* NotificationObserver.swift in Sources */,
 				9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */,
+				9EE97E81305446EE00F2AA5F /* CustomInfoListView.swift in Sources */,
 				9E365336303C862500BD9ADD /* AttachedDocument+helper.swift in Sources */,
 				9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */,
 				9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */,
@@ -799,6 +816,8 @@
 				9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */,
 				9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */,
 				9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */,
+				9ED4DB763058597800C2A373 /* ToolbarTitleView.swift in Sources */,
+				9EF8CAEB3058435000D48986 /* CardSymbolImage.swift in Sources */,
 				9E9C05AC2E26984B00E9C0E2 /* CenteredLabelStyle.swift in Sources */,
 				9E36533D303C86C000BD9ADD /* DocumentListView.swift in Sources */,
 				9EEAC4CD2BA2571E0053C65E /* Vehicle+helper.swift in Sources */,
@@ -814,7 +833,6 @@
 				9EEAC4FD2BA380BA0053C65E /* AddEditRepairView.swift in Sources */,
 				9EEAC51C2BA4A1E70053C65E /* EmptyMaintenanceView.swift in Sources */,
 				9EEAC5032BA389140053C65E /* ServiceRecord+helper.swift in Sources */,
-				9EF60B602E58C3320039D57A /* DashboardCard.swift in Sources */,
 				9EEAC4B52BA1F0A50053C65E /* CameraManager.swift in Sources */,
 				9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */,
 				9E5270E02E8AF82300EFDCB8 /* FuelCostSettingsView.swift in Sources */,
@@ -829,6 +847,7 @@
 				9E1AD9082E8DAF7300E60184 /* RepairsCard.swift in Sources */,
 				9E52CCB62E6F569E00B3CB45 /* DraftServiceLog.swift in Sources */,
 				9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */,
+				9ED4DB78305882F400C2A373 /* CardTextView.swift in Sources */,
 				9E5270E22E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift in Sources */,
 				9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */,
 				9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */,
@@ -839,7 +858,6 @@
 				9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */,
 				9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */,
 				9EEAC4B32BA1F08F0053C65E /* CameraCapture.swift in Sources */,
-				9E1AD90A2E8DB00900E60184 /* CustomInfoSection.swift in Sources */,
 				9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */,
 				9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */,
 				9E5067CB3047395400744533 /* ChartPoint.swift in Sources */,
@@ -852,12 +870,14 @@
 				9EEAC4F02BA376380053C65E /* AddEditCustomInfoView.swift in Sources */,
 				9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */,
 				9EEAC4E62BA364AA0053C65E /* CustomInfo+helper.swift in Sources */,
+				9EE97E853054617400F2AA5F /* DashboardCard.swift in Sources */,
 				9EEAC5192BA48D720053C65E /* AddEditFillupView.swift in Sources */,
 				9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */,
 				9E5067CD3047429200744533 /* FillupHistoryRow.swift in Sources */,
 				9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */,
 				9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */,
 				9E87C5B62E4235CF001BE562 /* FormFooterView.swift in Sources */,
+				9E07C1AC3053492500160E0A /* CustomInfoCard.swift in Sources */,
 				9E35034C2E1FE3300032F845 /* VehicleDashboardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
