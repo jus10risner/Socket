@@ -34,7 +34,7 @@ struct FuelEconomyChartTests {
         #expect(points[0].value == 10)
     }
 
-    @Test func missedFillResetsTheFullTankBaseline() {
+    @Test func missedFillStartsANewBaselineForTheNextFullTank() {
         let values = makeFillups([
             (100, 10, .fullTank),
             (150, 5, .missedFill),
@@ -44,8 +44,9 @@ struct FuelEconomyChartTests {
 
         let points = ChartPoint.make(from: values, unit: .mpg)
 
-        #expect(points.count == 1)
-        #expect(points[0].value == 10)
+        #expect(points.count == 2)
+        #expect(points[0].value == 5)
+        #expect(points[1].value == 10)
     }
 
     @Test func litersPerHundredKilometersUsesInverseFormula() {

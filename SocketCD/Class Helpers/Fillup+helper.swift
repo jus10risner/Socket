@@ -74,19 +74,14 @@ extension Fillup {
         return odometer - previousOdometer
     }
     
-    // Finds the nearest previous full tank fill-up (ignoring partial fills, but stopping at missed fills).
-    func previousFullTank(in fillups: [Fillup]) -> Fillup? {
+    // Finds the nearest previous fill-up that establishes a fuel-economy baseline.
+    func previousFuelEconomyBaseline(in fillups: [Fillup]) -> Fillup? {
         guard let currentIndex = fillups.firstIndex(of: self) else { return nil }
 
         for i in (currentIndex + 1)..<fillups.count {
             let candidate = fillups[i]
 
-            if candidate.fillType == .missedFill {
-                // Reset point — fuel economy cannot be calculated across a missed fill
-                break
-            }
-
-            if candidate.fillType == .fullTank {
+            if candidate.fillType == .fullTank || candidate.fillType == .missedFill {
                 return candidate
             }
         }
@@ -102,15 +97,15 @@ extension Fillup {
             return 0
         }
 
-        // Find baseline: nearest previous full tank
-        guard let previousFullTank = previousFullTank(in: fillups) else { return 0 }
+        // A missed fill cannot produce its own result, but its odometer starts a new baseline.
+        guard let previousBaseline = previousFuelEconomyBaseline(in: fillups) else { return 0 }
         
         var totalVolume = self.volume
         var totalDistance = self.tripDistance
         
         // Add any partials between this full tank and the previous full tank
         if let currentIndex = fillups.firstIndex(of: self),
-           let prevIndex = fillups.firstIndex(of: previousFullTank) {
+           let prevIndex = fillups.firstIndex(of: previousBaseline) {
             for i in (currentIndex + 1)..<prevIndex {
                 let prev = fillups[i]
                 if prev.fillType == .partialFill {

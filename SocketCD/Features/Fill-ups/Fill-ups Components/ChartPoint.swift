@@ -27,7 +27,7 @@ struct ChartPoint: Identifiable, Equatable, @unchecked Sendable {
         for fillup in sortedFillups {
             switch fillup.fillType {
             case .missedFill:
-                baselineOdometer = nil
+                baselineOdometer = fillup.odometer
                 partialVolume = 0
 
             case .partialFill:
