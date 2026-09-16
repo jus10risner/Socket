@@ -21,6 +21,7 @@ struct AddEditCustomInfoView: View {
     private let vehicle: Vehicle?
     private let customInfo: CustomInfo?
     private let onDelete: (() -> Void)?
+    let settings = AppSettingsStore.shared
     
     // MARK: - Init
     init(vehicle: Vehicle? = nil, customInfo: CustomInfo? = nil, onDelete: (() -> Void)? = nil) {
@@ -35,6 +36,8 @@ struct AddEditCustomInfoView: View {
     var body: some View {
         NavigationStack {
             Form {
+                FormHeaderView(symbolName: "bookmark.fill", primaryText: customInfo != nil ? "Edit Custom Info" : "New Custom Info", accentColor: settings.selectedAccent())
+                
                 Section {
                     LabeledInput(label: "Label") {
                         TextField("License Plate", text: $draftCustomInfo.label)
@@ -55,8 +58,6 @@ struct AddEditCustomInfoView: View {
                 )
             }
             .scrollDismissesKeyboard(.interactively)
-            .navigationTitle(customInfo != nil ? "Edit Info" : "New Info")
-            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if customInfo == nil {
                     // Show keyboard automatically, when adding new custom info
