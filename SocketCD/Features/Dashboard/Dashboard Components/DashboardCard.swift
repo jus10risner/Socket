@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct DashboardCard<Visual: View, Detail: View>: View {
+    private let contentInset: CGFloat = 16
+    private let quickActionTrailingInset: CGFloat = 8
+
     let title: String
     let color: Color
     let quickActionTitle: String
@@ -48,7 +51,7 @@ struct DashboardCard<Visual: View, Detail: View>: View {
                     }
                 }
                 .frame(minHeight: 80)
-                .padding()
+                .padding(contentInset)
                 .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
                 .contentShape(Rectangle())
             }
@@ -69,7 +72,8 @@ struct DashboardCard<Visual: View, Detail: View>: View {
             .tint(color)
             .disabled(disableButton ?? false)
             .sensoryFeedback(.impact(weight: .light), trigger: feedbackTrigger)
-            .padding()
+            .padding(.trailing, quickActionTrailingInset)
+            .padding(.bottom, contentInset)
         }
     }
     
