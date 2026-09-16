@@ -49,7 +49,7 @@ struct RepairsListView: View {
                 }
             }
         }
-//        .navigationTitle("Repairs")
+        .vehicleNavigationTitle("Repairs", vehicleName: vehicle.name)
         .sheet(isPresented: $showingAddRepair) {
             AddEditRepairView(vehicle: vehicle)
         }
@@ -61,10 +61,6 @@ struct RepairsListView: View {
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
                 .tint(Color.repairsTheme)
-            }
-            
-            ToolbarItem(placement: .principal) {
-                ToolbarTitleView(sectionTitle: "Repairs", vehicleName: vehicle.name)
             }
         }
     }
@@ -107,4 +103,3 @@ struct RepairsListView: View {
     
     return RepairsListView(vehicle: vehicle)
 }
-

@@ -51,7 +51,7 @@ struct CustomInfoListView: View {
                 }
             }
         }
-//        .navigationTitle("Custom Info")
+        .vehicleNavigationTitle("Custom Info", vehicleName: vehicle.name)
         .sheet(isPresented: $showingAddCustomInfo) {
             AddEditCustomInfoView(vehicle: vehicle)
         }
@@ -63,10 +63,6 @@ struct CustomInfoListView: View {
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
                 .tint(Color.accentColor)
-            }
-            
-            ToolbarItem(placement: .principal) {
-                ToolbarTitleView(sectionTitle: "Custom Info", vehicleName: vehicle.name)
             }
         }
     }

@@ -112,7 +112,7 @@ struct FillupsDashboardView: View {
                 .scrollIndicators(.hidden)
             }
         }
-//        .navigationTitle("Fill-ups")
+        .vehicleNavigationTitle("Fill-ups", vehicleName: vehicle.name)
         .task(id: chartDataRevision) {
             await updateChartData()
         }
@@ -130,10 +130,6 @@ struct FillupsDashboardView: View {
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
                 .tint(Color.fillupsTheme)
-            }
-
-            ToolbarItem(placement: .principal) {
-                ToolbarTitleView(sectionTitle: "Fill-ups", vehicleName: vehicle.name)
             }
         }
     }

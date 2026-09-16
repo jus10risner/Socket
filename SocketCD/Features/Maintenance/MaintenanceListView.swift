@@ -39,7 +39,7 @@ struct MaintenanceListView: View {
                 }
             }
         }
-//        .navigationTitle("Maintenance")
+        .vehicleNavigationTitle("Maintenance", vehicleName: vehicle.name)
         .listRowSpacing(5)
         .sheet(isPresented: $showingAddService) {
             AddEditServiceView(vehicle: vehicle)
@@ -70,10 +70,6 @@ struct MaintenanceListView: View {
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle) // defines button shape for iOS 17 & 18
                 .disabled(services.isEmpty)
-            }
-            
-            ToolbarItem(placement: .principal) {
-                ToolbarTitleView(sectionTitle: "Maintenance", vehicleName: vehicle.name)
             }
         }
     }

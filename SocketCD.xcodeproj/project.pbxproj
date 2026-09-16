@@ -43,6 +43,7 @@
 		9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C062BC07B6F005E16DD /* DraftVehicle.swift */; };
 		9E620C092BC08194005E16DD /* AddEditVehicleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */; };
 		9E620C0D2BC5D4FC005E16DD /* MailComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */; };
+		9E63DD31305AE069005B596B /* VehicleNavigationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD30305AE069005B596B /* VehicleNavigationTitle.swift */; };
 		9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */; };
 		9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53452BADD68A00F75D49 /* AppInfo.swift */; };
 		9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */; };
@@ -65,7 +66,6 @@
 		9EB025362E4E5CB7008B4AC7 /* Primary.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB025352E4E5CB7008B4AC7 /* Primary.icon */; };
 		9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */; };
 		9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */; };
-		9ED4DB763058597800C2A373 /* ToolbarTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED4DB753058597800C2A373 /* ToolbarTitleView.swift */; };
 		9ED4DB78305882F400C2A373 /* CardTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED4DB77305882F400C2A373 /* CardTextView.swift */; };
 		9EDCA2442ED0E19D005B1C5A /* PopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */; };
 		9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */; };
@@ -175,6 +175,7 @@
 		9E620C062BC07B6F005E16DD /* DraftVehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftVehicle.swift; sourceTree = "<group>"; };
 		9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditVehicleImageView.swift; sourceTree = "<group>"; };
 		9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailComposeViewController.swift; sourceTree = "<group>"; };
+		9E63DD30305AE069005B596B /* VehicleNavigationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleNavigationTitle.swift; sourceTree = "<group>"; };
 		9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLabelStyle.swift; sourceTree = "<group>"; };
 		9E6A53452BADD68A00F75D49 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectorView.swift; sourceTree = "<group>"; };
@@ -199,7 +200,6 @@
 		9EB025352E4E5CB7008B4AC7 /* Primary.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Primary.icon; sourceTree = "<group>"; };
 		9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Monochrome.icon; sourceTree = "<group>"; };
 		9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartTests.swift; sourceTree = "<group>"; };
-		9ED4DB753058597800C2A373 /* ToolbarTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarTitleView.swift; sourceTree = "<group>"; };
 		9ED4DB77305882F400C2A373 /* CardTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextView.swift; sourceTree = "<group>"; };
 		9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContent.swift; sourceTree = "<group>"; };
 		9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
@@ -321,7 +321,6 @@
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
 				9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */,
-				9ED4DB753058597800C2A373 /* ToolbarTitleView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -349,6 +348,7 @@
 				9E18D94D2EBE3A910097CBAC /* AdaptiveToolbarButton.swift */,
 				9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */,
 				9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */,
+				9E63DD30305AE069005B596B /* VehicleNavigationTitle.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -785,6 +785,7 @@
 				9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */,
 				9E7507592BF68C84000E25BD /* EmptyVehicleListView.swift in Sources */,
 				9E9C05AA2E218B2A00E9C0E2 /* ServiceIndicatorView.swift in Sources */,
+				9E63DD31305AE069005B596B /* VehicleNavigationTitle.swift in Sources */,
 				9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */,
 				9EEAC4AE2BA1F0380053C65E /* SwiftUIExtensions.swift in Sources */,
 				9EE97E833054486D00F2AA5F /* EmptyCustomInfoView.swift in Sources */,
@@ -816,7 +817,6 @@
 				9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */,
 				9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */,
 				9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */,
-				9ED4DB763058597800C2A373 /* ToolbarTitleView.swift in Sources */,
 				9EF8CAEB3058435000D48986 /* CardSymbolImage.swift in Sources */,
 				9E9C05AC2E26984B00E9C0E2 /* CenteredLabelStyle.swift in Sources */,
 				9E36533D303C86C000BD9ADD /* DocumentListView.swift in Sources */,
