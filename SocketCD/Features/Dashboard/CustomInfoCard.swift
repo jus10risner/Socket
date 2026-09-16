@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CustomInfoCard: View {
     @ObservedObject var vehicle: Vehicle
+    let settings = AppSettingsStore.shared
     
     @Binding var activeSheet: ActiveSheet?
     @Binding var selectedSection: AppSection?
@@ -16,7 +17,7 @@ struct CustomInfoCard: View {
     var body: some View {
         DashboardCard(
             title: "Custom Info",
-            color: .accent,
+            color: settings.selectedAccent(),
             quickActionTitle: "Add Info",
             accessibilityValue: accessibilityValue,
             accessibilityHint: String(localized: "Opens custom info list")
@@ -25,7 +26,7 @@ struct CustomInfoCard: View {
         } quickAction: {
             activeSheet = .addCustomInfo
         } visual: {
-            CardSymbolImage(symbolName: "bookmark.fill", color: .accent)
+            CardSymbolImage(symbolName: "bookmark.fill", color: settings.selectedAccent())
         } detail: {
             if vehicle.sortedCustomInfoArray.count > 0 {
                 CardTextView(

@@ -110,6 +110,7 @@ struct AddEditRepairView: View {
                 Text("Permanently delete this repair record? This cannot be undone.")
             }
         }
+        .tint(Color.repairsTheme)
     }
 }
 

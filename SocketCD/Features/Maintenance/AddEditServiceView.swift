@@ -229,6 +229,7 @@ struct AddEditServiceView: View {
                 Text("Please choose a different name.")
             }
         }
+        .tint(Color.maintenanceTheme)
     }
     
     // MARK: - Methods
@@ -248,7 +249,7 @@ struct AddEditServiceView: View {
                             showingMoreInfo = true
                         }
                         .labelStyle(.iconOnly)
-                        .foregroundStyle(settings.selectedAccent())
+                        .foregroundStyle(Color.maintenanceTheme)
                         .buttonStyle(.plain)
                         .popover(isPresented: $showingMoreInfo) {
                             PopoverContent(text: """
@@ -304,4 +305,3 @@ struct AddEditServiceView: View {
     
     return AddEditServiceView(vehicle: vehicle, service: service)
 }
-

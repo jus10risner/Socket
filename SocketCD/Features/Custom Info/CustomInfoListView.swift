@@ -62,7 +62,7 @@ struct CustomInfoListView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
-                .tint(Color.accentColor)
+//                .tint(Color.accentColor)
             }
         }
     }

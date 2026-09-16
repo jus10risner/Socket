@@ -21,7 +21,7 @@ struct SelectedServicesListView: View {
                         LabeledContent(service.name) {
                             if let id = service.id, draftServiceLog.selectedServiceIDs.contains(id) {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(Color.white, Color.accentColor)
+                                    .foregroundStyle(Color.white, Color.maintenanceTheme)
                             } else {
                                 Image(systemName: "circle")
                                     .foregroundStyle(Color.secondary)

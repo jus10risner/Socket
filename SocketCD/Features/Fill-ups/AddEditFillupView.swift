@@ -149,6 +149,7 @@ struct AddEditFillupView: View {
                 Text("Deleting fill-up records may cause inaccurate fuel economy calculation. Delete this record anyway?")
             }
         }
+        .tint(Color.fillupsTheme)
     }
     
     // Returns the total or per-unit cost, based on which the user has selected in settings (used to show both costs at once)

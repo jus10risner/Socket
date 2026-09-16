@@ -146,6 +146,7 @@ struct AddEditRecordView: View {
                 Text("Permanently delete this service log? This cannot be undone.")
             }
         }
+        .tint(Color.maintenanceTheme)
     }
 }
 
