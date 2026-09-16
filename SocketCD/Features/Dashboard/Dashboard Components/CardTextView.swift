@@ -17,7 +17,7 @@ struct CardTextView: View {
                 .font(.headline)
             
             Text(subheadline)
-                .font(.footnote.bold())
+                .font(.footnote)
                 .foregroundStyle(Color.secondary)
         }
     }
