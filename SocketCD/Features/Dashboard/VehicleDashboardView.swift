@@ -41,19 +41,21 @@ struct VehicleDashboardView: View {
                     VStack(alignment: .leading, spacing: 0) {
                         Text(vehicle.name)
                             .font(.largeTitle.bold())
+                            .minimumScaleFactor(0.6)
                             .lineLimit(2)
                         
                         HStack(spacing: 10) {
                             Text("\(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
                                 .font(.title3)
                                 .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
-                            
+                             
                             Button("Update Odometer", systemImage: "pencil") {
                                 showingUpdateOdometerAlert = true
                             }
-                            .labelStyle(.iconOnly)
+                            .font(.footnote)
+                            .labelStyle(.titleOnly)
                             .buttonStyle(.bordered)
-                            .buttonBorderShape(.circle)
+                            .buttonBorderShape(.capsule)
                         }
                     }
                     
