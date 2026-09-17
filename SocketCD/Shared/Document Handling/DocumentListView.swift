@@ -14,15 +14,30 @@ struct DocumentListView: View {
     var body: some View {
         ForEach(documents.sorted { $0.timeStamp < $1.timeStamp }, id: \.objectID) { document in
             if isEditable {
-                Label(document.fileName, systemImage: "document")
-                    .labelStyle(.titleOnly)
-                    .lineLimit(1)
-                    .swipeActions(edge: .trailing) {
-                        Button("Remove", role: .destructive) {
+                HStack {
+                    Text(document.fileName)
+                        .lineLimit(1)
+
+                    Spacer()
+
+                    Button(role: .destructive) {
+                        withAnimation {
                             delete(document)
                         }
-                        .tint(.red)
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
                     }
+                    .buttonStyle(.plain)
+                    .labelStyle(.iconOnly)
+                    .font(.title2)
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, .gray)
+                    .contentShape(
+                        .interaction,
+                        Circle().inset(by: -10)
+                    )
+                    .accessibilityLabel("Remove \(document.fileName)")
+                }
             } else {
                 ReadOnlyDocumentRow(document: document)
             }
