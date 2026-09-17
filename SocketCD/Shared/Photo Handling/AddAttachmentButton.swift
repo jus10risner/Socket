@@ -32,7 +32,7 @@ struct AddAttachmentButton: View {
             
             Text("Add Attachment...")
         }
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.tint)
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityHidden(true)
         
