@@ -29,7 +29,7 @@ struct RepairsCard: View {
         } detail: {
             if let repair = vehicle.sortedRepairsArray.first {
                 CardTextView(
-                    headline: "Latest",
+                    headline: latestRepairName,
                     subheadline: repair.date.formatted(date: .numeric, time: .omitted)
                 )
             } else {
@@ -38,6 +38,14 @@ struct RepairsCard: View {
                     subheadline: "Your vehicle is on its best behavior"
                 )
             }
+        }
+    }
+    
+    private var latestRepairName: String {
+        if let latestRepair = vehicle.sortedRepairsArray.first?.name {
+            return latestRepair
+        } else {
+            return "Unknown Repair"
         }
     }
     
