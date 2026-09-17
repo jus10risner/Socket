@@ -39,46 +39,9 @@ struct FillupsDashboardView: View {
             } else {
                 List {
                     Section {
-                        VStack(spacing: 15) {
-                            if let chartPoints {
-                                if chartPoints.isEmpty {
-                                    emptyChartView
-                                } else {
-                                    FuelEconomyChartView(
-                                        data: chartPoints,
-                                        selectedDateRange: $selectedDateRange
-                                    )
-
-                                    Picker("Date Range", selection: $selectedDateRange) {
-                                        ForEach(DateRange.allCases, id: \.self) { range in
-                                            Text(range.rawValue)
-                                                .tag(range)
-                                                .accessibilityLabel(
-                                                    range.accessibilityLabel
-                                                )
-                                        }
-                                    }
-                                    .pickerStyle(.segmented)
-                                    .accessibilityHint(
-                                        "Selects the range for fuel economy data."
-                                    )
-
-                                    
-                                }
-                            } else {
-                                Color(.systemGroupedBackground).opacity(0.3)
-                                    .frame(
-                                        minHeight: horizontalSizeClass == .regular
-                                            ? 350
-                                            : 200
-                                    )
-                            }
-                        }
-                        .padding(15)
-                        .listRowInsets(EdgeInsets())
+                        fuelEconomyChart
                         
                         allTimeAverageFooter
-                        
                     } footer: {
                         if let latestUnavailableMessage {
                             Button("Where’s my latest fill-up?") {
@@ -135,6 +98,48 @@ struct FillupsDashboardView: View {
     }
 
     // MARK: - Chart Data
+    
+    private var fuelEconomyChart: some View {
+        VStack(spacing: 15) {
+            if let chartPoints {
+                Group {
+                    if chartPoints.isEmpty {
+                        FuelEconomySetupView(
+                            hasBaseline: hasFuelEconomyBaseline
+                        )
+                    } else {
+                        FuelEconomyChartView(
+                            data: chartPoints,
+                            selectedDateRange: $selectedDateRange
+                        )
+
+                        Picker("Date Range", selection: $selectedDateRange) {
+                            ForEach(DateRange.allCases, id: \.self) { range in
+                                Text(range.rawValue)
+                                    .tag(range)
+                                    .accessibilityLabel(
+                                        range.accessibilityLabel
+                                    )
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        .accessibilityHint(
+                            "Selects the range for fuel economy data."
+                        )
+                    }
+                }
+            } else {
+                Color(.systemGroupedBackground).opacity(0.3)
+                    .frame(
+                        minHeight: horizontalSizeClass == .regular
+                            ? 350
+                            : 200
+                    )
+            }
+        }
+        .padding(15)
+        .listRowInsets(EdgeInsets())
+    }
 
     @ViewBuilder
     private var allTimeAverageFooter: some View {
@@ -169,15 +174,30 @@ struct FillupsDashboardView: View {
 
         return switch latestFillup.fillType {
         case .partialFill:
-            "The latest fill-up was a partial fill, so fuel economy wasn’t calculated. Fuel economy will be calculated again after your next full tank fill-up."
+            "The latest fill-up was a Partial Fill, so fuel economy wasn’t calculated. Fuel economy will be calculated again after your next Full Tank fill-up."
         case .missedFill:
-            "The latest fill-up was marked as missed, so fuel economy wasn’t calculated. Fuel economy will be calculated again after your next full tank fill-up."
+            "The latest fill-up was marked as Missed, so fuel economy wasn’t calculated. Fuel economy will be calculated again after your next Full Tank fill-up."
         case .fullTank:
             "Fuel economy wasn’t available for the latest fill-up."
         }
     }
 
-    /// Changes when chart-relevant Core Data values or the display unit change.
+    private var hasFuelEconomyBaseline: Bool {
+        fillups
+            .sorted { $0.date < $1.date }
+            .reduce(false) { hasBaseline, fillup in
+                switch fillup.fillType {
+                case .fullTank:
+                    true
+                case .partialFill:
+                    hasBaseline
+                case .missedFill:
+                    true
+                }
+            }
+    }
+
+    // Changes when chart-relevant Core Data values or the display unit change.
     private var chartDataRevision: Int {
         var hasher = Hasher()
         hasher.combine(chartRefreshID)
@@ -248,41 +268,55 @@ struct FillupsDashboardView: View {
         }
     }
 
-    // MARK: - Empty State
+}
 
-    private var emptyChartView: some View {
-        let isFullTank = fillups.contains { $0.fillType == .fullTank }
+private struct FuelEconomySetupView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
-        return VStack(spacing: 5) {
-            Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 40))
-                .foregroundStyle(Color(.fillupsTheme))
-                .frame(height: 50)
-                .accessibilityHidden(true)
+    let hasBaseline: Bool
 
-            Group {
-                if isFullTank {
-                    Text("Just one more fill-up")
-                } else {
-                    Text("Let’s start with a full tank")
-                }
+    var body: some View {
+        VStack(spacing: 20) {
+            HStack(alignment: .top, spacing: 12) {
+                FuelEconomyMilestoneView(
+                    title: "Baseline",
+                    isComplete: hasBaseline
+                )
+
+                Capsule()
+                    .fill(Color.secondary.opacity(0.25))
+                    .frame(maxWidth: 90)
+                    .frame(height: 1)
+                    .padding(.top, 21)
+                    .accessibilityHidden(true)
+
+                FuelEconomyMilestoneView(
+                    title: "Next full tank",
+                    isComplete: false
+                )
             }
-            .font(.title2.bold())
-            .foregroundStyle(Color.primary)
 
-            Group {
-                if isFullTank {
+            VStack(spacing: 6) {
+                if hasBaseline {
+                    Text("One more Full Tank")
+                        .font(.title2.bold())
+                        .foregroundStyle(.primary)
+
                     Text(
-                        "Add one more **Full Tank** fill-up to see your fuel economy chart."
+                        "Your next Full Tank fill-up will create your first fuel economy point."
                     )
                 } else {
+                    Text("Start with a full tank")
+                        .font(.title2.bold())
+                        .foregroundStyle(.primary)
+
                     Text(
-                        "Fuel economy can only be measured between **Full Tank** fill-ups."
+                        "Two Full Tank fill-ups are needed to calculate your first fuel economy point."
                     )
                 }
             }
             .font(.subheadline)
-            .foregroundStyle(Color.secondary)
+            .foregroundStyle(.secondary)
             .multilineTextAlignment(.center)
         }
         .padding(.horizontal)
@@ -290,11 +324,54 @@ struct FillupsDashboardView: View {
             minHeight: horizontalSizeClass == .regular ? 350 : 200
         )
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle.adaptive
-                .fill(Color(.tertiarySystemGroupedBackground))
-        )
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(accessibilityHint)
+    }
+
+    private var accessibilityLabel: LocalizedStringResource {
+        hasBaseline
+            ? "Fuel economy setup, baseline established"
+            : "Fuel economy setup, no baseline established"
+    }
+
+    private var accessibilityHint: LocalizedStringResource {
+        hasBaseline
+            ? "Log one more full-tank fill-up to create your first fuel-economy point"
+            : "Log two full-tank fill-ups to create your first fuel-economy point"
+    }
+}
+
+private struct FuelEconomyMilestoneView: View {
+    let title: LocalizedStringResource
+    let isComplete: Bool
+
+    var body: some View {
+        VStack(spacing: 7) {
+            Image(systemName: "fuelpump.fill")
+                .font(.headline)
+                .foregroundStyle(isComplete ? Color.white : Color.fillupsTheme)
+                .frame(width: 44, height: 44)
+                .background(
+                    isComplete
+                        ? Color.fillupsTheme
+                        : Color(.tertiarySystemGroupedBackground),
+                    in: Circle()
+                )
+                .overlay {
+                    if !isComplete {
+                        Circle()
+                            .stroke(Color.fillupsTheme.opacity(0.7), lineWidth: 1.5)
+                    }
+                }
+
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: 90)
+        .accessibilityHidden(true)
     }
 }
 
