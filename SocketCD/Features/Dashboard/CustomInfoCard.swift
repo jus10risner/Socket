@@ -30,7 +30,7 @@ struct CustomInfoCard: View {
         } detail: {
             if vehicle.sortedCustomInfoArray.count > 0 {
                 CardTextView(
-                    headline: "\(vehicle.sortedServicesArray.count)",
+                    headline: "\(vehicle.sortedCustomInfoArray.count)",
                     subheadline: "Items added"
                 )
             } else {
