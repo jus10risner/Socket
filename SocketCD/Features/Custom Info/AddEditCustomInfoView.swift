@@ -39,13 +39,13 @@ struct AddEditCustomInfoView: View {
                 FormHeaderView(symbolName: "bookmark.fill", primaryText: customInfo != nil ? "Edit Custom Info" : "New Custom Info", accentColor: settings.selectedAccent())
                 
                 Section {
-                    LabeledInput(label: "Label") {
-                        TextField("License Plate", text: $draftCustomInfo.label)
+                    LabeledInput(label: "Name") {
+                        TextField("e.g. Tire Size", text: $draftCustomInfo.label)
                             .focused($isInputActive)
                     }
                     
-                    LabeledInput(label: "Detail") {
-                        TextField("ABC 123", text: $draftCustomInfo.detail)
+                    LabeledInput(label: "Information") {
+                        TextField("e.g. 225/45R17", text: $draftCustomInfo.detail)
                     }
                 }
                 
