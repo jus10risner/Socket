@@ -15,7 +15,7 @@ struct CardSymbolImage: View {
         Image(systemName: symbolName)
             .foregroundStyle(color)
             .frame(width: 35, height: 35)
-            .background(color.opacity(0.14), in: Circle())
+            .background(color.opacity(0.2), in: Circle())
             .accessibilityHidden(true)
     }
 }
