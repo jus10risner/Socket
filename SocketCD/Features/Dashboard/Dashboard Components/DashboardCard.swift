@@ -30,8 +30,8 @@ struct DashboardCard<Visual: View, Detail: View>: View {
                 VStack(alignment: .leading) {
                     HStack {
                         Text(title)
+                            .font(.subheadline.bold())
                             .foregroundStyle(.secondary)
-                            .font(.headline)
                         
                         Spacer()
                         
@@ -65,9 +65,10 @@ struct DashboardCard<Visual: View, Detail: View>: View {
                 quickAction()
             } label: {
                 Label(quickActionTitle, systemImage: "plus")
+                    .imageScale(.large)
             }
             .labelStyle(.iconOnly)
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.bordered)
             .buttonBorderShape(.circle)
             .tint(color)
             .disabled(disableButton ?? false)
@@ -82,6 +83,8 @@ struct DashboardCard<Visual: View, Detail: View>: View {
             visual
 
             detail
+                .lineLimit(1)
+                .truncationMode(.tail)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -97,10 +100,10 @@ struct DashboardCard<Visual: View, Detail: View>: View {
     } detail: {
         VStack(alignment: .leading) {
             Text("Oil Change")
-                .font(.title3.bold())
+                .font(.headline)
 
             Text("Due in 500 mi or 14 days.")
-                .font(.caption)
+                .font(.footnote)
                 .foregroundStyle(.secondary)
         }
     }
