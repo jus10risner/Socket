@@ -30,7 +30,7 @@ struct VehicleDashboardView: View {
     @State private var shareItem: ShareItem?
     @State private var showingPageSizeSelector = false
     
-    let columns = [GridItem(.adaptive(minimum: 300), spacing: 5)]
+    let columns = [GridItem(.adaptive(minimum: 325), spacing: 5)]
     
     var body: some View {
         NavigationStack {
@@ -40,24 +40,31 @@ struct VehicleDashboardView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 0) {
                         Text(vehicle.name)
-                            .font(.largeTitle.bold())
-                            .minimumScaleFactor(0.6)
-                            .lineLimit(2)
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
                         
                         HStack(spacing: 10) {
-                            Text("\(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
-                                .font(.title3)
-                                .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                            HStack(alignment: .firstTextBaseline, spacing: 3) {
+                                Text(vehicle.odometer.formatted())
+                                    .font(.title2.bold())
+                                    .monospacedDigit()
+                                
+                                Text(settings.distanceUnit.abbreviated)
+                                    .font(.headline)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
                              
                             Button("Update Odometer", systemImage: "pencil") {
                                 showingUpdateOdometerAlert = true
                             }
-                            .font(.footnote)
-                            .labelStyle(.titleOnly)
+                            .imageScale(.large)
+                            .labelStyle(.iconOnly)
                             .buttonStyle(.bordered)
-                            .buttonBorderShape(.capsule)
+                            .buttonBorderShape(.circle)
                         }
                     }
+                    .padding(.top, 5)
                     
                     Spacer()
                 }
