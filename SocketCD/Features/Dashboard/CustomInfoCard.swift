@@ -44,26 +44,49 @@ struct CustomInfoCard: View {
         } detail: {
             if customInfo.isEmpty {
                 CardTextView(
-                    headline: "\(vehicle.sortedCustomInfoArray.count)",
-                    subheadline: "Items added"
+                    headline: "Organize Important Details",
+                    subheadline: "Save information for easy access"
                 )
             } else {
                 CardTextView(
-                    headline: "No Custom Info Added",
-                    subheadline: "Save the details that matter to you"
+                    headline: savedDetailsHeadline,
+                    subheadline: savedLabelsSummary
                 )
             }
         }
     }
     
-    private var accessibilityValue: String {
-        let count = vehicle.sortedCustomInfoArray.count
-        
-        if count > 0 {
-            return String(localized: "\(count) items saved")
+    private var savedDetailsHeadline: String {
+        let count = customInfo.count
+        if count == 1 {
+            return String(localized: "1 Saved Detail")
         } else {
-            return String(localized: "No items saved")
+            return String(localized: "\(count) Saved Details")
         }
+    }
+
+    private var savedLabelsSummary: String {
+        let labels = customInfo.map(\.label)
+
+        switch labels.count {
+        case 0:
+            return ""
+        case 1:
+            return labels[0]
+        case 2:
+            return labels.formatted(.list(type: .and, width: .short))
+        default:
+            let remainingCount = labels.count - 2
+            return String(localized: "\(labels[0]), \(labels[1]) & \(remainingCount) more")
+        }
+    }
+    
+    private var accessibilityValue: String {
+        guard !customInfo.isEmpty else {
+            return String(localized: "No vehicle details saved")
+        }
+
+        return String(localized: "\(savedDetailsHeadline). \(savedLabelsSummary)")
     }
 }
 

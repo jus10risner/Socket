@@ -52,12 +52,16 @@ struct FillupsCard: View {
             if let fillup = latestValidFillup {
                 CardTextView(
                     headline: "\(Double(fillup.fuelEconomy()).formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)",
-                    subheadline: "Last calculated \(formattedFuelEconomyDate(fillup.date))"
+                    subheadline: previousFuelEconomy == nil
+                        ? "Keep logging fill-ups to see trends"
+                        : "Based on your \(formattedFuelEconomyDate(fillup.date)) fill-up"
                 )
             } else {
                 CardTextView(
-                    headline: "No Fill-ups Logged",
-                    subheadline: "Add your first fill-up when you’re ready"
+                    headline: fillups.isEmpty ? "Track Fuel Economy" : "Nice Start!",
+                    subheadline: fillups.isEmpty
+                        ? "Log fill-ups to see trends"
+                        : "Keep logging fill-ups to see trends"
                 )
             }
         }
@@ -108,12 +112,20 @@ struct FillupsCard: View {
 
     private var accessibilityValue: String {
         guard let fillup = latestValidFillup else {
-            return String(localized: "No fill-ups logged")
+            if fillups.isEmpty {
+                return String(localized: "No fill-ups logged. Log fill-ups to see fuel economy trends.")
+            } else {
+                return String(localized: "Keep logging fill-ups to see fuel economy trends.")
+            }
         }
 
         let economy = fillup.fuelEconomy().formatted(.number.precision(.fractionLength(1)))
         let date = formattedFuelEconomyDate(fillup.date)
-        return String(localized: "\(economy) \(settings.fuelEconomyUnit.fullName). \(fuelEconomyTrendDescription). Last calculated \(date)")
+        if previousFuelEconomy == nil {
+            return String(localized: "\(economy) \(settings.fuelEconomyUnit.fullName). Keep logging fill-ups to see trends. Based on your \(date) fill-up.")
+        } else {
+            return String(localized: "\(economy) \(settings.fuelEconomyUnit.fullName). \(fuelEconomyTrendDescription). Based on your \(date) fill-up.")
+        }
     }
 }
 

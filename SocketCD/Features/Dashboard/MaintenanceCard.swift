@@ -40,7 +40,7 @@ struct MaintenanceCard: View {
                 activeSheet = .logService
             } visual: {
                 if let service = nextDueService {
-                    ServiceIndicatorView(vehicle: vehicle, service: service)
+                    ServiceIndicatorView(vehicle: vehicle, service: service, showsMaintenanceSymbol: true)
                 } else {
                     CardSymbolImage(symbolName: "book.and.wrench.fill", color: Color(.maintenanceTheme))
                 }
@@ -52,8 +52,8 @@ struct MaintenanceCard: View {
                     )
                 } else {
                     CardTextView(
-                        headline: "Tap to get started",
-                        subheadline: "Let’s set up your first service"
+                        headline: "Know When Service Is Due",
+                        subheadline: "Tap to begin setting up services"
                     )
                 }
             }

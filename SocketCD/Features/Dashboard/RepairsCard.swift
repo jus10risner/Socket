@@ -45,30 +45,41 @@ struct RepairsCard: View {
             if let repair = repairs.first {
                 CardTextView(
                     headline: latestRepairName,
-                    subheadline: repair.date.formatted(date: .numeric, time: .omitted)
+                    subheadline: latestRepairDescription(repair)
                 )
             } else {
                 CardTextView(
-                    headline: "No Repairs Logged",
-                    subheadline: "Your vehicle is on its best behavior"
+                    headline: "Document Vehicle History",
+                    subheadline: "Add repairs to review or share"
                 )
             }
         }
     }
     
     private var latestRepairName: String {
-        if let latestRepair = vehicle.sortedRepairsArray.first?.name {
+        if let latestRepair = repairs.first?.name {
             return latestRepair
         } else {
             return "Unknown Repair"
         }
     }
     
-    private var accessibilityValue: String {
-        if let repair = vehicle.sortedRepairsArray.first {
-            return String(localized: "Latest: \(repair.date.formatted(date: .numeric, time: .omitted))")
+    private func latestRepairDescription(_ repair: Repair) -> String {
+        let date: String
+        if Calendar.current.isDate(repair.date, equalTo: .now, toGranularity: .year) {
+            date = repair.date.formatted(.dateTime.month(.abbreviated).day())
         } else {
-            return "No repairs logged"
+            date = repair.date.formatted(.dateTime.month(.abbreviated).day().year())
+        }
+
+        return String(localized: "\(date) • \(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+    }
+    
+    private var accessibilityValue: String {
+        if let repair = repairs.first {
+            return String(localized: "Latest repair: \(repair.name). \(latestRepairDescription(repair))")
+        } else {
+            return String(localized: "No repairs logged")
         }
     }
 }
