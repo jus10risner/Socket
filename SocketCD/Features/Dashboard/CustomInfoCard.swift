@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 9/10/26.
 //
 
+import CoreData
 import SwiftUI
 
 struct CustomInfoCard: View {
@@ -13,6 +14,19 @@ struct CustomInfoCard: View {
     
     @Binding var activeSheet: ActiveSheet?
     @Binding var selectedSection: AppSection?
+
+    @FetchRequest private var customInfo: FetchedResults<CustomInfo>
+
+    init(vehicle: Vehicle, activeSheet: Binding<ActiveSheet?>, selectedSection: Binding<AppSection?>) {
+        self.vehicle = vehicle
+        self._activeSheet = activeSheet
+        self._selectedSection = selectedSection
+        self._customInfo = FetchRequest(
+            entity: CustomInfo.entity(),
+            sortDescriptors: [NSSortDescriptor(keyPath: \CustomInfo.label_, ascending: true)],
+            predicate: NSPredicate(format: "vehicle == %@", vehicle)
+        )
+    }
     
     var body: some View {
         DashboardCard(
@@ -28,7 +42,7 @@ struct CustomInfoCard: View {
         } visual: {
             CardSymbolImage(symbolName: "bookmark.fill", color: settings.selectedAccent())
         } detail: {
-            if vehicle.sortedCustomInfoArray.count > 0 {
+            if customInfo.isEmpty {
                 CardTextView(
                     headline: "\(vehicle.sortedCustomInfoArray.count)",
                     subheadline: "Items added"

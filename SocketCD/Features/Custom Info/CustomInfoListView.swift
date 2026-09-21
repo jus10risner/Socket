@@ -18,7 +18,7 @@ struct CustomInfoListView: View {
         self.vehicle = vehicle
         self._customInfo = FetchRequest(
             entity: CustomInfo.entity(),
-            sortDescriptors: [NSSortDescriptor(keyPath: \CustomInfo.label_, ascending: false)],
+            sortDescriptors: [NSSortDescriptor(keyPath: \CustomInfo.label_, ascending: true)],
             predicate: NSPredicate(format: "vehicle == %@", vehicle)
         )
     }
@@ -31,20 +31,11 @@ struct CustomInfoListView: View {
                 EmptyCustomInfoView()
             } else {
                 List {
-                    ForEach(vehicle.sortedCustomInfoArray, id: \.id) { customInfo in
+                    ForEach(customInfo, id: \.id) { customInfo in
                         NavigationLink {
                             CustomInfoDetailView(customInfo: customInfo)
                         } label: {
-                            LabeledContent(customInfo.label) {
-                                if !customInfo.detail.isEmpty {
-                                    Text(customInfo.detail)
-                                        .foregroundStyle(Color.secondary)
-                                    
-                                } else if customInfo.photos?.count != 0 {
-                                    Image(systemName: "photo")
-                                        .foregroundStyle(Color.secondary)
-                                }
-                            }
+                            CustomInfoListRow(customInfo: customInfo)
                         }
                         .buttonStyle(.plain)
                     }
@@ -63,6 +54,22 @@ struct CustomInfoListView: View {
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
 //                .tint(Color.accentColor)
+            }
+        }
+    }
+}
+
+private struct CustomInfoListRow: View {
+    @ObservedObject var customInfo: CustomInfo
+
+    var body: some View {
+        LabeledContent(customInfo.label) {
+            if !customInfo.detail.isEmpty {
+                Text(customInfo.detail)
+                    .foregroundStyle(Color.secondary)
+            } else if customInfo.photos?.count != 0 {
+                Image(systemName: "photo")
+                    .foregroundStyle(Color.secondary)
             }
         }
     }

@@ -5,13 +5,28 @@
 //  Created by Justin Risner on 10/1/25.
 //
 
+import CoreData
 import SwiftUI
 
 struct RepairsCard: View {
     @ObservedObject var vehicle: Vehicle
+    let settings = AppSettingsStore.shared
     
     @Binding var activeSheet: ActiveSheet?
     @Binding var selectedSection: AppSection?
+
+    @FetchRequest private var repairs: FetchedResults<Repair>
+
+    init(vehicle: Vehicle, activeSheet: Binding<ActiveSheet?>, selectedSection: Binding<AppSection?>) {
+        self.vehicle = vehicle
+        self._activeSheet = activeSheet
+        self._selectedSection = selectedSection
+        self._repairs = FetchRequest(
+            entity: Repair.entity(),
+            sortDescriptors: [NSSortDescriptor(keyPath: \Repair.date_, ascending: false)],
+            predicate: NSPredicate(format: "vehicle == %@", vehicle)
+        )
+    }
     
     var body: some View {
         DashboardCard(
@@ -27,7 +42,7 @@ struct RepairsCard: View {
         } visual: {
             CardSymbolImage(symbolName: "wrench.adjustable.fill", color: Color(.repairsTheme))
         } detail: {
-            if let repair = vehicle.sortedRepairsArray.first {
+            if let repair = repairs.first {
                 CardTextView(
                     headline: latestRepairName,
                     subheadline: repair.date.formatted(date: .numeric, time: .omitted)
