@@ -73,7 +73,7 @@ struct FuelEconomyChartView: View {
                     selectedPoint.date,
                     format: .dateTime.month(.abbreviated).day().year()
                 )
-                .font(.caption)
+                .font(.footnote)
                 .foregroundStyle(.secondary)
             } else {
                 Text("Average Fuel Economy")
@@ -91,7 +91,7 @@ struct FuelEconomyChartView: View {
                     )
 
                 Text(visibleAverageDateRangeText)
-                    .font(.caption)
+                    .font(.footnote)
                     .foregroundStyle(.secondary)
             }
         }
