@@ -18,13 +18,15 @@ struct ImageDetailView: View {
 
     @State private var selectedPhotoID: NSManagedObjectID
     @State private var isZoomed = false
+    @State private var selectedImage: UIImage?
+    @State private var selectedImageData: Data?
 
     init(
         photos: [Photo],
         selectedPhotoID: NSManagedObjectID,
         transitionNamespace: Namespace.ID
     ) {
-        self.pages = photos.map { PhotoPage(id: $0.objectID, image: $0.converted) }
+        self.pages = photos.map { PhotoPage(id: $0.objectID, photo: $0) }
         self.transitionNamespace = transitionNamespace
         self._selectedPhotoID = State(initialValue: selectedPhotoID)
     }
@@ -51,10 +53,10 @@ struct ImageDetailView: View {
                 }
 
                 ToolbarItem(placement: .primaryAction) {
-                    if let shareablePhoto, let image = selectedPage?.image {
+                    if let shareablePhoto, let selectedImage {
                         ShareLink(
                             item: shareablePhoto,
-                            preview: SharePreview("Photo", image: Image(uiImage: image))
+                            preview: SharePreview("Photo", image: Image(uiImage: selectedImage))
                         ) {
                             Label("Share Image", systemImage: "square.and.arrow.up")
                         }
@@ -76,6 +78,9 @@ struct ImageDetailView: View {
             .onChange(of: currentPhotoID) {
                 isZoomed = false
             }
+            .task(id: currentPhotoID) {
+                await loadSelectedPhoto()
+            }
         }
         .navigationTransition(.zoom(sourceID: currentPhotoID, in: transitionNamespace))
     }
@@ -93,11 +98,29 @@ struct ImageDetailView: View {
     }
 
     private var shareablePhoto: ShareablePhoto? {
-        guard let data = selectedPage?.image?.jpegData(compressionQuality: 0.8) else {
-            return nil
+        selectedImageData.map(ShareablePhoto.init)
+    }
+
+    private func loadSelectedPhoto() async {
+        guard let selectedPage else { return }
+
+        selectedImage = nil
+        selectedImageData = nil
+
+        let data = selectedPage.photo.imageData
+        let key = selectedPage.id.uriRepresentation().absoluteString
+        let image = await PhotoImageLoader.shared.image(
+            forKey: key,
+            data: data,
+            maximumPixelSize: 4_096
+        )
+
+        guard !Task.isCancelled, currentPhotoID == selectedPage.id else {
+            return
         }
 
-        return ShareablePhoto(data: data)
+        selectedImageData = data
+        selectedImage = image
     }
 }
 
@@ -106,6 +129,18 @@ private struct PhotoPager: View {
 
     @Binding var selectedPhotoID: NSManagedObjectID
     @Binding var isZoomed: Bool
+    @State private var scrollPositionID: NSManagedObjectID?
+
+    init(
+        pages: [PhotoPage],
+        selectedPhotoID: Binding<NSManagedObjectID>,
+        isZoomed: Binding<Bool>
+    ) {
+        self.pages = pages
+        self._selectedPhotoID = selectedPhotoID
+        self._isZoomed = isZoomed
+        self._scrollPositionID = State(initialValue: selectedPhotoID.wrappedValue)
+    }
 
     var body: some View {
         GeometryReader { proxy in
@@ -119,7 +154,7 @@ private struct PhotoPager: View {
                 }
                 .scrollTargetLayout()
             }
-            .scrollPosition(id: selectedPhotoIDBinding)
+            .scrollPosition(id: $scrollPositionID)
             .onScrollTargetVisibilityChange(idType: NSManagedObjectID.self) { visiblePhotoIDs in
                 if let visiblePhotoID = visiblePhotoIDs.first {
                     selectedPhotoID = visiblePhotoID
@@ -130,36 +165,50 @@ private struct PhotoPager: View {
             .scrollDisabled(isZoomed)
         }
     }
-
-    private var selectedPhotoIDBinding: Binding<NSManagedObjectID?> {
-        Binding(
-            get: { selectedPhotoID },
-            set: { newValue in
-                if let newValue {
-                    selectedPhotoID = newValue
-                }
-            }
-        )
-    }
 }
 
 private struct PhotoPageView: View {
     let page: PhotoPage
     @Binding var isZoomed: Bool
 
+    @State private var image: UIImage?
+    @State private var didFailToLoad = false
+
     var body: some View {
-        if let image = page.image {
-            ImageViewer(image: image, isZoomed: $isZoomed)
-        } else {
-            ContentUnavailableView("Image unavailable", systemImage: "photo")
-                .foregroundStyle(.white)
+        Group {
+            if let image {
+                ImageViewer(image: image, isZoomed: $isZoomed)
+            } else if didFailToLoad {
+                ContentUnavailableView("Image unavailable", systemImage: "photo")
+                    .foregroundStyle(.white)
+            } else {
+                ProgressView()
+                    .tint(.white)
+            }
+        }
+        .task(id: page.id) {
+            image = nil
+            didFailToLoad = false
+
+            let data = page.photo.imageData
+            let key = page.id.uriRepresentation().absoluteString
+            let loadedImage = await PhotoImageLoader.shared.image(
+                forKey: key,
+                data: data,
+                maximumPixelSize: 4_096
+            )
+
+            guard !Task.isCancelled else { return }
+
+            image = loadedImage
+            didFailToLoad = loadedImage == nil
         }
     }
 }
 
 private struct PhotoPage: Identifiable {
     let id: NSManagedObjectID
-    let image: UIImage?
+    let photo: Photo
 }
 
 private struct ShareablePhoto: Transferable, Sendable {

@@ -71,7 +71,6 @@ struct FormFooterView: View {
                 Section {
                     Button(deleteButtonTitle, role: .destructive, action: onDelete)
                 }
-                .listSectionSpacing(photos.count > 0 ? .custom(60) : .default)
             }
         }
     }
@@ -111,10 +110,10 @@ private struct EditableAttachmentsSection: View {
             if !documents.isEmpty {
                 DocumentListView(documents: $documents, isEditable: true)
             }
-        }
-
-        if !photos.isEmpty {
-            EditablePhotoSection(photos: $photos)
+            
+            if !photos.isEmpty {
+                EditablePhotoSection(photos: $photos)
+            }
         }
     }
 }
@@ -124,9 +123,8 @@ private struct EditablePhotoSection: View {
 
     var body: some View {
         Section {
-            PhotoGridView(photos: $photos, isEditable: true)
+            FormPhotosView(photos: $photos, isEditable: true)
         }
-        .listSectionSpacing(8)
     }
 }
 
@@ -142,20 +140,20 @@ private struct AttachmentsView: View {
 
     var body: some View {
         readOnlyAttachments
-        .onChange(of: photos.count) {
-            if photos.isEmpty {
-                selectedCategory = .documents
-            } else if !documents.isEmpty {
-                selectedCategory = .photos
+            .onChange(of: photos.count) {
+                if photos.isEmpty {
+                    selectedCategory = .documents
+                } else if !documents.isEmpty {
+                    selectedCategory = .photos
+                }
             }
-        }
-        .onChange(of: documents.count) {
-            if documents.isEmpty {
-                selectedCategory = .photos
-            } else if !photos.isEmpty {
-                selectedCategory = .documents
+            .onChange(of: documents.count) {
+                if documents.isEmpty {
+                    selectedCategory = .photos
+                } else if !photos.isEmpty {
+                    selectedCategory = .documents
+                }
             }
-        }
     }
 
     @ViewBuilder
@@ -197,7 +195,7 @@ private struct AttachmentsView: View {
     @ViewBuilder
     private var singleAttachmentContent: some View {
         if !photos.isEmpty {
-            PhotoGridView(photos: $photos, isEditable: false)
+            FormPhotosView(photos: $photos, isEditable: false)
         } else {
             documentList
         }
@@ -205,7 +203,7 @@ private struct AttachmentsView: View {
 
     private var photoSection: some View {
         Section {
-            PhotoGridView(photos: $photos, isEditable: false)
+            FormPhotosView(photos: $photos, isEditable: false)
         }
     }
 

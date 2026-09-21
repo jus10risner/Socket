@@ -44,6 +44,8 @@
 		9E620C092BC08194005E16DD /* AddEditVehicleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */; };
 		9E620C0D2BC5D4FC005E16DD /* MailComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */; };
 		9E63DD31305AE069005B596B /* VehicleNavigationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD30305AE069005B596B /* VehicleNavigationTitle.swift */; };
+		9E63DD33305DA77A005B596B /* PhotoImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD32305DA77A005B596B /* PhotoImageLoader.swift */; };
+		9E63DD3530617683005B596B /* AttachmentDeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */; };
 		9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */; };
 		9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53452BADD68A00F75D49 /* AppInfo.swift */; };
 		9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */; };
@@ -98,7 +100,7 @@
 		9EEAC4D72BA332E50053C65E /* VehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4D62BA332E50053C65E /* VehicleListView.swift */; };
 		9EEAC4E62BA364AA0053C65E /* CustomInfo+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E52BA364AA0053C65E /* CustomInfo+helper.swift */; };
 		9EEAC4E82BA367A00053C65E /* AddAttachmentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4E72BA367A00053C65E /* AddAttachmentButton.swift */; };
-		9EEAC4EC2BA3749E0053C65E /* PhotoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4EB2BA3749E0053C65E /* PhotoGridView.swift */; };
+		9EEAC4EC2BA3749E0053C65E /* FormPhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4EB2BA3749E0053C65E /* FormPhotosView.swift */; };
 		9EEAC4EE2BA374D70053C65E /* CustomInfoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4ED2BA374D70053C65E /* CustomInfoDetailView.swift */; };
 		9EEAC4F02BA376380053C65E /* AddEditCustomInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4EF2BA376380053C65E /* AddEditCustomInfoView.swift */; };
 		9EEAC4F32BA379FE0053C65E /* EmptyRepairsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4F22BA379FE0053C65E /* EmptyRepairsView.swift */; };
@@ -176,6 +178,8 @@
 		9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditVehicleImageView.swift; sourceTree = "<group>"; };
 		9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailComposeViewController.swift; sourceTree = "<group>"; };
 		9E63DD30305AE069005B596B /* VehicleNavigationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleNavigationTitle.swift; sourceTree = "<group>"; };
+		9E63DD32305DA77A005B596B /* PhotoImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoImageLoader.swift; sourceTree = "<group>"; };
+		9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentDeleteButton.swift; sourceTree = "<group>"; };
 		9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLabelStyle.swift; sourceTree = "<group>"; };
 		9E6A53452BADD68A00F75D49 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectorView.swift; sourceTree = "<group>"; };
@@ -233,7 +237,7 @@
 		9EEAC4D62BA332E50053C65E /* VehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListView.swift; sourceTree = "<group>"; };
 		9EEAC4E52BA364AA0053C65E /* CustomInfo+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomInfo+helper.swift"; sourceTree = "<group>"; };
 		9EEAC4E72BA367A00053C65E /* AddAttachmentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAttachmentButton.swift; sourceTree = "<group>"; };
-		9EEAC4EB2BA3749E0053C65E /* PhotoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridView.swift; sourceTree = "<group>"; };
+		9EEAC4EB2BA3749E0053C65E /* FormPhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPhotosView.swift; sourceTree = "<group>"; };
 		9EEAC4ED2BA374D70053C65E /* CustomInfoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInfoDetailView.swift; sourceTree = "<group>"; };
 		9EEAC4EF2BA376380053C65E /* AddEditCustomInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditCustomInfoView.swift; sourceTree = "<group>"; };
 		9EEAC4F22BA379FE0053C65E /* EmptyRepairsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyRepairsView.swift; sourceTree = "<group>"; };
@@ -321,6 +325,7 @@
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
 				9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */,
+				9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -531,11 +536,12 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC4E72BA367A00053C65E /* AddAttachmentButton.swift */,
-				9EEAC4EB2BA3749E0053C65E /* PhotoGridView.swift */,
+				9EEAC4EB2BA3749E0053C65E /* FormPhotosView.swift */,
 				9EEAC4B82BA1F1180053C65E /* ImageDetailView.swift */,
 				9EEAC4B62BA1F0CE0053C65E /* ImageViewer.swift */,
 				9EEAC4B42BA1F0A50053C65E /* CameraManager.swift */,
 				9E235B912DFB58CA008F7327 /* CameraViewModel.swift */,
+				9E63DD32305DA77A005B596B /* PhotoImageLoader.swift */,
 			);
 			path = "Photo Handling";
 			sourceTree = "<group>";
@@ -775,6 +781,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9EEAC5012BA389020053C65E /* Service+helper.swift in Sources */,
+				9E63DD3530617683005B596B /* AttachmentDeleteButton.swift in Sources */,
 				9E00C4C62EBE9B8600B3E88F /* TermsOfUseView.swift in Sources */,
 				9EEAC51E2BA4A2280053C65E /* MaintenanceListView.swift in Sources */,
 				9EEAC4BE2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift in Sources */,
@@ -804,7 +811,7 @@
 				9EEAC4A72BA1EF720053C65E /* ActivityView.swift in Sources */,
 				9EEAC5082BA38BC20053C65E /* EmptyFillupsView.swift in Sources */,
 				9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */,
-				9EEAC4EC2BA3749E0053C65E /* PhotoGridView.swift in Sources */,
+				9EEAC4EC2BA3749E0053C65E /* FormPhotosView.swift in Sources */,
 				9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */,
 				9E7EF3FD2EC38E6000E1E5D1 /* NotificationObserver.swift in Sources */,
 				9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */,
@@ -855,6 +862,7 @@
 				9EEAC4C12BA24EEC0053C65E /* AppSettingsStore.swift in Sources */,
 				9EEAC4CB2BA256570053C65E /* AddEditVehicleView.swift in Sources */,
 				9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */,
+				9E63DD33305DA77A005B596B /* PhotoImageLoader.swift in Sources */,
 				9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */,
 				9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */,
 				9EEAC4B32BA1F08F0053C65E /* CameraCapture.swift in Sources */,

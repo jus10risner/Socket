@@ -20,16 +20,18 @@ extension Photo {
         set { imageData_ = newValue }
     }
     
-    var converted: UIImage? {
-        UIImage(data: imageData)
-    }
-    
     
     // MARK: - CRUD Methods
     
     static func create(from uiImage: UIImage, in context: NSManagedObjectContext) -> Photo? {
-        guard let imageData = uiImage.jpegData(compressionQuality: 0.8) else { return nil }
-        
+        guard let imageData = uiImage.jpegData(compressionQuality: 0.8) else {
+            return nil
+        }
+
+        return create(from: imageData, in: context)
+    }
+
+    static func create(from imageData: Data, in context: NSManagedObjectContext) -> Photo {
         let photo = Photo(context: context)
         photo.id = UUID()
         photo.timeStamp = Date()

@@ -22,15 +22,20 @@ struct AddAttachmentButton: View {
     @State private var showingDocumentPicker = false
     @State private var showingPhotoError = false
     @State private var showingDocumentError = false
+    @State private var isLoadingPhotos = false
     
     @State private var capturedImage: UIImage?
     @State private var selectedImages: [PhotosPickerItem] = []
     
     var body: some View {
         HStack {
-            Image(systemName: "paperclip")
-            
-            Text("Add Attachment...")
+            if isLoadingPhotos {
+                ProgressView()
+                Text("Adding Photos…")
+            } else {
+                Image(systemName: "paperclip")
+                Text("Add Attachment...")
+            }
         }
         .foregroundStyle(.tint)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -157,29 +162,65 @@ struct AddAttachmentButton: View {
     
     // Verifies images captured via the PhotosPicker, then appends them to the photos array
     private func loadSelectedImages() async {
-        defer { selectedImages.removeAll() }
-        
-        for item in selectedImages {
-            do {
-                if let data = try await item.loadTransferable(type: Data.self),
-                   let uiImage = UIImage(data: data),
-                   let newPhoto = Photo.create(from: uiImage, in: context) {
-                    photos.append(newPhoto)
-                } else {
-                    showingPhotoError = true
+        let items = selectedImages
+        guard !items.isEmpty else { return }
+
+        isLoadingPhotos = true
+        defer {
+            selectedImages.removeAll()
+            isLoadingPhotos = false
+        }
+
+        let loadedImages = await withTaskGroup(
+            of: (Int, Data?).self,
+            returning: [(Int, Data?)].self
+        ) { group in
+            for (index, item) in items.enumerated() {
+                group.addTask {
+                    do {
+                        guard let data = try await item.loadTransferable(type: Data.self) else {
+                            return (index, nil)
+                        }
+
+                        return (index, PhotoDataProcessor.jpegData(from: data))
+                    } catch {
+                        return (index, nil)
+                    }
                 }
-            } catch {
-                showingPhotoError = true
             }
+
+            var results: [(Int, Data?)] = []
+            for await result in group {
+                results.append(result)
+            }
+            return results.sorted { $0.0 < $1.0 }
+        }
+
+        let imageData = loadedImages.compactMap(\.1)
+        let newPhotos = imageData.map { Photo.create(from: $0, in: context) }
+
+        withAnimation {
+            photos.append(contentsOf: newPhotos)
+        }
+
+        if newPhotos.count != items.count {
+            showingPhotoError = true
         }
     }
 
     private func importDocuments(_ result: Result<[URL], Error>) {
         do {
             let urls = try result.get()
+            var newDocuments: [AttachedDocument] = []
+
             for url in urls {
-                documents
-                    .append(try AttachedDocument.create(from: url, in: context))
+                newDocuments.append(
+                    try AttachedDocument.create(from: url, in: context)
+                )
+            }
+
+            withAnimation(.smooth) {
+                documents.append(contentsOf: newDocuments)
             }
         } catch {
             showingDocumentError = true

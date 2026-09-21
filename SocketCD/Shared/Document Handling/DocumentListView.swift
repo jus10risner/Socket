@@ -20,23 +20,11 @@ struct DocumentListView: View {
 
                     Spacer()
 
-                    Button(role: .destructive) {
+                    AttachmentDeleteButton("Remove \(document.fileName)") {
                         withAnimation {
                             delete(document)
                         }
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
                     }
-                    .buttonStyle(.plain)
-                    .labelStyle(.iconOnly)
-                    .font(.title2)
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.white, .gray)
-                    .contentShape(
-                        .interaction,
-                        Circle().inset(by: -10)
-                    )
-                    .accessibilityLabel("Remove \(document.fileName)")
                 }
             } else {
                 ReadOnlyDocumentRow(document: document)

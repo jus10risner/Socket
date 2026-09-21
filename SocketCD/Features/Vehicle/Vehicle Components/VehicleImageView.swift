@@ -28,13 +28,15 @@ struct VehicleImageView: View {
                             .foregroundStyle(isLightColor ? .ultraThinMaterial : .regularMaterial)
                             .colorScheme(isLightColor ? .dark : .light)
                     }
-            } else if let carPhoto, let uiImage = carPhoto.converted {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: geo.size.width, height: geo.size.height) // Forces the image to obey the parent view's constraints
-                    .clipped()
-                    .accessibilityLabel("Vehicle Photo")
+            } else if let carPhoto {
+                CachedPhotoImage(
+                    photo: carPhoto,
+                    maximumPixelSize: 1_200,
+                    contentMode: .fill
+                )
+                .frame(width: geo.size.width, height: geo.size.height)
+                .clipped()
+                .accessibilityLabel("Vehicle Photo")
             }
         }
         .accessibilityHidden(true)
