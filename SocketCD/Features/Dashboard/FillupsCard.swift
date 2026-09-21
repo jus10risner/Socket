@@ -40,7 +40,7 @@ struct FillupsCard: View {
         } quickAction: {
             activeSheet = .addFillup
         } visual: {
-            if latestValidFillup != nil {
+            if latestFuelEconomy != nil, previousFuelEconomy != nil {
                 TrendArrowView(
                     latestFuelEconomy: latestFuelEconomy,
                     previousFuelEconomy: previousFuelEconomy
@@ -52,9 +52,7 @@ struct FillupsCard: View {
             if let fillup = latestValidFillup {
                 CardTextView(
                     headline: "\(Double(fillup.fuelEconomy()).formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)",
-                    subheadline: previousFuelEconomy == nil
-                        ? "Keep logging fill-ups to see trends"
-                        : "Based on your \(formattedFuelEconomyDate(fillup.date)) fill-up"
+                    subheadline: "Based on your \(formattedFuelEconomyDate(fillup.date)) fill-up"
                 )
             } else {
                 CardTextView(
@@ -122,7 +120,7 @@ struct FillupsCard: View {
         let economy = fillup.fuelEconomy().formatted(.number.precision(.fractionLength(1)))
         let date = formattedFuelEconomyDate(fillup.date)
         if previousFuelEconomy == nil {
-            return String(localized: "\(economy) \(settings.fuelEconomyUnit.fullName). Keep logging fill-ups to see trends. Based on your \(date) fill-up.")
+            return String(localized: "\(economy) \(settings.fuelEconomyUnit.fullName). Based on your \(date) fill-up.")
         } else {
             return String(localized: "\(economy) \(settings.fuelEconomyUnit.fullName). \(fuelEconomyTrendDescription). Based on your \(date) fill-up.")
         }
