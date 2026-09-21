@@ -14,24 +14,25 @@ struct TrendArrowView: View {
     @State private var animatingTrendArrow = false
     
     var body: some View {
-        Circle()
-            .frame(width: 35)
-            .foregroundStyle(Color(.fillupsTheme).opacity(0.14))
-            .overlay {
-                indicatorSymbol
-                    .foregroundStyle(Color(.fillupsTheme))
-                    .scaledToFit()
-                    .bold()
-                    .padding(8)
-            }
-            .onAppear { animateTrendArrow(shouldReset: false) }
-            .mask {
-                Circle()
-                    .frame(width: 35)
-            }
-            .onChange(of: latestFuelEconomy) {
-                animateTrendArrow(shouldReset: true)
-            }
+        ZStack {
+            Circle()
+                .stroke(Color(.fillupsTheme), lineWidth: 4)
+
+            indicatorSymbol
+                .foregroundStyle(Color(.fillupsTheme))
+                .scaledToFit()
+                .bold()
+                .padding(8)
+                .mask {
+                    Circle()
+                        .frame(width: 35, height: 35)
+                }
+        }
+        .frame(width: 35, height: 35)
+        .onAppear { animateTrendArrow(shouldReset: false) }
+        .onChange(of: latestFuelEconomy) {
+            animateTrendArrow(shouldReset: true)
+        }
     }
     
     private var indicatorSymbol: some View {

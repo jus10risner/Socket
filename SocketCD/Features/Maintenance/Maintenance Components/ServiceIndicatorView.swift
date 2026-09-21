@@ -10,6 +10,7 @@ import SwiftUI
 struct ServiceIndicatorView: View {
     @ObservedObject var vehicle: Vehicle
     @ObservedObject var service: Service
+    var showsMaintenanceSymbol = false
     
     @State private var remainingValue: CGFloat = 0.0
     
@@ -18,24 +19,31 @@ struct ServiceIndicatorView: View {
             .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
             .frame(width: 33)
             .overlay {
-                if service.sortedServiceRecordsArray.count > 0 {
-                    switch service.serviceStatus {
-                    case .overDue:
-                        ZStack {
+                ZStack {
+                    if service.sortedServiceRecordsArray.count > 0 {
+                        switch service.serviceStatus {
+                        case .overDue:
+                            ZStack {
+                                Circle()
+                                    .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                
+                                Image(systemName: "exclamationmark")
+                                    .imageScale(.large)
+                                    .bold()
+                                    .padding(5)
+                                    .foregroundStyle(Color.red)
+                            }
+                        default:
                             Circle()
+                                .trim(from: remainingValue, to: 1.0)
                                 .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                            
-                            Image(systemName: "exclamationmark")
-                                .imageScale(.large)
-                                .bold()
-                                .padding(5)
-                                .foregroundStyle(Color.red)
+                                .rotationEffect(.degrees(-90))
                         }
-                    default:
-                        Circle()
-                            .trim(from: remainingValue, to: 1.0)
-                            .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                            .rotationEffect(.degrees(-90))
+                    }
+
+                    if showsMaintenanceSymbol && !isOverdue {
+                        Image(systemName: "book.and.wrench.fill")
+                            .foregroundStyle(Color(.maintenanceTheme))
                     }
                 }
             }
@@ -47,6 +55,14 @@ struct ServiceIndicatorView: View {
             }
     }
     
+    private var isOverdue: Bool {
+        if case .overDue = service.serviceStatus {
+            return true
+        } else {
+            return false
+        }
+    }
+
     private func loadRemainingValue() {
         Task {
             withAnimation(.default.delay(0.5)) {

@@ -12,11 +12,15 @@ struct CardSymbolImage: View {
     let color: Color
     
     var body: some View {
-        Image(systemName: symbolName)
-            .foregroundStyle(color)
-            .frame(width: 35, height: 35)
-            .background(color.opacity(0.2), in: Circle())
-            .accessibilityHidden(true)
+        ZStack {
+            Circle()
+                .stroke(color, lineWidth: 4)
+
+            Image(systemName: symbolName)
+                .foregroundStyle(color)
+        }
+        .frame(width: 35, height: 35)
+        .accessibilityHidden(true)
     }
 }
 
