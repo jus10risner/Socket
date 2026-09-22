@@ -46,6 +46,7 @@
 		9E63DD31305AE069005B596B /* VehicleNavigationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD30305AE069005B596B /* VehicleNavigationTitle.swift */; };
 		9E63DD33305DA77A005B596B /* PhotoImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD32305DA77A005B596B /* PhotoImageLoader.swift */; };
 		9E63DD3530617683005B596B /* AttachmentDeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */; };
+		9E63DD373062DA72005B596B /* FuelEconomySetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD363062DA72005B596B /* FuelEconomySetupView.swift */; };
 		9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */; };
 		9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53452BADD68A00F75D49 /* AppInfo.swift */; };
 		9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */; };
@@ -180,6 +181,7 @@
 		9E63DD30305AE069005B596B /* VehicleNavigationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleNavigationTitle.swift; sourceTree = "<group>"; };
 		9E63DD32305DA77A005B596B /* PhotoImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoImageLoader.swift; sourceTree = "<group>"; };
 		9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentDeleteButton.swift; sourceTree = "<group>"; };
+		9E63DD363062DA72005B596B /* FuelEconomySetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomySetupView.swift; sourceTree = "<group>"; };
 		9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLabelStyle.swift; sourceTree = "<group>"; };
 		9E6A53452BADD68A00F75D49 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectorView.swift; sourceTree = "<group>"; };
@@ -625,6 +627,7 @@
 				9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */,
 				9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */,
 				9E5067CA3047395400744533 /* ChartPoint.swift */,
+				9E63DD363062DA72005B596B /* FuelEconomySetupView.swift */,
 			);
 			path = "Fill-ups Components";
 			sourceTree = "<group>";
@@ -863,6 +866,7 @@
 				9EEAC4CB2BA256570053C65E /* AddEditVehicleView.swift in Sources */,
 				9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */,
 				9E63DD33305DA77A005B596B /* PhotoImageLoader.swift in Sources */,
+				9E63DD373062DA72005B596B /* FuelEconomySetupView.swift in Sources */,
 				9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */,
 				9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */,
 				9EEAC4B32BA1F08F0053C65E /* CameraCapture.swift in Sources */,

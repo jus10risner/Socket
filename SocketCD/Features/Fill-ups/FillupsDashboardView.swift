@@ -105,7 +105,7 @@ struct FillupsDashboardView: View {
                 Group {
                     if chartPoints.isEmpty {
                         FuelEconomySetupView(
-                            hasBaseline: hasFuelEconomyBaseline
+                            state: fuelEconomySetupState
                         )
                     } else {
                         FuelEconomyChartView(
@@ -182,19 +182,12 @@ struct FillupsDashboardView: View {
         }
     }
 
-    private var hasFuelEconomyBaseline: Bool {
-        fillups
-            .sorted { $0.date < $1.date }
-            .reduce(false) { hasBaseline, fillup in
-                switch fillup.fillType {
-                case .fullTank:
-                    true
-                case .partialFill:
-                    hasBaseline
-                case .missedFill:
-                    true
-                }
-            }
+    private var fuelEconomySetupState: FuelEconomySetupState {
+        let hasBaseline = fillups.contains {
+            $0.fillType == .fullTank || $0.fillType == .missedFill
+        }
+
+        return hasBaseline ? .needsFullTank : .needsBaseline
     }
 
     // Changes when chart-relevant Core Data values or the display unit change.
@@ -268,111 +261,6 @@ struct FillupsDashboardView: View {
         }
     }
 
-}
-
-private struct FuelEconomySetupView: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-
-    let hasBaseline: Bool
-
-    var body: some View {
-        VStack(spacing: 20) {
-            HStack(alignment: .top, spacing: 12) {
-                FuelEconomyMilestoneView(
-                    title: "Baseline",
-                    isComplete: hasBaseline
-                )
-
-                Capsule()
-                    .fill(Color.secondary.opacity(0.25))
-                    .frame(maxWidth: 90)
-                    .frame(height: 1)
-                    .padding(.top, 21)
-                    .accessibilityHidden(true)
-
-                FuelEconomyMilestoneView(
-                    title: "Next full tank",
-                    isComplete: false
-                )
-            }
-
-            VStack(spacing: 6) {
-                if hasBaseline {
-                    Text("One more Full Tank")
-                        .font(.title2.bold())
-                        .foregroundStyle(.primary)
-
-                    Text(
-                        "Your next Full Tank fill-up will create your first fuel economy point."
-                    )
-                } else {
-                    Text("Start with a full tank")
-                        .font(.title2.bold())
-                        .foregroundStyle(.primary)
-
-                    Text(
-                        "Two Full Tank fill-ups are needed to calculate your first fuel economy point."
-                    )
-                }
-            }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            .multilineTextAlignment(.center)
-        }
-        .padding(.horizontal)
-        .frame(
-            minHeight: horizontalSizeClass == .regular ? 350 : 200
-        )
-        .frame(maxWidth: .infinity)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint(accessibilityHint)
-    }
-
-    private var accessibilityLabel: LocalizedStringResource {
-        hasBaseline
-            ? "Fuel economy setup, baseline established"
-            : "Fuel economy setup, no baseline established"
-    }
-
-    private var accessibilityHint: LocalizedStringResource {
-        hasBaseline
-            ? "Log one more full-tank fill-up to create your first fuel-economy point"
-            : "Log two full-tank fill-ups to create your first fuel-economy point"
-    }
-}
-
-private struct FuelEconomyMilestoneView: View {
-    let title: LocalizedStringResource
-    let isComplete: Bool
-
-    var body: some View {
-        VStack(spacing: 7) {
-            Image(systemName: "fuelpump.fill")
-                .font(.headline)
-                .foregroundStyle(isComplete ? Color.white : Color.fillupsTheme)
-                .frame(width: 44, height: 44)
-                .background(
-                    isComplete
-                        ? Color.fillupsTheme
-                        : Color(.tertiarySystemGroupedBackground),
-                    in: Circle()
-                )
-                .overlay {
-                    if !isComplete {
-                        Circle()
-                            .stroke(Color.fillupsTheme.opacity(0.7), lineWidth: 1.5)
-                    }
-                }
-
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: 90)
-        .accessibilityHidden(true)
-    }
 }
 
 #Preview {
