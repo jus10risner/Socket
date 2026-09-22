@@ -14,7 +14,6 @@ struct VehicleListRowView: View {
     @ObservedObject var vehicle: Vehicle
     let settings = AppSettingsStore.shared
     let isSelected: Bool
-    let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     
     @FetchRequest var services: FetchedResults<Service>
     
@@ -77,7 +76,21 @@ struct VehicleListRowView: View {
         .background {
             RoundedRectangle.adaptive
                 .fill(Color(.tertiarySystemBackground))
-                .strokeBorder(isPad && isSelected ? Color.secondary : Color.secondary.opacity(0.5), lineWidth: isPad && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
+                .overlay {
+                    RoundedRectangle.adaptive
+                        .fill(
+                            Color.primary.opacity(
+                                isSelected ? (colorScheme == .dark ? 0.05 : 0.08) : 0
+                            )
+                        )
+                }
+                .overlay {
+                    RoundedRectangle.adaptive
+                        .strokeBorder(
+                            Color.secondary.opacity(0.5),
+                            lineWidth: colorScheme == .dark ? 0 : 0.5
+                        )
+                }
         }
         .containerShape(RoundedRectangle.adaptive)
         .listRowInsets(EdgeInsets())
@@ -124,7 +137,21 @@ struct VehicleListRowView: View {
         .background {
             RoundedRectangle.adaptive
                 .fill(Color(.tertiarySystemBackground))
-                .strokeBorder(isPad && isSelected ? Color.secondary : Color.secondary.opacity(0.5), lineWidth: isPad && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
+                .overlay {
+                    RoundedRectangle.adaptive
+                        .fill(
+                            Color.primary.opacity(
+                                isSelected ? (colorScheme == .dark ? 0.05 : 0.08) : 0
+                            )
+                        )
+                }
+                .overlay {
+                    RoundedRectangle.adaptive
+                        .strokeBorder(
+                            Color.secondary.opacity(0.5),
+                            lineWidth: colorScheme == .dark ? 0 : 0.5
+                        )
+                }
         }
         .containerShape(RoundedRectangle.adaptive)
         .listRowInsets(EdgeInsets())
