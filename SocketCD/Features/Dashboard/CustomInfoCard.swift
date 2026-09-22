@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CustomInfoCard: View {
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettingsStore.shared
+    @ObservedObject private var settings = AppSettingsStore.shared
     
     @Binding var activeSheet: ActiveSheet?
     @Binding var selectedSection: AppSection?
