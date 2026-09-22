@@ -17,6 +17,7 @@ struct AddEditFillupView: View {
     @FocusState var isInputActive: Bool
     @State var showingFillTypeInfo = false
     @State private var showingDeleteAlert = false
+    @State private var showingDuplicateOdometerError = false
     
     // MARK: - Input
     private let vehicle: Vehicle?
@@ -116,13 +117,7 @@ struct AddEditFillupView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(fillup != nil ? "Done" : "Add", systemImage: "checkmark") {
-                        if let fillup {
-                            fillup.updateAndSave(draftFillup: draftFillup)
-                        } else if let vehicle {
-                            vehicle.addNewFillup(draftFillup: draftFillup)
-                        }
-                        
-                        dismiss()
+                        saveFillup()
                     }
                     .labelStyle(.adaptive)
                     .disabled(draftFillup.canBeSaved ? false : true)
@@ -148,6 +143,14 @@ struct AddEditFillupView: View {
             } message: {
                 Text("Deleting fill-up records may cause inaccurate fuel economy calculation. Delete this record anyway?")
             }
+            .alert(
+                "Odometer reading already used",
+                isPresented: $showingDuplicateOdometerError
+            ) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Each fill-up needs a different odometer reading.")
+            }
         }
         .tint(Color.fillupsTheme)
     }
@@ -160,6 +163,18 @@ struct AddEditFillupView: View {
             return (cost * (draftFillup.volume ?? 0)).asCurrency()
         } else {
             return (cost / (draftFillup.volume ?? 0)).asCurrency()
+        }
+    }
+
+    private var hasDuplicateOdometer: Bool {
+        guard let odometer = draftFillup.odometer,
+              let vehicle = vehicle ?? fillup?.vehicle else {
+            return false
+        }
+
+        return vehicle.sortedFillupsArray.contains { existingFillup in
+            existingFillup.odometer == odometer
+                && existingFillup.objectID != fillup?.objectID
         }
     }
     
@@ -175,6 +190,21 @@ struct AddEditFillupView: View {
         }
         .buttonStyle(.plain)
         .tint(Color.primary)
+    }
+
+    private func saveFillup() {
+        guard !hasDuplicateOdometer else {
+            showingDuplicateOdometerError = true
+            return
+        }
+
+        if let fillup {
+            fillup.updateAndSave(draftFillup: draftFillup)
+        } else if let vehicle {
+            vehicle.addNewFillup(draftFillup: draftFillup)
+        }
+
+        dismiss()
     }
 }
 
