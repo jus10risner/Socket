@@ -22,7 +22,11 @@ struct FuelEconomyChartView: View {
     @State private var settledDomainLength: TimeInterval = 60 * 60 * 24 * 183
     @State private var contentOpacity = 1.0
     @State private var displayedDateRange: DateRange = .threeMonths
+    @State private var resizePlotOpacity = 1.0
+    @State private var chartLayoutID = 0
+    @State private var resizeScrollPosition: Date?
     @State private var rangeTransitionTask: Task<Void, Never>?
+    @State private var resizeTransitionTask: Task<Void, Never>?
 
     private let settings = AppSettingsStore.shared
     private let selectionTolerance: TimeInterval = 60 * 60 * 24
@@ -32,7 +36,19 @@ struct FuelEconomyChartView: View {
             header
 
             chart
+                .id(chartLayoutID)
+                .frame(maxWidth: .infinity)
                 .frame(height: horizontalSizeClass == .regular ? 350 : 200)
+                .allowsHitTesting(resizePlotOpacity == 1)
+                .onGeometryChange(for: CGFloat.self) { proxy in
+                    proxy.size.width.rounded()
+                } action: { oldWidth, newWidth in
+                    guard oldWidth > 0, abs(newWidth - oldWidth) > 1 else {
+                        return
+                    }
+                    
+                    handleChartWidthChange()
+                }
         }
         .onAppear {
             resetChartPosition()
@@ -57,6 +73,7 @@ struct FuelEconomyChartView: View {
         }
         .onDisappear {
             rangeTransitionTask?.cancel()
+            resizeTransitionTask?.cancel()
         }
     }
 
@@ -171,6 +188,10 @@ struct FuelEconomyChartView: View {
         )
     }
 
+    private var plotOpacity: Double {
+        contentOpacity * resizePlotOpacity
+    }
+    
     private var chart: some View {
         Chart {
             if data.count >= 2 {
@@ -188,7 +209,7 @@ struct FuelEconomyChartView: View {
                         lineJoin: .round
                     )
                 )
-                .opacity(contentOpacity)
+                .opacity(plotOpacity)
             }
 
             if data.count >= 3 {
@@ -209,7 +230,7 @@ struct FuelEconomyChartView: View {
                         endPoint: .bottom
                     )
                 )
-                .opacity(contentOpacity)
+                .opacity(plotOpacity)
                 .accessibilityHidden(true)
             } else {
                 PointPlot(
@@ -219,7 +240,7 @@ struct FuelEconomyChartView: View {
                 )
                 .symbolSize(45)
                 .foregroundStyle(Color.fillupsTheme)
-                .opacity(contentOpacity)
+                .opacity(plotOpacity)
                 .accessibilityHidden(true)
             }
 
@@ -229,7 +250,7 @@ struct FuelEconomyChartView: View {
                 )
                 .foregroundStyle(Color.secondary)
                 .lineStyle(StrokeStyle(lineWidth: 1))
-                .opacity(contentOpacity)
+                .opacity(plotOpacity)
                 .accessibilityHidden(true)
             }
         }
@@ -347,7 +368,11 @@ struct FuelEconomyChartView: View {
 
     private func resetChartPosition() {
         rangeTransitionTask?.cancel()
+        resizeTransitionTask?.cancel()
+        resizeScrollPosition = nil
+        resizePlotOpacity = 1
         selectedDate = nil
+        resizePlotOpacity = 1
         contentOpacity = 1
         displayedDateRange = selectedDateRange
         let newDomainLength = targetDomainLength
@@ -360,8 +385,52 @@ struct FuelEconomyChartView: View {
         settledScrollPosition = newScrollPosition
     }
 
+    private func handleChartWidthChange() {
+        rangeTransitionTask?.cancel()
+        
+        if resizeScrollPosition == nil {
+            resizeScrollPosition = settledScrollPosition
+            selectedDate = nil
+            
+            if reduceMotion {
+                resizePlotOpacity = 0
+            } else {
+                withAnimation(.easeOut(duration: 0.15)) {
+                    resizePlotOpacity = 0
+                }
+            }
+        }
+        
+        resizeTransitionTask?.cancel()
+        resizeTransitionTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(150))
+            guard !Task.isCancelled,
+                  let resizeScrollPosition else { return }
+            
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                scrollPosition = resizeScrollPosition
+                settledScrollPosition = resizeScrollPosition
+                selectedDate = nil
+                chartLayoutID += 1
+                self.resizeScrollPosition = nil
+            }
+            
+            if reduceMotion {
+                resizePlotOpacity = 1
+            } else {
+                withAnimation(.easeIn(duration: 0.2)) {
+                    resizePlotOpacity = 1
+                }
+            }
+        }
+    }
+    
     private func transitionRange() {
         rangeTransitionTask?.cancel()
+        resizeTransitionTask?.cancel()
+        resizeScrollPosition = nil
         selectedDate = nil
 
         let newDomainLength = targetDomainLength
