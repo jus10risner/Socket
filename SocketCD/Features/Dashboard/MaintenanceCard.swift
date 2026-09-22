@@ -41,6 +41,7 @@ struct MaintenanceCard: View {
             } visual: {
                 if let service = nextDueService {
                     ServiceIndicatorView(vehicle: vehicle, service: service, showsMaintenanceSymbol: true)
+                        .id(service.objectID)
                 } else {
                     CardSymbolImage(symbolName: "book.and.wrench.fill", color: Color(.maintenanceTheme))
                 }
