@@ -17,7 +17,7 @@ struct ServiceIndicatorView: View {
     var body: some View {
         Circle()
             .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
-            .frame(width: 33)
+            .frame(width: 35, height: 35)
             .overlay {
                 ZStack {
                     if service.sortedServiceRecordsArray.count > 0 {
