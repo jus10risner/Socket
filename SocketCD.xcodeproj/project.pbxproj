@@ -50,6 +50,7 @@
 		9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */; };
 		9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53452BADD68A00F75D49 /* AppInfo.swift */; };
 		9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */; };
+		9E73890E306312F600F63EB5 /* PDFExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E73890D306312F600F63EB5 /* PDFExporterTests.swift */; };
 		9E7507592BF68C84000E25BD /* EmptyVehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */; };
 		9E7EF3FB2EC3899000E1E5D1 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */; };
 		9E7EF3FD2EC38E6000E1E5D1 /* NotificationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */; };
@@ -185,6 +186,7 @@
 		9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLabelStyle.swift; sourceTree = "<group>"; };
 		9E6A53452BADD68A00F75D49 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectorView.swift; sourceTree = "<group>"; };
+		9E73890D306312F600F63EB5 /* PDFExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExporterTests.swift; sourceTree = "<group>"; };
 		9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyVehicleListView.swift; sourceTree = "<group>"; };
 		9E7A4A5B2F4E0A260021AA4E /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 				9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */,
 				9EAEDF962F4DFC5D005D29C6 /* VehicleTests.swift */,
 				9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */,
+				9E73890D306312F600F63EB5 /* PDFExporterTests.swift */,
 			);
 			path = SocketCDTests;
 			sourceTree = "<group>";
@@ -772,6 +775,7 @@
 			files = (
 				9EAEDF982F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift in Sources */,
 				9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */,
+				9E73890E306312F600F63EB5 /* PDFExporterTests.swift in Sources */,
 				9EAEDF9D2F4E057B005D29C6 /* TestDataController.swift in Sources */,
 				9EAEDF992F4DFC5D005D29C6 /* ServiceTests.swift in Sources */,
 				9EAEDF9A2F4DFC5D005D29C6 /* VehicleTests.swift in Sources */,
