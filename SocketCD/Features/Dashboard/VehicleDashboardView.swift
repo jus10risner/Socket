@@ -26,9 +26,9 @@ struct VehicleDashboardView: View {
     @State private var showingUpdateOdometerAlert = false
     @State private var newOdometerValue: Int? = nil
     
-    @State private var exportURL: URL?
     @State private var shareItem: ShareItem?
-    @State private var showingPageSizeSelector = false
+    @State private var showingExportOptions = false
+    @State private var showingExportError = false
     
     let columns = [GridItem(.adaptive(minimum: 325), spacing: 5)]
     
@@ -105,6 +105,11 @@ struct VehicleDashboardView: View {
             .sheet(item: $shareItem) { item in
                 ActivityView(activityItems: [item.url])
             }
+            .sheet(isPresented: $showingExportOptions) {
+                PDFExportOptionsView { options in
+                    exportPDF(options: options)
+                }
+            }
             .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
                 TextField("\(draftVehicle.odometer ?? 0)", value: $newOdometerValue, format: .number.decimalSeparator(strategy: .automatic))
                     .keyboardType(.numberPad)
@@ -119,6 +124,11 @@ struct VehicleDashboardView: View {
             }, message: {
                 Text("Enter the current odometer value.")
             })
+            .alert("Couldn’t Export PDF", isPresented: $showingExportError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("The document couldn’t be created. Please try again.")
+            }
             .toolbar {
                 vehicleToolbar
             }
@@ -145,20 +155,15 @@ struct VehicleDashboardView: View {
                 Button("Edit Vehicle", systemImage: "pencil") { activeSheet = .editVehicle }
             }
             .adaptiveTint()
-            .confirmationDialog("Which paper size do you prefer?", isPresented: $showingPageSizeSelector, titleVisibility: .visible) {
-                Button("A4") { exportPDF(pageSize: .a4) }
-                
-                Button("US Letter") { exportPDF(pageSize: .usLetter) }
-                
-                Button("Cancel", role: .cancel) { }
-            }
         }
     }
     
-    private func exportPDF(pageSize: PDFPaperSize) {
+    private func exportPDF(options: PDFExportOptions) {
         Task {
-            if let exportURL = PDFExporter.export(vehicle: vehicle, paperSize: pageSize) {
+            if let exportURL = PDFExporter.export(vehicle: vehicle, options: options) {
                 shareItem = ShareItem(url: exportURL)
+            } else {
+                showingExportError = true
             }
         }
     }
@@ -177,7 +182,7 @@ struct VehicleDashboardView: View {
     private var exportMenu: some View {
         Menu("Export Records", systemImage: "square.and.arrow.up") {
             Section("Printable Document (PDF)") {
-                Button("Maintenance and Repairs") { showingPageSizeSelector = true }
+                Button("Maintenance and Repairs") { showingExportOptions = true }
             }
             
             Section("Spreadsheet (CSV)") {
@@ -201,6 +206,67 @@ struct VehicleDashboardView: View {
         case .customInfo:
             CustomInfoListView(vehicle: vehicle)
         }
+    }
+}
+
+private struct PDFExportOptionsView: View {
+    @Environment(\.dismiss) private var dismiss
+    @AppStorage("pdfExportPaperSize") private var paperSizeRawValue = PDFPaperSize.usLetter.rawValue
+    @State private var options = PDFExportOptions()
+
+    let export: (PDFExportOptions) -> Void
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Paper Size") {
+                    Picker("Paper Size", selection: paperSizeSelection) {
+                        ForEach(PDFPaperSize.allCases) { paperSize in
+                            Text(paperSize.title).tag(paperSize)
+                        }
+                    }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                }
+
+                Section {
+                    Toggle("Include Photos", isOn: $options.includePhotos)
+                    Toggle("Include Costs", isOn: $options.includeCosts)
+                    Toggle("Include Notes", isOn: $options.includeNotes)
+                }
+            }
+            .navigationTitle("Export PDF")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark") { dismiss() }
+                        .labelStyle(.adaptive)
+                        .adaptiveTint()
+                }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Export", systemImage: "checkmark") {
+                        var selectedOptions = options
+                        selectedOptions.paperSize = selectedPaperSize
+                        dismiss()
+                        export(selectedOptions)
+                    }
+                    .labelStyle(.adaptive)
+                }
+            }
+        }
+        .presentationDetents([.medium])
+    }
+
+    private var selectedPaperSize: PDFPaperSize {
+        PDFPaperSize(rawValue: paperSizeRawValue) ?? .usLetter
+    }
+
+    private var paperSizeSelection: Binding<PDFPaperSize> {
+        Binding(
+            get: { selectedPaperSize },
+            set: { paperSizeRawValue = $0.rawValue }
+        )
     }
 }
 
