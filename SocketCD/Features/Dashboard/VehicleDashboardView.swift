@@ -24,7 +24,7 @@ struct VehicleDashboardView: View {
     @State private var selectedSection: AppSection?
     @State private var activeSheet: ActiveSheet?
     @State private var showingUpdateOdometerAlert = false
-    @State private var newOdometerValue: Int? = nil
+    @State private var newOdometerValue = ""
     
     @State private var shareItem: ShareItem?
     @State private var showingExportOptions = false
@@ -48,6 +48,8 @@ struct VehicleDashboardView: View {
                                 Text(vehicle.odometer.formatted())
                                     .font(.title2.bold())
                                     .monospacedDigit()
+                                    .contentTransition(.numericText(value: Double(vehicle.odometer)))
+                                    .animation(.default, value: vehicle.odometer)
                                 
                                 Text(settings.distanceUnit.abbreviated)
                                     .font(.headline)
@@ -111,18 +113,26 @@ struct VehicleDashboardView: View {
                 }
             }
             .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
-                TextField("\(draftVehicle.odometer ?? 0)", value: $newOdometerValue, format: .number.decimalSeparator(strategy: .automatic))
+                TextField("\(draftVehicle.odometer ?? 0)", text: $newOdometerValue)
                     .keyboardType(.numberPad)
-                Button("Cancel", role: .cancel) { newOdometerValue = nil }
-                Button("Save") {
-                    if let newOdometer = newOdometerValue {
+                    .onChange(of: newOdometerValue) { _, newValue in
+                        formatOdometerInput(newValue)
+                    }
+                
+                Button("Cancel", role: .cancel) {
+                    newOdometerValue = ""
+                }
+                .keyboardShortcut(.cancelAction)
+                
+                Button("Update") {
+                    if let newOdometer = enteredOdometer {
                         draftVehicle.odometer = newOdometer
                         vehicle.updateAndSave(draftVehicle: draftVehicle)
                     }
+                    newOdometerValue = ""
                 }
-                .disabled(newOdometerValue == nil)
-            }, message: {
-                Text("Enter the current odometer value.")
+                .keyboardShortcut(.defaultAction)
+                .disabled(enteredOdometer == nil)
             })
             .alert("Couldn’t Export PDF", isPresented: $showingExportError) {
                 Button("OK", role: .cancel) { }
@@ -132,6 +142,22 @@ struct VehicleDashboardView: View {
             .toolbar {
                 vehicleToolbar
             }
+        }
+        .modifier(
+            SystemAlertTintModifier(isPresented: showingUpdateOdometerAlert)
+        )
+    }
+
+    private var enteredOdometer: Int? {
+        Int(newOdometerValue.filter(\.isNumber))
+    }
+
+    private func formatOdometerInput(_ input: String) {
+        let digits = input.filter(\.isNumber)
+        let formattedValue = Int(digits)?.formatted() ?? digits
+
+        if newOdometerValue != formattedValue {
+            newOdometerValue = formattedValue
         }
     }
     
@@ -205,6 +231,19 @@ struct VehicleDashboardView: View {
             FillupsDashboardView(vehicle: vehicle)
         case .customInfo:
             CustomInfoListView(vehicle: vehicle)
+        }
+    }
+}
+
+private struct SystemAlertTintModifier: ViewModifier {
+    let isPresented: Bool
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content.tint(nil)
+        } else {
+            content
         }
     }
 }
