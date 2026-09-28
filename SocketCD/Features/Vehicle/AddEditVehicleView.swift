@@ -25,6 +25,7 @@ struct AddEditVehicleView: View {
     
     @State private var showingDuplicateNameError = false
     @State private var showingDeleteAlert = false
+    @State private var odometerWarning: OdometerWarning?
     
     var body: some View {
         NavigationStack {
@@ -64,17 +65,7 @@ struct AddEditVehicleView: View {
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button(vehicle != nil ? "Done" : "Add", systemImage: "checkmark") {
-                        if vehicles.contains(where: { $0.name == draftVehicle.name && $0.id != vehicle?.id }) {
-                            showingDuplicateNameError = true
-                        } else {
-                            if let vehicle {
-                                vehicle.updateAndSave(draftVehicle: draftVehicle)
-                            } else {
-                                addNewVehicle()
-                            }
-                            
-                            dismiss()
-                        }
+                        saveVehicle()
                     }
                     .labelStyle(.adaptive)
                     .disabled(draftVehicle.canBeSaved ? false : true)
@@ -103,6 +94,13 @@ struct AddEditVehicleView: View {
             } message: {
                 Text("Permanently delete this vehicle and all of its records? This action cannot be undone.")
             }
+            .odometerWarningAlert(
+                warning: $odometerWarning,
+                entered: draftVehicle.odometer,
+                current: vehicle?.odometer,
+                distanceUnit: AppSettingsStore.shared.distanceUnit.abbreviated,
+                onConfirm: performVehicleSave
+            )
         }
         .tint(nil)
     }
@@ -127,6 +125,35 @@ struct AddEditVehicleView: View {
     
     
     // MARK: - Methods
+
+    private func saveVehicle() {
+        guard !vehicles.contains(where: { $0.name == draftVehicle.name && $0.id != vehicle?.id }) else {
+            showingDuplicateNameError = true
+            return
+        }
+
+        if let vehicle, let entered = draftVehicle.odometer,
+           let warning = OdometerValidator.warning(
+               entered: entered,
+               current: vehicle.odometer,
+               context: .currentVehicle
+           ) {
+            odometerWarning = warning
+            return
+        }
+
+        performVehicleSave()
+    }
+
+    private func performVehicleSave() {
+        if let vehicle {
+            vehicle.updateAndSave(draftVehicle: draftVehicle)
+        } else {
+            addNewVehicle()
+        }
+
+        dismiss()
+    }
     
     // Creates a new vehicle object, using the information from this view
     func addNewVehicle() {
@@ -141,7 +168,6 @@ struct AddEditVehicleView: View {
         newVehicle.displayOrder = newVehicleDisplayOrder
         
         try? context.save()
-        dismiss()
     }
 }
 

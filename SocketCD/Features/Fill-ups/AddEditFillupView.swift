@@ -18,6 +18,7 @@ struct AddEditFillupView: View {
     @State var showingFillTypeInfo = false
     @State private var showingDeleteAlert = false
     @State private var showingDuplicateOdometerError = false
+    @State private var odometerWarning: OdometerWarning?
     
     // MARK: - Input
     private let vehicle: Vehicle?
@@ -152,6 +153,13 @@ struct AddEditFillupView: View {
             } message: {
                 Text("Each fill-up needs a different odometer reading.")
             }
+            .odometerWarningAlert(
+                warning: $odometerWarning,
+                entered: draftFillup.odometer,
+                current: comparisonVehicle?.odometer,
+                distanceUnit: settings.distanceUnit.abbreviated,
+                onConfirm: performFillupSave
+            )
         }
         .tint(nil)
     }
@@ -178,7 +186,11 @@ struct AddEditFillupView: View {
                 && existingFillup.objectID != fillup?.objectID
         }
     }
-    
+
+    private var comparisonVehicle: Vehicle? {
+        vehicle ?? fillup?.vehicle
+    }
+
     // Allows the user to specify a fill type for a given fill-up
     private var fillTypePicker: some View {
         LabeledInput(label: "Fill Type") {
@@ -198,6 +210,21 @@ struct AddEditFillupView: View {
             showingDuplicateOdometerError = true
             return
         }
+
+        if let entered = draftFillup.odometer, let comparisonVehicle,
+           let warning = OdometerValidator.warning(
+               entered: entered,
+               current: comparisonVehicle.odometer,
+               context: .historicalRecord
+           ) {
+            odometerWarning = warning
+            return
+        }
+
+        performFillupSave()
+    }
+
+    private func performFillupSave() {
 
         if let fillup {
             fillup.updateAndSave(draftFillup: draftFillup)

@@ -15,6 +15,7 @@ struct AddEditRepairView: View {
     @StateObject var draftRepair = DraftRepair()
     @FocusState var isInputActive: Bool
     @State private var showingDeleteAlert = false
+    @State private var odometerWarning: OdometerWarning?
     
     // MARK: - Input
     private let vehicle: Vehicle?
@@ -78,13 +79,7 @@ struct AddEditRepairView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(repair != nil ? "Done" : "Add", systemImage: "checkmark") {
-                        if let repair {
-                            repair.updateAndSave(draftRepair: draftRepair)
-                        } else if let vehicle {
-                            vehicle.addNewRepair(draftRepair: draftRepair)
-                        }
-                        
-                        dismiss()
+                        saveRepair()
                     }
                     .labelStyle(.adaptive)
                     .disabled(draftRepair.canBeSaved ? false : true)
@@ -111,7 +106,42 @@ struct AddEditRepairView: View {
         } message: {
             Text("Permanently delete this repair record? This cannot be undone.")
         }
+        .odometerWarningAlert(
+            warning: $odometerWarning,
+            entered: draftRepair.odometer,
+            current: comparisonVehicle?.odometer,
+            distanceUnit: AppSettingsStore.shared.distanceUnit.abbreviated,
+            onConfirm: performRepairSave
+        )
         .tint(nil)
+    }
+
+    private var comparisonVehicle: Vehicle? {
+        vehicle ?? repair?.vehicle
+    }
+
+    private func saveRepair() {
+        if let entered = draftRepair.odometer, let comparisonVehicle,
+           let warning = OdometerValidator.warning(
+               entered: entered,
+               current: comparisonVehicle.odometer,
+               context: .historicalRecord
+           ) {
+            odometerWarning = warning
+            return
+        }
+
+        performRepairSave()
+    }
+
+    private func performRepairSave() {
+        if let repair {
+            repair.updateAndSave(draftRepair: draftRepair)
+        } else if let vehicle {
+            vehicle.addNewRepair(draftRepair: draftRepair)
+        }
+
+        dismiss()
     }
 }
 

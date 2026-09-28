@@ -19,6 +19,7 @@ struct AddEditRecordView: View {
     @StateObject var draftServiceLog = DraftServiceLog()
     @FocusState var isInputActive: Bool
     @State private var showingDeleteAlert = false
+    @State private var odometerWarning: OdometerWarning?
     
     // MARK: - Input
     private let vehicle: Vehicle
@@ -101,20 +102,7 @@ struct AddEditRecordView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(record != nil ? "Done" : "Add", systemImage: "checkmark") {
-                        if let record {
-                            if let log = record.serviceLog {
-                                // Edit existing ServiceLog
-                                log.updateAndSave(draftServiceLog: draftServiceLog, allServices: vehicle.sortedServicesArray)
-                            } else {
-                                // Edit legacy single ServiceRecord
-                                record.updateAndSave(service: service, draftServiceLog: draftServiceLog)
-                            }
-                        } else {
-                            // Add new record/log
-                            service.addNewServiceRecord(draftServiceLog: draftServiceLog, allServices: vehicle.sortedServicesArray)
-                        }
-                        
-                        dismiss()
+                        saveRecord()
                     }
                     .labelStyle(.adaptive)
                     .disabled(draftServiceLog.canBeSaved ? false : true)
@@ -146,8 +134,43 @@ struct AddEditRecordView: View {
             } message: {
                 Text("Permanently delete this service log? This cannot be undone.")
             }
+            .odometerWarningAlert(
+                warning: $odometerWarning,
+                entered: draftServiceLog.odometer,
+                current: vehicle.odometer,
+                distanceUnit: AppSettingsStore.shared.distanceUnit.abbreviated,
+                onConfirm: performRecordSave
+            )
         }
         .tint(nil)
+    }
+
+    private func saveRecord() {
+        if let entered = draftServiceLog.odometer,
+           let warning = OdometerValidator.warning(
+               entered: entered,
+               current: vehicle.odometer,
+               context: .historicalRecord
+           ) {
+            odometerWarning = warning
+            return
+        }
+
+        performRecordSave()
+    }
+
+    private func performRecordSave() {
+        if let record {
+            if let log = record.serviceLog {
+                log.updateAndSave(draftServiceLog: draftServiceLog, allServices: vehicle.sortedServicesArray)
+            } else {
+                record.updateAndSave(service: service, draftServiceLog: draftServiceLog)
+            }
+        } else {
+            service.addNewServiceRecord(draftServiceLog: draftServiceLog, allServices: vehicle.sortedServicesArray)
+        }
+
+        dismiss()
     }
 }
 

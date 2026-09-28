@@ -17,6 +17,7 @@ struct AddEditServiceView: View {
     @StateObject var draftServiceLog = DraftServiceLog()
     @FocusState var isInputActive: Bool
     @State private var showingDuplicateNameError = false
+    @State private var odometerWarning: OdometerWarning?
     @State private var loggingService = true
     @State private var showingDeleteAlert = false
     @State private var showingMoreInfo = false
@@ -179,18 +180,7 @@ struct AddEditServiceView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(service != nil ? "Done" : "Add", systemImage: "checkmark") {
-                        if let service {
-                            service.updateAndSave(draftService: draftService)
-                        } else if let vehicle {
-                            if vehicle.sortedServicesArray.contains(where: { service in service.name == draftService.name }) {
-                                showingDuplicateNameError = true
-                                return
-                            } else if draftServiceLog.odometer != nil {
-                                vehicle.addNewService(draftService: draftService, initialRecord: draftServiceLog, isBaseLine: loggingService ? false : true)
-                            }
-                        }
-                        
-                        dismiss()
+                        saveService()
                     }
                     .labelStyle(.adaptive)
                     .disabled(draftService.canBeSaved ? false : true)
@@ -229,11 +219,58 @@ struct AddEditServiceView: View {
             } message: {
                 Text("Please choose a different name.")
             }
+            .odometerWarningAlert(
+                warning: $odometerWarning,
+                entered: draftServiceLog.odometer,
+                current: vehicle?.odometer,
+                distanceUnit: AppSettingsStore.shared.distanceUnit.abbreviated,
+                onConfirm: performServiceSave
+            )
         }
         .tint(nil)
     }
     
     // MARK: - Methods
+
+    private func saveService() {
+        guard service == nil else {
+            performServiceSave()
+            return
+        }
+
+        guard let vehicle else { return }
+
+        guard !vehicle.sortedServicesArray.contains(where: { $0.name == draftService.name }) else {
+            showingDuplicateNameError = true
+            return
+        }
+
+        if let entered = draftServiceLog.odometer,
+           let warning = OdometerValidator.warning(
+               entered: entered,
+               current: vehicle.odometer,
+               context: .historicalRecord
+           ) {
+            odometerWarning = warning
+            return
+        }
+
+        performServiceSave()
+    }
+
+    private func performServiceSave() {
+        if let service {
+            service.updateAndSave(draftService: draftService)
+        } else if let vehicle, draftServiceLog.odometer != nil {
+            vehicle.addNewService(
+                draftService: draftService,
+                initialRecord: draftServiceLog,
+                isBaseLine: !loggingService
+            )
+        }
+
+        dismiss()
+    }
     
     // Defines the header and padding for the service interval and 'Start Tracking From' sections
     private func formItem<Content: View>(headline: String, hasInfoButton: Bool = false, subheadline: String? = nil, @ViewBuilder content: () -> Content) -> some View {

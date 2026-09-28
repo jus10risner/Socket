@@ -25,6 +25,8 @@ struct VehicleDashboardView: View {
     @State private var activeSheet: ActiveSheet?
     @State private var showingUpdateOdometerAlert = false
     @State private var newOdometerValue = ""
+    @State private var pendingOdometer: Int?
+    @State private var odometerWarning: OdometerWarning?
     
     @State private var shareItem: ShareItem?
     @State private var showingExportOptions = false
@@ -126,15 +128,21 @@ struct VehicleDashboardView: View {
                 .keyboardShortcut(.cancelAction)
                 
                 Button("Update") {
-                    if let newOdometer = enteredOdometer {
-                        draftVehicle.odometer = newOdometer
-                        vehicle.updateAndSave(draftVehicle: draftVehicle)
-                    }
-                    newOdometerValue = ""
+                    validateEnteredOdometer()
                 }
                 .keyboardShortcut(.defaultAction)
                 .disabled(enteredOdometer == nil)
             })
+            .odometerWarningAlert(
+                warning: $odometerWarning,
+                entered: pendingOdometer,
+                current: vehicle.odometer,
+                distanceUnit: settings.distanceUnit.abbreviated,
+                confirmationTitle: "Update Anyway",
+                cancellationTitle: "Cancel",
+                onConfirm: commitPendingOdometer,
+                onCancel: { pendingOdometer = nil }
+            )
             .alert("Couldn’t Export PDF", isPresented: $showingExportError) {
                 Button("OK", role: .cancel) { }
             } message: {
@@ -158,6 +166,33 @@ struct VehicleDashboardView: View {
         if newOdometerValue != formattedValue {
             newOdometerValue = formattedValue
         }
+    }
+
+    private func validateEnteredOdometer() {
+        guard let enteredOdometer else { return }
+
+        pendingOdometer = enteredOdometer
+        newOdometerValue = ""
+
+        if let warning = OdometerValidator.warning(
+            entered: enteredOdometer,
+            current: vehicle.odometer,
+            context: .currentVehicle
+        ) {
+            DispatchQueue.main.async {
+                odometerWarning = warning
+            }
+        } else {
+            commitPendingOdometer()
+        }
+    }
+
+    private func commitPendingOdometer() {
+        guard let pendingOdometer else { return }
+
+        draftVehicle.odometer = pendingOdometer
+        vehicle.updateAndSave(draftVehicle: draftVehicle)
+        self.pendingOdometer = nil
     }
     
     @ToolbarContentBuilder
