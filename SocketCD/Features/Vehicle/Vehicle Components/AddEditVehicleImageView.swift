@@ -68,6 +68,7 @@ struct AddEditVehicleImageView: View {
             ? Text("Vehicle photo is shown.")
             : Text("No photo selected. Current color is shown.")
         )
+        .tint(nil)
     }
     
     
@@ -163,4 +164,3 @@ struct AddEditVehicleImageView: View {
 #Preview {
     AddEditVehicleImageView(draftVehicle: DraftVehicle())
 }
-

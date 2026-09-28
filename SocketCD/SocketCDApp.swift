@@ -48,6 +48,7 @@ struct SocketCDApp: App {
                 } message: {
                     Text(dataController.persistentStoreError?.localizedDescription ?? "Unknown error")
                 }
+                .tint(nil)
         }
         .onChange(of: scenePhase) { _, newPhase in
             dataController.save()

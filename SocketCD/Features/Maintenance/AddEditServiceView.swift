@@ -203,6 +203,7 @@ struct AddEditServiceView: View {
                         .adaptiveTint()
                 }
             }
+            .tint(Color.maintenanceTheme)
             .alert("Delete Service", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let service {
@@ -229,7 +230,7 @@ struct AddEditServiceView: View {
                 Text("Please choose a different name.")
             }
         }
-        .tint(Color.maintenanceTheme)
+        .tint(nil)
     }
     
     // MARK: - Methods

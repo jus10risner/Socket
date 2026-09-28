@@ -96,21 +96,22 @@ struct AddEditRepairView: View {
                         .adaptiveTint()
                 }
             }
-            .alert("Delete Repair", isPresented: $showingDeleteAlert) {
-                Button("Delete", role: .destructive) {
-                    if let repair {
-                        DataController.shared.delete(repair)
-                    }
-                    
-                    dismiss()
-                    onDelete?()
-                }
-                Button("Cancel", role: .cancel) { }
-            } message: {
-                Text("Permanently delete this repair record? This cannot be undone.")
-            }
         }
         .tint(Color.repairsTheme)
+        .alert("Delete Repair", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                if let repair {
+                    DataController.shared.delete(repair)
+                }
+
+                dismiss()
+                onDelete?()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Permanently delete this repair record? This cannot be undone.")
+        }
+        .tint(nil)
     }
 }
 

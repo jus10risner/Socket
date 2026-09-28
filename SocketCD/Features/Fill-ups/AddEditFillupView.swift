@@ -129,6 +129,7 @@ struct AddEditFillupView: View {
                         .adaptiveTint()
                 }
             }
+            .tint(Color.fillupsTheme)
             .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let fillup {
@@ -152,7 +153,7 @@ struct AddEditFillupView: View {
                 Text("Each fill-up needs a different odometer reading.")
             }
         }
-        .tint(Color.fillupsTheme)
+        .tint(nil)
     }
     
     // Returns the total or per-unit cost, based on which the user has selected in settings (used to show both costs at once)

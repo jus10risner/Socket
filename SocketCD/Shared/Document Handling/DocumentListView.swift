@@ -65,6 +65,7 @@ private struct ReadOnlyDocumentRow: View {
         } message: {
             Text("There was a problem opening that document.")
         }
+        .tint(nil)
     }
 
     private func preview() {

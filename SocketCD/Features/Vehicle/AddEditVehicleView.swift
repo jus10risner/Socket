@@ -80,6 +80,7 @@ struct AddEditVehicleView: View {
                     .disabled(draftVehicle.canBeSaved ? false : true)
                 }
             }
+            .tint(AppSettingsStore.shared.selectedAccent())
             .alert("You already have a vehicle with that name", isPresented: $showingDuplicateNameError) {
                 Button("OK", role: .cancel) { }
             } message: {
@@ -103,6 +104,7 @@ struct AddEditVehicleView: View {
                 Text("Permanently delete this vehicle and all of its records? This action cannot be undone.")
             }
         }
+        .tint(nil)
     }
     
     

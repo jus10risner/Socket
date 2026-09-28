@@ -91,6 +91,7 @@ struct AddEditCustomInfoView: View {
                         .adaptiveTint()
                 }
             }
+            .tint(settings.selectedAccent())
             .alert("Delete Vehicle Info", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let customInfo {
@@ -110,6 +111,7 @@ struct AddEditCustomInfoView: View {
                 Text("Please choose a different label.")
             }
         }
+        .tint(nil)
     }
 }
 

@@ -14,19 +14,19 @@ import UniformTypeIdentifiers
 struct AddAttachmentButton: View {
     @Environment(\.managedObjectContext) var context
     @StateObject private var cameraViewModel = CameraViewModel()
-    
+
     @Binding var photos: [Photo]
     @Binding var documents: [AttachedDocument]
-    
+
     @State private var showingPhotosPicker = false
     @State private var showingDocumentPicker = false
     @State private var showingPhotoError = false
     @State private var showingDocumentError = false
     @State private var isLoadingPhotos = false
-    
+
     @State private var capturedImage: UIImage?
     @State private var selectedImages: [PhotosPickerItem] = []
-    
+
     var body: some View {
         HStack {
             if isLoadingPhotos {
@@ -40,126 +40,128 @@ struct AddAttachmentButton: View {
         .foregroundStyle(.tint)
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityHidden(true)
-        
-//        Label("Add Attachment...", systemImage: "paperclip")
-//            .frame(maxWidth: .infinity, alignment: .leading)
-//            .accessibilityHidden(true)
-            .overlay {
-                Menu {
-                    Button("Choose Photo", systemImage: "photo.on.rectangle") {
-                        UIApplication.shared
-                            .sendAction(
-                                #selector(UIResponder.resignFirstResponder),
-                                to: nil,
-                                from: nil,
-                                for: nil
-                            )
-                        
-                        // Dismisses keyboard, if visible
-                        showingPhotosPicker = true
-                    }
-                
-                    Button("Take Photo", systemImage: "camera") {
-                        Task {
-                            await cameraViewModel
-                                .requestCameraAccessAndAvailability()
-                        }
-                    }
+        .overlay {
+            Menu {
+                Button("Choose Photo", systemImage: "photo.on.rectangle") {
+                    UIApplication.shared
+                        .sendAction(
+                            #selector(UIResponder.resignFirstResponder),
+                            to: nil,
+                            from: nil,
+                            for: nil
+                        )
 
-                    Button("Choose PDF", systemImage: "document") {
-                        UIApplication.shared
-                            .sendAction(
-                                #selector(UIResponder.resignFirstResponder),
-                                to: nil,
-                                from: nil,
-                                for: nil
-                            )
-                        
-                        showingDocumentPicker = true
+                    // Dismisses keyboard, if visible
+                    showingPhotosPicker = true
+                }
+
+                Button("Take Photo", systemImage: "camera") {
+                    Task {
+                        await cameraViewModel
+                            .requestCameraAccessAndAvailability()
                     }
-                } label: {
-                    Color.clear
-                        .accessibilityLabel("Add Attachment")
-                        .accessibilityHint("Double-tap to open attachments menu")
                 }
-            }
-            .onChange(of: selectedImages) {
-                Task {
-                    await loadSelectedImages()
+
+                Button("Choose PDF", systemImage: "document") {
+                    UIApplication.shared
+                        .sendAction(
+                            #selector(UIResponder.resignFirstResponder),
+                            to: nil,
+                            from: nil,
+                            for: nil
+                        )
+
+                    showingDocumentPicker = true
                 }
+            } label: {
+                Color.clear
+                    .accessibilityLabel("Add Attachment")
+                    .accessibilityHint("Double-tap to open attachments menu")
             }
-            .photosPicker(
-                isPresented: $showingPhotosPicker,
-                selection: $selectedImages,
-                matching: .images
-            )
-            .fileImporter(
-                isPresented: $showingDocumentPicker,
-                allowedContentTypes: [.pdf],
-                allowsMultipleSelection: true,
-                onCompletion: importDocuments
-            )
-            .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: {
+        }
+        .onChange(of: selectedImages) {
+            Task {
+                await loadSelectedImages()
+            }
+        }
+        .photosPicker(
+            isPresented: $showingPhotosPicker,
+            selection: $selectedImages,
+            matching: .images
+        )
+        .fileImporter(
+            isPresented: $showingDocumentPicker,
+            allowedContentTypes: [.pdf],
+            allowsMultipleSelection: true,
+            onCompletion: importDocuments
+        )
+        .fullScreenCover(
+            isPresented: $cameraViewModel.showingCamera,
+            onDismiss: {
                 Task {
                     await verifyAndAppend()
                 }
-            }) {
-                CameraCapture(
-                    image: $capturedImage,
-                    isPresented: $cameraViewModel.showingCamera
-                )
-                .ignoresSafeArea()
             }
-            .alert(
-                "No Camera Found",
-                isPresented: $cameraViewModel.showingCameraUnavailableAlert
-            ) {
-                Button("OK", role: .cancel) { }
-            } message: {
-                Text(
-                    "This device does not appear to have a functioning camera."
-                )
-            }
-            .alert(
-                "No Camera Access",
-                isPresented: $cameraViewModel.showingCameraAccessAlert
-            ) {
-                Button("Go to Settings") {
-                    Task {
-                        await AppSettingsStore.openSocketSettings()
-                    }
+        ) {
+            CameraCapture(
+                image: $capturedImage,
+                isPresented: $cameraViewModel.showingCamera
+            )
+            .ignoresSafeArea()
+        }
+        .alert(
+            "No Camera Found",
+            isPresented: $cameraViewModel.showingCameraUnavailableAlert
+        ) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(
+                "This device does not appear to have a functioning camera."
+            )
+        }
+        .alert(
+            "No Camera Access",
+            isPresented: $cameraViewModel.showingCameraAccessAlert
+        ) {
+            Button("Go to Settings") {
+                Task {
+                    await AppSettingsStore.openSocketSettings()
                 }
-                Button("Cancel", role: .cancel) { }
-            } message: {
-                Text(
-                    "To use the camera, you will need to turn on camera access for Socket, in the Settings app."
-                )
             }
-            .alert("Image Error", isPresented: $showingPhotoError) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(
-                    "There was a problem saving that image. Please try another image."
-                )
-            }
-            .alert("Document Error", isPresented: $showingDocumentError) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(
-                    "There was a problem saving that PDF. Please try another document."
-                )
-            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text(
+                "To use the camera, you will need to turn on camera access for Socket, in the Settings app."
+            )
+        }
+        .alert("Image Error", isPresented: $showingPhotoError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(
+                "There was a problem saving that image. Please try another image."
+            )
+        }
+        .alert("Document Error", isPresented: $showingDocumentError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(
+                "There was a problem saving that PDF. Please try another document."
+            )
+        }
+        .tint(nil)
     }
-    
+
     // MARK: - Methods
-    
+
     // Verifies an image captured via the camera, then appends it to the photos array
     private func verifyAndAppend() async {
-        if let selectedImage = capturedImage, let newPhoto = Photo.create(from: selectedImage, in: context) {
+        if let selectedImage = capturedImage,
+            let newPhoto = Photo.create(from: selectedImage, in: context)
+        {
             photos.append(newPhoto)
         }
     }
-    
+
     // Verifies images captured via the PhotosPicker, then appends them to the photos array
     private func loadSelectedImages() async {
         let items = selectedImages
@@ -178,7 +180,11 @@ struct AddAttachmentButton: View {
             for (index, item) in items.enumerated() {
                 group.addTask {
                     do {
-                        guard let data = try await item.loadTransferable(type: Data.self) else {
+                        guard
+                            let data = try await item.loadTransferable(
+                                type: Data.self
+                            )
+                        else {
                             return (index, nil)
                         }
 

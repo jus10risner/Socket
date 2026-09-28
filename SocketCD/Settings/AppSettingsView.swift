@@ -74,12 +74,14 @@ struct AppSettingsView: View {
                         .adaptiveTint()
                 }
             }
+            .tint(settings.selectedAccent())
             .alert("Could not send mail", isPresented: $showingMailError) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Please make sure email has been set up on this device, then try again.")
             }
         }
+        .tint(nil)
     }
     
     

@@ -63,11 +63,13 @@ struct TermsOfUseView: View {
         .padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad ? 20 : 0)
         .interactiveDismissDisabled()
         .navigationTitle("Terms of Use")
+        .tint(settings.selectedAccent())
         .alert("Take your time", isPresented: $showingAlert) {
             Button("OK", role: .cancel) { }
         } message: {
             Text("You’ll need to agree to the Terms of Use before using Socket, so please come back when you're ready.")
         }
+        .tint(nil)
     }
 }
 

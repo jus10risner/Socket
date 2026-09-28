@@ -126,6 +126,7 @@ struct AddEditRecordView: View {
                         .adaptiveTint()
                 }
             }
+            .tint(Color.maintenanceTheme)
             .alert("Delete Record", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let record {
@@ -146,7 +147,7 @@ struct AddEditRecordView: View {
                 Text("Permanently delete this service log? This cannot be undone.")
             }
         }
-        .tint(Color.maintenanceTheme)
+        .tint(nil)
     }
 }
 

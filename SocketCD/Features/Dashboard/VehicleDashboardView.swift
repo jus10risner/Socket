@@ -112,6 +112,7 @@ struct VehicleDashboardView: View {
                     exportPDF(options: options)
                 }
             }
+            .tint(settings.selectedAccent())
             .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
                 TextField("\(draftVehicle.odometer ?? 0)", text: $newOdometerValue)
                     .keyboardType(.numberPad)
@@ -143,9 +144,7 @@ struct VehicleDashboardView: View {
                 vehicleToolbar
             }
         }
-        .modifier(
-            SystemAlertTintModifier(isPresented: showingUpdateOdometerAlert)
-        )
+        .tint(nil)
     }
 
     private var enteredOdometer: Int? {
@@ -231,19 +230,6 @@ struct VehicleDashboardView: View {
             FillupsDashboardView(vehicle: vehicle)
         case .customInfo:
             CustomInfoListView(vehicle: vehicle)
-        }
-    }
-}
-
-private struct SystemAlertTintModifier: ViewModifier {
-    let isPresented: Bool
-
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            content.tint(nil)
-        } else {
-            content
         }
     }
 }
