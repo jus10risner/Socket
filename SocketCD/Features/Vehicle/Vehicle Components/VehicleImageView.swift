@@ -10,10 +10,16 @@ import SwiftUI
 struct VehicleImageView: View {
     let carPhoto: Photo?
     let backgroundColor: Color?
+    let symbolSize: CGFloat
     
-    init(carPhoto: Photo? = nil, backgroundColor: Color? = nil) {
+    init(
+        carPhoto: Photo? = nil,
+        backgroundColor: Color? = nil,
+        symbolSize: CGFloat = 70
+    ) {
         self.carPhoto = carPhoto
         self.backgroundColor = backgroundColor
+        self.symbolSize = symbolSize
     }
     
     var body: some View {
@@ -24,7 +30,7 @@ struct VehicleImageView: View {
                 backgroundColor
                     .overlay {
                         Image(systemName: "car.fill")
-                            .font(.system(size: 70))
+                            .font(.system(size: symbolSize))
                             .foregroundStyle(isLightColor ? .ultraThinMaterial : .regularMaterial)
                             .colorScheme(isLightColor ? .dark : .light)
                     }
@@ -42,4 +48,3 @@ struct VehicleImageView: View {
         .accessibilityHidden(true)
     }
 }
-
