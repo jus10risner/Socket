@@ -33,6 +33,7 @@ struct ContentView: View {
         } detail: {
             if let vehicle = selectedVehicle {
                 VehicleDashboardView(vehicle: vehicle, selectedVehicle: $selectedVehicle)
+                    .id(vehicle.objectID)
             } else {
                 emptyDetailListView
             }

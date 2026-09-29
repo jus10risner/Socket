@@ -68,7 +68,6 @@ struct VehicleDashboardView: View {
                             .buttonBorderShape(.circle)
                         }
                     }
-                    .padding(.top, 5)
                     
                     Spacer()
                 }
