@@ -86,6 +86,8 @@ struct VehicleDashboardView: View {
             .padding(.horizontal)
             .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))
+            .navigationTitle(vehicle.name)
+            .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(item: $selectedSection) { section in
                 destinationView(for: section, vehicle: vehicle)
             }
@@ -214,6 +216,11 @@ struct VehicleDashboardView: View {
                 Button("Edit Vehicle", systemImage: "pencil") { activeSheet = .editVehicle }
             }
             .adaptiveTint()
+        }
+        
+        ToolbarItem(placement: .principal) {
+            // hides navigation title, but lets the navigation destination provide the vehicle name as part of the Back button
+            Text("")
         }
     }
     
