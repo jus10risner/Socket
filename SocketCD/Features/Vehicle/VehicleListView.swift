@@ -11,6 +11,7 @@ import SwiftUI
 struct VehicleListView: View {
     @Environment(\.managedObjectContext) var context
     @Binding var selectedVehicle: Vehicle?
+    let usesExpandedNavigation: Bool
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
@@ -24,10 +25,14 @@ struct VehicleListView: View {
             } else {
                 List(selection: $selectedVehicle) {
                     ForEach(vehicles) { vehicle in
-                        VehicleListRowView(vehicle: vehicle, isSelected: selectedVehicle == vehicle)
-                            .onTapGesture {
-                                selectedVehicle = vehicle
-                            }
+                        VehicleListRowView(
+                            vehicle: vehicle,
+                            isSelected: selectedVehicle == vehicle,
+                            usesExpandedNavigation: usesExpandedNavigation
+                        )
+                        .onTapGesture {
+                            selectedVehicle = vehicle
+                        }
                     }
                     .onMove {
                         move(from: $0, to: $1)
@@ -38,7 +43,7 @@ struct VehicleListView: View {
             }
         }
         .navigationTitle("Vehicles")
-        .navigationBarTitleDisplayMode(.large)
+        .toolbarTitleDisplayMode(.inlineLarge)
         .listRowSpacing(5)
         .scrollIndicators(.hidden)
         .sheet(isPresented: $showingSettings) {
@@ -48,20 +53,18 @@ struct VehicleListView: View {
             AddEditVehicleView()
         }
         .toolbar {
-            ToolbarItem{
-                Button("Add a Vehicle", systemImage: "plus") {
-                    showingAddVehicle = true
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Settings", systemImage: "gearshape") {
+                    showingSettings = true
                 }
                 .adaptiveTint()
             }
             
-            if #available(iOS 26, *) {
-                ToolbarSpacer()
-            }
-            
-            ToolbarItem {
-                Button("Settings", systemImage: "gearshape") {
-                    showingSettings = true
+            ToolbarItemGroup(placement: .bottomBar) {
+                Spacer()
+                
+                Button("Add a Vehicle", systemImage: "plus") {
+                    showingAddVehicle = true
                 }
                 .adaptiveTint()
             }
@@ -97,5 +100,8 @@ struct VehicleListView: View {
     vehicle.name = "My Car"
     vehicle.odometer = 12345
     
-    return VehicleListView(selectedVehicle: .constant(vehicle))
+    return VehicleListView(
+        selectedVehicle: .constant(vehicle),
+        usesExpandedNavigation: true
+    )
 }
