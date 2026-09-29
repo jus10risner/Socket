@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var settings: AppSettingsStore
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
@@ -21,7 +22,10 @@ struct ContentView: View {
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
-            VehicleListView(selectedVehicle: $selectedVehicle)
+            VehicleListView(
+                selectedVehicle: $selectedVehicle,
+                usesExpandedNavigation: horizontalSizeClass == .regular
+            )
                 .onChange(of: notificationBadgeNumber) {
                     // Sets the app icon's notification badge number
                     UNUserNotificationCenter.current().setBadgeCount(notificationBadgeNumber)

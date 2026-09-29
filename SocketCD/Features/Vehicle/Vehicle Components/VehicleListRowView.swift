@@ -14,12 +14,18 @@ struct VehicleListRowView: View {
     @ObservedObject var vehicle: Vehicle
     let settings = AppSettingsStore.shared
     let isSelected: Bool
+    let usesExpandedNavigation: Bool
     
     @FetchRequest var services: FetchedResults<Service>
     
-    init(vehicle: Vehicle, isSelected: Bool) {
+    init(
+        vehicle: Vehicle,
+        isSelected: Bool,
+        usesExpandedNavigation: Bool
+    ) {
         self.vehicle = vehicle
         self.isSelected = isSelected
+        self.usesExpandedNavigation = usesExpandedNavigation
         self._services = FetchRequest(
             entity: Service.entity(),
             sortDescriptors: [],
@@ -76,21 +82,7 @@ struct VehicleListRowView: View {
         .background {
             RoundedRectangle.adaptive
                 .fill(Color(.tertiarySystemBackground))
-                .overlay {
-                    RoundedRectangle.adaptive
-                        .fill(
-                            Color.primary.opacity(
-                                isSelected ? (colorScheme == .dark ? 0.05 : 0.08) : 0
-                            )
-                        )
-                }
-                .overlay {
-                    RoundedRectangle.adaptive
-                        .strokeBorder(
-                            Color.secondary.opacity(0.5),
-                            lineWidth: colorScheme == .dark ? 0 : 0.5
-                        )
-                }
+                .strokeBorder(Color.secondary.opacity(0.5), lineWidth: usesExpandedNavigation && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
         }
         .containerShape(RoundedRectangle.adaptive)
         .listRowInsets(EdgeInsets())
@@ -137,21 +129,7 @@ struct VehicleListRowView: View {
         .background {
             RoundedRectangle.adaptive
                 .fill(Color(.tertiarySystemBackground))
-                .overlay {
-                    RoundedRectangle.adaptive
-                        .fill(
-                            Color.primary.opacity(
-                                isSelected ? (colorScheme == .dark ? 0.05 : 0.08) : 0
-                            )
-                        )
-                }
-                .overlay {
-                    RoundedRectangle.adaptive
-                        .strokeBorder(
-                            Color.secondary.opacity(0.5),
-                            lineWidth: colorScheme == .dark ? 0 : 0.5
-                        )
-                }
+                .strokeBorder(Color.secondary.opacity(0.5), lineWidth: usesExpandedNavigation && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5)
         }
         .containerShape(RoundedRectangle.adaptive)
         .listRowInsets(EdgeInsets())
@@ -186,6 +164,10 @@ struct VehicleListRowView: View {
     vehicle.name = "My Car"
     vehicle.odometer = 12345
     
-    return VehicleListRowView(vehicle: vehicle, isSelected: true)
+    return VehicleListRowView(
+        vehicle: vehicle,
+        isSelected: true,
+        usesExpandedNavigation: true
+    )
 }
 
