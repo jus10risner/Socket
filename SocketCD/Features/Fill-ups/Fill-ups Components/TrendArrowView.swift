@@ -10,25 +10,26 @@ import SwiftUI
 struct TrendArrowView: View {
     let latestFuelEconomy: Double?
     let previousFuelEconomy: Double?
+    let diameter: CGFloat = 35
     
     @State private var animatingTrendArrow = false
     
     var body: some View {
         ZStack {
             Circle()
-                .stroke(Color(.fillupsTheme), lineWidth: 4)
+                .stroke(lineWidth: 4)
 
             indicatorSymbol
-                .foregroundStyle(Color(.fillupsTheme))
+                .foregroundStyle(.fillupsTheme)
                 .scaledToFit()
                 .bold()
                 .padding(8)
                 .mask {
                     Circle()
-                        .frame(width: 35, height: 35)
+                        .frame(width: diameter, height: diameter)
                 }
         }
-        .frame(width: 35, height: 35)
+        .frame(width: diameter, height: diameter)
         .onAppear { animateTrendArrow(shouldReset: false) }
         .onChange(of: latestFuelEconomy) {
             animateTrendArrow(shouldReset: true)
@@ -60,9 +61,9 @@ struct TrendArrowView: View {
         guard let latestFuelEconomy, let previousFuelEconomy else { return 0 }
 
         if latestFuelEconomy > previousFuelEconomy {
-            return 35
+            return diameter
         } else if latestFuelEconomy < previousFuelEconomy {
-            return -35
+            return -diameter
         } else {
             return 0
         }

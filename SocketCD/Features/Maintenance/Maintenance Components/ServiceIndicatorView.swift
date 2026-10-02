@@ -10,14 +10,17 @@ import SwiftUI
 struct ServiceIndicatorView: View {
     @ObservedObject var vehicle: Vehicle
     @ObservedObject var service: Service
+    
+    let diameter: CGFloat = 35
+    let lineWidth: CGFloat = 4
     var showsMaintenanceSymbol = false
     
     @State private var remainingValue: CGFloat = 0.0
     
     var body: some View {
         Circle()
-            .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
-            .frame(width: 35, height: 35)
+            .stroke(Color.secondary.opacity(0.2), lineWidth: lineWidth)
+            .frame(width: diameter, height: diameter)
             .overlay {
                 ZStack {
                     if service.sortedServiceRecordsArray.count > 0 {
@@ -25,7 +28,7 @@ struct ServiceIndicatorView: View {
                         case .overDue:
                             ZStack {
                                 Circle()
-                                    .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                    .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                                 
                                 Image(systemName: "exclamationmark")
                                     .imageScale(.large)
@@ -36,7 +39,7 @@ struct ServiceIndicatorView: View {
                         default:
                             Circle()
                                 .trim(from: remainingValue, to: 1.0)
-                                .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                .stroke(service.indicatorColor, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                                 .rotationEffect(.degrees(-90))
                         }
                     }
