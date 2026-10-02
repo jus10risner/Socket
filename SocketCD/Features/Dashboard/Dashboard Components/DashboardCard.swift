@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct DashboardCard<Visual: View, Detail: View>: View {
-    private let contentInset: CGFloat = 16
-    private let quickActionTrailingInset: CGFloat = 8
-
     let title: String
     let color: Color
     let quickActionTitle: String
@@ -21,67 +18,53 @@ struct DashboardCard<Visual: View, Detail: View>: View {
     let quickAction: () -> Void
     @ViewBuilder let visual: Visual
     @ViewBuilder let detail: Detail
-    
+
     @State private var feedbackTrigger = false
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+        VStack(spacing: 0) {
             Button(action: action) {
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text(title)
-                            .font(.subheadline.bold())
-                            .foregroundStyle(.secondary)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .font(.footnote)
-                            .foregroundStyle(.tertiary)
-                    }
-                    
-                    Spacer()
-                    
-                    HStack(alignment: .bottom) {
-                        statusRow
-                        
-                        // Reserves space beneath the overlaid quick action button
-                        Spacer()
-                            .frame(width: 44)
-                    }
+                VStack(alignment: .leading, spacing: 20) {
+                    DashboardCardHeader(
+                        title: title
+                    )
+
+                    cardContent
                 }
-                .frame(minHeight: 80)
-                .padding(contentInset)
-                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .padding()
             .accessibilityLabel(title)
             .accessibilityValue(accessibilityValue)
             .accessibilityHint(accessibilityHint)
             
+            Divider()
+                .padding(.horizontal)
+
             Button {
                 feedbackTrigger.toggle()
                 quickAction()
             } label: {
                 Label(quickActionTitle, systemImage: "plus")
+                    .labelStyle(.iconOnly)
                     .imageScale(.large)
+                    .frame(maxWidth: .infinity)
             }
-            .labelStyle(.iconOnly)
             .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
             .tint(color)
             .disabled(disableButton ?? false)
             .sensoryFeedback(.impact(weight: .light), trigger: feedbackTrigger)
-            .padding(.trailing, quickActionTrailingInset)
-            .padding(.bottom, contentInset)
+            .padding()
         }
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)
     }
     
-    private var statusRow: some View {
+    private var cardContent: some View {
         HStack {
             visual
-
+                .foregroundStyle(color)
+            
             detail
                 .lineLimit(1)
                 .truncationMode(.tail)
@@ -90,22 +73,42 @@ struct DashboardCard<Visual: View, Detail: View>: View {
     }
 }
 
-#Preview {
-    DashboardCard(title: "Maintenance", color: .green, quickActionTitle: "Log Service", accessibilityValue: "Due soon", accessibilityHint: "Tap to log", action: {}, quickAction: {}) {
-        Image(systemName: "book.and.wrench")
-            .foregroundStyle(.green)
-            .frame(width: 35, height: 35)
-            .background(.green.opacity(0.14), in: Circle())
-            .accessibilityHidden(true)
-    } detail: {
-        VStack(alignment: .leading) {
-            Text("Oil Change")
-                .font(.headline)
+private struct DashboardCardHeader: View {
+    let title: String
 
-            Text("Due in 500 mi or 14 days.")
-                .font(.footnote)
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.subheadline.bold())
                 .foregroundStyle(.secondary)
+            
+            Spacer()
+
+            Image(systemName: "chevron.forward")
+                .font(.footnote)
+                .foregroundStyle(.tertiary)
         }
     }
-    .frame(height: 80)
+}
+
+#Preview {
+    List {
+        DashboardCard(
+            title: "Maintenance",
+            color: .green,
+            quickActionTitle: "Log Service",
+            accessibilityValue: "Due soon",
+            accessibilityHint: "Opens maintenance services",
+            action: {},
+            quickAction: {}
+        ) {
+            CardSymbolView(symbolName: "book.and.wrench.fill")
+        } detail: {
+            CardTextView(
+                headline: "Oil Change",
+                subheadline: "Due in 500 mi or 14 days."
+            )
+        }
+        .listRowInsets(EdgeInsets())
+    }
 }
