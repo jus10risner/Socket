@@ -109,40 +109,83 @@ private struct RegularVehicleListRow: View {
     let distanceUnit: String
     let serviceCounts: VehicleServiceCounts
 
-    @State private var usesHorizontalLayout = false
-
     var body: some View {
-        let layout = usesHorizontalLayout
-            ? AnyLayout(HStackLayout(alignment: .center, spacing: 12))
-            : AnyLayout(VStackLayout(alignment: .leading, spacing: 10))
+        ViewThatFits(in: .horizontal) {
+            MinimumWidthLayout(minimumWidth: horizontalLayoutMinimumWidth) {
+                HStack(spacing: 12) {
+                    vehicleImage(maxWidth: horizontalImageWidth)
 
-        layout {
-            VehicleListRowImage(vehicle: vehicle)
-                .aspectRatio(2, contentMode: .fit)
-                .frame(maxWidth: usesHorizontalLayout ? horizontalImageWidth : .infinity)
-                .clipShape(ContainerRelativeShape())
-                .overlay {
-                    ContainerRelativeShape()
-                        .stroke(Color.secondary.opacity(0.5), lineWidth: 0.25)
+                    vehicleDetails
+                        .padding(.horizontal, 8)
                 }
+            }
 
-            VehicleListRowDetails(
-                vehicleName: vehicle.name,
-                odometer: vehicle.odometer,
-                distanceUnit: distanceUnit,
-                serviceCounts: serviceCounts,
-                nameFont: .headline
-            )
-            .padding(.horizontal, usesHorizontalLayout ? 8 : 11)
-            .padding(.vertical, usesHorizontalLayout ? 0 : 5)
+            VStack(alignment: .leading, spacing: 10) {
+                vehicleImage(maxWidth: .infinity)
+
+                vehicleDetails
+                    .padding(.horizontal, 11)
+                    .padding(.vertical, 5)
+            }
+            .frame(maxWidth: .infinity)
         }
         .padding(5)
-        .onGeometryChange(for: Bool.self) { proxy in
-            proxy.size.width >= horizontalLayoutMinimumWidth
-        } action: { usesHorizontalLayout in
-            self.usesHorizontalLayout = usesHorizontalLayout
-        }
-        .animation(.smooth(duration: 0.3), value: usesHorizontalLayout)
+    }
+
+    private func vehicleImage(maxWidth: CGFloat) -> some View {
+        VehicleListRowImage(vehicle: vehicle)
+            .aspectRatio(2, contentMode: .fit)
+            .frame(maxWidth: maxWidth)
+            .clipShape(ContainerRelativeShape())
+            .overlay {
+                ContainerRelativeShape()
+                    .stroke(Color.secondary.opacity(0.5), lineWidth: 0.25)
+            }
+    }
+
+    private var vehicleDetails: some View {
+        VehicleListRowDetails(
+            vehicleName: vehicle.name,
+            odometer: vehicle.odometer,
+            distanceUnit: distanceUnit,
+            serviceCounts: serviceCounts,
+            nameFont: .headline
+        )
+    }
+}
+
+private struct MinimumWidthLayout: Layout {
+    let minimumWidth: CGFloat
+
+    func sizeThatFits(
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout ()
+    ) -> CGSize {
+        guard let subview = subviews.first else { return .zero }
+
+        let proposedWidth = proposal.width ?? minimumWidth
+        let size = subview.sizeThatFits(
+            ProposedViewSize(width: proposedWidth, height: proposal.height)
+        )
+
+        return CGSize(
+            width: max(minimumWidth, proposedWidth),
+            height: size.height
+        )
+    }
+
+    func placeSubviews(
+        in bounds: CGRect,
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout ()
+    ) {
+        subviews.first?.place(
+            at: bounds.origin,
+            anchor: .topLeading,
+            proposal: ProposedViewSize(width: bounds.width, height: bounds.height)
+        )
     }
 }
 
@@ -152,7 +195,7 @@ private struct CompactVehicleListRow: View {
     let serviceCounts: VehicleServiceCounts
 
     var body: some View {
-        CompactVehicleRowLayout(spacing: 10) {
+        HStack(spacing: 10) {
             VehicleListRowImage(vehicle: vehicle, symbolSize: 35)
                 .frame(width: 100, height: 75)
                 .aspectRatio(1.5, contentMode: .fit)
@@ -173,58 +216,6 @@ private struct CompactVehicleListRow: View {
         .padding(.leading, 5)
         .padding(.vertical, 5)
         .padding(.trailing, 12)
-    }
-}
-
-private struct CompactVehicleRowLayout: Layout {
-    let spacing: CGFloat
-
-    func sizeThatFits(
-        proposal: ProposedViewSize,
-        subviews: Subviews,
-        cache: inout ()
-    ) -> CGSize {
-        guard subviews.count == 2 else { return .zero }
-
-        let imageSize = subviews[0].sizeThatFits(.unspecified)
-        let proposedWidth = proposal.width ?? imageSize.width + spacing + subviews[1].sizeThatFits(.unspecified).width
-        let detailsWidth = max(0, proposedWidth - imageSize.width - spacing)
-        let detailsSize = subviews[1].sizeThatFits(
-            ProposedViewSize(width: detailsWidth, height: proposal.height)
-        )
-
-        return CGSize(
-            width: proposedWidth,
-            height: max(imageSize.height, detailsSize.height)
-        )
-    }
-
-    func placeSubviews(
-        in bounds: CGRect,
-        proposal: ProposedViewSize,
-        subviews: Subviews,
-        cache: inout ()
-    ) {
-        guard subviews.count == 2 else { return }
-
-        let imageSize = subviews[0].sizeThatFits(.unspecified)
-        let detailsWidth = max(0, bounds.width - imageSize.width - spacing)
-        let detailsProposal = ProposedViewSize(width: detailsWidth, height: proposal.height)
-        let detailsSize = subviews[1].sizeThatFits(detailsProposal)
-        let detailsY = detailsSize.height <= imageSize.height
-            ? bounds.minY + (imageSize.height - detailsSize.height) / 2
-            : bounds.minY
-
-        subviews[0].place(
-            at: bounds.origin,
-            anchor: .topLeading,
-            proposal: ProposedViewSize(imageSize)
-        )
-        subviews[1].place(
-            at: CGPoint(x: bounds.minX + imageSize.width + spacing, y: detailsY),
-            anchor: .topLeading,
-            proposal: detailsProposal
-        )
     }
 }
 
