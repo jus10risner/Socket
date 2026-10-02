@@ -10,8 +10,6 @@ import SwiftUI
 
 struct RepairsListView: View {
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettingsStore.shared
-    
     @FetchRequest var repairs: FetchedResults<Repair>
     
     init(vehicle: Vehicle) {
@@ -32,19 +30,17 @@ struct RepairsListView: View {
             } else {
                 List {
                     ForEach(repairsByYear, id: \.year) { section in
-                        Section {
+                        HistoryListSection(year: section.year, headerColor: .repairsTheme) {
                             ForEach(section.repairs, id: \.id) { repair in
                                 NavigationLink {
                                     RepairDetailView(repair: repair)
                                 } label: {
-                                    listRowItem(repair: repair)
+                                    HistoryListRow(date: repair.date, odometer: repair.odometer) {
+                                        Text(repair.name)
+                                    }
                                 }
                             }
-                        } header: {
-                            Text("\(section.year.formatted(.number.grouping(.never)))")
-                                .foregroundStyle(Color.repairsTheme)
                         }
-                        .headerProminence(.increased)
                     }
                 }
             }
@@ -63,26 +59,6 @@ struct RepairsListView: View {
                 .tint(Color.repairsTheme)
             }
         }
-    }
-    
-    // Repairs list row label
-    private func listRowItem(repair: Repair) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 0) {
-                Text(repair.date.formatted(.dateTime.month(.abbreviated).day()))
-                    .font(.callout.bold())
-                
-                Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
-                    .font(.caption2)
-                    .foregroundStyle(Color.secondary)
-            }
-            .frame(minWidth: 65, alignment: .leading)
-            
-            Divider()
-            
-            Text(repair.name)
-        }
-        .padding(.vertical, 5)
     }
     
     var repairsByYear: [(year: Int, repairs: [Repair])] {

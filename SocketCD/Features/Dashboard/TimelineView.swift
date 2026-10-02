@@ -9,29 +9,14 @@ import SwiftUI
 
 struct TimelineView: View {
     @Environment(\.dismiss) var dismiss
-    let settings = AppSettingsStore.shared
     let vehicle: Vehicle
     
     var body: some View {
         NavigationStack {
             List(timelineGroupsByYear, id: \.year) { yearGroup in
-                Section(header: Text(yearGroup.year.formatted(.number.grouping(.never)))) {
+                HistoryListSection(year: yearGroup.year) {
                     ForEach(yearGroup.groups, id: \.date) { group in
-                        HStack {
-                            VStack(alignment: .leading, spacing: 0) {
-                                Text(group.date.formatted(.dateTime.month(.abbreviated).day()))
-                                    .font(.callout.bold())
-                                
-                                if let odometer = group.entries.first?.odometer {
-                                    Text("\(odometer.formatted()) \(settings.distanceUnit.abbreviated)")
-                                        .font(.caption2)
-                                        .foregroundStyle(Color.secondary)
-                                }
-                            }
-                            .frame(minWidth: 65, alignment: .leading)
-                            
-                            Divider()
-                            
+                        HistoryListRow(date: group.date, odometer: group.entries.first?.odometer) {
                             VStack(alignment: .leading) {
                                 ForEach(group.entries) { item in
                                     HStack(alignment: .firstTextBaseline) {
@@ -53,7 +38,6 @@ struct TimelineView: View {
                                 }
                             }
                         }
-                        .padding(.vertical, 5)
                         .accessibilityElement(children: .combine)
                     }
                 }
