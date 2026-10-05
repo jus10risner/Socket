@@ -22,6 +22,8 @@
 		9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */; };
 		9E1AD9082E8DAF7300E60184 /* RepairsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */; };
 		9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E235B912DFB58CA008F7327 /* CameraViewModel.swift */; };
+		9E30BD13306EACCA00B8A3A3 /* CardSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD12306EACCA00B8A3A3 /* CardSymbolView.swift */; };
+		9E30BD1530700B5400B8A3A3 /* HistoryListComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD1430700B5400B8A3A3 /* HistoryListComponents.swift */; };
 		9E328E102E33B99600FF25B5 /* PDFExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */; };
 		9E328E122E3CF7A600FF25B5 /* LabeledInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */; };
 		9E35034C2E1FE3300032F845 /* VehicleDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */; };
@@ -129,7 +131,6 @@
 		9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */; };
 		9EEAC52A2BA4CBB40053C65E /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */; };
 		9EEAC52C2BA4CD150053C65E /* AddEditRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC52B2BA4CD150053C65E /* AddEditRecordView.swift */; };
-		9EF8CAEB3058435000D48986 /* CardSymbolImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF8CAEA3058435000D48986 /* CardSymbolImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -336,6 +337,7 @@
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
 				9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */,
 				9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */,
+				9E30BD1430700B5400B8A3A3 /* HistoryListComponents.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -403,8 +405,8 @@
 			isa = PBXGroup;
 			children = (
 				9EE97E843054617400F2AA5F /* DashboardCard.swift */,
-				9EF8CAEA3058435000D48986 /* CardSymbolImage.swift */,
 				9ED4DB77305882F400C2A373 /* CardTextView.swift */,
+				9E30BD12306EACCA00B8A3A3 /* CardSymbolView.swift */,
 			);
 			path = "Dashboard Components";
 			sourceTree = "<group>";
@@ -811,6 +813,7 @@
 				9E9C05AA2E218B2A00E9C0E2 /* ServiceIndicatorView.swift in Sources */,
 				9E63DD31305AE069005B596B /* VehicleNavigationTitle.swift in Sources */,
 				9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */,
+				9E30BD13306EACCA00B8A3A3 /* CardSymbolView.swift in Sources */,
 				9EEAC4AE2BA1F0380053C65E /* SwiftUIExtensions.swift in Sources */,
 				9EE97E833054486D00F2AA5F /* EmptyCustomInfoView.swift in Sources */,
 				9EEAC4FB2BA37FDB0053C65E /* RepairDetailView.swift in Sources */,
@@ -841,7 +844,7 @@
 				9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */,
 				9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */,
 				9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */,
-				9EF8CAEB3058435000D48986 /* CardSymbolImage.swift in Sources */,
+				9E30BD1530700B5400B8A3A3 /* HistoryListComponents.swift in Sources */,
 				9E9C05AC2E26984B00E9C0E2 /* CenteredLabelStyle.swift in Sources */,
 				9E36533D303C86C000BD9ADD /* DocumentListView.swift in Sources */,
 				9EEAC4CD2BA2571E0053C65E /* Vehicle+helper.swift in Sources */,
