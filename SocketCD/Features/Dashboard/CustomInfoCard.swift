@@ -34,18 +34,18 @@ struct CustomInfoCard: View {
             color: settings.selectedAccent(),
             quickActionTitle: "Add Info",
             accessibilityValue: accessibilityValue,
-            accessibilityHint: String(localized: "Opens custom info list")
+            accessibilityHint: String(localized: "Opens the custom info list")
         ) {
             selectedSection = .customInfo
         } quickAction: {
             activeSheet = .addCustomInfo
         } visual: {
-            CardSymbolImage(symbolName: "bookmark.fill", color: settings.selectedAccent())
+            CardSymbolView(symbolName: "bookmark.fill")
         } detail: {
             if customInfo.isEmpty {
                 CardTextView(
-                    headline: "Organize Important Details",
-                    subheadline: "Save information for easy access"
+                    headline: "Find important details quickly",
+                    subheadline: "Save information you may need later"
                 )
             } else {
                 CardTextView(

@@ -31,32 +31,37 @@ struct MaintenanceCard: View {
         DashboardCard(
             title: "Maintenance",
             color: Color(.maintenanceTheme),
-            quickActionTitle: "Add Service Log",
+            quickActionTitle: "Log Service",
             accessibilityValue: accessibilityValue,
-            accessibilityHint: String(localized: "Opens list of maintenance services"),
-            disableButton: vehicle.sortedServicesArray.count < 1) {
-                selectedSection = .maintenance
-            } quickAction: {
-                activeSheet = .logService
-            } visual: {
-                if let service = nextDueService {
-                    ServiceIndicatorView(vehicle: vehicle, service: service, showsMaintenanceSymbol: true)
-                } else {
-                    CardSymbolImage(symbolName: "book.and.wrench.fill", color: Color(.maintenanceTheme))
-                }
-            } detail: {
-                if let service = nextDueService {
-                    CardTextView(
-                        headline: service.name,
-                        subheadline: service.nextDueDescription(currentOdometer: vehicle.odometer)
-                    )
-                } else {
-                    CardTextView(
-                        headline: "Know When Service Is Due",
-                        subheadline: "Tap to begin setting up services"
-                    )
-                }
+            accessibilityHint: accessibilityHint,
+            disableButton: vehicle.sortedServicesArray.count < 1
+        ) {
+            selectedSection = .maintenance
+        } quickAction: {
+            activeSheet = .logService
+        } visual: {
+            if let service = nextDueService {
+                ServiceIndicatorView(
+                    vehicle: vehicle,
+                    service: service,
+                    showsMaintenanceSymbol: true
+                )
+            } else {
+                CardSymbolView(symbolName: "book.and.wrench.fill")
             }
+        } detail: {
+            if let service = nextDueService {
+                CardTextView(
+                    headline: service.name,
+                    subheadline: service.nextDueDescription(currentOdometer: vehicle.odometer)
+                )
+            } else {
+                CardTextView(
+                    headline: "Know when service is due",
+                    subheadline: "Tap here to set up your first service"
+                )
+            }
+        }
     }
     
     private var accessibilityValue: String {
@@ -64,6 +69,14 @@ struct MaintenanceCard: View {
             return String(localized: "\(service.name) \(service.nextDueDescription(currentOdometer: vehicle.odometer))")
         } else {
             return String(localized: "No services set up")
+        }
+    }
+
+    private var accessibilityHint: String {
+        if services.isEmpty {
+            return String(localized: "Opens Maintenance to set up your first service")
+        } else {
+            return String(localized: "Opens list of maintenance services")
         }
     }
     

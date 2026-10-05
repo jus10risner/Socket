@@ -34,13 +34,13 @@ struct RepairsCard: View {
             color: Color(.repairsTheme),
             quickActionTitle: "Add Repair",
             accessibilityValue: accessibilityValue,
-            accessibilityHint: String(localized: "Opens the repair history")
+            accessibilityHint: String(localized: "Opens repair history")
         ) {
             selectedSection = .repairs
         } quickAction: {
             activeSheet = .addRepair
         } visual: {
-            CardSymbolImage(symbolName: "wrench.adjustable.fill", color: Color(.repairsTheme))
+            CardSymbolView(symbolName: "wrench.adjustable.fill")
         } detail: {
             if let repair = repairs.first {
                 CardTextView(
@@ -49,8 +49,8 @@ struct RepairsCard: View {
                 )
             } else {
                 CardTextView(
-                    headline: "Document Vehicle History",
-                    subheadline: "Add repairs to review or share"
+                    headline: "Have a clear vehicle history",
+                    subheadline: "Record completed work for future reference"
                 )
             }
         }

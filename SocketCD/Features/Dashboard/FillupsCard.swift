@@ -32,7 +32,7 @@ struct FillupsCard: View {
         DashboardCard(
             title: "Fill-ups",
             color: Color(.fillupsTheme),
-            quickActionTitle: "Add Fill-up",
+            quickActionTitle: "Log Fill-up",
             accessibilityValue: accessibilityValue,
             accessibilityHint: String(localized: "Opens fill-up history")
         ) {
@@ -46,7 +46,7 @@ struct FillupsCard: View {
                     previousFuelEconomy: previousFuelEconomy
                 )
             } else {
-                CardSymbolImage(symbolName: "fuelpump.fill", color: Color(.fillupsTheme))
+                CardSymbolView(symbolName: "fuelpump.fill")
             }
         } detail: {
             if let fillup = latestValidFillup {
@@ -56,10 +56,10 @@ struct FillupsCard: View {
                 )
             } else {
                 CardTextView(
-                    headline: fillups.isEmpty ? "Track Fuel Economy" : "Nice Start!",
+                    headline: fillups.isEmpty ? "Understand your fuel economy" : "See how fuel economy changes",
                     subheadline: fillups.isEmpty
-                        ? "Log fill-ups to see trends"
-                        : "Keep logging fill-ups to see trends"
+                        ? "Log fill-ups to see changes over time"
+                        : "Continue adding entries to see trends"
                 )
             }
         }
