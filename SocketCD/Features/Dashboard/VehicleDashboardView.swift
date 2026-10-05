@@ -27,7 +27,8 @@ struct VehicleDashboardView: View {
     @State private var newOdometerValue = ""
     @State private var pendingOdometer: Int?
     @State private var odometerWarning: OdometerWarning?
-    
+    @State private var vehicleNameVisibility: CGFloat = 1
+
     @State private var shareItem: ShareItem?
     @State private var showingExportOptions = false
     @State private var showingExportError = false
@@ -44,7 +45,14 @@ struct VehicleDashboardView: View {
                         Text(vehicle.name)
                             .font(.headline)
                             .foregroundStyle(.secondary)
-                        
+                            .opacity(vehicleNameVisibility)
+                            .onGeometryChange(for: CGFloat.self) { proxy in
+                                let frame = proxy.frame(in: .scrollView(axis: .vertical))
+                                return min(max(frame.maxY / frame.height, 0), 1)
+                            } action: { visibility in
+                                vehicleNameVisibility = visibility
+                            }
+
                         HStack(spacing: 10) {
                             HStack(alignment: .firstTextBaseline, spacing: 3) {
                                 Text(vehicle.odometer.formatted())
@@ -71,7 +79,7 @@ struct VehicleDashboardView: View {
                     
                     Spacer()
                 }
-                
+
                 LazyVGrid(columns: columns, spacing: 5) {
                     MaintenanceCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
                     
@@ -152,6 +160,9 @@ struct VehicleDashboardView: View {
             .toolbar {
                 vehicleToolbar
             }
+            .onChange(of: vehicle.objectID) {
+                vehicleNameVisibility = 1
+            }
         }
         .tint(nil)
     }
@@ -217,10 +228,17 @@ struct VehicleDashboardView: View {
             }
             .adaptiveTint()
         }
-        
+
         ToolbarItem(placement: .principal) {
-            // hides navigation title, but lets the navigation destination provide the vehicle name as part of the Back button
-            Text("")
+            Text(vehicle.name)
+                .font(.headline)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+                .truncationMode(.tail)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .opacity(1 - vehicleNameVisibility)
+                .accessibilityHidden(vehicleNameVisibility > 0)
         }
     }
     
