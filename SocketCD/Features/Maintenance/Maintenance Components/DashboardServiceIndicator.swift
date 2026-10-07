@@ -22,16 +22,16 @@ struct DashboardServiceIndicator: View {
 
             Image(systemName: displayedSymbol)
                 .imageScale(.large)
-                .fontWeight(displayedSymbol == "exclamationmark" ? .bold : .regular)
+                .fontWeight(displayedSymbol == "exclamationmark" ? .black : .regular)
                 .foregroundStyle(.white)
-                .contentTransition(.symbolEffect(.replace))
+                .contentTransition(.symbolEffect(.replace.upUp))
         }
         .frame(width: diameter, height: diameter)
         .dynamicTypeSize(.medium)
         .accessibilityHidden(true)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                withAnimation(.snappy(duration: 0.3)) {
+                withAnimation(.snappy) {
                     showsStatus = service.serviceStatus != .notDue
                 }
             }
