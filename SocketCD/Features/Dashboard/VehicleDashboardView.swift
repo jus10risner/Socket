@@ -24,6 +24,7 @@ struct VehicleDashboardView: View {
     
     @State private var selectedSection: AppSection?
     @State private var activeSheet: ActiveSheet?
+    @State private var servicesForNewLog: [Service] = []
     @State private var showingUpdateOdometerAlert = false
     @State private var newOdometerValue = ""
     @State private var pendingOdometer: Int?
@@ -99,7 +100,12 @@ struct VehicleDashboardView: View {
                     }
 
                     LazyVGrid(columns: columns, spacing: gridSpacing) {
-                        MaintenanceCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                        MaintenanceCard(
+                            vehicle: vehicle,
+                            activeSheet: $activeSheet,
+                            selectedSection: $selectedSection,
+                            servicesForNewLog: $servicesForNewLog
+                        )
                         
                         FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
                         
@@ -133,7 +139,7 @@ struct VehicleDashboardView: View {
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
                 case .logService:
-                    AddEditRecordView(service: vehicle.sortedServicesArray.first, vehicle: vehicle)
+                    AddEditRecordView(services: servicesForNewLog, vehicle: vehicle)
                 case .addRepair:
                     AddEditRepairView(vehicle: vehicle)
                 case .addFillup:

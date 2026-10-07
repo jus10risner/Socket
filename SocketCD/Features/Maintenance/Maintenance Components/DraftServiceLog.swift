@@ -21,10 +21,8 @@ class DraftServiceLog: ObservableObject {
     
     
     // Initializes with an optional Service Record, for use in add/edit context
-    init(record: ServiceRecord? = nil, preselectedService: Service? = nil) {
-        if let service = preselectedService, let id = service.id {
-            self.selectedServiceIDs = [id]   // preselect if passed in
-        }
+    init(record: ServiceRecord? = nil, preselectedServices: [Service] = []) {
+        selectedServiceIDs = Set(preselectedServices.compactMap(\.id))
         
         if let record {
             if  let log = record.serviceLog {

@@ -27,13 +27,15 @@ struct AddEditRecordView: View {
     private let onDelete: (() -> Void)?
     
     // MARK: - Init
-    init(service: Service? = nil, vehicle: Vehicle, record: ServiceRecord? = nil, onDelete: (() -> Void)? = nil) {
-        self.service = service ?? Service(context: DataController.shared.container.viewContext)
+    init(service: Service? = nil, services: [Service] = [], vehicle: Vehicle, record: ServiceRecord? = nil, onDelete: (() -> Void)? = nil) {
+        let preselectedServices = services.isEmpty ? [service].compactMap { $0 } : services
+
+        self.service = service ?? services.first ?? Service(context: DataController.shared.container.viewContext)
         self.vehicle = vehicle
         self.record = record
         self.onDelete = onDelete
         
-        _draftServiceLog = StateObject(wrappedValue: DraftServiceLog(record: record, preselectedService: service))
+        _draftServiceLog = StateObject(wrappedValue: DraftServiceLog(record: record, preselectedServices: preselectedServices))
     }
     
     // MARK: - Body
