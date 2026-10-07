@@ -10,27 +10,28 @@ import SwiftUI
 struct TrendArrowView: View {
     let latestFuelEconomy: Double?
     let previousFuelEconomy: Double?
-    let diameter: CGFloat = 35
+    let diameter: CGFloat = 50
     
     @State private var animatingTrendArrow = false
     
     var body: some View {
         ZStack {
             Circle()
-                .stroke(lineWidth: 4)
+                .fill(Color(.fillupsTheme).gradient)
+
+            Image(systemName: "fuelpump.fill")
+                .imageScale(.large)
+                .offset(
+                    x: animatingTrendArrow ? fuelPumpOffset.width : 0,
+                    y: animatingTrendArrow ? fuelPumpOffset.height : 0
+                )
 
             indicatorSymbol
-                .foregroundStyle(.fillupsTheme)
-                .scaledToFit()
-                .bold()
-                .padding(8)
-                .mask {
-                    Circle()
-                        .frame(width: diameter, height: diameter)
-                }
         }
+        .foregroundStyle(.white)
         .frame(width: diameter, height: diameter)
-        .onAppear { animateTrendArrow(shouldReset: false) }
+        .clipShape(Circle())
+        .onAppear { introduceTrendArrow() }
         .onChange(of: latestFuelEconomy) {
             animateTrendArrow(shouldReset: true)
         }
@@ -38,8 +39,11 @@ struct TrendArrowView: View {
     
     private var indicatorSymbol: some View {
         Image(systemName: systemName)
-            .resizable()
-            .offset(y: arrowOffset)
+            .font(.title.bold())
+            .offset(
+                x: animatingTrendArrow ? 0 : -fuelPumpOffset.width,
+                y: animatingTrendArrow ? 0 : -fuelPumpOffset.height
+            )
             .accessibilityHidden(true)
     }
 
@@ -55,17 +59,25 @@ struct TrendArrowView: View {
         }
     }
 
-    private var arrowOffset: CGFloat {
-        guard !animatingTrendArrow else { return 0 }
-
-        guard let latestFuelEconomy, let previousFuelEconomy else { return 0 }
+    private var fuelPumpOffset: CGSize {
+        guard let latestFuelEconomy, let previousFuelEconomy else { return .zero }
 
         if latestFuelEconomy > previousFuelEconomy {
-            return diameter
+            return CGSize(width: 0, height: -diameter)
         } else if latestFuelEconomy < previousFuelEconomy {
-            return -diameter
+            return CGSize(width: 0, height: diameter)
         } else {
-            return 0
+            return CGSize(width: diameter, height: 0)
+        }
+    }
+
+    private func introduceTrendArrow() {
+        guard !animatingTrendArrow else { return }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            withAnimation(.bouncy) {
+                animatingTrendArrow = true
+            }
         }
     }
     
