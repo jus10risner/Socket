@@ -14,10 +14,11 @@ struct CardTextView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(headline)
-                .font(.headline)
+                .lineLimit(2)
+                .font(.title3.bold())
             
             Text(subheadline)
-                .font(.footnote)
+                .font(.subheadline)
                 .foregroundStyle(Color.secondary)
         }
     }

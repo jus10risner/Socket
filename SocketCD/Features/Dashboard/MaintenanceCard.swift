@@ -41,11 +41,7 @@ struct MaintenanceCard: View {
             activeSheet = .logService
         } visual: {
             if let service = nextDueService {
-                ServiceIndicatorView(
-                    vehicle: vehicle,
-                    service: service,
-                    showsMaintenanceSymbol: true
-                )
+                DashboardServiceIndicator(vehicle: vehicle, service: service)
             } else {
                 CardSymbolView(symbolName: "book.and.wrench.fill")
             }

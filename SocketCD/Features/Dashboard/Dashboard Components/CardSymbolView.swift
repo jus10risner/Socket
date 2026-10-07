@@ -9,16 +9,18 @@ import SwiftUI
 
 struct CardSymbolView: View {
     let symbolName: String
-    let diameter: CGFloat = 35
+    let diameter: CGFloat = 50
 
     var body: some View {
         ZStack {
             Circle()
-                .stroke(lineWidth: 4)
 
             Image(systemName: symbolName)
+                .imageScale(.large)
+                .foregroundStyle(.white)
         }
         .frame(width: diameter, height: diameter)
+        .dynamicTypeSize(.medium)
         .accessibilityHidden(true)
     }
 }

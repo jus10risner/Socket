@@ -21,26 +21,19 @@ struct DashboardCard<Visual: View, Detail: View>: View {
 
     @State private var feedbackTrigger = false
 
-    var body: some View {
-        VStack(spacing: 0) {
-            Button(action: action) {
-                VStack(alignment: .leading, spacing: 20) {
-                    DashboardCardHeader(
-                        title: title
-                    )
+    private let quickActionSize: CGFloat = 44
+    private let minimumContentHeight: CGFloat = 125
 
-                    cardContent
-                }
-                .contentShape(Rectangle())
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            Button(action: action) {
+                cardContent
             }
             .buttonStyle(.plain)
             .padding()
             .accessibilityLabel(title)
             .accessibilityValue(accessibilityValue)
             .accessibilityHint(accessibilityHint)
-            
-            Divider()
-                .padding(.horizontal)
 
             Button {
                 feedbackTrigger.toggle()
@@ -49,10 +42,13 @@ struct DashboardCard<Visual: View, Detail: View>: View {
                 Label(quickActionTitle, systemImage: "plus")
                     .labelStyle(.iconOnly)
                     .imageScale(.large)
-                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
+            .buttonBorderShape(.circle)
             .tint(color)
+            .frame(width: quickActionSize, height: quickActionSize, alignment: .topTrailing)
+            .contentShape(Rectangle())
+            .dynamicTypeSize(.medium)
             .disabled(disableButton ?? false)
             .sensoryFeedback(.impact(weight: .light), trigger: feedbackTrigger)
             .padding()
@@ -61,33 +57,33 @@ struct DashboardCard<Visual: View, Detail: View>: View {
     }
     
     private var cardContent: some View {
-        HStack {
-            visual
-                .foregroundStyle(color)
-            
-            detail
-                .lineLimit(1)
-                .truncationMode(.tail)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .top) {
+                visual
+                    .foregroundStyle(color.gradient)
+
+                Spacer(minLength: 0)
+
+                Color.clear
+                    .frame(width: quickActionSize, height: quickActionSize)
+                    .accessibilityHidden(true)
+            }
+
+            Spacer(minLength: 10)
+
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.caption2)
+                    .textCase(.uppercase)
+                    .foregroundStyle(.secondary)
+                
+                detail
+                    .truncationMode(.tail)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
-    }
-}
-
-private struct DashboardCardHeader: View {
-    let title: String
-
-    var body: some View {
-        HStack {
-            Text(title)
-                .font(.subheadline.bold())
-                .foregroundStyle(.secondary)
-            
-            Spacer()
-
-            Image(systemName: "chevron.forward")
-                .font(.footnote)
-                .foregroundStyle(.tertiary)
-        }
+        .frame(minHeight: minimumContentHeight, alignment: .top)
+        .contentShape(Rectangle())
     }
 }
 
