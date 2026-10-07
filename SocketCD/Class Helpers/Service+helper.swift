@@ -190,7 +190,7 @@ extension Service {
         return odometerDue - currentOdometer
     }
     
-    // Returns progress toward this service as a value between 0 (just reset) and 1 (overdue)
+    // Returns the remaining service interval as a value between 1 (just reset) and 0 (overdue)
     func progress(currentOdometer: Int) -> CGFloat {
         let now = Date()
 
