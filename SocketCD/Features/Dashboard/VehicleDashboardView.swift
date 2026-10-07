@@ -10,6 +10,7 @@ import TipKit
 
 struct VehicleDashboardView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @StateObject var draftVehicle = DraftVehicle()
     @ObservedObject var vehicle: Vehicle
     @Binding var selectedVehicle: Vehicle? // Used primarily to dismiss this view if the vehicle is deleted
@@ -28,66 +29,96 @@ struct VehicleDashboardView: View {
     @State private var pendingOdometer: Int?
     @State private var odometerWarning: OdometerWarning?
     @State private var vehicleNameVisibility: CGFloat = 1
+    @State private var scrollPosition = ScrollPosition()
 
     @State private var shareItem: ShareItem?
     @State private var showingExportOptions = false
     @State private var showingExportError = false
+
+    private let minimumColumnWidth: CGFloat = 325
+    private let maximumGridWidth: CGFloat = 800
+    private let gridSpacing: CGFloat = 5
     
-    let columns = [GridItem(.adaptive(minimum: 325), spacing: 5)]
+    private var columns: [GridItem] {
+        if dynamicTypeSize.isAccessibilitySize {
+            [GridItem(.flexible(), alignment: .top)]
+        } else {
+            [
+                GridItem(
+                    .adaptive(minimum: minimumColumnWidth),
+                    spacing: gridSpacing,
+                    alignment: .top
+                )
+            ]
+        }
+    }
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 TipView(DashboardTip())
                     .tipBackground(Color(.tertiarySystemBackground))
-                HStack {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(vehicle.name)
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                            .opacity(vehicleNameVisibility)
-                            .onGeometryChange(for: CGFloat.self) { proxy in
-                                let frame = proxy.frame(in: .scrollView(axis: .vertical))
-                                return min(max(frame.maxY / frame.height, 0), 1)
-                            } action: { visibility in
-                                vehicleNameVisibility = visibility
-                            }
+                VStack(alignment: .leading) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text(vehicle.name)
+                                .font(.title3.bold())
+                                .opacity(vehicleNameVisibility)
+                                .onGeometryChange(for: CGFloat.self) { proxy in
+                                    let frame = proxy.frame(in: .scrollView(axis: .vertical))
+                                    return min(max(frame.maxY / frame.height, 0), 1)
+                                } action: { visibility in
+                                    vehicleNameVisibility = visibility
+                                }
 
-                        HStack(spacing: 10) {
-                            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                                Text(vehicle.odometer.formatted())
-                                    .font(.title2.bold())
-                                    .monospacedDigit()
-                                    .contentTransition(.numericText(value: Double(vehicle.odometer)))
-                                    .animation(.default, value: vehicle.odometer)
-                                
-                                Text(settings.distanceUnit.abbreviated)
-                                    .font(.headline)
-                                    .foregroundStyle(.secondary)
+                            HStack(spacing: 10) {
+                                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                                    Text(vehicle.odometer.formatted())
+                                        .font(.title.bold())
+                                        .monospacedDigit()
+                                        .contentTransition(.numericText(value: Double(vehicle.odometer)))
+                                        .animation(.default, value: vehicle.odometer)
+                                    
+                                    Text(settings.distanceUnit.abbreviated)
+                                        .font(.title3.bold())
+                                        .foregroundStyle(.secondary)
+                                }
+                                .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                                 
+                                Button("Update Odometer", systemImage: "pencil") {
+                                    showingUpdateOdometerAlert = true
+                                }
+                                .imageScale(.large)
+                                .labelStyle(.iconOnly)
+                                .buttonStyle(.borderedProminent)
+                                .buttonBorderShape(.circle)
                             }
-                            .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
-                             
-                            Button("Update Odometer", systemImage: "pencil") {
-                                showingUpdateOdometerAlert = true
-                            }
-                            .imageScale(.large)
-                            .labelStyle(.iconOnly)
-                            .buttonStyle(.bordered)
-                            .buttonBorderShape(.circle)
                         }
+                        
+                        Spacer()
                     }
-                    
-                    Spacer()
-                }
 
-                LazyVGrid(columns: columns, spacing: 5) {
-                    MaintenanceCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
-                    
-                    FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
-                    
-                    RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
-                    
-                    CustomInfoCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                    LazyVGrid(columns: columns, spacing: gridSpacing) {
+                        MaintenanceCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                        
+                        FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
+                        
+                        RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                        
+                        CustomInfoCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                    }
+                }
+                .frame(maxWidth: maximumGridWidth)
+                .frame(maxWidth: .infinity)
+            }
+            .scrollPosition($scrollPosition)
+            .onScrollPhaseChange { _, newPhase in
+                if newPhase == .idle,
+                   vehicleNameVisibility > 0.5,
+                   vehicleNameVisibility < 0.99 {
+                    withAnimation(.smooth(duration: 0.35)) {
+                        scrollPosition.scrollTo(edge: .top)
+                    }
                 }
             }
             .scrollIndicators(.hidden)
@@ -236,7 +267,6 @@ struct VehicleDashboardView: View {
                 .minimumScaleFactor(0.75)
                 .truncationMode(.tail)
                 .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity)
                 .opacity(1 - vehicleNameVisibility)
                 .accessibilityHidden(vehicleNameVisibility > 0)
         }
