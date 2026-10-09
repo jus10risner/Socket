@@ -66,7 +66,7 @@ struct AddEditFillupView: View {
                             .multilineTextAlignment(.trailing)
                     } label: {
                         Group {
-                            Text(settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
+                            Text(settings.fillupCostType == .perUnit ? "Cost per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
                             
                             if settings.showCalculatedCost {
                                 Text(settings.fillupCostType == .perUnit ? "Total: \(calculatedCost)" : "Per \(settings.fuelEconomyUnit.volumeUnit): \(calculatedCost)")
@@ -76,7 +76,7 @@ struct AddEditFillupView: View {
                         .accessibilityHidden(true)
                     }
                     .foregroundStyle(Color.secondary)
-                    .accessibilityLabel(settings.fillupCostType == .perUnit ? "Price per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
+                    .accessibilityLabel(settings.fillupCostType == .perUnit ? "Cost per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
                     .accessibilityHint(
                         settings.showCalculatedCost && draftFillup.cost != nil
                         ? (settings.fillupCostType == .perUnit

@@ -48,7 +48,7 @@ class DraftFillup: ObservableObject {
         odometer.hasValue && volume.hasValue
     }
     
-    // Returns either the price per volume unit, or the total cost of the fill-up, based on the user's selection in Settings
+    // Returns either the cost per volume unit, or the total cost of the fill-up, based on the user's selection in Settings
     var fillupCostPerUnit: Double {
         guard let volume = self.volume else { return 0 }
         guard let cost = self.cost else { return 0 }

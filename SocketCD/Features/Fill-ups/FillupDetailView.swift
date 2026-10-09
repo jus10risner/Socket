@@ -26,7 +26,7 @@ struct FillupDetailView: View {
                 
                 LabeledContent("\(settings.fuelEconomyUnit.volumeUnit)s of Fuel", value: fillup.volume.formatted())
                 
-                LabeledContent("Price per \(settings.fuelEconomyUnit.volumeUnit)", value: (fillup.pricePerUnit ?? 0).asCurrency())
+                LabeledContent("Cost per \(settings.fuelEconomyUnit.volumeUnit)", value: (fillup.pricePerUnit ?? 0).asCurrency())
             }
             
             Section {

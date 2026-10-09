@@ -79,7 +79,7 @@ struct CSVExporter {
         var allFillups: [String] = []
 
         let header = """
-        Date,Odometer,\(settings.fuelEconomyUnit.volumeUnit)s of Fuel,Price per \(settings.fuelEconomyUnit.volumeUnit),Trip (\(settings.distanceUnit.abbreviated)),Fuel Economy (\(settings.fuelEconomyUnit.rawValue)),Total Cost,Full Tank?,Note
+        Date,Odometer,\(settings.fuelEconomyUnit.volumeUnit)s of Fuel,Cost per \(settings.fuelEconomyUnit.volumeUnit),Trip (\(settings.distanceUnit.abbreviated)),Fuel Economy (\(settings.fuelEconomyUnit.rawValue)),Total Cost,Full Tank?,Note
         """
         allFillups.append(header)
 
