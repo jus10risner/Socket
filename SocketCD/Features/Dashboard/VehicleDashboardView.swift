@@ -73,17 +73,11 @@ struct VehicleDashboardView: View {
                                 }
 
                             HStack(spacing: 10) {
-                                HStack(alignment: .firstTextBaseline, spacing: 3) {
-                                    Text(vehicle.odometer.formatted())
-                                        .font(.title.bold())
-                                        .monospacedDigit()
-                                        .contentTransition(.numericText(value: Double(vehicle.odometer)))
-                                        .animation(.default, value: vehicle.odometer)
-                                    
-                                    Text(settings.distanceUnit.abbreviated)
-                                        .font(.title3.bold())
-                                        .foregroundStyle(.secondary)
-                                }
+                                Text(
+                                    "\(Text(vehicle.odometer.formatted()).font(.title.bold()).monospacedDigit()) \(Text(settings.distanceUnit.abbreviated).font(.title3.bold()).foregroundColor(.secondary))"
+                                )
+                                .contentTransition(.numericText(value: Double(vehicle.odometer)))
+                                .animation(.default, value: vehicle.odometer)
                                 .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
                                  
                                 Button("Update Odometer", systemImage: "pencil") {
