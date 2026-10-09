@@ -30,6 +30,7 @@ struct TrendArrowView: View {
         }
         .foregroundStyle(.white)
         .frame(width: diameter, height: diameter)
+        .dynamicTypeSize(.medium)
         .clipShape(Circle())
         .onAppear { introduceTrendArrow() }
         .onChange(of: latestFuelEconomy) {
