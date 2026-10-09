@@ -95,9 +95,8 @@ struct FuelEconomyChartView: View {
             } else {
                 Text("Average Fuel Economy")
                     .font(.headline)
-                    .foregroundStyle(.secondary)
 
-                Text(visibleAverageFuelEconomyValue)
+                visibleAverageFuelEconomyValue
                     .font(.title2.bold())
                     .monospacedDigit()
                     .contentTransition(
@@ -114,12 +113,14 @@ struct FuelEconomyChartView: View {
         }
     }
 
-    private var visibleAverageFuelEconomyValue: String {
+    private var visibleAverageFuelEconomyValue: Text {
         guard let average = visibleAverageFuelEconomy else {
-            return "Not available"
+            return Text("Not available")
         }
 
-        return "\(average.formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)"
+        return Text(
+            "\(Text(average.formatted(.number.precision(.fractionLength(1)))).font(.title.bold())) \(Text(settings.fuelEconomyUnit.rawValue).font(.title3.bold()).foregroundStyle(.secondary))"
+        )
     }
 
     private var visibleAverageFuelEconomy: Double? {
@@ -179,9 +180,8 @@ struct FuelEconomyChartView: View {
 
     private func fuelEconomyText(for point: ChartPoint) -> some View {
         Text(
-            "\(point.value, specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)"
+            "\(Text("\(point.value, specifier: "%.1f")").font(.title.bold())) \(Text(settings.fuelEconomyUnit.rawValue).font(.title3.bold()).foregroundStyle(.secondary))"
         )
-        .font(.title2.bold())
         .monospacedDigit()
         .accessibilityLabel(
             "\(point.value, specifier: "%.1f") \(settings.fuelEconomyUnit.fullName)"
