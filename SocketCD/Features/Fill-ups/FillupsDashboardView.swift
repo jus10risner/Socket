@@ -34,45 +34,53 @@ struct FillupsDashboardView: View {
 
     var body: some View {
         List {
-            Section {
-                fuelEconomyChart
-
-                allTimeAverageFooter
-            } footer: {
-                if let latestUnavailableMessage {
-                    Button("Where’s my latest fill-up?") {
-                        showingLatestExplanation = true
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(Color.fillupsTheme)
-                    .textCase(nil)
-                    .popover(
-                        isPresented: $showingLatestExplanation
-                    ) {
-                        PopoverContent(
-                            text: latestUnavailableMessage
-                        )
+            if fillups.count > 0 {
+                Section {
+                    fuelEconomyChart
+                    
+                    allTimeAverageFooter
+                } footer: {
+                    if let latestUnavailableMessage {
+                        Button("Where’s my latest fill-up?") {
+                            showingLatestExplanation = true
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(Color.fillupsTheme)
+                        .textCase(nil)
+                        .popover(
+                            isPresented: $showingLatestExplanation
+                        ) {
+                            PopoverContent(
+                                text: latestUnavailableMessage
+                            )
+                        }
                     }
                 }
-            }
-
-            Section {
-                NavigationLink {
-                    AllFillupsListView(vehicle: vehicle)
-                } label: {
-                    Label(
-                        "Fill-up History",
-                        systemImage: "clock.arrow.circlepath"
-                    )
-                    .foregroundStyle(Color.primary)
+                
+                Section {
+                    NavigationLink {
+                        AllFillupsListView(vehicle: vehicle)
+                    } label: {
+                        Label(
+                            "Fill-up History",
+                            systemImage: "clock.arrow.circlepath"
+                        )
+                        .foregroundStyle(Color.primary)
+                    }
                 }
             }
         }
-        .scrollIndicators(.hidden)
         .vehicleNavigationTitle("Fill-ups", vehicleName: vehicle.name)
+        .scrollIndicators(.hidden)
+        .scrollContentBackground(.hidden)
+        .background(Color(.systemGroupedBackground))
         .overlay {
             if fillups.isEmpty {
-                EmptyFillupsView()
+                ContentUnavailableView {
+                    Label("No Fill-ups", systemImage: "fuelpump")
+                } description: {
+                    Text("Log each time you refuel to see fuel economy trends over time.")
+                }
             }
         }
         .task(id: chartDataRevision) {

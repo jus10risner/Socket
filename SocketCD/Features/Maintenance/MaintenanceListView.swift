@@ -35,9 +35,13 @@ struct MaintenanceListView: View {
         }
         .vehicleNavigationTitle("Maintenance", vehicleName: vehicle.name)
         .listRowSpacing(5)
+        .scrollContentBackground(.hidden)
+        .background(Color(.systemGroupedBackground))
         .overlay {
             if vehicle.sortedServicesArray.isEmpty {
-                EmptyMaintenanceView()
+                EmptyMaintenanceListView {
+                    showingAddService = true
+                }
             }
         }
         .sheet(isPresented: $showingAddService) {
@@ -51,7 +55,7 @@ struct MaintenanceListView: View {
                 Button {
                     showingAddService = true
                 } label: {
-                    Label("Set up New Service", image: "book.badge.plus")
+                    Label("Set up New Service", image: "checklist.unchecked.square.badge.plus")
                 }
                 .tint(Color.primary)
                 .buttonStyle(.plain)
@@ -70,6 +74,30 @@ struct MaintenanceListView: View {
                 .buttonBorderShape(.circle) // defines button shape for iOS 17 & 18
                 .disabled(services.isEmpty)
             }
+        }
+    }
+}
+
+
+// MARK: - Subviews
+
+private struct EmptyMaintenanceListView: View {
+    let action: () -> Void
+    
+    var body: some View {
+        ContentUnavailableView {
+            Label("No Services", systemImage: "book.and.wrench")
+        } description: {
+            Text("Start by setting up a routine maintenance service, then add a log each time it is completed.")
+        } actions: {
+            Button {
+                action()
+            } label: {
+                Label("Set Up a Service", image: "checklist.unchecked.square.badge.plus")
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .tint(Color(.maintenanceTheme))
         }
     }
 }

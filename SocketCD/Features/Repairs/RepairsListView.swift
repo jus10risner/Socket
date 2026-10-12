@@ -48,9 +48,15 @@ struct RepairsListView: View {
             }
         }
         .vehicleNavigationTitle("Repairs", vehicleName: vehicle.name)
+        .scrollContentBackground(.hidden)
+        .background(Color(.systemGroupedBackground))
         .overlay {
             if repairs.isEmpty {
-                EmptyRepairsView()
+                ContentUnavailableView {
+                    Label("No Repairs", systemImage: "wrench.adjustable")
+                } description: {
+                    Text("Record unexpected work, such as battery replacement or engine repair.")
+                }
             }
         }
         .sheet(isPresented: $showingAddRepair) {

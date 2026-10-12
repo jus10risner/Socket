@@ -39,9 +39,15 @@ struct CustomInfoListView: View {
             }
         }
         .vehicleNavigationTitle("Custom Info", vehicleName: vehicle.name)
+        .scrollContentBackground(.hidden)
+        .background(Color(.systemGroupedBackground))
         .overlay {
             if customInfo.isEmpty {
-                EmptyCustomInfoView()
+                ContentUnavailableView {
+                    Label("No Saved Info", systemImage: "bookmark")
+                } description: {
+                    Text("Keep useful details here, such as tire size or insurance documents.")
+                }
             }
         }
         .sheet(isPresented: $showingAddCustomInfo) {
