@@ -77,7 +77,10 @@ struct RepairsCard: View {
     
     private var accessibilityValue: String {
         if let repair = repairs.first {
-            return String(localized: "Latest repair: \(repair.name). \(latestRepairDescription(repair))")
+            let description = latestRepairDescription(repair)
+                .replacingOccurrences(of: " • ", with: ", ")
+            
+            return String(localized: "Latest repair: \(repair.name). \(description)")
         } else {
             return String(localized: "No repairs logged")
         }
