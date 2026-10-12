@@ -33,49 +33,48 @@ struct FillupsDashboardView: View {
     @State private var chartRefreshID = 0
 
     var body: some View {
-        ZStack {
-            if fillups.isEmpty {
-                EmptyFillupsView()
-            } else {
-                List {
-                    Section {
-                        fuelEconomyChart
-                        
-                        allTimeAverageFooter
-                    } footer: {
-                        if let latestUnavailableMessage {
-                            Button("Where’s my latest fill-up?") {
-                                showingLatestExplanation = true
-                            }
-                            .buttonStyle(.plain)
-                            .foregroundStyle(Color.fillupsTheme)
-                            .textCase(nil)
-                            .popover(
-                                isPresented: $showingLatestExplanation
-                            ) {
-                                PopoverContent(
-                                    text: latestUnavailableMessage
-                                )
-                            }
-                        }
-                    }
+        List {
+            Section {
+                fuelEconomyChart
 
-                    Section {
-                        NavigationLink {
-                            AllFillupsListView(vehicle: vehicle)
-                        } label: {
-                            Label(
-                                "Fill-up History",
-                                systemImage: "clock.arrow.circlepath"
-                            )
-                            .foregroundStyle(Color.primary)
-                        }
+                allTimeAverageFooter
+            } footer: {
+                if let latestUnavailableMessage {
+                    Button("Where’s my latest fill-up?") {
+                        showingLatestExplanation = true
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(Color.fillupsTheme)
+                    .textCase(nil)
+                    .popover(
+                        isPresented: $showingLatestExplanation
+                    ) {
+                        PopoverContent(
+                            text: latestUnavailableMessage
+                        )
                     }
                 }
-                .scrollIndicators(.hidden)
+            }
+
+            Section {
+                NavigationLink {
+                    AllFillupsListView(vehicle: vehicle)
+                } label: {
+                    Label(
+                        "Fill-up History",
+                        systemImage: "clock.arrow.circlepath"
+                    )
+                    .foregroundStyle(Color.primary)
+                }
             }
         }
+        .scrollIndicators(.hidden)
         .vehicleNavigationTitle("Fill-ups", vehicleName: vehicle.name)
+        .overlay {
+            if fillups.isEmpty {
+                EmptyFillupsView()
+            }
+        }
         .task(id: chartDataRevision) {
             await updateChartData()
         }
@@ -98,7 +97,7 @@ struct FillupsDashboardView: View {
     }
 
     // MARK: - Chart Data
-    
+
     private var fuelEconomyChart: some View {
         VStack(spacing: 15) {
             if let chartPoints {
@@ -144,18 +143,23 @@ struct FillupsDashboardView: View {
     @ViewBuilder
     private var allTimeAverageFooter: some View {
         if let chartPoints,
-           let average = ChartPoint.aggregateFuelEconomy(
-               from: chartPoints,
-               unit: settings.fuelEconomyUnit
-           ),
-           let firstFillupDate = fillups.last?.date {
+            let average = ChartPoint.aggregateFuelEconomy(
+                from: chartPoints,
+                unit: settings.fuelEconomyUnit
+            ),
+            let firstFillupDate = fillups.last?.date
+        {
             LabeledContent {
-                Text("\(average.formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)")
-                    .monospacedDigit()
+                Text(
+                    "\(average.formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)"
+                )
+                .monospacedDigit()
             } label: {
                 Text("All-time average")
-                Text("\(firstFillupDate.formatted(.dateTime.month(.abbreviated).year())) – Present")
-                    .font(.caption)
+                Text(
+                    "\(firstFillupDate.formatted(.dateTime.month(.abbreviated).year())) – Present"
+                )
+                .font(.caption)
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(
@@ -166,8 +170,8 @@ struct FillupsDashboardView: View {
 
     private var latestUnavailableMessage: String? {
         guard let latestFillup = fillups.first,
-              let latestChartPoint = chartPoints?.last,
-              latestChartPoint.id != latestFillup.objectID
+            let latestChartPoint = chartPoints?.last,
+            latestChartPoint.id != latestFillup.objectID
         else {
             return nil
         }
@@ -208,8 +212,9 @@ struct FillupsDashboardView: View {
     }
 
     private func updateChartData() async {
-        guard let coordinator = vehicle.managedObjectContext?
-            .persistentStoreCoordinator
+        guard
+            let coordinator = vehicle.managedObjectContext?
+                .persistentStoreCoordinator
         else {
             chartPoints = []
             return
@@ -225,9 +230,11 @@ struct FillupsDashboardView: View {
 
         do {
             let points = try await context.perform {
-                guard let backgroundVehicle = try context.existingObject(
-                    with: vehicleID
-                ) as? Vehicle else {
+                guard
+                    let backgroundVehicle = try context.existingObject(
+                        with: vehicleID
+                    ) as? Vehicle
+                else {
                     return [ChartPoint]()
                 }
 

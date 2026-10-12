@@ -28,19 +28,18 @@ struct MaintenanceListView: View {
     @State private var showingLogService = false
     
     var body: some View {
-        ZStack {
-            if vehicle.sortedServicesArray.isEmpty {
-                EmptyMaintenanceView()
-            } else {
-                List {
-                    ForEach(vehicle.sortedServicesArray) { service in
-                        ServiceListRowView(service: service, vehicle: vehicle)
-                    }
-                }
+        List {
+            ForEach(vehicle.sortedServicesArray) { service in
+                ServiceListRowView(service: service, vehicle: vehicle)
             }
         }
         .vehicleNavigationTitle("Maintenance", vehicleName: vehicle.name)
         .listRowSpacing(5)
+        .overlay {
+            if vehicle.sortedServicesArray.isEmpty {
+                EmptyMaintenanceView()
+            }
+        }
         .sheet(isPresented: $showingAddService) {
             AddEditServiceView(vehicle: vehicle)
         }

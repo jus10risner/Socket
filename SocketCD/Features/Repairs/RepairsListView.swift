@@ -11,34 +11,36 @@ import SwiftUI
 struct RepairsListView: View {
     @ObservedObject var vehicle: Vehicle
     @FetchRequest var repairs: FetchedResults<Repair>
-    
+
     init(vehicle: Vehicle) {
         self.vehicle = vehicle
         self._repairs = FetchRequest(
             entity: Repair.entity(),
-            sortDescriptors: [NSSortDescriptor(keyPath: \Repair.date_, ascending: false)],
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \Repair.date_, ascending: false)
+            ],
             predicate: NSPredicate(format: "vehicle == %@", vehicle)
         )
     }
-    
+
     @State private var showingAddRepair = false
-    
+
     var body: some View {
-        ZStack {
-            if repairs.isEmpty {
-                EmptyRepairsView()
-            } else {
-                List {
-                    ForEach(repairsByYear, id: \.year) { section in
-                        HistoryListSection(year: section.year, headerColor: .repairsTheme) {
-                            ForEach(section.repairs, id: \.id) { repair in
-                                NavigationLink {
-                                    RepairDetailView(repair: repair)
-                                } label: {
-                                    HistoryListRow(date: repair.date, odometer: repair.odometer) {
-                                        Text(repair.name)
-                                    }
-                                }
+        List {
+            ForEach(repairsByYear, id: \.year) { section in
+                HistoryListSection(
+                    year: section.year,
+                    headerColor: .repairsTheme
+                ) {
+                    ForEach(section.repairs, id: \.id) { repair in
+                        NavigationLink {
+                            RepairDetailView(repair: repair)
+                        } label: {
+                            HistoryListRow(
+                                date: repair.date,
+                                odometer: repair.odometer
+                            ) {
+                                Text(repair.name)
                             }
                         }
                     }
@@ -46,6 +48,11 @@ struct RepairsListView: View {
             }
         }
         .vehicleNavigationTitle("Repairs", vehicleName: vehicle.name)
+        .overlay {
+            if repairs.isEmpty {
+                EmptyRepairsView()
+            }
+        }
         .sheet(isPresented: $showingAddRepair) {
             AddEditRepairView(vehicle: vehicle)
         }
@@ -60,7 +67,7 @@ struct RepairsListView: View {
             }
         }
     }
-    
+
     var repairsByYear: [(year: Int, repairs: [Repair])] {
         let calendar = Calendar.current
         let grouped = Dictionary(grouping: repairs) { repair in
@@ -76,6 +83,6 @@ struct RepairsListView: View {
     let vehicle = Vehicle(context: context)
     vehicle.name = "My Car"
     vehicle.odometer = 12345
-    
+
     return RepairsListView(vehicle: vehicle)
 }
