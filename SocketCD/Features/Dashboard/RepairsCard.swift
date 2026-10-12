@@ -44,7 +44,7 @@ struct RepairsCard: View {
         } detail: {
             if let repair = repairs.first {
                 CardTextView(
-                    headline: latestRepairName,
+                    headline: latestRepairHeadline,
                     subheadline: latestRepairDescription(repair)
                 )
             } else {
@@ -56,11 +56,19 @@ struct RepairsCard: View {
         }
     }
     
-    private var latestRepairName: String {
-        if let latestRepair = repairs.first?.name {
-            return latestRepair
-        } else {
-            return "Unknown Repair"
+    private var latestRepairHeadline: String {
+        guard repairsOnLatestDate.count > 1 else {
+            return repairs.first?.name ?? String(localized: "Unknown Repair")
+        }
+
+        return String(localized: "\(repairsOnLatestDate.count) Repairs Performed")
+    }
+
+    private var repairsOnLatestDate: [Repair] {
+        guard let latestRepair = repairs.first else { return [] }
+
+        return repairs.filter {
+            Calendar.current.isDate($0.date, inSameDayAs: latestRepair.date)
         }
     }
     
@@ -72,6 +80,9 @@ struct RepairsCard: View {
             date = repair.date.formatted(.dateTime.month(.abbreviated).day().year())
         }
 
+        let odometerValues = Set(repairsOnLatestDate.map(\.odometer))
+        guard odometerValues.count == 1 else { return date }
+
         return String(localized: "\(date) • \(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
     }
     
@@ -80,7 +91,11 @@ struct RepairsCard: View {
             let description = latestRepairDescription(repair)
                 .replacingOccurrences(of: " • ", with: ", ")
             
-            return String(localized: "Latest repair: \(repair.name). \(description)")
+            if repairsOnLatestDate.count > 1 {
+                return String(localized: "\(latestRepairHeadline). \(description)")
+            } else {
+                return String(localized: "Latest repair: \(repair.name). \(description)")
+            }
         } else {
             return String(localized: "No repairs logged")
         }
