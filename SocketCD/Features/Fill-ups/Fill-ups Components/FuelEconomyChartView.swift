@@ -9,6 +9,18 @@ import Charts
 import SwiftUI
 
 struct FuelEconomyChartView: View {
+    private struct Viewport {
+        var position: Date = .now
+        var domainLength: TimeInterval = 60 * 60 * 24 * 183
+    }
+
+    private enum Timing {
+        static let fadeOut = 0.15
+        static let fadeIn = 0.2
+        static let scrollSettleDelay = Duration.milliseconds(350)
+        static let transitionDelay = Duration.milliseconds(150)
+    }
+
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -16,10 +28,8 @@ struct FuelEconomyChartView: View {
 
     @Binding var selectedDateRange: DateRange
     @State private var selectedDate: Date?
-    @State private var scrollPosition: Date = .now
-    @State private var settledScrollPosition: Date = .now
-    @State private var visibleDomainLength: TimeInterval = 60 * 60 * 24 * 183
-    @State private var settledDomainLength: TimeInterval = 60 * 60 * 24 * 183
+    @State private var viewport = Viewport()
+    @State private var settledViewport = Viewport()
     @State private var contentOpacity = 1.0
     @State private var displayedDateRange: DateRange = .threeMonths
     @State private var resizePlotOpacity = 1.0
@@ -27,6 +37,7 @@ struct FuelEconomyChartView: View {
     @State private var resizeScrollPosition: Date?
     @State private var rangeTransitionTask: Task<Void, Never>?
     @State private var resizeTransitionTask: Task<Void, Never>?
+    @State private var initialRevealProgress = 0.0
 
     private let settings = AppSettingsStore.shared
     private let selectionTolerance: TimeInterval = 60 * 60 * 24
@@ -52,6 +63,7 @@ struct FuelEconomyChartView: View {
         }
         .onAppear {
             resetChartPosition()
+            revealChart()
         }
         .onChange(of: selectedDateRange) {
             transitionRange()
@@ -59,16 +71,16 @@ struct FuelEconomyChartView: View {
         .onChange(of: data) {
             resetChartPosition()
         }
-        .task(id: scrollPosition) {
-            let newScrollPosition = scrollPosition
-            let newDomainLength = visibleDomainLength
+        .task(id: viewport.position) {
+            let newScrollPosition = viewport.position
+            let newDomainLength = viewport.domainLength
 
-            try? await Task.sleep(for: .milliseconds(350))
+            try? await Task.sleep(for: Timing.scrollSettleDelay)
             guard !Task.isCancelled else { return }
 
-            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.2)) {
-                settledScrollPosition = newScrollPosition
-                settledDomainLength = newDomainLength
+            withAnimation(reduceMotion ? nil : .easeOut(duration: Timing.fadeIn)) {
+                settledViewport.position = newScrollPosition
+                settledViewport.domainLength = newDomainLength
             }
         }
         .onDisappear {
@@ -147,18 +159,18 @@ struct FuelEconomyChartView: View {
 
     private var settledWindow: Range<Date> {
         let latestValidStart = latestDate.addingTimeInterval(
-            -settledDomainLength
+            -settledViewport.domainLength
         )
         let earliestValidStart = min(
             data.first?.date ?? latestDate,
             latestValidStart
         )
         let start = min(
-            max(settledScrollPosition, earliestValidStart),
+            max(settledViewport.position, earliestValidStart),
             latestValidStart
         )
 
-        return start..<start.addingTimeInterval(settledDomainLength)
+        return start..<start.addingTimeInterval(settledViewport.domainLength)
     }
 
     private func insertionIndex(for date: Date, afterMatches: Bool = false) -> Int {
@@ -194,65 +206,7 @@ struct FuelEconomyChartView: View {
     
     private var chart: some View {
         Chart {
-            if data.count >= 2 {
-                LinePlot(
-                    data,
-                    x: .value("Date", \.date),
-                    y: .value("Fuel Economy", \.value)
-                )
-                .interpolationMethod(.catmullRom)
-                .foregroundStyle(Color.fillupsTheme.gradient)
-                .lineStyle(
-                    StrokeStyle(
-                        lineWidth: 3,
-                        lineCap: .round,
-                        lineJoin: .round
-                    )
-                )
-                .opacity(plotOpacity)
-            }
-
-            if data.count >= 3 {
-                AreaPlot(
-                    data,
-                    x: .value("Date", \.date),
-                    yStart: .value("Minimum", yAxisDomain.lowerBound),
-                    yEnd: .value("Fuel Economy", \.value)
-                )
-                .interpolationMethod(.catmullRom)
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [
-                            Color.fillupsTheme.opacity(0.3),
-                            Color.fillupsTheme.opacity(0.1)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-                .opacity(plotOpacity)
-                .accessibilityHidden(true)
-            } else {
-                PointPlot(
-                    data,
-                    x: .value("Date", \.date),
-                    y: .value("Fuel Economy", \.value)
-                )
-                .symbolSize(45)
-                .foregroundStyle(Color.fillupsTheme)
-                .opacity(plotOpacity)
-                .accessibilityHidden(true)
-            }
-
-            if let selectedPoint {
-                RuleMark(
-                    x: .value("Selected Date", selectedPoint.date)
-                )
-                .foregroundStyle(Color.secondary)
-                .lineStyle(StrokeStyle(lineWidth: 1))
-                .opacity(plotOpacity)
-                .accessibilityHidden(true)
-            }
+            chartContent
         }
         .accessibilityLabel("Fuel economy history")
         .chartYScale(domain: yAxisDomain)
@@ -286,27 +240,114 @@ struct FuelEconomyChartView: View {
             }
         }
         .chartScrollableAxes(.horizontal)
-        .chartXVisibleDomain(length: visibleDomainLength)
-        .chartScrollPosition(x: $scrollPosition)
+        .chartXVisibleDomain(length: viewport.domainLength)
+        .chartScrollPosition(x: $viewport.position)
         .chartXSelection(value: $selectedDate)
         .chartOverlay { proxy in
-            GeometryReader { geometry in
-                if let selectedPoint,
-                   let plotFrame = proxy.plotFrame,
-                   let xPosition = proxy.position(forX: selectedPoint.date),
-                   let yPosition = proxy.position(forY: selectedPoint.value) {
-                    let frame = geometry[plotFrame]
+            selectionOverlay(for: proxy)
+        }
+    }
 
-                    Circle()
-                        .fill(Color.fillupsTheme)
-                        .frame(width: 14, height: 14)
-                        .position(
-                            x: frame.origin.x + xPosition,
-                            y: frame.origin.y + yPosition
-                        )
-                        .allowsHitTesting(false)
-                        .accessibilityHidden(true)
-                }
+    @ChartContentBuilder
+    private var chartContent: some ChartContent {
+        if data.count >= 2 {
+            ForEach(data) { point in
+                LineMark(
+                    x: .value("Date", point.date),
+                    y: .value("Fuel Economy", revealedValue(for: point))
+                )
+                .interpolationMethod(.catmullRom)
+                .foregroundStyle(Color.fillupsTheme.gradient)
+                .lineStyle(
+                    StrokeStyle(
+                        lineWidth: 3,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
+                )
+                .opacity(plotOpacity)
+            }
+        }
+
+        if data.count >= 3 {
+            ForEach(data) { point in
+                AreaMark(
+                    x: .value("Date", point.date),
+                    yStart: .value("Minimum", yAxisDomain.lowerBound),
+                    yEnd: .value("Fuel Economy", revealedValue(for: point))
+                )
+                .interpolationMethod(.catmullRom)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [
+                            Color.fillupsTheme.opacity(0.3),
+                            Color.fillupsTheme.opacity(0.1)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .opacity(plotOpacity)
+                .accessibilityHidden(true)
+            }
+        } else {
+            ForEach(data) { point in
+                PointMark(
+                    x: .value("Date", point.date),
+                    y: .value("Fuel Economy", revealedValue(for: point))
+                )
+                .symbolSize(45)
+                .foregroundStyle(Color.fillupsTheme)
+                .opacity(plotOpacity)
+                .accessibilityHidden(true)
+            }
+        }
+
+        if let selectedPoint {
+            RuleMark(
+                x: .value("Selected Date", selectedPoint.date)
+            )
+            .foregroundStyle(Color.secondary)
+            .lineStyle(StrokeStyle(lineWidth: 1))
+            .opacity(plotOpacity)
+            .accessibilityHidden(true)
+        }
+    }
+
+    private func selectionOverlay(for proxy: ChartProxy) -> some View {
+        GeometryReader { geometry in
+            if let selectedPoint,
+               let plotFrame = proxy.plotFrame,
+               let xPosition = proxy.position(forX: selectedPoint.date),
+               let yPosition = proxy.position(forY: selectedPoint.value) {
+                let frame = geometry[plotFrame]
+
+                Circle()
+                    .fill(Color.fillupsTheme)
+                    .frame(width: 14, height: 14)
+                    .position(
+                        x: frame.origin.x + xPosition,
+                        y: frame.origin.y + yPosition
+                    )
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
+        }
+    }
+
+    private func revealedValue(for point: ChartPoint) -> Double {
+        yAxisDomain.lowerBound
+            + ((point.value - yAxisDomain.lowerBound) * initialRevealProgress)
+    }
+
+    private func revealChart() {
+        guard initialRevealProgress == 0 else { return }
+
+        if reduceMotion {
+            initialRevealProgress = 1
+        } else {
+            withAnimation(.easeInOut.delay(Timing.fadeIn)) {
+                initialRevealProgress = 1
             }
         }
     }
@@ -325,15 +366,19 @@ struct FuelEconomyChartView: View {
 
     private var xAxisDomain: ClosedRange<Date> {
         let windowStart = latestDate.addingTimeInterval(
-            -visibleDomainLength
+            -viewport.domainLength
         )
         let earliestDate = data.first?.date ?? latestDate
 
         return min(earliestDate, windowStart)...latestDate
     }
 
-    private var targetDomainLength: TimeInterval {
-        selectedDateRange.chartDuration
+    private var targetViewport: Viewport {
+        let domainLength = selectedDateRange.chartDuration
+        return Viewport(
+            position: latestDate.addingTimeInterval(-domainLength),
+            domainLength: domainLength
+        )
     }
 
     private var selectedPoint: ChartPoint? {
@@ -355,9 +400,9 @@ struct FuelEconomyChartView: View {
                 : after
         }
 
-        let visibleStart = scrollPosition.addingTimeInterval(-selectionTolerance)
-        let visibleEnd = scrollPosition
-            .addingTimeInterval(visibleDomainLength + selectionTolerance)
+        let visibleStart = viewport.position.addingTimeInterval(-selectionTolerance)
+        let visibleEnd = viewport.position
+            .addingTimeInterval(viewport.domainLength + selectionTolerance)
 
         guard point.date >= visibleStart, point.date <= visibleEnd else {
             return nil
@@ -372,30 +417,24 @@ struct FuelEconomyChartView: View {
         resizeScrollPosition = nil
         resizePlotOpacity = 1
         selectedDate = nil
-        resizePlotOpacity = 1
         contentOpacity = 1
         displayedDateRange = selectedDateRange
-        let newDomainLength = targetDomainLength
-        let newScrollPosition = latestDate.addingTimeInterval(
-            -newDomainLength
-        )
-        visibleDomainLength = newDomainLength
-        settledDomainLength = newDomainLength
-        scrollPosition = newScrollPosition
-        settledScrollPosition = newScrollPosition
+        let newViewport = targetViewport
+        viewport = newViewport
+        settledViewport = newViewport
     }
 
     private func handleChartWidthChange() {
         rangeTransitionTask?.cancel()
         
         if resizeScrollPosition == nil {
-            resizeScrollPosition = settledScrollPosition
+            resizeScrollPosition = settledViewport.position
             selectedDate = nil
             
             if reduceMotion {
                 resizePlotOpacity = 0
             } else {
-                withAnimation(.easeOut(duration: 0.15)) {
+                withAnimation(.easeOut(duration: Timing.fadeOut)) {
                     resizePlotOpacity = 0
                 }
             }
@@ -403,15 +442,15 @@ struct FuelEconomyChartView: View {
         
         resizeTransitionTask?.cancel()
         resizeTransitionTask = Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(150))
+            try? await Task.sleep(for: Timing.transitionDelay)
             guard !Task.isCancelled,
                   let resizeScrollPosition else { return }
             
             var transaction = Transaction()
             transaction.disablesAnimations = true
             withTransaction(transaction) {
-                scrollPosition = resizeScrollPosition
-                settledScrollPosition = resizeScrollPosition
+                viewport.position = resizeScrollPosition
+                settledViewport.position = resizeScrollPosition
                 selectedDate = nil
                 chartLayoutID += 1
                 self.resizeScrollPosition = nil
@@ -420,7 +459,7 @@ struct FuelEconomyChartView: View {
             if reduceMotion {
                 resizePlotOpacity = 1
             } else {
-                withAnimation(.easeIn(duration: 0.2)) {
+                withAnimation(.easeIn(duration: Timing.fadeIn)) {
                     resizePlotOpacity = 1
                 }
             }
@@ -433,34 +472,28 @@ struct FuelEconomyChartView: View {
         resizeScrollPosition = nil
         selectedDate = nil
 
-        let newDomainLength = targetDomainLength
-        let newScrollPosition = latestDate.addingTimeInterval(
-            -newDomainLength
-        )
+        let newViewport = targetViewport
 
         guard !reduceMotion else {
-            visibleDomainLength = newDomainLength
-            settledDomainLength = newDomainLength
-            scrollPosition = newScrollPosition
-            settledScrollPosition = newScrollPosition
+            viewport = newViewport
+            settledViewport = newViewport
             contentOpacity = 1
             displayedDateRange = selectedDateRange
             return
         }
 
         rangeTransitionTask = Task { @MainActor in
-            withAnimation(.easeOut(duration: 0.15)) {
+            withAnimation(.easeOut(duration: Timing.fadeOut)) {
                 contentOpacity = 0
             }
 
-            try? await Task.sleep(for: .milliseconds(150))
+            try? await Task.sleep(for: Timing.transitionDelay)
             guard !Task.isCancelled else { return }
 
-            visibleDomainLength = newDomainLength
-            scrollPosition = newScrollPosition
+            viewport = newViewport
             displayedDateRange = selectedDateRange
 
-            withAnimation(.easeIn(duration: 0.2)) {
+            withAnimation(.easeIn(duration: Timing.fadeIn)) {
                 contentOpacity = 1
             }
         }

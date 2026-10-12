@@ -139,8 +139,8 @@ struct FillupsDashboardView: View {
                 Color(.systemGroupedBackground).opacity(0.3)
                     .frame(
                         minHeight: horizontalSizeClass == .regular
-                            ? 350
-                            : 200
+                            ? 470
+                            : 320
                     )
             }
         }
