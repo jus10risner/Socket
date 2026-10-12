@@ -28,16 +28,9 @@ struct ServiceDetailView: View {
             Section {
                 LabeledContent("Next Due") {
                     if !service.sortedServiceRecordsArray.isEmpty {
-                        HStack(spacing: 3) {
-                            if service.odometerDue != nil {
-                                odometerSymbol
-                            }
-                            
-                            Text(serviceNextDueInfo)
-                        }
-                        .accessibilityElement(children: .combine)
+                        Text(serviceNextDueInfo)
                     } else {
-                        Text("Unknown")
+                        Text("Not set")
                     }
                 }
                 
@@ -108,16 +101,6 @@ struct ServiceDetailView: View {
         }
 
         return components.joined(separator: " or ")
-    }
-    
-    // Simple graphic, to precede an odometer reading
-    private var odometerSymbol: some View {
-        Text("ODO")
-            .font(.caption.bold())
-            .padding(.horizontal, 2)
-            .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder())
-            .accessibilityElement()
-            .accessibilityLabel("At Odometer")
     }
 }
 
