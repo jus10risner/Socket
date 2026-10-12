@@ -49,8 +49,8 @@ struct RepairsCard: View {
                 )
             } else {
                 CardTextView(
-                    headline: "Have a clear vehicle history",
-                    subheadline: "Record completed work for future reference"
+                    headline: "Keep a repair history",
+                    subheadline: "Record unexpected vehicle work"
                 )
             }
         }

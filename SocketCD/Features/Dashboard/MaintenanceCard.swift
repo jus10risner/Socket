@@ -61,8 +61,8 @@ struct MaintenanceCard: View {
                 )
             } else {
                 CardTextView(
-                    headline: "Know when service is due",
-                    subheadline: "Tap here to set up your first service"
+                    headline: "Set up your first service",
+                    subheadline: "Tap this card to get started"
                 )
             }
         }

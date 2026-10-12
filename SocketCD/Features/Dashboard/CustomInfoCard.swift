@@ -44,8 +44,8 @@ struct CustomInfoCard: View {
         } detail: {
             if customInfo.isEmpty {
                 CardTextView(
-                    headline: "Find important details quickly",
-                    subheadline: "Save information you may need later"
+                    headline: "Save vehicle details",
+                    subheadline: "Add text, photos, or documents"
                 )
             } else {
                 CardTextView(

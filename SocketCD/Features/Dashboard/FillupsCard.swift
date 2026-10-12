@@ -56,10 +56,10 @@ struct FillupsCard: View {
                 )
             } else {
                 CardTextView(
-                    headline: fillups.isEmpty ? "Understand your fuel economy" : "See how fuel economy changes",
+                    headline: fillups.isEmpty ? "Track fuel economy" : "More fill-ups needed",
                     subheadline: fillups.isEmpty
-                        ? "Log fill-ups to see changes over time"
-                        : "Continue adding entries to see trends"
+                        ? "Log fill-ups to see trends over time"
+                        : "Keep logging to see fuel economy trends"
                 )
             }
         }
