@@ -18,22 +18,21 @@ struct DashboardServiceIndicator: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(displayedColor.gradient)
+                .fill(statusColor.gradient)
 
             Image(systemName: displayedSymbol)
                 .imageScale(.large)
                 .fontWeight(displayedSymbol == "exclamationmark" ? .black : .regular)
                 .foregroundStyle(.white)
-                .contentTransition(.symbolEffect(.replace.upUp))
+                .contentTransition(.symbolEffect(.replace))
         }
         .frame(width: diameter, height: diameter)
         .dynamicTypeSize(.medium)
         .accessibilityHidden(true)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                withAnimation(.snappy) {
-                    showsStatus = service.serviceStatus != .notDue
-                }
+            Task {
+                try? await Task.sleep(for: .seconds(1.0))
+                showsStatus = service.serviceStatus != .notDue
             }
         }
     }
@@ -53,21 +52,16 @@ struct DashboardServiceIndicator: View {
         }
     }
 
-    private var displayedColor: Color {
-        guard showsStatus else {
-            return Color(.maintenanceTheme)
-        }
-
+    private var statusColor: Color {
         switch service.serviceStatus {
         case .notDue:
             return Color(.maintenanceTheme)
         case .due:
-            return .orange
+            return .yellow
         case .overDue:
             return .red
         }
     }
-
 }
 
 #Preview {
