@@ -2,7 +2,7 @@
 //  ServiceIndicatorView.swift
 //  SocketCD
 //
-//  Created by Justin Risner on 7/11/25.
+//  Created by Justin Risner on 10/13/26.
 //
 
 import SwiftUI
@@ -72,15 +72,4 @@ private struct ServiceCapacityGaugeStyle: GaugeStyle {
             configuration.currentValueLabel
         }
     }
-}
-
-#Preview {
-    let context = DataController.preview.container.viewContext
-    let vehicle = Vehicle(context: context)
-    vehicle.name = "My Car"
-    
-    let service = Service(context: context)
-    service.vehicle = vehicle
-    
-    return ServiceIndicatorView(vehicle: vehicle, service: service)
 }

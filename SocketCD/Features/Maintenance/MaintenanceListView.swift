@@ -71,7 +71,7 @@ struct MaintenanceListView: View {
                 }
                 .tint(Color.maintenanceTheme)
                 .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.circle) // defines button shape for iOS 17 & 18
+                .buttonBorderShape(.circle)
                 .disabled(services.isEmpty)
             }
         }
@@ -98,6 +98,54 @@ private struct EmptyMaintenanceListView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .tint(Color(.maintenanceTheme))
+        }
+    }
+}
+
+private struct ServiceListRowView: View {
+    @ObservedObject var service: Service
+    @ObservedObject var vehicle: Vehicle
+    
+    @State private var selectedService: Service?
+    
+    var body: some View {
+        NavigationLink {
+            ServiceDetailView(service: service, vehicle: vehicle)
+        } label: {
+            Label {
+                serviceInfo
+            } icon: {
+                ServiceIndicatorView(vehicle: vehicle, service: service)
+            }
+            .labelStyle(CenteredLabelStyle())
+        }
+        .listRowSeparator(.hidden)
+        .sheet(item: $selectedService) { service in
+            AddEditRecordView(service: service, vehicle: vehicle)
+        }
+        .swipeActions(edge: .leading) {
+            Button("Add Service Log", systemImage: "plus") {
+                selectedService = service
+            }
+            .tint(Color(.maintenanceTheme))
+        }
+    }
+    
+    // Service name and relevant info
+    private var serviceInfo: some View {
+        VStack(alignment: .leading) {
+            Text(service.name)
+                .font(.headline)
+            
+            if service.sortedServiceRecordsArray.isEmpty {
+                Text("Tap the plus button to add a service log")
+                    .font(.caption)
+                    .foregroundStyle(Color.secondary)
+            } else {
+                Text(service.nextDueDescription(currentOdometer: vehicle.odometer))
+                    .font(.caption)
+                    .foregroundStyle(Color.secondary)
+            }
         }
     }
 }

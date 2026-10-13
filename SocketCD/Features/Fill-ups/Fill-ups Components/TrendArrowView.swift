@@ -2,7 +2,7 @@
 //  TrendArrowView.swift
 //  SocketCD
 //
-//  Created by Justin Risner on 7/1/25.
+//  Created by Justin Risner on 10/13/26.
 //
 
 import SwiftUI

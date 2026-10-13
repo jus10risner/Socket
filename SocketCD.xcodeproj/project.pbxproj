@@ -33,7 +33,6 @@
 		9E36533D303C86C000BD9ADD /* DocumentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36533C303C86C000BD9ADD /* DocumentListView.swift */; };
 		9E4CC2D12F51E60B001F7F51 /* RepairTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */; };
 		9E5067CB3047395400744533 /* ChartPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5067CA3047395400744533 /* ChartPoint.swift */; };
-		9E5067CD3047429200744533 /* FillupHistoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5067CC3047429200744533 /* FillupHistoryRow.swift */; };
 		9E5270E02E8AF82300EFDCB8 /* FuelCostSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */; };
 		9E5270E22E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */; };
 		9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */; };
@@ -61,11 +60,8 @@
 		9E916A442E464B7800E10B42 /* CSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E916A432E464B7800E10B42 /* CSVExporter.swift */; };
 		9E96EC462ECB985100667A47 /* OnboardingTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E96EC452ECB985100667A47 /* OnboardingTips.swift */; };
 		9E97B2752BD2C694002B1E9F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */; };
-		9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E97B2852BD40364002B1E9F /* ServiceListRowView.swift */; };
-		9E9C05AA2E218B2A00E9C0E2 /* ServiceIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C05A92E218B2A00E9C0E2 /* ServiceIndicatorView.swift */; };
 		9E9C05AC2E26984B00E9C0E2 /* CenteredLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */; };
 		9E9ED3A62E12E7BF00EB89F8 /* FuelEconomyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */; };
-		9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */; };
 		9EAEDF982F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAEDF932F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift */; };
 		9EAEDF992F4DFC5D005D29C6 /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAEDF942F4DFC5D005D29C6 /* ServiceTests.swift */; };
 		9EAEDF9A2F4DFC5D005D29C6 /* VehicleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAEDF962F4DFC5D005D29C6 /* VehicleTests.swift */; };
@@ -118,12 +114,10 @@
 		9EEAC5012BA389020053C65E /* Service+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5002BA389020053C65E /* Service+helper.swift */; };
 		9EEAC5032BA389140053C65E /* ServiceRecord+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5022BA389140053C65E /* ServiceRecord+helper.swift */; };
 		9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5052BA38B8E0053C65E /* FillupsDashboardView.swift */; };
-		9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */; };
 		9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5142BA489D30053C65E /* AllFillupsListView.swift */; };
 		9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5162BA48A7E0053C65E /* FillupDetailView.swift */; };
 		9EEAC5192BA48D720053C65E /* AddEditFillupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5182BA48D720053C65E /* AddEditFillupView.swift */; };
 		9EEAC51E2BA4A2280053C65E /* MaintenanceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC51D2BA4A2280053C65E /* MaintenanceListView.swift */; };
-		9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */; };
 		9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5232BA4B4700053C65E /* ServiceDetailView.swift */; };
 		9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */; };
 		9EEAC52A2BA4CBB40053C65E /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */; };
@@ -170,7 +164,6 @@
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairTests.swift; sourceTree = "<group>"; };
 		9E5067CA3047395400744533 /* ChartPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartPoint.swift; sourceTree = "<group>"; };
-		9E5067CC3047429200744533 /* FillupHistoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupHistoryRow.swift; sourceTree = "<group>"; };
 		9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelCostSettingsView.swift; sourceTree = "<group>"; };
 		9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsOfMeasureSettingsView.swift; sourceTree = "<group>"; };
 		9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceLog+helper.swift"; sourceTree = "<group>"; };
@@ -199,11 +192,8 @@
 		9E916A432E464B7800E10B42 /* CSVExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporter.swift; sourceTree = "<group>"; };
 		9E96EC452ECB985100667A47 /* OnboardingTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTips.swift; sourceTree = "<group>"; };
 		9E97B2742BD2C694002B1E9F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		9E97B2852BD40364002B1E9F /* ServiceListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceListRowView.swift; sourceTree = "<group>"; };
-		9E9C05A92E218B2A00E9C0E2 /* ServiceIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceIndicatorView.swift; sourceTree = "<group>"; };
 		9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredLabelStyle.swift; sourceTree = "<group>"; };
 		9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartView.swift; sourceTree = "<group>"; };
-		9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendArrowView.swift; sourceTree = "<group>"; };
 		9EAEDF7F2F4CDAB8005D29C6 /* SocketCDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocketCDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EAEDF932F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataDiagnosticTests.swift; sourceTree = "<group>"; };
 		9EAEDF942F4DFC5D005D29C6 /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
@@ -258,12 +248,10 @@
 		9EEAC5002BA389020053C65E /* Service+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Service+helper.swift"; sourceTree = "<group>"; };
 		9EEAC5022BA389140053C65E /* ServiceRecord+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceRecord+helper.swift"; sourceTree = "<group>"; };
 		9EEAC5052BA38B8E0053C65E /* FillupsDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupsDashboardView.swift; sourceTree = "<group>"; };
-		9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillTypeInfoView.swift; sourceTree = "<group>"; };
 		9EEAC5142BA489D30053C65E /* AllFillupsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFillupsListView.swift; sourceTree = "<group>"; };
 		9EEAC5162BA48A7E0053C65E /* FillupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupDetailView.swift; sourceTree = "<group>"; };
 		9EEAC5182BA48D720053C65E /* AddEditFillupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditFillupView.swift; sourceTree = "<group>"; };
 		9EEAC51D2BA4A2280053C65E /* MaintenanceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceListView.swift; sourceTree = "<group>"; };
-		9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthsYearsToggle.swift; sourceTree = "<group>"; };
 		9EEAC5232BA4B4700053C65E /* ServiceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceDetailView.swift; sourceTree = "<group>"; };
 		9EEAC5252BA4C5060053C65E /* AddEditServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditServiceView.swift; sourceTree = "<group>"; };
 		9EEAC5292BA4CBB40053C65E /* RecordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailView.swift; sourceTree = "<group>"; };
@@ -303,10 +291,7 @@
 			children = (
 				9E620BF92BC05754005E16DD /* DraftService.swift */,
 				9E52CCB52E6F569E00B3CB45 /* DraftServiceLog.swift */,
-				9EEAC51F2BA4B13D0053C65E /* MonthsYearsToggle.swift */,
-				9E97B2852BD40364002B1E9F /* ServiceListRowView.swift */,
-				9E9C05A92E218B2A00E9C0E2 /* ServiceIndicatorView.swift */,
-				9E30BD1830757A8200B8A3A3 /* DashboardServiceIndicator.swift */,
+				9E325177307E867100F43F37 /* ServiceIndicatorView.swift */,
 			);
 			path = "Maintenance Components";
 			sourceTree = "<group>";
@@ -629,12 +614,11 @@
 			isa = PBXGroup;
 			children = (
 				9E620BF52BC04531005E16DD /* DraftFillup.swift */,
-				9E5067CC3047429200744533 /* FillupHistoryRow.swift */,
-				9EEAC50B2BA482AE0053C65E /* FillTypeInfoView.swift */,
+				9E325173307E85B000F43F37 /* FillupHistoryRow.swift */,
 				9E9ED3A52E12E7BF00EB89F8 /* FuelEconomyChartView.swift */,
-				9E9ED3A92E144A1000EB89F8 /* TrendArrowView.swift */,
 				9E5067CA3047395400744533 /* ChartPoint.swift */,
 				9E63DD363062DA72005B596B /* FuelEconomySetupView.swift */,
+				9E325175307E85F500F43F37 /* TrendArrowView.swift */,
 			);
 			path = "Fill-ups Components";
 			sourceTree = "<group>";
@@ -800,11 +784,10 @@
 				9EDCA2442ED0E19D005B1C5A /* PopoverContent.swift in Sources */,
 				9EEAC4D72BA332E50053C65E /* VehicleListView.swift in Sources */,
 				9E328E102E33B99600FF25B5 /* PDFExporter.swift in Sources */,
+				9E325174307E85B000F43F37 /* FillupHistoryRow.swift in Sources */,
 				9E02BAF62E44FE1B00D45FA3 /* VehicleExportRecord.swift in Sources */,
 				9E7507592BF68C84000E25BD /* EmptyVehicleListView.swift in Sources */,
-				9E9C05AA2E218B2A00E9C0E2 /* ServiceIndicatorView.swift in Sources */,
 				9E63DD31305AE069005B596B /* VehicleNavigationTitle.swift in Sources */,
-				9EEAC5202BA4B13D0053C65E /* MonthsYearsToggle.swift in Sources */,
 				9E30BD13306EACCA00B8A3A3 /* CardSymbolView.swift in Sources */,
 				9EEAC4AE2BA1F0380053C65E /* SwiftUIExtensions.swift in Sources */,
 				9EEAC4FB2BA37FDB0053C65E /* RepairDetailView.swift in Sources */,
@@ -842,7 +825,6 @@
 				9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */,
 				9EEAC4CF2BA258290053C65E /* VehicleImageView.swift in Sources */,
 				9E7EF3FB2EC3899000E1E5D1 /* NotificationManager.swift in Sources */,
-				9E97B2862BD40364002B1E9F /* ServiceListRowView.swift in Sources */,
 				9EEAC4F52BA37A270053C65E /* RepairsListView.swift in Sources */,
 				9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */,
 				9E187C172EA158CC00FBDAC9 /* TimelineView.swift in Sources */,
@@ -868,7 +850,6 @@
 				9E5270E22E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift in Sources */,
 				9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */,
 				9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */,
-				9E9ED3AA2E144A1000EB89F8 /* TrendArrowView.swift in Sources */,
 				9EEAC4C12BA24EEC0053C65E /* AppSettingsStore.swift in Sources */,
 				9EEAC4CB2BA256570053C65E /* AddEditVehicleView.swift in Sources */,
 				9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */,
@@ -878,22 +859,22 @@
 				9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */,
 				9EEAC4B32BA1F08F0053C65E /* CameraCapture.swift in Sources */,
 				9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */,
-				9EEAC50C2BA482AE0053C65E /* FillTypeInfoView.swift in Sources */,
 				9E5067CB3047395400744533 /* ChartPoint.swift in Sources */,
 				9EEAC5172BA48A7E0053C65E /* FillupDetailView.swift in Sources */,
 				9E0B19B72EAA87C500E7A820 /* WhatsNewView.swift in Sources */,
 				9EEAC48E2BA0FA280053C65E /* SocketDataModel.xcdatamodeld in Sources */,
+				9E325176307E85F500F43F37 /* TrendArrowView.swift in Sources */,
 				9EEAC4D32BA258960053C65E /* Photo+helper.swift in Sources */,
 				9EBB223A306AD12E00A37D48 /* OdometerValidator.swift in Sources */,
 				9E620C0D2BC5D4FC005E16DD /* MailComposeViewController.swift in Sources */,
-				9E30BD1930757A8200B8A3A3 /* DashboardServiceIndicator.swift in Sources */,
 				9EEAC4F02BA376380053C65E /* AddEditCustomInfoView.swift in Sources */,
+				9E325178307E867100F43F37 /* ServiceIndicatorView.swift in Sources */,
 				9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */,
 				9EEAC4E62BA364AA0053C65E /* CustomInfo+helper.swift in Sources */,
 				9EE97E853054617400F2AA5F /* DashboardCard.swift in Sources */,
 				9EEAC5192BA48D720053C65E /* AddEditFillupView.swift in Sources */,
+				9E30BD1B307802CB00B8A3A3 /* WelcomeStep.swift in Sources */,
 				9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */,
-				9E5067CD3047429200744533 /* FillupHistoryRow.swift in Sources */,
 				9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */,
 				9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */,
 				9E87C5B62E4235CF001BE562 /* FormFooterView.swift in Sources */,
