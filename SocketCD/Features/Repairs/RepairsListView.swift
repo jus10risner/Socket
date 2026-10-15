@@ -38,7 +38,8 @@ struct RepairsListView: View {
                         } label: {
                             HistoryListRow(
                                 date: repair.date,
-                                odometer: repair.odometer
+                                odometer: repair.odometer,
+                                distanceUnit: vehicle.distanceUnit
                             ) {
                                 Text(repair.name)
                             }

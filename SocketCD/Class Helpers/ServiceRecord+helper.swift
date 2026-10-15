@@ -15,10 +15,10 @@ extension ServiceRecord {
     }
     
     var odometer: Int {
-        get { Int(odometer_) }
-        set { odometer_ = Int64(newValue) }
+        get { service?.vehicle?.displayedDistance(fromStored: odometer_) ?? Int(odometer_) }
+        set { odometer_ = service?.vehicle?.storedDistance(fromDisplayed: newValue) ?? Int64(newValue) }
     }
-    
+
     var cost: Double? {
         get { cost_ }
         set { cost_ = newValue ?? 0}

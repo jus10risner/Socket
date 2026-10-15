@@ -57,9 +57,9 @@ struct AddEditServiceView: View {
                                     .keyboardType(.numberPad)
                                     .fixedSize()
                                     .accessibilityLabel("Distance interval")
-                                    .accessibilityHint("Enter the number of " + settings.distanceUnit.rawValue)
+                                    .accessibilityHint("Enter the number of " + distanceUnit.rawValue)
 
-                                Text("\(String(describing: settings.distanceUnit.abbreviated)) or")
+                                Text("\(distanceUnit.abbreviated) or")
                                     .accessibilityHidden(true)
 
                                 TextField("6", text: optionalIntFieldBinding($draftService.timeInterval))
@@ -83,9 +83,9 @@ struct AddEditServiceView: View {
                                         .keyboardType(.numberPad)
                                         .fixedSize()
                                         .accessibilityLabel("Distance interval")
-                                        .accessibilityHint("Enter the number of " + settings.distanceUnit.rawValue)
+                                        .accessibilityHint("Enter the number of " + distanceUnit.rawValue)
                                     
-                                    Text("\(String(describing: settings.distanceUnit.abbreviated)) or")
+                                    Text("\(distanceUnit.abbreviated) or")
                                         .accessibilityHidden(true)
                                 }
 
@@ -223,7 +223,7 @@ struct AddEditServiceView: View {
                 warning: $odometerWarning,
                 entered: draftServiceLog.odometer,
                 current: vehicle?.odometer,
-                distanceUnit: AppSettingsStore.shared.distanceUnit.abbreviated,
+                distanceUnit: distanceUnit.abbreviated,
                 onConfirm: performServiceSave
             )
         }
@@ -231,6 +231,10 @@ struct AddEditServiceView: View {
     }
     
     // MARK: - Methods
+
+    private var distanceUnit: DistanceUnits {
+        vehicle?.distanceUnit ?? service?.vehicle?.distanceUnit ?? settings.distanceUnit
+    }
 
     private func saveService() {
         guard service == nil else {

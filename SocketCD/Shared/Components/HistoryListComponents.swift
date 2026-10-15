@@ -34,17 +34,18 @@ struct HistoryListSection<Content: View>: View {
 struct HistoryListRow<Content: View>: View {
     let date: Date
     let odometer: Int?
+    let distanceUnit: DistanceUnits
     @ViewBuilder let content: Content
-
-    private let settings = AppSettingsStore.shared
 
     init(
         date: Date,
         odometer: Int?,
+        distanceUnit: DistanceUnits,
         @ViewBuilder content: () -> Content
     ) {
         self.date = date
         self.odometer = odometer
+        self.distanceUnit = distanceUnit
         self.content = content()
     }
 
@@ -55,7 +56,7 @@ struct HistoryListRow<Content: View>: View {
                     .font(.callout.bold())
 
                 if let odometer {
-                    Text("\(odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                    Text("\(odometer.formatted()) \(distanceUnit.abbreviated)")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }

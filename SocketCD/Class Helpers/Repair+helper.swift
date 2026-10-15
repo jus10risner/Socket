@@ -8,6 +8,10 @@
 import CoreData
 
 extension Repair {
+    var distanceUnit: DistanceUnits {
+        vehicle?.distanceUnit ?? AppSettingsStore.shared.distanceUnit
+    }
+
     
     var date: Date {
         get { date_ ?? Date() }
@@ -20,10 +24,10 @@ extension Repair {
     }
     
     var odometer: Int {
-        get { Int(odometer_) }
-        set { odometer_ = Int64(newValue) }
+        get { vehicle?.displayedDistance(fromStored: odometer_) ?? Int(odometer_) }
+        set { odometer_ = vehicle?.storedDistance(fromDisplayed: newValue) ?? Int64(newValue) }
     }
-    
+
     var cost: Double? {
         get { cost_ }
         set { cost_ = newValue ?? 0 }

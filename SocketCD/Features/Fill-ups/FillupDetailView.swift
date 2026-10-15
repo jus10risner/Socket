@@ -10,7 +10,6 @@ import SwiftUI
 struct FillupDetailView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var fillup: Fillup
-    let settings = AppSettingsStore.shared
     
     @State private var showingEditFillup = false
     @State private var showingFuelEconomyInfo = false
@@ -21,23 +20,26 @@ struct FillupDetailView: View {
                 LabeledContent("Fill-up Date", value: fillup.date.formatted(date: .numeric, time: .omitted))
                 
                 LabeledContent("Odometer") {
-                    Text("\(fillup.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                    Text("\(fillup.odometer.formatted()) \(fillup.distanceUnit.abbreviated)")
                 }
                 
-                LabeledContent("\(settings.fuelEconomyUnit.volumeUnit)s of Fuel", value: fillup.volume.formatted())
+                LabeledContent(
+                    "\(fillup.volumeUnit.singularName)s of Fuel",
+                    value: fillup.volume.formatted(.number.precision(.fractionLength(0...3)))
+                )
                 
-                LabeledContent("Cost per \(settings.fuelEconomyUnit.volumeUnit)", value: (fillup.pricePerUnit ?? 0).asCurrency())
+                LabeledContent("Cost per \(fillup.volumeUnit.singularName)", value: (fillup.pricePerUnit ?? 0).asCurrency())
             }
             
             Section {
                 LabeledContent("Trip") {
-                    Text("\(fillup.tripDistance.formatted()) \(settings.distanceUnit.abbreviated)")
+                    Text("\(fillup.tripDistance.formatted()) \(fillup.distanceUnit.abbreviated)")
                 }
                 
                 LabeledContent {
                     if fillup.fuelEconomy() != 0 {
-                        Text("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.rawValue)")
-                            .accessibilityLabel("\(fillup.fuelEconomy(), specifier: "%.1f") \(settings.fuelEconomyUnit.fullName)")
+                        Text("\(fillup.fuelEconomy(), specifier: "%.1f") \(fillup.fuelEconomyUnit.displayName)")
+                            .accessibilityLabel("\(fillup.fuelEconomy(), specifier: "%.1f") \(fillup.fuelEconomyUnit.fullName)")
                     } else {
                         switch fillup.fillType {
                         case .fullTank:

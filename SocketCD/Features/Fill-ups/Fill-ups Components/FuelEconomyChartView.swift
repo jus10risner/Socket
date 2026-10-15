@@ -25,6 +25,7 @@ struct FuelEconomyChartView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     let data: [ChartPoint]
+    let fuelEconomyUnit: FuelEconomyUnits
 
     @Binding var selectedDateRange: DateRange
     @State private var selectedDate: Date?
@@ -39,7 +40,6 @@ struct FuelEconomyChartView: View {
     @State private var resizeTransitionTask: Task<Void, Never>?
     @State private var initialRevealProgress = 0.0
 
-    private let settings = AppSettingsStore.shared
     private let selectionTolerance: TimeInterval = 60 * 60 * 24
 
     var body: some View {
@@ -131,7 +131,7 @@ struct FuelEconomyChartView: View {
         }
 
         return Text(
-            "\(Text(average.formatted(.number.precision(.fractionLength(1)))).font(.title.bold())) \(Text(settings.fuelEconomyUnit.rawValue).font(.title3.bold()).foregroundStyle(.secondary))"
+            "\(Text(average.formatted(.number.precision(.fractionLength(1)))).font(.title.bold())) \(Text(fuelEconomyUnit.displayName).font(.title3.bold()).foregroundStyle(.secondary))"
         )
     }
 
@@ -147,7 +147,7 @@ struct FuelEconomyChartView: View {
 
         return ChartPoint.aggregateFuelEconomy(
             from: data[startIndex..<endIndex],
-            unit: settings.fuelEconomyUnit
+            unit: fuelEconomyUnit
         )
     }
 
@@ -192,11 +192,11 @@ struct FuelEconomyChartView: View {
 
     private func fuelEconomyText(for point: ChartPoint) -> some View {
         Text(
-            "\(Text("\(point.value, specifier: "%.1f")").font(.title.bold())) \(Text(settings.fuelEconomyUnit.rawValue).font(.title3.bold()).foregroundStyle(.secondary))"
+            "\(Text("\(point.value, specifier: "%.1f")").font(.title.bold())) \(Text(fuelEconomyUnit.displayName).font(.title3.bold()).foregroundStyle(.secondary))"
         )
         .monospacedDigit()
         .accessibilityLabel(
-            "\(point.value, specifier: "%.1f") \(settings.fuelEconomyUnit.fullName)"
+            "\(point.value, specifier: "%.1f") \(fuelEconomyUnit.fullName)"
         )
     }
 

@@ -21,30 +21,30 @@ struct ChartPoint: Identifiable, Equatable, @unchecked Sendable {
         var points: [ChartPoint] = []
         points.reserveCapacity(sortedFillups.count)
 
-        var baselineOdometer: Int?
+        var baselineOdometer: Double?
         var partialVolume = 0.0
 
         for fillup in sortedFillups {
             switch fillup.fillType {
             case .missedFill:
-                baselineOdometer = fillup.odometer
+                baselineOdometer = fillup.odometerKilometers
                 partialVolume = 0
 
             case .partialFill:
                 if baselineOdometer != nil {
-                    partialVolume += fillup.volume
+                    partialVolume += fillup.volumeLiters
                 }
 
             case .fullTank:
                 defer {
-                    baselineOdometer = fillup.odometer
+                    baselineOdometer = fillup.odometerKilometers
                     partialVolume = 0
                 }
 
                 guard let baselineOdometer else { continue }
 
-                let distance = Double(fillup.odometer - baselineOdometer)
-                let volume = partialVolume + fillup.volume
+                let distance = fillup.odometerKilometers - baselineOdometer
+                let volume = partialVolume + fillup.volumeLiters
 
                 guard let value = fuelEconomy(
                     distance: distance,
@@ -90,11 +90,10 @@ struct ChartPoint: Identifiable, Equatable, @unchecked Sendable {
     ) -> Double? {
         guard distance > 0, volume > 0 else { return nil }
 
-        switch unit {
-        case .L100km:
-            return (volume / distance) * 100
-        default:
-            return distance / volume
-        }
+        return MeasurementConverter.fuelEconomy(
+            distanceKilometers: distance,
+            volumeLiters: volume,
+            unit: unit
+        )
     }
 }

@@ -55,6 +55,9 @@ final class DataController: ObservableObject {
                 print("❌ Failed to load persistent store:", error)
             } else {
                 print("✅ Loaded persistent store: \(storeDescription.url?.absoluteString ?? "")")
+                DispatchQueue.main.async {
+                    self.captureLegacyMeasurementUnitsIfNeeded()
+                }
             }
         }
 
@@ -74,6 +77,31 @@ final class DataController: ObservableObject {
             }
         }
         #endif
+    }
+
+    private func captureLegacyMeasurementUnitsIfNeeded() {
+        let context = container.viewContext
+        let request = Vehicle.fetchRequest()
+
+        guard let vehicles = try? context.fetch(request) else { return }
+
+        let settings = AppSettingsStore.shared
+        let legacyDistanceUnit = settings.distanceUnit
+        let legacyVolumeUnit: VolumeUnits = switch settings.fuelEconomyUnit {
+        case .mpg, .kmGal: .usGallons
+        case .mpgImperial: .imperialGallons
+        case .kmL, .L100km: .liters
+        }
+
+        for vehicle in vehicles {
+            vehicle.captureLegacyMeasurementUnitsIfNeeded(
+                distanceUnit: legacyDistanceUnit,
+                volumeUnit: legacyVolumeUnit,
+                fuelEconomyUnit: settings.fuelEconomyUnit
+            )
+        }
+
+        save()
     }
 
     // MARK: - Save / Delete
@@ -105,4 +133,3 @@ final class DataController: ObservableObject {
         }
     }
 }
-

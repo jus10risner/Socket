@@ -16,9 +16,9 @@ struct MaintenanceAlertSettingsView: View {
     
     var body: some View {
         List {
-            Section(footer: Text("When Socket should alert you of upcoming maintenance services")) {
-                LabeledInput(label: "\(settings.distanceUnit.rawValue.capitalized) before due") {
-                    TextField("\(settings.distanceUnit.rawValue.capitalized)", value: $settings.distanceBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
+            Section(footer: Text("Choose when Socket should alert you. Distance uses each vehicle’s selected units.")) {
+                LabeledInput(label: "Distance before due") {
+                    TextField("Distance", value: $settings.distanceBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
                         .keyboardType(.numberPad)
                 }
                 

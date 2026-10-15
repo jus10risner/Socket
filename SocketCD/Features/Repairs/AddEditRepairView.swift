@@ -110,7 +110,7 @@ struct AddEditRepairView: View {
             warning: $odometerWarning,
             entered: draftRepair.odometer,
             current: comparisonVehicle?.odometer,
-            distanceUnit: AppSettingsStore.shared.distanceUnit.abbreviated,
+            distanceUnit: comparisonVehicle?.distanceUnit.abbreviated ?? AppSettingsStore.shared.distanceUnit.abbreviated,
             onConfirm: performRepairSave
         )
         .tint(nil)

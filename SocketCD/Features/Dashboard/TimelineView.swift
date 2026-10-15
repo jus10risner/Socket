@@ -16,7 +16,11 @@ struct TimelineView: View {
             List(timelineGroupsByYear, id: \.year) { yearGroup in
                 HistoryListSection(year: yearGroup.year) {
                     ForEach(yearGroup.groups, id: \.date) { group in
-                        HistoryListRow(date: group.date, odometer: group.entries.first?.odometer) {
+                        HistoryListRow(
+                            date: group.date,
+                            odometer: group.entries.first?.odometer,
+                            distanceUnit: vehicle.distanceUnit
+                        ) {
                             VStack(alignment: .leading) {
                                 ForEach(group.entries) { item in
                                     HStack(alignment: .firstTextBaseline) {

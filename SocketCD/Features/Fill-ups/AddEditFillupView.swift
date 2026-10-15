@@ -54,8 +54,14 @@ struct AddEditFillupView: View {
                             .focused($isInputActive)
                     }
                     
-                    LabeledInput(label: "\(settings.fuelEconomyUnit.volumeUnit)s of Fuel") {
-                        TextField("Required", value: $draftFillup.volume, format: .number.decimalSeparator(strategy: .automatic))
+                    LabeledInput(label: "\(volumeUnit.singularName)s of Fuel") {
+                        TextField(
+                            "Required",
+                            value: $draftFillup.volume,
+                            format: .number
+                                .precision(.fractionLength(0...3))
+                                .decimalSeparator(strategy: .automatic)
+                        )
                             .keyboardType(.decimalPad)
                     }
                     
@@ -66,22 +72,22 @@ struct AddEditFillupView: View {
                             .multilineTextAlignment(.trailing)
                     } label: {
                         Group {
-                            Text(settings.fillupCostType == .perUnit ? "Cost per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
+                            Text(settings.fillupCostType == .perUnit ? "Cost per \(volumeUnit.singularName)" : "Total Cost")
                             
                             if settings.showCalculatedCost {
-                                Text(settings.fillupCostType == .perUnit ? "Total: \(calculatedCost)" : "Per \(settings.fuelEconomyUnit.volumeUnit): \(calculatedCost)")
+                                Text(settings.fillupCostType == .perUnit ? "Total: \(calculatedCost)" : "Per \(volumeUnit.singularName): \(calculatedCost)")
                                     .font(.caption)
                             }
                         }
                         .accessibilityHidden(true)
                     }
                     .foregroundStyle(Color.secondary)
-                    .accessibilityLabel(settings.fillupCostType == .perUnit ? "Cost per \(settings.fuelEconomyUnit.volumeUnit)" : "Total Cost")
+                    .accessibilityLabel(settings.fillupCostType == .perUnit ? "Cost per \(volumeUnit.singularName)" : "Total Cost")
                     .accessibilityHint(
                         settings.showCalculatedCost && draftFillup.cost != nil
                         ? (settings.fillupCostType == .perUnit
                            ? "Total cost for this fill-up: \(calculatedCost)"
-                           : "Cost per \(settings.fuelEconomyUnit.volumeUnit) for this fill-up: \(calculatedCost)")
+                           : "Cost per \(volumeUnit.singularName) for this fill-up: \(calculatedCost)")
                         : ""
                     )
                     
@@ -157,7 +163,7 @@ struct AddEditFillupView: View {
                 warning: $odometerWarning,
                 entered: draftFillup.odometer,
                 current: comparisonVehicle?.odometer,
-                distanceUnit: settings.distanceUnit.abbreviated,
+                distanceUnit: distanceUnit.abbreviated,
                 onConfirm: performFillupSave
             )
         }
@@ -189,6 +195,14 @@ struct AddEditFillupView: View {
 
     private var comparisonVehicle: Vehicle? {
         vehicle ?? fillup?.vehicle
+    }
+
+    private var distanceUnit: DistanceUnits {
+        comparisonVehicle?.distanceUnit ?? settings.distanceUnit
+    }
+
+    private var volumeUnit: VolumeUnits {
+        comparisonVehicle?.volumeUnit ?? settings.volumeUnit
     }
 
     // Allows the user to specify a fill type for a given fill-up

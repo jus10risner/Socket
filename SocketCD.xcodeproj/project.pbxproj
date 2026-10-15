@@ -24,7 +24,15 @@
 		9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E235B912DFB58CA008F7327 /* CameraViewModel.swift */; };
 		9E30BD13306EACCA00B8A3A3 /* CardSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD12306EACCA00B8A3A3 /* CardSymbolView.swift */; };
 		9E30BD1530700B5400B8A3A3 /* HistoryListComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD1430700B5400B8A3A3 /* HistoryListComponents.swift */; };
-		9E30BD1930757A8200B8A3A3 /* DashboardServiceIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD1830757A8200B8A3A3 /* DashboardServiceIndicator.swift */; };
+		9E30BD1B307802CB00B8A3A3 /* WelcomeStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD1A307802CB00B8A3A3 /* WelcomeStep.swift */; };
+		9E30BD1D30780BC400B8A3A3 /* VehicleStep1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD1C30780BC400B8A3A3 /* VehicleStep1.swift */; };
+		9E30BD1F30780F8C00B8A3A3 /* VehicleStep2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD1E30780F8C00B8A3A3 /* VehicleStep2.swift */; };
+		9E30BD21307811C600B8A3A3 /* UnitSelectionStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD20307811C600B8A3A3 /* UnitSelectionStep.swift */; };
+		9E30BD2330791DF800B8A3A3 /* NotificationsStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD2230791DF800B8A3A3 /* NotificationsStep.swift */; };
+		9E30BD2530794C0E00B8A3A3 /* OnboardingContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E30BD2430794C0E00B8A3A3 /* OnboardingContainer.swift */; };
+		9E325174307E85B000F43F37 /* FillupHistoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E325173307E85B000F43F37 /* FillupHistoryRow.swift */; };
+		9E325176307E85F500F43F37 /* TrendArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E325175307E85F500F43F37 /* TrendArrowView.swift */; };
+		9E325178307E867100F43F37 /* ServiceIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E325177307E867100F43F37 /* ServiceIndicatorView.swift */; };
 		9E328E102E33B99600FF25B5 /* PDFExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */; };
 		9E328E122E3CF7A600FF25B5 /* LabeledInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */; };
 		9E35034C2E1FE3300032F845 /* VehicleDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */; };
@@ -34,7 +42,6 @@
 		9E4CC2D12F51E60B001F7F51 /* RepairTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */; };
 		9E5067CB3047395400744533 /* ChartPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5067CA3047395400744533 /* ChartPoint.swift */; };
 		9E5270E02E8AF82300EFDCB8 /* FuelCostSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */; };
-		9E5270E22E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */; };
 		9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */; };
 		9E52CCB62E6F569E00B3CB45 /* DraftServiceLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB52E6F569E00B3CB45 /* DraftServiceLog.swift */; };
 		9E52CCBA2E72FC0C00B3CB45 /* SelectedServicesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB92E72FC0C00B3CB45 /* SelectedServicesListView.swift */; };
@@ -153,7 +160,15 @@
 		9E2F33372E4A42DA00EAB7B9 /* SocketDataModel_V2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SocketDataModel_V2.xcdatamodel; sourceTree = "<group>"; };
 		9E30BD12306EACCA00B8A3A3 /* CardSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSymbolView.swift; sourceTree = "<group>"; };
 		9E30BD1430700B5400B8A3A3 /* HistoryListComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryListComponents.swift; sourceTree = "<group>"; };
-		9E30BD1830757A8200B8A3A3 /* DashboardServiceIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardServiceIndicator.swift; sourceTree = "<group>"; };
+		9E30BD1A307802CB00B8A3A3 /* WelcomeStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeStep.swift; sourceTree = "<group>"; };
+		9E30BD1C30780BC400B8A3A3 /* VehicleStep1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleStep1.swift; sourceTree = "<group>"; };
+		9E30BD1E30780F8C00B8A3A3 /* VehicleStep2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleStep2.swift; sourceTree = "<group>"; };
+		9E30BD20307811C600B8A3A3 /* UnitSelectionStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSelectionStep.swift; sourceTree = "<group>"; };
+		9E30BD2230791DF800B8A3A3 /* NotificationsStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsStep.swift; sourceTree = "<group>"; };
+		9E30BD2430794C0E00B8A3A3 /* OnboardingContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainer.swift; sourceTree = "<group>"; };
+		9E325173307E85B000F43F37 /* FillupHistoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillupHistoryRow.swift; sourceTree = "<group>"; };
+		9E325175307E85F500F43F37 /* TrendArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendArrowView.swift; sourceTree = "<group>"; };
+		9E325177307E867100F43F37 /* ServiceIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceIndicatorView.swift; sourceTree = "<group>"; };
 		9E328E0F2E33B99600FF25B5 /* PDFExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExporter.swift; sourceTree = "<group>"; };
 		9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInput.swift; sourceTree = "<group>"; };
 		9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDashboardView.swift; sourceTree = "<group>"; };
@@ -165,7 +180,6 @@
 		9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairTests.swift; sourceTree = "<group>"; };
 		9E5067CA3047395400744533 /* ChartPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartPoint.swift; sourceTree = "<group>"; };
 		9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelCostSettingsView.swift; sourceTree = "<group>"; };
-		9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsOfMeasureSettingsView.swift; sourceTree = "<group>"; };
 		9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceLog+helper.swift"; sourceTree = "<group>"; };
 		9E52CCB52E6F569E00B3CB45 /* DraftServiceLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftServiceLog.swift; sourceTree = "<group>"; };
 		9E52CCB92E72FC0C00B3CB45 /* SelectedServicesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedServicesListView.swift; sourceTree = "<group>"; };
@@ -364,7 +378,6 @@
 		9E5270E32E8AF97600EFDCB8 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				9E5270E12E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift */,
 				9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */,
 				9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */,
 				9EEAC4BB2BA1F1CA0053C65E /* AccentColorSelectorView.swift */,
@@ -557,6 +570,12 @@
 			isa = PBXGroup;
 			children = (
 				9EEAC4C52BA253950053C65E /* WelcomeView.swift */,
+				9E30BD2430794C0E00B8A3A3 /* OnboardingContainer.swift */,
+				9E30BD1A307802CB00B8A3A3 /* WelcomeStep.swift */,
+				9E30BD1C30780BC400B8A3A3 /* VehicleStep1.swift */,
+				9E30BD1E30780F8C00B8A3A3 /* VehicleStep2.swift */,
+				9E30BD20307811C600B8A3A3 /* UnitSelectionStep.swift */,
+				9E30BD2230791DF800B8A3A3 /* NotificationsStep.swift */,
 				9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */,
 				9E00C4C52EBE9B8600B3E88F /* TermsOfUseView.swift */,
 				9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */,
@@ -781,6 +800,8 @@
 				9EEAC51E2BA4A2280053C65E /* MaintenanceListView.swift in Sources */,
 				9EEAC4BE2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift in Sources */,
 				9E96EC462ECB985100667A47 /* OnboardingTips.swift in Sources */,
+				9E30BD1D30780BC400B8A3A3 /* VehicleStep1.swift in Sources */,
+				9E30BD1F30780F8C00B8A3A3 /* VehicleStep2.swift in Sources */,
 				9EDCA2442ED0E19D005B1C5A /* PopoverContent.swift in Sources */,
 				9EEAC4D72BA332E50053C65E /* VehicleListView.swift in Sources */,
 				9E328E102E33B99600FF25B5 /* PDFExporter.swift in Sources */,
@@ -806,6 +827,7 @@
 				9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */,
 				9EEAC4EC2BA3749E0053C65E /* FormPhotosView.swift in Sources */,
 				9E1AD9062E8DAE5600E60184 /* FillupsCard.swift in Sources */,
+				9E30BD21307811C600B8A3A3 /* UnitSelectionStep.swift in Sources */,
 				9E7EF3FD2EC38E6000E1E5D1 /* NotificationObserver.swift in Sources */,
 				9EEAC5262BA4C5060053C65E /* AddEditServiceView.swift in Sources */,
 				9EE97E81305446EE00F2AA5F /* CustomInfoListView.swift in Sources */,
@@ -828,6 +850,7 @@
 				9EEAC4F52BA37A270053C65E /* RepairsListView.swift in Sources */,
 				9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */,
 				9E187C172EA158CC00FBDAC9 /* TimelineView.swift in Sources */,
+				9E30BD2330791DF800B8A3A3 /* NotificationsStep.swift in Sources */,
 				9EEAC4B92BA1F1180053C65E /* ImageDetailView.swift in Sources */,
 				9EEAC4FD2BA380BA0053C65E /* AddEditRepairView.swift in Sources */,
 				9EBB223C306AD37600A37D48 /* OdometerWarningAlertModifier.swift in Sources */,
@@ -840,6 +863,7 @@
 				9E1528852EB917DB005170AB /* FormHeaderView.swift in Sources */,
 				9E620C092BC08194005E16DD /* AddEditVehicleImageView.swift in Sources */,
 				9EEAC4EE2BA374D70053C65E /* CustomInfoDetailView.swift in Sources */,
+				9E30BD2530794C0E00B8A3A3 /* OnboardingContainer.swift in Sources */,
 				9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */,
 				9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */,
 				9EEAC4E82BA367A00053C65E /* AddAttachmentButton.swift in Sources */,
@@ -847,7 +871,6 @@
 				9E52CCB62E6F569E00B3CB45 /* DraftServiceLog.swift in Sources */,
 				9E235B922DFB58CA008F7327 /* CameraViewModel.swift in Sources */,
 				9ED4DB78305882F400C2A373 /* CardTextView.swift in Sources */,
-				9E5270E22E8AF87600EFDCB8 /* UnitsOfMeasureSettingsView.swift in Sources */,
 				9EEAC5062BA38B8E0053C65E /* FillupsDashboardView.swift in Sources */,
 				9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */,
 				9EEAC4C12BA24EEC0053C65E /* AppSettingsStore.swift in Sources */,

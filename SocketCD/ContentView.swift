@@ -15,7 +15,6 @@ struct ContentView: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
     @AppStorage("lastSelectedVehicleID") var lastSelectedVehicleID: String = ""
-    
     @State private var onboardingSheet: ActiveOnboardingSheet?
     @State private var selectedVehicle: Vehicle?
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
@@ -51,7 +50,7 @@ struct ContentView: View {
         .onChange(of: selectedVehicle) { _ , value in
             lastSelectedVehicleID = value?.id?.uuidString ?? ""
         }
-        .sheet(item: $onboardingSheet, onDismiss: requestNotificationPermission) { sheet in
+        .sheet(item: $onboardingSheet, onDismiss: onboardingDidDismiss) { sheet in
             switch sheet {
             case .welcome:
                 WelcomeView()
@@ -106,9 +105,12 @@ struct ContentView: View {
         
         return servicesDue.count
     }
-    
-    
+
     // MARK: - Methods
+
+    private func onboardingDidDismiss() {
+        requestNotificationPermission()
+    }
     
     // Splits the app version number into an array of Int (used in checkForOnboardingViewsToShow)
     private func parseVersion(_ version: String) -> [Int] {

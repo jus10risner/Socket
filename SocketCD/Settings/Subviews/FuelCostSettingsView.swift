@@ -16,7 +16,7 @@ struct FuelCostSettingsView: View {
                 Picker("Fill-up Cost Type", selection: $settings.fillupCostType) {
                     ForEach(FillupCostTypes.allCases, id: \.self) { type in
                         if type == .perUnit {
-                            Text("Cost per \(settings.fuelEconomyUnit == .mpg ? "gallon" : "liter")")
+                            Text("Cost per unit")
                         } else {
                             Text("Total cost")
                         }
@@ -25,7 +25,7 @@ struct FuelCostSettingsView: View {
                 .labelsHidden()
             }
             
-            Section(footer: Text("Shows the \(settings.fillupCostType == .total ? "per-\(settings.fuelEconomyUnit.volumeUnit.lowercased())" : "total") cost, calculated from your input, when logging a fill-up.")) {
+            Section(footer: Text("Shows the \(settings.fillupCostType == .total ? "per-unit" : "total") cost, calculated from your input, when logging a fill-up.")) {
                 Toggle("Verify Cost", isOn: $settings.showCalculatedCost)
             }
         }

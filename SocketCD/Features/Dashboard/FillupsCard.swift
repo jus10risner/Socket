@@ -13,7 +13,6 @@ struct FillupsCard: View {
     
     @Binding var activeSheet: ActiveSheet?
     @Binding var selectedSection: AppSection?
-    let settings = AppSettingsStore.shared
     
     @FetchRequest var fillups: FetchedResults<Fillup>
     
@@ -51,7 +50,7 @@ struct FillupsCard: View {
         } detail: {
             if let fillup = latestValidFillup {
                 CardTextView(
-                    headline: "\(Double(fillup.fuelEconomy()).formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)",
+                    headline: "\(Double(fillup.fuelEconomy()).formatted(.number.precision(.fractionLength(1)))) \(vehicle.fuelEconomyUnit.displayName)",
                     subheadline: "Based on your \(formattedFuelEconomyDate(fillup.date)) fill-up"
                 )
             } else {
@@ -120,9 +119,9 @@ struct FillupsCard: View {
         let economy = fillup.fuelEconomy().formatted(.number.precision(.fractionLength(1)))
         let date = formattedFuelEconomyDate(fillup.date)
         if previousFuelEconomy == nil {
-            return String(localized: "\(economy) \(settings.fuelEconomyUnit.fullName). Based on your \(date) fill-up.")
+            return String(localized: "\(economy) \(vehicle.fuelEconomyUnit.fullName). Based on your \(date) fill-up.")
         } else {
-            return String(localized: "\(economy) \(settings.fuelEconomyUnit.fullName). \(fuelEconomyTrendDescription). Based on your \(date) fill-up.")
+            return String(localized: "\(economy) \(vehicle.fuelEconomyUnit.fullName). \(fuelEconomyTrendDescription). Based on your \(date) fill-up.")
         }
     }
 }

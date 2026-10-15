@@ -11,8 +11,6 @@ import SwiftUI
 struct FillupsDashboardView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @ObservedObject var vehicle: Vehicle
-    @ObservedObject private var settings = AppSettingsStore.shared
-
     @FetchRequest var fillups: FetchedResults<Fillup>
 
     init(vehicle: Vehicle) {
@@ -117,6 +115,7 @@ struct FillupsDashboardView: View {
                     } else {
                         FuelEconomyChartView(
                             data: chartPoints,
+                            fuelEconomyUnit: vehicle.fuelEconomyUnit,
                             selectedDateRange: $selectedDateRange
                         )
 
@@ -153,13 +152,13 @@ struct FillupsDashboardView: View {
         if let chartPoints,
             let average = ChartPoint.aggregateFuelEconomy(
                 from: chartPoints,
-                unit: settings.fuelEconomyUnit
+                unit: vehicle.fuelEconomyUnit
             ),
             let firstFillupDate = fillups.last?.date
         {
             LabeledContent {
                 Text(
-                    "\(average.formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.rawValue)"
+                    "\(average.formatted(.number.precision(.fractionLength(1)))) \(vehicle.fuelEconomyUnit.displayName)"
                 )
                 .monospacedDigit()
             } label: {
@@ -171,7 +170,7 @@ struct FillupsDashboardView: View {
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(
-                "All-time average fuel economy, \(average.formatted(.number.precision(.fractionLength(1)))) \(settings.fuelEconomyUnit.fullName), from \(firstFillupDate.formatted(date: .long, time: .omitted)) to present"
+                "All-time average fuel economy, \(average.formatted(.number.precision(.fractionLength(1)))) \(vehicle.fuelEconomyUnit.fullName), from \(firstFillupDate.formatted(date: .long, time: .omitted)) to present"
             )
         }
     }
@@ -206,14 +205,11 @@ struct FillupsDashboardView: View {
     private var chartDataRevision: Int {
         var hasher = Hasher()
         hasher.combine(chartRefreshID)
-        hasher.combine(settings.fuelEconomyUnit.rawValue)
+        hasher.combine(vehicle.fuelEconomyUnit.rawValue)
 
         for fillup in fillups {
             hasher.combine(fillup.objectID)
-            hasher.combine(fillup.date_)
-            hasher.combine(fillup.odometer_)
-            hasher.combine(fillup.volume_)
-            hasher.combine(fillup.fillType_)
+            hasher.combine(fillup.chartDataRevision)
         }
 
         return hasher.finalize()
@@ -229,7 +225,7 @@ struct FillupsDashboardView: View {
         }
 
         let vehicleID = vehicle.objectID
-        let unit = settings.fuelEconomyUnit
+        let unit = vehicle.fuelEconomyUnit
         let context = NSManagedObjectContext(
             concurrencyType: .privateQueueConcurrencyType
         )

@@ -92,29 +92,123 @@ enum DistanceUnits: String, CaseIterable {
     }
 }
 
-enum FuelEconomyUnits: String, CaseIterable {
-    case mpg = "mpg", kmL = "km/L", L100km = "L/100km", kmGal = "km/gal"
-    
-    // Returns the fuel volume unit for the user's selected fuel economy units
-    var volumeUnit: String {
+enum VolumeUnits: String, CaseIterable {
+    case liters = "liters"
+    case usGallons = "US gallons"
+    case imperialGallons = "Imperial gallons"
+
+    var abbreviated: String {
         switch self {
-        case .mpg, .kmGal:
-            return "Gallon"
-        default: 
-            return "Liter"
+        case .liters: "L"
+        case .usGallons, .imperialGallons: "gal"
         }
     }
+
+    var singularName: String {
+        switch self {
+        case .liters: "Liter"
+        case .usGallons, .imperialGallons: "Gallon"
+        }
+    }
+
+    var exportAbbreviation: String {
+        switch self {
+        case .liters: "L"
+        case .usGallons: "US gal"
+        case .imperialGallons: "Imp gal"
+        }
+    }
+
+    var settingsName: String {
+        switch self {
+        case .liters: "Liters"
+        case .usGallons: "US Gallons"
+        case .imperialGallons: "Imperial Gallons"
+        }
+    }
+}
+
+enum FuelEconomyUnits: String, CaseIterable {
+    case mpg = "mpg"
+    case mpgImperial = "mpg (UK)"
+    case kmL = "km/L"
+    case L100km = "L/100km"
+    case kmGal = "km/gal"
     
     var fullName: String {
         switch self {
-        case .mpg: 
-            return "Miles per Gallon"
-        case .kmL:
-            return "Kilometers per Liter"
-        case .L100km: 
-            return "Liters per 100km"
-        case .kmGal:
-            return "Kilometers per Gallon"
+        case .mpg: "Miles per US Gallon"
+        case .mpgImperial: "Miles per Imperial Gallon"
+        case .kmL: "Kilometers per Liter"
+        case .L100km: "Liters per 100 Kilometers"
+        case .kmGal: "Kilometers per US Gallon"
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .mpg, .mpgImperial: "mpg"
+        case .kmL: "km/L"
+        case .L100km: "L/100km"
+        case .kmGal: "km/gal"
+        }
+    }
+
+    var settingsName: String {
+        switch self {
+        case .mpg: "MPG (US)"
+        case .mpgImperial: "MPG (UK)"
+        case .kmL, .L100km, .kmGal: displayName
+        }
+    }
+}
+
+enum MeasurementConverter {
+    private static let kilometersPerMile = 1.609344
+    private static let litersPerUSGallon = 3.785411784
+    private static let litersPerImperialGallon = 4.54609
+
+    static func kilometers(from value: Double, unit: DistanceUnits) -> Double {
+        unit == .kilometers ? value : value * kilometersPerMile
+    }
+
+    static func distance(fromKilometers value: Double, unit: DistanceUnits) -> Double {
+        unit == .kilometers ? value : value / kilometersPerMile
+    }
+
+    static func liters(from value: Double, unit: VolumeUnits) -> Double {
+        switch unit {
+        case .liters: value
+        case .usGallons: value * litersPerUSGallon
+        case .imperialGallons: value * litersPerImperialGallon
+        }
+    }
+
+    static func volume(fromLiters value: Double, unit: VolumeUnits) -> Double {
+        switch unit {
+        case .liters: value
+        case .usGallons: value / litersPerUSGallon
+        case .imperialGallons: value / litersPerImperialGallon
+        }
+    }
+
+    static func pricePerLiter(from price: Double, unit: VolumeUnits) -> Double {
+        price / liters(from: 1, unit: unit)
+    }
+
+    static func pricePerDisplayedUnit(fromPricePerLiter price: Double, unit: VolumeUnits) -> Double {
+        price * liters(from: 1, unit: unit)
+    }
+
+    static func fuelEconomy(distanceKilometers: Double, volumeLiters: Double, unit: FuelEconomyUnits) -> Double {
+        guard distanceKilometers > 0, volumeLiters > 0 else { return 0 }
+
+        return switch unit {
+        case .L100km: volumeLiters / distanceKilometers * 100
+        case .kmL: distanceKilometers / volumeLiters
+        case .kmGal: distanceKilometers / volumeLiters * litersPerUSGallon
+        case .mpg: distanceKilometers / kilometersPerMile / (volumeLiters / litersPerUSGallon)
+        case .mpgImperial: distanceKilometers / kilometersPerMile / (volumeLiters / litersPerImperialGallon)
         }
     }
 }

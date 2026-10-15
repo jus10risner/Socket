@@ -26,9 +26,6 @@ struct AppSettingsView: View {
                         rowLabel(title: "Maintenance Alerts", symbol: "clock")
                     }
                     
-                    NavigationLink(destination: UnitsOfMeasureSettingsView()) {
-                        rowLabel(title: "Units of Measure", symbol: "ruler")
-                    }
                 }
                 
                 Section("Styling") {
@@ -83,8 +80,7 @@ struct AppSettingsView: View {
         }
         .tint(nil)
     }
-    
-    
+
     // MARK: - Views
     
     // Navigates to App Theme settings

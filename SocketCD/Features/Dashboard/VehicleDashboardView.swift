@@ -74,11 +74,11 @@ struct VehicleDashboardView: View {
 
                             HStack(spacing: 10) {
                                 Text(
-                                    "\(Text(vehicle.odometer.formatted()).font(.title.bold()).monospacedDigit()) \(Text(settings.distanceUnit.abbreviated).font(.title3.bold()).foregroundColor(.secondary))"
+                                    "\(Text(vehicle.odometer.formatted()).font(.title.bold()).monospacedDigit()) \(Text(vehicle.distanceUnit.abbreviated).font(.title3.bold()).foregroundColor(.secondary))"
                                 )
                                 .contentTransition(.numericText(value: Double(vehicle.odometer)))
                                 .animation(.default, value: vehicle.odometer)
-                                .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                                .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(vehicle.distanceUnit.abbreviated)")
                                  
                                 Button("Update Odometer", systemImage: "pencil") {
                                     showingUpdateOdometerAlert = true
@@ -130,7 +130,7 @@ struct VehicleDashboardView: View {
             .navigationDestination(item: $selectedSection) { section in
                 destinationView(for: section, vehicle: vehicle)
             }
-            .sheet(item: $activeSheet) { sheet in
+            .sheet(item: $activeSheet, onDismiss: refreshDashboard) { sheet in
                 switch sheet {
                 case .logService:
                     AddEditRecordView(services: servicesForNewLog, vehicle: vehicle)
@@ -177,7 +177,7 @@ struct VehicleDashboardView: View {
                 warning: $odometerWarning,
                 entered: pendingOdometer,
                 current: vehicle.odometer,
-                distanceUnit: settings.distanceUnit.abbreviated,
+                distanceUnit: vehicle.distanceUnit.abbreviated,
                 confirmationTitle: "Update Anyway",
                 cancellationTitle: "Cancel",
                 onConfirm: commitPendingOdometer,
@@ -196,6 +196,7 @@ struct VehicleDashboardView: View {
             }
         }
         .tint(nil)
+        .onAppear(perform: refreshDashboard)
     }
 
     private var enteredOdometer: Int? {
@@ -236,6 +237,12 @@ struct VehicleDashboardView: View {
         draftVehicle.odometer = pendingOdometer
         vehicle.updateAndSave(draftVehicle: draftVehicle)
         self.pendingOdometer = nil
+    }
+
+    private func refreshDashboard() {
+        withAnimation {
+            vehicle.objectWillChange.send()
+        }
     }
     
     @ToolbarContentBuilder

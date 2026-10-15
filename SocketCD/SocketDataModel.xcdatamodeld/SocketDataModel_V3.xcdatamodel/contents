@@ -94,10 +94,14 @@
     </entity>
     <entity name="Vehicle" representedClassName="Vehicle" syncable="YES" codeGenerationType="class">
         <attribute name="colorComponents_" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName"/>
+        <attribute name="distanceUnit_" optional="YES" attributeType="String"/>
         <attribute name="displayOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fuelEconomyUnit_" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="measurementStorageVersion" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name_" optional="YES" attributeType="String"/>
         <attribute name="odometer_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="volumeUnit_" optional="YES" attributeType="String"/>
         <relationship name="customInfo" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CustomInfo" inverseName="vehicle" inverseEntity="CustomInfo"/>
         <relationship name="fillups" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Fillup" inverseName="vehicle" inverseEntity="Fillup"/>
         <relationship name="photo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Photo" inverseName="vehicle" inverseEntity="Photo"/>

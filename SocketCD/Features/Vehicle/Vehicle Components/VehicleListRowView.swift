@@ -38,13 +38,13 @@ struct VehicleListRowView: View {
             if settings.vehicleListShouldBeCompact {
                 CompactVehicleListRow(
                     vehicle: vehicle,
-                    distanceUnit: settings.distanceUnit.abbreviated,
+                    distanceUnit: vehicle.distanceUnit.abbreviated,
                     serviceCounts: serviceCounts
                 )
             } else {
                 RegularVehicleListRow(
                     vehicle: vehicle,
-                    distanceUnit: settings.distanceUnit.abbreviated,
+                    distanceUnit: vehicle.distanceUnit.abbreviated,
                     serviceCounts: serviceCounts
                 )
             }
@@ -86,7 +86,7 @@ struct VehicleListRowView: View {
     private var accessibilityLabel: String {
         var components = [
             vehicle.name,
-            "\(vehicle.odometer) \(settings.distanceUnit)"
+            "\(vehicle.odometer) \(vehicle.distanceUnit.rawValue)"
         ]
 
         if serviceCounts.due > 0 {

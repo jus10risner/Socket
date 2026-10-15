@@ -20,6 +20,10 @@ class AppSettingsStore: ObservableObject {
     @AppStorage("fuelEconomyUnit") var fuelEconomyUnit: FuelEconomyUnits = .mpg {
         willSet { objectWillChange.send() }
     }
+
+    @AppStorage("volumeUnit") var volumeUnit: VolumeUnits = .usGallons {
+        willSet { objectWillChange.send() }
+    }
     
     @AppStorage("fillupCostType") var fillupCostType: FillupCostTypes = .perUnit {
         willSet { objectWillChange.send() }
@@ -48,7 +52,44 @@ class AppSettingsStore: ObservableObject {
     @AppStorage("vehicleListIsCompact") var vehicleListIsCompact: Bool? {
         willSet { objectWillChange.send() }
     }
-    
+
+    init() {
+        let defaults = UserDefaults.standard
+        let hasExistingUnitPreferences = defaults.object(forKey: "distanceUnit") != nil
+            || defaults.object(forKey: "fuelEconomyUnit") != nil
+            || defaults.object(forKey: "volumeUnit") != nil
+
+        if !hasExistingUnitPreferences {
+            applyRegionalUnitDefaults()
+        } else if defaults.object(forKey: "volumeUnit") == nil {
+            switch fuelEconomyUnit {
+            case .mpg, .kmGal:
+                volumeUnit = .usGallons
+            case .mpgImperial:
+                volumeUnit = .imperialGallons
+            case .kmL, .L100km:
+                volumeUnit = .liters
+            }
+        }
+    }
+
+    private func applyRegionalUnitDefaults(locale: Locale = .current) {
+        switch locale.region?.identifier {
+        case "US":
+            distanceUnit = .miles
+            volumeUnit = .usGallons
+            fuelEconomyUnit = .mpg
+        case "GB", "UK":
+            distanceUnit = .miles
+            volumeUnit = .liters
+            fuelEconomyUnit = .mpgImperial
+        default:
+            distanceUnit = .kilometers
+            volumeUnit = .liters
+            fuelEconomyUnit = .L100km
+        }
+    }
+
     // Used to set the default vehicleCardIsCompact value to true for iPad and false for iPhone (for different default styles)
     var vehicleListShouldBeCompact: Bool {
         vehicleListIsCompact ?? (UIDevice.current.userInterfaceIdiom == .pad)

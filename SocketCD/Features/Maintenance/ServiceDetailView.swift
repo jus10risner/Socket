@@ -10,7 +10,6 @@ import SwiftUI
 struct ServiceDetailView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var service: Service
-    let settings = AppSettingsStore.shared
     let vehicle: Vehicle
     
     @State private var showingAddRecord = false
@@ -49,14 +48,14 @@ struct ServiceDetailView: View {
                             RecordDetailView(record: record, vehicle: vehicle, service: service)
                         } label: {
                             LabeledContent {
-                                Text("\(record.effectiveOdometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                                Text("\(record.effectiveOdometer.formatted()) \(vehicle.distanceUnit.abbreviated)")
                                     .foregroundStyle(.secondary)
                             } label: {
                                 Text(record.effectiveDate, format: .dateTime.month(.abbreviated).day().year())
                             }
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel(
-                                "\(record.effectiveDate.formatted(date: .long, time: .omitted)), odometer \(record.effectiveOdometer.formatted()) \(settings.distanceUnit.rawValue)"
+                                "\(record.effectiveDate.formatted(date: .long, time: .omitted)), odometer \(record.effectiveOdometer.formatted()) \(vehicle.distanceUnit.rawValue)"
                             )
                         }
                     }
@@ -91,7 +90,7 @@ struct ServiceDetailView: View {
         var components: [String] = []
 
         if let odometer = service.odometerDue, service.distanceInterval != 0 {
-            let formatted = "\(odometer.formatted()) \(settings.distanceUnit.abbreviated)"
+            let formatted = "\(odometer.formatted()) \(vehicle.distanceUnit.abbreviated)"
             components.append(formatted)
         }
 

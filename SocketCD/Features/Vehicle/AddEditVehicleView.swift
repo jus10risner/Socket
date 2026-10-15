@@ -25,6 +25,8 @@ struct AddEditVehicleView: View {
     
     @State private var showingDuplicateNameError = false
     @State private var showingDeleteAlert = false
+    @State private var showingMeasurementMigrationAlert = false
+    @State private var showingSaveError = false
     @State private var odometerWarning: OdometerWarning?
     
     var body: some View {
@@ -47,6 +49,10 @@ struct AddEditVehicleView: View {
                             .keyboardType(.numberPad)
                     }
                 }
+                
+                VehicleMeasurementUnitsSection(
+                    draftVehicle: draftVehicle
+                )
                 
                 if vehicle != nil {
                     Button("Delete Vehicle", role: .destructive) {
@@ -94,12 +100,23 @@ struct AddEditVehicleView: View {
             } message: {
                 Text("Permanently delete this vehicle and all of its records? This action cannot be undone.")
             }
+            .alert("Update Units?", isPresented: $showingMeasurementMigrationAlert) {
+                Button("Update", action: performVehicleSave)
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Make sure your other devices are running iOS 18.5 or later with the latest version of Socket. Older versions may display this vehicle’s data incorrectly after updating.")
+            }
+            .alert("Unable to Save Changes", isPresented: $showingSaveError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Your changes were not saved. Please try again.")
+            }
             .odometerWarningAlert(
                 warning: $odometerWarning,
                 entered: draftVehicle.odometer,
-                current: vehicle?.odometer,
-                distanceUnit: AppSettingsStore.shared.distanceUnit.abbreviated,
-                onConfirm: performVehicleSave
+                current: currentOdometerInSelectedUnit,
+                distanceUnit: draftVehicle.distanceUnit.abbreviated,
+                onConfirm: confirmMeasurementMigrationIfNeeded
             )
         }
         .tint(nil)
@@ -122,6 +139,23 @@ struct AddEditVehicleView: View {
             return 0
         }
     }
+
+    private var currentOdometerInSelectedUnit: Int? {
+        guard let vehicle else { return nil }
+
+        let sourceUnit = vehicle.usesCanonicalMeasurements
+            ? vehicle.distanceUnit
+            : draftVehicle.legacyDistanceUnit
+        let kilometers = MeasurementConverter.kilometers(
+            from: Double(vehicle.odometer),
+            unit: sourceUnit
+        )
+
+        return Int(MeasurementConverter.distance(
+            fromKilometers: kilometers,
+            unit: draftVehicle.distanceUnit
+        ).rounded())
+    }
     
     
     // MARK: - Methods
@@ -135,39 +169,152 @@ struct AddEditVehicleView: View {
         if let vehicle, let entered = draftVehicle.odometer,
            let warning = OdometerValidator.warning(
                entered: entered,
-               current: vehicle.odometer,
+               current: currentOdometerInSelectedUnit ?? vehicle.odometer,
                context: .currentVehicle
            ) {
             odometerWarning = warning
             return
         }
 
-        performVehicleSave()
+        confirmMeasurementMigrationIfNeeded()
+    }
+
+    private func confirmMeasurementMigrationIfNeeded() {
+        if vehicle?.usesCanonicalMeasurements == false, draftVehicle.shouldMigrateMeasurements {
+            showingMeasurementMigrationAlert = true
+        } else {
+            performVehicleSave()
+        }
     }
 
     private func performVehicleSave() {
+        let didSave: Bool
+
         if let vehicle {
-            vehicle.updateAndSave(draftVehicle: draftVehicle)
+            didSave = vehicle.updateAndSave(draftVehicle: draftVehicle)
         } else {
-            addNewVehicle()
+            didSave = addNewVehicle()
         }
 
-        dismiss()
+        if didSave {
+            dismiss()
+        } else {
+            DispatchQueue.main.async {
+                showingSaveError = true
+            }
+        }
     }
     
     // Creates a new vehicle object, using the information from this view
-    func addNewVehicle() {
+    func addNewVehicle() -> Bool {
         let colorComponents = UIColor(draftVehicle.selectedColor).cgColor.components
         
         let newVehicle = Vehicle(context: context)
         newVehicle.id = UUID()
         newVehicle.name = draftVehicle.name
+        newVehicle.distanceUnit = draftVehicle.distanceUnit
+        newVehicle.volumeUnit = draftVehicle.volumeUnit
+        newVehicle.fuelEconomyUnit = draftVehicle.fuelEconomyUnit
+        newVehicle.markMeasurementsAsCanonical()
         newVehicle.odometer = draftVehicle.odometer ?? 0
         newVehicle.colorComponents = colorComponents
         newVehicle.photo = draftVehicle.photo
         newVehicle.displayOrder = newVehicleDisplayOrder
         
-        try? context.save()
+        do {
+            try context.save()
+            return true
+        } catch {
+            context.rollback()
+            print("⚠️ Failed to add vehicle: \(error.localizedDescription)")
+            return false
+        }
+    }
+}
+
+private struct VehicleMeasurementUnitsSection: View {
+    @ObservedObject var draftVehicle: DraftVehicle
+
+    var body: some View {
+        Section {
+            NavigationLink {
+                VehicleUnitsView(draftVehicle: draftVehicle)
+            } label: {
+                LabeledInput(label: "Units") {
+                    Text(unitDescription)
+                }
+            }
+        }
+    }
+
+    private var unitDescription: String {
+        let distance = draftVehicle.distanceUnit.rawValue.capitalized
+        let volume = draftVehicle.volumeUnit == .liters ? "Liters" : "Gallons"
+
+        return "\(distance), \(volume), \(draftVehicle.fuelEconomyUnit.settingsName)"
+    }
+}
+
+private struct VehicleUnitsView: View {
+    @ObservedObject var draftVehicle: DraftVehicle
+
+    var body: some View {
+        Form {
+            Section {
+                Picker("Distance", selection: displayDistanceUnit) {
+                    ForEach(DistanceUnits.allCases, id: \.self) { unit in
+                        Text(unit.rawValue.capitalized).tag(unit)
+                    }
+                }
+
+                Picker("Fuel Volume", selection: $draftVehicle.volumeUnit) {
+                    ForEach(VolumeUnits.allCases, id: \.self) { unit in
+                        Text(unit.settingsName).tag(unit)
+                    }
+                }
+
+                Picker("Fuel Economy", selection: $draftVehicle.fuelEconomyUnit) {
+                    ForEach(FuelEconomyUnits.allCases, id: \.self) { unit in
+                        Text(unit.settingsName)
+                            .tag(unit)
+                            .accessibilityLabel(unit.fullName)
+                    }
+                }
+            }
+
+            if draftVehicle.shouldMigrateMeasurements {
+                Section {
+                    Picker("Distance", selection: $draftVehicle.legacyDistanceUnit) {
+                        ForEach(DistanceUnits.allCases, id: \.self) { unit in
+                            Text(unit.rawValue.capitalized).tag(unit)
+                        }
+                    }
+
+                    Picker("Fuel Volume", selection: $draftVehicle.legacyVolumeUnit) {
+                        ForEach(VolumeUnits.allCases, id: \.self) { unit in
+                            Text(unit.settingsName).tag(unit)
+                        }
+                    }
+                } header: {
+                    Text("Please confirm the units used for this vehicle’s existing records so Socket can safely convert them to your preferred units.")
+                        .font(.body)
+                }
+                .textCase(nil)
+            }
+        }
+        .animation(.default, value: draftVehicle.shouldMigrateMeasurements)
+        .navigationTitle("Units")
+        .navigationBarTitleDisplayMode(.inline)
+        .pickerStyle(.menu)
+        .tint(AppSettingsStore.shared.selectedAccent())
+    }
+
+    private var displayDistanceUnit: Binding<DistanceUnits> {
+        Binding {
+            draftVehicle.distanceUnit
+        } set: {
+            draftVehicle.setDistanceUnit($0)
+        }
     }
 }
 

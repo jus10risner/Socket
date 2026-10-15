@@ -86,7 +86,6 @@ struct PDFExporter {
         ) + ".pdf"
         let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
         let renderer = UIGraphicsPDFRenderer(bounds: pageRect)
-        let settings = AppSettingsStore.shared
         var cursorY: CGFloat = 0
         var pageNumber = 0
 
@@ -129,7 +128,7 @@ struct PDFExporter {
                 ) + 5
                 cursorY += drawText(
                     String(
-                        localized: "Current odometer: \(vehicle.odometer.formatted()) \(settings.distanceUnit.abbreviated)",
+                        localized: "Current odometer: \(vehicle.odometer.formatted()) \(vehicle.distanceUnit.abbreviated)",
                         comment: "Current vehicle odometer shown in a PDF header"
                     ),
                     atY: cursorY,
@@ -147,7 +146,7 @@ struct PDFExporter {
                     var groupMetadata: [String] = []
                     if let commonOdometer {
                         groupMetadata.append(String(
-                            localized: "\(commonOdometer.formatted()) \(settings.distanceUnit.abbreviated)",
+                            localized: "\(commonOdometer.formatted()) \(vehicle.distanceUnit.abbreviated)",
                             comment: "An odometer reading and its abbreviated distance unit"
                         ))
                     }
@@ -174,7 +173,7 @@ struct PDFExporter {
                         var metadata: [String] = []
                         if commonOdometer == nil {
                             metadata.append(String(
-                                localized: "\(record.odometer.formatted()) \(settings.distanceUnit.abbreviated)",
+                                localized: "\(record.odometer.formatted()) \(vehicle.distanceUnit.abbreviated)",
                                 comment: "An odometer reading and its abbreviated distance unit"
                             ))
                         }

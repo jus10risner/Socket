@@ -10,7 +10,6 @@ import SwiftUI
 struct RepairDetailView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var repair: Repair
-    let settings = AppSettingsStore.shared
     
     @State private var showingEditRepair = false
     
@@ -22,7 +21,7 @@ struct RepairDetailView: View {
                 LabeledContent("Name", value: repair.name)
                 
                 LabeledContent("Odometer") {
-                    Text("\(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                    Text("\(repair.odometer.formatted()) \(repair.distanceUnit.abbreviated)")
                 }
                 
                 LabeledContent("Cost", value: (repair.cost ?? 0).asCurrency())

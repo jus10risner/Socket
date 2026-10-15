@@ -70,8 +70,6 @@ struct CSVExporter {
     
     // MARK: - Export only fill-up records
     static func exportFillups(for vehicle: Vehicle) -> URL? {
-        let settings = AppSettingsStore()
-        
         let filename = "\(vehicle.name) Fill-ups.csv"
         let tempDirectory = NSTemporaryDirectory()
         let fileURL = URL(fileURLWithPath: tempDirectory, isDirectory: true).appendingPathComponent(filename)
@@ -79,7 +77,7 @@ struct CSVExporter {
         var allFillups: [String] = []
 
         let header = """
-        Date,Odometer,\(settings.fuelEconomyUnit.volumeUnit)s of Fuel,Cost per \(settings.fuelEconomyUnit.volumeUnit),Trip (\(settings.distanceUnit.abbreviated)),Fuel Economy (\(settings.fuelEconomyUnit.rawValue)),Total Cost,Full Tank?,Note
+        Date,Odometer,Fuel (\(vehicle.volumeUnit.exportAbbreviation)),Cost per \(vehicle.volumeUnit.exportAbbreviation),Trip (\(vehicle.distanceUnit.abbreviated)),Fuel Economy (\(vehicle.fuelEconomyUnit.displayName)),Total Cost,Full Tank?,Note
         """
         allFillups.append(header)
 

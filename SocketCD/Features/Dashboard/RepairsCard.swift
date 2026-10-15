@@ -10,7 +10,6 @@ import SwiftUI
 
 struct RepairsCard: View {
     @ObservedObject var vehicle: Vehicle
-    let settings = AppSettingsStore.shared
     
     @Binding var activeSheet: ActiveSheet?
     @Binding var selectedSection: AppSection?
@@ -83,7 +82,7 @@ struct RepairsCard: View {
         let odometerValues = Set(repairsOnLatestDate.map(\.odometer))
         guard odometerValues.count == 1 else { return date }
 
-        return String(localized: "\(date) • \(repair.odometer.formatted()) \(settings.distanceUnit.abbreviated)")
+        return String(localized: "\(date) • \(repair.odometer.formatted()) \(vehicle.distanceUnit.abbreviated)")
     }
     
     private var accessibilityValue: String {

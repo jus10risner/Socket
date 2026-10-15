@@ -16,10 +16,10 @@ extension Service {
     }
     
     var distanceInterval: Int {
-        get { Int(distanceInterval_) }
-        set { distanceInterval_ = Int64(newValue) }
+        get { displayedDistance(distanceInterval_) }
+        set { distanceInterval_ = canonicalDistance(newValue) }
     }
-    
+
     var timeInterval: Int {
         get { Int(timeInterval_) }
         set { timeInterval_ = Int64(newValue) }
@@ -57,8 +57,16 @@ extension Service {
     }
     
     var lastScheduledNotificationOdometer: Int? {
-        get { lastScheduledNotificationOdometer_ == 0 ? nil : Int(lastScheduledNotificationOdometer_) }
-        set { lastScheduledNotificationOdometer_ = newValue == nil ? 0 : Int64(newValue!) }
+        get { lastScheduledNotificationOdometer_ == 0 ? nil : displayedDistance(lastScheduledNotificationOdometer_) }
+        set { lastScheduledNotificationOdometer_ = newValue.map(canonicalDistance) ?? 0 }
+    }
+
+    private func displayedDistance(_ value: Int64) -> Int {
+        vehicle?.displayedDistance(fromStored: value) ?? Int(value)
+    }
+
+    private func canonicalDistance(_ value: Int) -> Int64 {
+        vehicle?.storedDistance(fromDisplayed: value) ?? Int64(value)
     }
     
     var sortedServiceRecordsArray: [ServiceRecord] {
@@ -238,7 +246,7 @@ extension Service {
     
     // Returns a string that describes when service is next due (or by how much service is overdue). Used on VehicleDashboardView and MaintenanceListView
     func nextDueDescription(currentOdometer: Int) -> String {
-        let settings = AppSettingsStore()
+        let distanceUnit = vehicle?.distanceUnit ?? AppSettingsStore.shared.distanceUnit
 
         // Compute values once
         let days = daysUntilDue() ?? 0
@@ -257,22 +265,22 @@ extension Service {
             if abs(days) >= abs(miles) {
                 return "Overdue by \(pluralize(abs(days), unit: "day"))"
             } else {
-                return "Overdue by \(abs(miles).formatted()) \(settings.distanceUnit.abbreviated)"
+                return "Overdue by \(abs(miles).formatted()) \(distanceUnit.abbreviated)"
             }
         } else if days < 0 {
             return "Overdue by \(pluralize(abs(days), unit: "day"))"
         } else if miles < 0 {
-            return "Overdue by \(abs(miles).formatted()) \(settings.distanceUnit.abbreviated)"
+            return "Overdue by \(abs(miles).formatted()) \(distanceUnit.abbreviated)"
         }
 
         // Case 3: Not overdue
         switch (hasDays, hasMiles) {
         case (true, true):
-            return "Due in \(miles.formatted()) \(settings.distanceUnit.abbreviated) or \(pluralize(days, unit: "day"))"
+            return "Due in \(miles.formatted()) \(distanceUnit.abbreviated) or \(pluralize(days, unit: "day"))"
         case (true, false):
             return "Due in \(pluralize(days, unit: "day"))"
         case (false, true):
-            return "Due in \(miles.formatted()) \(settings.distanceUnit.abbreviated)"
+            return "Due in \(miles.formatted()) \(distanceUnit.abbreviated)"
         default:
             return "No Service Logged"
         }
@@ -285,11 +293,11 @@ extension Service {
     
     // A String describing the service interval for a given service
     var intervalDescription: String {
-        let settings = AppSettingsStore()
+        let distanceUnit = vehicle?.distanceUnit ?? AppSettingsStore.shared.distanceUnit
         var components: [String] = []
 
         if distanceInterval != 0 {
-            let distance = "\(distanceInterval.formatted()) \(settings.distanceUnit.abbreviated)"
+            let distance = "\(distanceInterval.formatted()) \(distanceUnit.abbreviated)"
             components.append(distance)
         }
         
@@ -327,20 +335,19 @@ extension Service {
             context.delete(baselineServiceLog)
         }
         
-        // Create a new ServiceLog
-        let log = ServiceLog(context: context)
-        log.id = UUID()
-        log.date = draftServiceLog.date
-        log.odometer = draftServiceLog.odometer ?? 0
-        log.cost = draftServiceLog.cost
-        log.note = draftServiceLog.note
-        log.photos = NSSet(array: draftServiceLog.photos)
-        log.documents = NSSet(array: draftServiceLog.documents)
-
         // Resolve selected services from IDs
         let selectedServices = draftServiceLog.selectedServiceIDs.compactMap { id in
             allServices.first(where: { $0.id == id })
         }
+
+        // Create a new ServiceLog
+        let log = ServiceLog(context: context)
+        log.id = UUID()
+        log.date = draftServiceLog.date
+        log.cost = draftServiceLog.cost
+        log.note = draftServiceLog.note
+        log.photos = NSSet(array: draftServiceLog.photos)
+        log.documents = NSSet(array: draftServiceLog.documents)
 
         // Create a record for each selected service
         for svc in selectedServices {
@@ -351,6 +358,7 @@ extension Service {
             record.date = draftServiceLog.date
             record.odometer = draftServiceLog.odometer ?? 0
         }
+        log.odometer = draftServiceLog.odometer ?? 0
 
         // Update vehicle odometer if needed
         for svc in selectedServices {

@@ -140,7 +140,7 @@ struct AddEditRecordView: View {
                 warning: $odometerWarning,
                 entered: draftServiceLog.odometer,
                 current: vehicle.odometer,
-                distanceUnit: AppSettingsStore.shared.distanceUnit.abbreviated,
+                distanceUnit: vehicle.distanceUnit.abbreviated,
                 onConfirm: performRecordSave
             )
         }

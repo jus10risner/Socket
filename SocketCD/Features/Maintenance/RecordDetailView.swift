@@ -10,7 +10,6 @@ import SwiftUI
 struct RecordDetailView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var record: ServiceRecord
-    let settings = AppSettingsStore.shared
     let vehicle: Vehicle
     let service: Service
     
@@ -22,7 +21,7 @@ struct RecordDetailView: View {
                 LabeledContent("Date", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
                 
                 LabeledContent("Odometer") {
-                    Text("\(record.effectiveOdometer.formatted()) \(settings.distanceUnit.abbreviated)")
+                    Text("\(record.effectiveOdometer.formatted()) \(vehicle.distanceUnit.abbreviated)")
                 }
                 
                 LabeledContent("Cost", value: (record.effectiveCost ?? 0).asCurrency())

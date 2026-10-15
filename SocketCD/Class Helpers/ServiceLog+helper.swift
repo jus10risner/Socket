@@ -15,8 +15,15 @@ extension ServiceLog {
     }
     
     var odometer: Int {
-        get { Int(odometer_) }
-        set { odometer_ = Int64(newValue) }
+        get {
+            let storedOdometer = Int(odometer_)
+            return sortedServicesArray.first?.vehicle?
+                .displayedDistance(fromStored: odometer_) ?? storedOdometer
+        }
+        set {
+            odometer_ = sortedServicesArray.first?.vehicle?
+                .storedDistance(fromDisplayed: newValue) ?? Int64(newValue)
+        }
     }
     
     var cost: Double? {

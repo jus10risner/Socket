@@ -16,8 +16,56 @@ extension Vehicle {
     }
     
     var odometer: Int {
-        get { Int(odometer_) }
-        set { odometer_ = Int64(newValue) }
+        get { displayedDistance(fromStored: odometer_) }
+        set { odometer_ = storedDistance(fromDisplayed: newValue) }
+    }
+
+    var usesCanonicalMeasurements: Bool { measurementStorageVersion >= 1 }
+
+    var distanceUnit: DistanceUnits {
+        get { DistanceUnits(rawValue: distanceUnit_ ?? "") ?? AppSettingsStore.shared.distanceUnit }
+        set { distanceUnit_ = newValue.rawValue }
+    }
+
+    var volumeUnit: VolumeUnits {
+        get { VolumeUnits(rawValue: volumeUnit_ ?? "") ?? AppSettingsStore.shared.volumeUnit }
+        set { volumeUnit_ = newValue.rawValue }
+    }
+
+    var fuelEconomyUnit: FuelEconomyUnits {
+        get { FuelEconomyUnits(rawValue: fuelEconomyUnit_ ?? "") ?? AppSettingsStore.shared.fuelEconomyUnit }
+        set { fuelEconomyUnit_ = newValue.rawValue }
+    }
+
+    func captureLegacyMeasurementUnitsIfNeeded(
+        distanceUnit: DistanceUnits,
+        volumeUnit: VolumeUnits,
+        fuelEconomyUnit: FuelEconomyUnits
+    ) {
+        guard !usesCanonicalMeasurements else { return }
+        if distanceUnit_ == nil { self.distanceUnit = distanceUnit }
+        if volumeUnit_ == nil { self.volumeUnit = volumeUnit }
+        if fuelEconomyUnit_ == nil { self.fuelEconomyUnit = fuelEconomyUnit }
+    }
+
+    func markMeasurementsAsCanonical() {
+        measurementStorageVersion = 1
+    }
+
+    func displayedDistance(fromStored value: Int64) -> Int {
+        guard usesCanonicalMeasurements else { return Int(value) }
+        return Int(MeasurementConverter.distance(
+            fromKilometers: Double(value),
+            unit: distanceUnit
+        ).rounded())
+    }
+
+    func storedDistance(fromDisplayed value: Int) -> Int64 {
+        guard usesCanonicalMeasurements else { return Int64(value) }
+        return Int64(MeasurementConverter.kilometers(
+            from: Double(value),
+            unit: distanceUnit
+        ).rounded())
     }
     
     var colorComponents: [CGFloat]? {
@@ -174,16 +222,83 @@ extension Vehicle {
     
     // MARK: - CRUD Methods
     
-    func updateAndSave(draftVehicle: DraftVehicle) {
-        let context = DataController.shared.container.viewContext
+    @discardableResult
+    func updateAndSave(draftVehicle: DraftVehicle) -> Bool {
+        guard let context = managedObjectContext else { return false }
         let colorComponents = UIColor(draftVehicle.selectedColor).cgColor.components
+        let originalDisplayedOdometer = odometer
+        let originalDistanceUnit = distanceUnit
+        let expectedUneditedOdometer = Int(MeasurementConverter.distance(
+            fromKilometers: MeasurementConverter.kilometers(
+                from: Double(originalDisplayedOdometer),
+                unit: originalDistanceUnit
+            ),
+            unit: draftVehicle.distanceUnit
+        ).rounded())
+        let odometerWasEdited = draftVehicle.odometer != expectedUneditedOdometer
         
         self.name = draftVehicle.name
-        self.odometer = draftVehicle.odometer ?? 0
+        if !usesCanonicalMeasurements, draftVehicle.shouldMigrateMeasurements {
+            migrateMeasurements(
+                from: draftVehicle.legacyDistanceUnit,
+                volumeUnit: draftVehicle.legacyVolumeUnit
+            )
+        }
+        distanceUnit = draftVehicle.distanceUnit
+        volumeUnit = draftVehicle.volumeUnit
+        fuelEconomyUnit = draftVehicle.fuelEconomyUnit
+        if odometerWasEdited, let odometer = draftVehicle.odometer {
+            self.odometer = odometer
+        }
         self.colorComponents = colorComponents
         self.photo = draftVehicle.photo
         
-        try? context.save()
+        do {
+            try context.save()
+            return true
+        } catch {
+            context.rollback()
+            print("⚠️ Failed to save vehicle: \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    func migrateMeasurements(from distanceUnit: DistanceUnits, volumeUnit: VolumeUnits) {
+        odometer = canonicalDistance(odometer, from: distanceUnit)
+
+        for fillup in fillups as? Set<Fillup> ?? [] {
+            fillup.odometer = canonicalDistance(fillup.odometer, from: distanceUnit)
+            fillup.volume = MeasurementConverter.liters(from: fillup.volume, unit: volumeUnit)
+            fillup.pricePerUnit = MeasurementConverter.pricePerLiter(
+                from: fillup.pricePerUnit ?? 0,
+                unit: volumeUnit
+            )
+        }
+
+        for repair in repairs as? Set<Repair> ?? [] {
+            repair.odometer = canonicalDistance(repair.odometer, from: distanceUnit)
+        }
+
+        var migratedLogs = Set<NSManagedObjectID>()
+        for service in services as? Set<Service> ?? [] {
+            service.distanceInterval = canonicalDistance(service.distanceInterval, from: distanceUnit)
+            if let scheduledOdometer = service.lastScheduledNotificationOdometer {
+                service.lastScheduledNotificationOdometer = canonicalDistance(scheduledOdometer, from: distanceUnit)
+            }
+
+            for record in service.serviceRecords as? Set<ServiceRecord> ?? [] {
+                record.odometer = canonicalDistance(record.odometer, from: distanceUnit)
+                if let log = record.serviceLog, migratedLogs.insert(log.objectID).inserted {
+                    log.odometer = canonicalDistance(log.odometer, from: distanceUnit)
+                }
+            }
+        }
+
+        markMeasurementsAsCanonical()
+    }
+
+    private func canonicalDistance(_ value: Int, from unit: DistanceUnits) -> Int {
+        Int(MeasurementConverter.kilometers(from: Double(value), unit: unit).rounded())
     }
     
     func addNewService(draftService: DraftService, initialRecord draftServiceLog: DraftServiceLog, isBaseLine: Bool) {
@@ -214,10 +329,10 @@ extension Vehicle {
             let baselineLog = ServiceLog(context: context)
             baselineLog.id = UUID()
             baselineLog.date = draftServiceLog.date
-            baselineLog.odometer = draftServiceLog.odometer ?? self.odometer
-            baselineLog.isBaseline = true
-            
             serviceRecord.serviceLog = baselineLog
+            let displayedOdometer = draftServiceLog.odometer ?? self.odometer
+            baselineLog.odometer = displayedOdometer
+            baselineLog.isBaseline = true
         }
         
         try? context.save()
