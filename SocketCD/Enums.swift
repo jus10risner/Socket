@@ -16,7 +16,25 @@ enum AppSection: String, CaseIterable {
 // MARK: - Fill-ups
 
 enum FillupCostTypes: String, CaseIterable {
-    case perUnit, total
+    case total, perUnit
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .total:
+            "Total cost"
+        case .perUnit:
+            "Cost per unit"
+        }
+    }
+
+    var verificationDescription: LocalizedStringResource {
+        switch self {
+        case .total:
+            "Shows the per-unit cost, calculated from your input, when logging a fill-up."
+        case .perUnit:
+            "Shows the total cost, calculated from your input, when logging a fill-up."
+        }
+    }
 }
 
 enum FillType: String, CaseIterable {

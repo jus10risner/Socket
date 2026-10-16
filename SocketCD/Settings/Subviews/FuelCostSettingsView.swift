@@ -15,17 +15,14 @@ struct FuelCostSettingsView: View {
             Section(footer: Text("Choose how you prefer to enter fuel costs when logging fill-ups.")) {
                 Picker("Fill-up Cost Type", selection: $settings.fillupCostType) {
                     ForEach(FillupCostTypes.allCases, id: \.self) { type in
-                        if type == .perUnit {
-                            Text("Cost per unit")
-                        } else {
-                            Text("Total cost")
-                        }
+                        Text(type.title)
+                            .tag(type)
                     }
                 }
-                .labelsHidden()
+                .pickerStyle(.menu)
             }
             
-            Section(footer: Text("Shows the \(settings.fillupCostType == .total ? "per-unit" : "total") cost, calculated from your input, when logging a fill-up.")) {
+            Section(footer: Text(settings.fillupCostType.verificationDescription)) {
                 Toggle("Verify Cost", isOn: $settings.showCalculatedCost)
             }
         }
