@@ -98,6 +98,7 @@
         <attribute name="displayOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="fuelEconomyUnit_" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="lastOdometerLogAt_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="measurementStorageVersion" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name_" optional="YES" attributeType="String"/>
         <attribute name="odometer_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>

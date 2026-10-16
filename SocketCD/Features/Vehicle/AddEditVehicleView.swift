@@ -217,6 +217,7 @@ struct AddEditVehicleView: View {
         newVehicle.fuelEconomyUnit = draftVehicle.fuelEconomyUnit
         newVehicle.markMeasurementsAsCanonical()
         newVehicle.odometer = draftVehicle.odometer ?? 0
+        newVehicle.recordOdometerActivity()
         newVehicle.colorComponents = colorComponents
         newVehicle.photo = draftVehicle.photo
         newVehicle.displayOrder = newVehicleDisplayOrder

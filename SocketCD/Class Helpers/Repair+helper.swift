@@ -67,6 +67,9 @@ extension Repair {
         if let vehicle = self.vehicle, let draftOdometer = draftRepair.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer
         }
+        if draftRepair.odometer != nil {
+            vehicle?.recordOdometerActivity()
+        }
         
         try? context.save()
     }

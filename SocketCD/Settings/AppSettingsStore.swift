@@ -10,7 +10,7 @@ import SwiftUI
 class AppSettingsStore: ObservableObject {
     
     static let shared = AppSettingsStore()
-    
+
     // MARK: - AppSettingsView
     
     @AppStorage("distanceUnit") var distanceUnit: DistanceUnits = .miles {
@@ -25,7 +25,7 @@ class AppSettingsStore: ObservableObject {
         willSet { objectWillChange.send() }
     }
     
-    @AppStorage("fillupCostType") var fillupCostType: FillupCostTypes = .perUnit {
+    @AppStorage("fillupCostType") var fillupCostType: FillupCostTypes = .total {
         willSet { objectWillChange.send() }
     }
     
@@ -38,6 +38,14 @@ class AppSettingsStore: ObservableObject {
     }
     
     @AppStorage("daysBeforeMaintenance") var daysBeforeMaintenance: Int = 14 {
+        willSet { objectWillChange.send() }
+    }
+
+    @AppStorage("odometerReminderEnabled") var odometerReminderEnabled: Bool = false {
+        willSet { objectWillChange.send() }
+    }
+
+    @AppStorage("odometerReminderIntervalDays") var odometerReminderIntervalDays: Int = 14 {
         willSet { objectWillChange.send() }
     }
     
@@ -55,6 +63,8 @@ class AppSettingsStore: ObservableObject {
 
     init() {
         let defaults = UserDefaults.standard
+        preserveLegacyFuelCostDefaultIfNeeded(in: defaults)
+
         let hasExistingUnitPreferences = defaults.object(forKey: "distanceUnit") != nil
             || defaults.object(forKey: "fuelEconomyUnit") != nil
             || defaults.object(forKey: "volumeUnit") != nil
@@ -70,6 +80,18 @@ class AppSettingsStore: ObservableObject {
             case .kmL, .L100km:
                 volumeUnit = .liters
             }
+        }
+    }
+
+    private func preserveLegacyFuelCostDefaultIfNeeded(in defaults: UserDefaults) {
+        guard defaults.object(forKey: "fillupCostType") == nil else { return }
+
+        let completedOnboarding = defaults.bool(forKey: "welcomeViewPresented") == false
+            && defaults.object(forKey: "welcomeViewPresented") != nil
+        let hasSavedAppVersion = defaults.string(forKey: "savedAppVersion")?.isEmpty == false
+
+        if completedOnboarding || hasSavedAppVersion {
+            defaults.set(FillupCostTypes.perUnit.rawValue, forKey: "fillupCostType")
         }
     }
 

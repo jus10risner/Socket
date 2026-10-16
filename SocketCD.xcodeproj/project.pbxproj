@@ -83,6 +83,9 @@
 		9EDCA2442ED0E19D005B1C5A /* PopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */; };
 		9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */; };
 		9EE5620D2BD9706600F5BE7E /* VehicleListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */; };
+		9EE704F13082744500EFF266 /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE704F03082744500EFF266 /* NotificationManagerTests.swift */; };
+		9EE704F3308279FE00EFF266 /* MaintenanceNotificationLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE704F2308279FE00EFF266 /* MaintenanceNotificationLedger.swift */; };
+		9EE704F530827B6B00EFF266 /* NotificationCenterClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE704F430827B6B00EFF266 /* NotificationCenterClient.swift */; };
 		9EE97E81305446EE00F2AA5F /* CustomInfoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE97E80305446EE00F2AA5F /* CustomInfoListView.swift */; };
 		9EE97E853054617400F2AA5F /* DashboardCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE97E843054617400F2AA5F /* DashboardCard.swift */; };
 		9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC47E2BA0F9C20053C65E /* SocketCDApp.swift */; };
@@ -100,7 +103,7 @@
 		9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4B62BA1F0CE0053C65E /* ImageViewer.swift */; };
 		9EEAC4B92BA1F1180053C65E /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4B82BA1F1180053C65E /* ImageDetailView.swift */; };
 		9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4BB2BA1F1CA0053C65E /* AccentColorSelectorView.swift */; };
-		9EEAC4BE2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4BD2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift */; };
+		9EEAC4BE2BA1F1E60053C65E /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4BD2BA1F1E60053C65E /* NotificationSettingsView.swift */; };
 		9EEAC4C12BA24EEC0053C65E /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4C02BA24EEC0053C65E /* AppSettingsStore.swift */; };
 		9EEAC4C62BA253950053C65E /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4C52BA253950053C65E /* WelcomeView.swift */; };
 		9EEAC4CB2BA256570053C65E /* AddEditVehicleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4CA2BA256570053C65E /* AddEditVehicleView.swift */; };
@@ -223,6 +226,9 @@
 		9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContent.swift; sourceTree = "<group>"; };
 		9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
 		9EE5620C2BD9706600F5BE7E /* VehicleListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListRowView.swift; sourceTree = "<group>"; };
+		9EE704F03082744500EFF266 /* NotificationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTests.swift; sourceTree = "<group>"; };
+		9EE704F2308279FE00EFF266 /* MaintenanceNotificationLedger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceNotificationLedger.swift; sourceTree = "<group>"; };
+		9EE704F430827B6B00EFF266 /* NotificationCenterClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterClient.swift; sourceTree = "<group>"; };
 		9EE97E80305446EE00F2AA5F /* CustomInfoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInfoListView.swift; sourceTree = "<group>"; };
 		9EE97E843054617400F2AA5F /* DashboardCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCard.swift; sourceTree = "<group>"; };
 		9EEAC47B2BA0F9C20053C65E /* SocketCD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocketCD.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,7 +247,7 @@
 		9EEAC4B62BA1F0CE0053C65E /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		9EEAC4B82BA1F1180053C65E /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
 		9EEAC4BB2BA1F1CA0053C65E /* AccentColorSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentColorSelectorView.swift; sourceTree = "<group>"; };
-		9EEAC4BD2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceAlertSettingsView.swift; sourceTree = "<group>"; };
+		9EEAC4BD2BA1F1E60053C65E /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 		9EEAC4C02BA24EEC0053C65E /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		9EEAC4C52BA253950053C65E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		9EEAC4CA2BA256570053C65E /* AddEditVehicleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditVehicleView.swift; sourceTree = "<group>"; };
@@ -381,7 +387,7 @@
 				9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */,
 				9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */,
 				9EEAC4BB2BA1F1CA0053C65E /* AccentColorSelectorView.swift */,
-				9EEAC4BD2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift */,
+				9EEAC4BD2BA1F1E60053C65E /* NotificationSettingsView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -391,6 +397,8 @@
 			children = (
 				9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */,
 				9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */,
+				9EE704F2308279FE00EFF266 /* MaintenanceNotificationLedger.swift */,
+				9EE704F430827B6B00EFF266 /* NotificationCenterClient.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -457,6 +465,7 @@
 				9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */,
 				9E73890D306312F600F63EB5 /* PDFExporterTests.swift */,
 				9EBB2237306AD12E00A37D48 /* OdometerValidatorTests.swift */,
+				9EE704F03082744500EFF266 /* NotificationManagerTests.swift */,
 			);
 			path = SocketCDTests;
 			sourceTree = "<group>";
@@ -781,6 +790,7 @@
 			files = (
 				9EAEDF982F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift in Sources */,
 				9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */,
+				9EE704F13082744500EFF266 /* NotificationManagerTests.swift in Sources */,
 				9E73890E306312F600F63EB5 /* PDFExporterTests.swift in Sources */,
 				9EAEDF9D2F4E057B005D29C6 /* TestDataController.swift in Sources */,
 				9EAEDF992F4DFC5D005D29C6 /* ServiceTests.swift in Sources */,
@@ -798,7 +808,7 @@
 				9E63DD3530617683005B596B /* AttachmentDeleteButton.swift in Sources */,
 				9E00C4C62EBE9B8600B3E88F /* TermsOfUseView.swift in Sources */,
 				9EEAC51E2BA4A2280053C65E /* MaintenanceListView.swift in Sources */,
-				9EEAC4BE2BA1F1E60053C65E /* MaintenanceAlertSettingsView.swift in Sources */,
+				9EEAC4BE2BA1F1E60053C65E /* NotificationSettingsView.swift in Sources */,
 				9E96EC462ECB985100667A47 /* OnboardingTips.swift in Sources */,
 				9E30BD1D30780BC400B8A3A3 /* VehicleStep1.swift in Sources */,
 				9E30BD1F30780F8C00B8A3A3 /* VehicleStep2.swift in Sources */,
@@ -836,6 +846,7 @@
 				9EEAC5152BA489D30053C65E /* AllFillupsListView.swift in Sources */,
 				9E1AD9042E8DAB6000E60184 /* MaintenanceCard.swift in Sources */,
 				9EEAC4902BA1036F0053C65E /* DataController.swift in Sources */,
+				9EE704F530827B6B00EFF266 /* NotificationCenterClient.swift in Sources */,
 				9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */,
 				9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */,
 				9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */,
@@ -865,6 +876,7 @@
 				9EEAC4EE2BA374D70053C65E /* CustomInfoDetailView.swift in Sources */,
 				9E30BD2530794C0E00B8A3A3 /* OnboardingContainer.swift in Sources */,
 				9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */,
+				9EE704F3308279FE00EFF266 /* MaintenanceNotificationLedger.swift in Sources */,
 				9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */,
 				9EEAC4E82BA367A00053C65E /* AddAttachmentButton.swift in Sources */,
 				9E1AD9082E8DAF7300E60184 /* RepairsCard.swift in Sources */,

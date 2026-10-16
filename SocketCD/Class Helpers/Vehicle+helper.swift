@@ -20,6 +20,15 @@ extension Vehicle {
         set { odometer_ = storedDistance(fromDisplayed: newValue) }
     }
 
+    var lastOdometerLogAt: Date? {
+        get { lastOdometerLogAt_ }
+        set { lastOdometerLogAt_ = newValue }
+    }
+
+    func recordOdometerActivity(at date: Date = .now) {
+        lastOdometerLogAt = date
+    }
+
     var usesCanonicalMeasurements: Bool { measurementStorageVersion >= 1 }
 
     var distanceUnit: DistanceUnits {
@@ -249,6 +258,7 @@ extension Vehicle {
         fuelEconomyUnit = draftVehicle.fuelEconomyUnit
         if odometerWasEdited, let odometer = draftVehicle.odometer {
             self.odometer = odometer
+            recordOdometerActivity()
         }
         self.colorComponents = colorComponents
         self.photo = draftVehicle.photo
@@ -350,6 +360,9 @@ extension Vehicle {
         newRepair.note = draftRepair.note
         newRepair.photos = NSSet(array: draftRepair.photos)
         newRepair.documents = NSSet(array: draftRepair.documents)
+        if draftRepair.odometer != nil {
+            recordOdometerActivity()
+        }
         
         if let odometer = draftRepair.odometer, odometer > self.odometer {
             self.odometer = odometer
@@ -372,6 +385,9 @@ extension Vehicle {
         newFillup.note = draftFillup.note
         newFillup.photos = NSSet(array: draftFillup.photos)
         newFillup.documents = NSSet(array: draftFillup.documents)
+        if draftFillup.odometer != nil {
+            recordOdometerActivity()
+        }
         
         if let odometer = draftFillup.odometer, odometer > self.odometer {
             self.odometer = odometer
@@ -393,13 +409,5 @@ extension Vehicle {
         newCustomInfo.documents = NSSet(array: draftCustomInfo.documents)
         
         try? context.save()
-    }
-    
-    // Cancels all scheduled notifications for all services associated with this vehicle
-    func cancelAllServiceNotifications() {
-        for service in self.sortedServicesArray {
-            NotificationScheduler.cancelTimeBased(for: service)
-            NotificationScheduler.cancelDistanceBased(for: service)
-        }
     }
 }

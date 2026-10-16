@@ -12,7 +12,7 @@ import TipKit
 @main
 struct SocketCDApp: App {
     @Environment(\.scenePhase) var scenePhase
-    @StateObject var settings = AppSettingsStore()
+    @StateObject private var settings = AppSettingsStore.shared
     let dataController = DataController.shared
     
     @State private var showingStoreError = false
@@ -30,10 +30,10 @@ struct SocketCDApp: App {
                 .task {
                     AppearanceController.shared.setAppearance()
                     
-                    #if DEBUG
-                    // Reset the datastore to allow testing on-device
-                    try? Tips.resetDatastore()
-                    #endif
+//                    #if DEBUG
+//                    // Reset the datastore to allow testing on-device
+//                    try? Tips.resetDatastore()
+//                    #endif
 
                     // Configure TipKit
                     try? Tips.configure()
@@ -55,7 +55,10 @@ struct SocketCDApp: App {
             
             if newPhase == .active {
                 Task {
-                    await NotificationManager.shared.refreshAllNotifications() // Checks to see if any notifications need to be canceled or scheduled
+                    if AppSettingsStore.shared.odometerReminderEnabled {
+                        NotificationManager.shared.initializeMissingOdometerActivityDates()
+                    }
+                    await NotificationManager.shared.refreshAllNotifications()
                 }
             }
         }

@@ -21,7 +21,7 @@ class DraftFillup: ObservableObject {
     @Published var documents: [AttachedDocument] = []
     
     // Initializes with an optional Fillup, for use in add/edit context
-    init(fillup: Fillup? = nil, settings: AppSettingsStore = AppSettingsStore()) {
+    init(fillup: Fillup? = nil, settings: AppSettingsStore = .shared) {
         self.settings = settings
         
         if let fillup {

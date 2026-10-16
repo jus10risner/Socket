@@ -2,23 +2,35 @@
 //  NotificationObserver.swift
 //  SocketCD
 //
-//  Created by Justin Risner on 11/11/25.
-//
 
 import CoreData
-import Combine
+import Foundation
 
 final class NotificationObserver {
     static let shared = NotificationObserver()
-    private var cancellable: AnyCancellable?
+
+    private var tasks: [Task<Void, Never>] = []
 
     private init() {
-        cancellable = NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
-            .debounce(for: .seconds(0.5), scheduler: RunLoop.main) // Prevents rapid firing
-            .sink { _ in
-                Task {
-                    await NotificationManager.shared.refreshAllNotifications()
-                }
+        tasks.append(Task {
+            for await _ in NotificationCenter.default.notifications(
+                named: .NSManagedObjectContextDidSave
+            ) {
+                await NotificationManager.shared.refreshAllNotifications()
             }
+        })
+
+        tasks.append(Task {
+            for await _ in NotificationCenter.default.notifications(
+                named: .NSPersistentStoreRemoteChange,
+                object: DataController.shared.container.persistentStoreCoordinator
+            ) {
+                await NotificationManager.shared.refreshAllNotifications()
+            }
+        })
+    }
+
+    deinit {
+        tasks.forEach { $0.cancel() }
     }
 }

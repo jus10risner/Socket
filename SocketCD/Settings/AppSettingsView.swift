@@ -22,8 +22,8 @@ struct AppSettingsView: View {
                         rowLabel(title: "Fuel Cost", symbol: "fuelpump")
                     }
                     
-                    NavigationLink(destination: MaintenanceAlertSettingsView()) {
-                        rowLabel(title: "Maintenance Alerts", symbol: "clock")
+                    NavigationLink(destination: NotificationSettingsView()) {
+                        rowLabel(title: "Notifications", symbol: "app.badge")
                     }
                     
                 }
@@ -34,7 +34,7 @@ struct AppSettingsView: View {
                     }
                     
                     NavigationLink(destination: AppIconSelectorView()) {
-                        rowLabel(title: "App Icon", symbol: "app.badge")
+                        rowLabel(title: "App Icon", symbol: "app")
                     }
                     
                     NavigationLink(destination: appearanceSettings) {

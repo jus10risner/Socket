@@ -8,7 +8,7 @@
 import SwiftUI
 
 class AppearanceController {
-    @ObservedObject var settings = AppSettingsStore()
+    @ObservedObject var settings = AppSettingsStore.shared
     static let shared = AppearanceController()
     
     var appearance: UIUserInterfaceStyle {

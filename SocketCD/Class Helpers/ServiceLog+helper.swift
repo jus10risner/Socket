@@ -111,7 +111,13 @@ extension ServiceLog {
                draftOdometer > vehicle.odometer {
                 vehicle.odometer = draftOdometer
             }
-                }
+        }
+
+        if draftServiceLog.odometer != nil {
+            for vehicle in Set(selectedServices.compactMap(\.vehicle)) {
+                vehicle.recordOdometerActivity()
+            }
+        }
 
         try? context.save()
     }

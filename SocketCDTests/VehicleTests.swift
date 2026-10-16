@@ -47,4 +47,19 @@ struct VehicleTests {
             print("Error fetching vehicles: \(error)")
         }
     }
+
+    @Test func `Recording odometer activity stores the actual log time`() throws {
+        let controller = TestDataController()
+        let context = controller.container.viewContext
+        let vehicle = Vehicle(context: context)
+        let logTime = Date(timeIntervalSinceReferenceDate: 123_456)
+
+        vehicle.recordOdometerActivity(at: logTime)
+        try context.save()
+
+        let savedVehicle = try #require(
+            context.fetch(Vehicle.fetchRequest()).first
+        )
+        #expect(savedVehicle.lastOdometerLogAt == logTime)
+    }
 }

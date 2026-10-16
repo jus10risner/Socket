@@ -225,6 +225,9 @@ extension Fillup {
         if let vehicle = self.vehicle, let draftOdometer = draftFillup.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer
         }
+        if draftFillup.odometer != nil {
+            vehicle?.recordOdometerActivity()
+        }
         
         try? context.save()
     }

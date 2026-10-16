@@ -91,6 +91,9 @@ extension ServiceRecord {
         if let vehicle = service.vehicle, let draftOdometer = draftServiceLog.odometer, draftOdometer > vehicle.odometer {
             vehicle.odometer = draftOdometer
         }
+        if draftServiceLog.odometer != nil {
+            service.vehicle?.recordOdometerActivity()
+        }
         
         try? context.save()
     }
