@@ -19,8 +19,6 @@ struct DashboardCard<Visual: View, Detail: View>: View {
     @ViewBuilder let visual: Visual
     @ViewBuilder let detail: Detail
 
-    @State private var feedbackTrigger = false
-
     private let quickActionSize: CGFloat = 44
     private let minimumContentHeight: CGFloat = 125
 
@@ -36,7 +34,6 @@ struct DashboardCard<Visual: View, Detail: View>: View {
             .accessibilityHint(accessibilityHint)
 
             Button {
-                feedbackTrigger.toggle()
                 quickAction()
             } label: {
                 Label(quickActionTitle, systemImage: "plus")
@@ -50,7 +47,6 @@ struct DashboardCard<Visual: View, Detail: View>: View {
             .contentShape(Rectangle())
             .dynamicTypeSize(.medium)
             .disabled(disableButton ?? false)
-            .sensoryFeedback(.impact(weight: .light), trigger: feedbackTrigger)
             .padding()
         }
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle.adaptive)

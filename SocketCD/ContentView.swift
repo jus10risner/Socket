@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import DeclaredAgeRange
 import SwiftUI
 
 struct ContentView: View {
@@ -18,6 +19,7 @@ struct ContentView: View {
     @State private var onboardingSheet: ActiveOnboardingSheet?
     @State private var selectedVehicle: Vehicle?
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
+    @State private var isAgeRangeCheckReady = false
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
@@ -38,8 +40,15 @@ struct ContentView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
+        .ageRangeComplianceCheck(isReady: isAgeRangeCheckReady) {
+            requestNotificationPermission()
+        }
         .onAppear {
             checkForOnboardingViewsToShow()
+
+            if onboardingSheet == nil {
+                isAgeRangeCheckReady = true
+            }
             
             if let lastSelectedVehicle {
                 selectedVehicle = lastSelectedVehicle
@@ -109,7 +118,7 @@ struct ContentView: View {
     // MARK: - Methods
 
     private func onboardingDidDismiss() {
-        requestNotificationPermission()
+        isAgeRangeCheckReady = true
     }
     
     // Splits the app version number into an array of Int (used in checkForOnboardingViewsToShow)
@@ -165,6 +174,74 @@ struct ContentView: View {
                 }
             }
         }
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func ageRangeComplianceCheck(
+        isReady: Bool,
+        onCompletion: @escaping () -> Void
+    ) -> some View {
+        if #available(iOS 26.2, *) {
+            modifier(AgeRangeComplianceModifier(isReady: isReady, onCompletion: onCompletion))
+        } else {
+            self.onChange(of: isReady) { _, ready in
+                if ready {
+                    onCompletion()
+                }
+            }
+        }
+    }
+}
+
+@available(iOS 26.2, *)
+private struct AgeRangeComplianceModifier: ViewModifier {
+    @Environment(\.requestAgeRange) private var requestAgeRange
+
+    let isReady: Bool
+    let onCompletion: () -> Void
+
+    @State private var didCheckAgeRange = false
+
+    func body(content: Content) -> some View {
+        content
+            .task(id: isReady) {
+                guard isReady, !didCheckAgeRange else { return }
+                didCheckAgeRange = true
+
+                defer { onCompletion() }
+
+                do {
+                    let isEligible = try await AgeRangeService.shared.isEligibleForAgeFeatures
+
+#if DEBUG
+                    print("[Age Assurance] Eligible for age features: \(isEligible)")
+#endif
+
+                    guard isEligible else { return }
+
+                    if #available(iOS 26.4, *) {
+                        let requiredFeatures = try await AgeRangeService.shared.requiredRegulatoryFeatures
+
+#if DEBUG
+                        print("[Age Assurance] Required regulatory features: \(requiredFeatures)")
+#endif
+
+                        guard requiredFeatures.contains(.declaredAgeRangeRequired) else { return }
+                    }
+
+                    let response = try await requestAgeRange(ageGates: 13, 16, 18)
+
+#if DEBUG
+                    print("[Age Assurance] Age-range response: \(response)")
+#endif
+                } catch {
+#if DEBUG
+                    print("[Age Assurance] Request failed: \(error.localizedDescription)")
+#endif
+                }
+            }
     }
 }
 

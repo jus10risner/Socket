@@ -146,6 +146,14 @@ struct VehicleDashboardView: View {
                     TimelineView(vehicle: vehicle)
                 }
             }
+            .sensoryFeedback(trigger: activeSheet) { _, newSheet in
+                switch newSheet {
+                case .logService, .addRepair, .addFillup, .addCustomInfo:
+                    return .impact(weight: .light)
+                case .editVehicle, .showTimeline, nil:
+                    return nil
+                }
+            }
             .sheet(item: $shareItem) { item in
                 ActivityView(activityItems: [item.url])
             }
