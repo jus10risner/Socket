@@ -55,10 +55,10 @@ struct FillupHistoryRow: View {
         } else {
             Text(status)
                 .font(.subheadline.weight(.medium))
-                .foregroundStyle(Color(.fillupsTheme))
+                .foregroundStyle(AppSection.fillups.color)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
-                .background(Color(.fillupsTheme).opacity(0.12), in: .capsule)
+                .background(AppSection.fillups.color.opacity(0.12), in: .capsule)
         }
     }
 

@@ -35,7 +35,7 @@ struct AddEditRepairView: View {
     var body: some View {
         NavigationStack {
             Form {
-                FormHeaderView(symbolName: "wrench.adjustable.fill", primaryText: repair != nil ? "Edit Repair" : "New Repair", accentColor: Color.repairsTheme)
+                FormHeaderView(symbolName: AppSection.repairs.symbol(filled: true), primaryText: repair != nil ? "Edit Repair" : "New Repair", accentColor: AppSection.repairs.color)
                 
                 Section {
                     DatePicker("Date", selection: $draftRepair.date, displayedComponents: .date)
@@ -92,7 +92,7 @@ struct AddEditRepairView: View {
                 }
             }
         }
-        .tint(Color.repairsTheme)
+        .tint(AppSection.repairs.color)
         .alert("Delete Repair", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
                 if let repair {

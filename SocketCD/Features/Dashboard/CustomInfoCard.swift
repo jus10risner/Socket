@@ -30,8 +30,8 @@ struct CustomInfoCard: View {
     
     var body: some View {
         DashboardCard(
-            title: "Custom Info",
-            color: settings.selectedAccent(),
+            title: String(localized: AppSection.customInfo.title),
+            color: AppSection.customInfo.color,
             quickActionTitle: "Add Info",
             accessibilityValue: accessibilityValue,
             accessibilityHint: String(localized: "Opens the custom info list")
@@ -40,7 +40,7 @@ struct CustomInfoCard: View {
         } quickAction: {
             activeSheet = .addCustomInfo
         } visual: {
-            CardSymbolView(symbolName: "bookmark.fill")
+            CardSymbolView(symbolName: AppSection.customInfo.symbol(filled: true))
         } detail: {
             if customInfo.isEmpty {
                 CardTextView(

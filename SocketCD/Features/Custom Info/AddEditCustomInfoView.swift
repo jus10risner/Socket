@@ -36,7 +36,7 @@ struct AddEditCustomInfoView: View {
     var body: some View {
         NavigationStack {
             Form {
-                FormHeaderView(symbolName: "bookmark.fill", primaryText: customInfo != nil ? "Edit Custom Info" : "New Custom Info", accentColor: settings.selectedAccent())
+                FormHeaderView(symbolName: AppSection.customInfo.symbol(filled: true), primaryText: customInfo != nil ? "Edit Custom Info" : "New Custom Info", accentColor: AppSection.customInfo.color)
                 
                 Section {
                     LabeledInput(label: "Name") {
@@ -91,7 +91,7 @@ struct AddEditCustomInfoView: View {
                         .adaptiveTint()
                 }
             }
-            .tint(settings.selectedAccent())
+            .tint(AppSection.customInfo.color)
             .alert("Delete Vehicle Info", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let customInfo {

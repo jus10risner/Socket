@@ -26,6 +26,6 @@ struct CardSymbolView: View {
 }
 
 #Preview {
-    CardSymbolView(symbolName: "fuelpump.fill")
+    CardSymbolView(symbolName: AppSection.fillups.symbol(filled: true))
         .foregroundStyle(.mint)
 }

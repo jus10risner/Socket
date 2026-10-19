@@ -33,7 +33,7 @@ struct MaintenanceListView: View {
                 ServiceListRowView(service: service, vehicle: vehicle)
             }
         }
-        .vehicleNavigationTitle("Maintenance", vehicleName: vehicle.name)
+        .sectionNavigationTitle(AppSection.maintenance.title, vehicleName: vehicle.name)
         .listRowSpacing(5)
         .scrollContentBackground(.hidden)
         .background(Color(.systemGroupedBackground))
@@ -69,7 +69,7 @@ struct MaintenanceListView: View {
                 } label: {
                     Label("Log Service", systemImage: "plus")
                 }
-                .tint(Color.maintenanceTheme)
+                .tint(AppSection.maintenance.color)
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
                 .disabled(services.isEmpty)
@@ -86,7 +86,7 @@ private struct EmptyMaintenanceListView: View {
     
     var body: some View {
         ContentUnavailableView {
-            Label("No Services", systemImage: "book.and.wrench")
+            Label("No Services", systemImage: AppSection.maintenance.symbol())
         } description: {
             Text("Start by setting up a routine maintenance service, then add a log each time it is completed.")
         } actions: {
@@ -97,7 +97,7 @@ private struct EmptyMaintenanceListView: View {
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .tint(Color(.maintenanceTheme))
+            .tint(AppSection.maintenance.color)
         }
     }
 }
@@ -127,7 +127,7 @@ private struct ServiceListRowView: View {
             Button("Add Service Log", systemImage: "plus") {
                 selectedService = service
             }
-            .tint(Color(.maintenanceTheme))
+            .tint(AppSection.maintenance.color)
         }
     }
     

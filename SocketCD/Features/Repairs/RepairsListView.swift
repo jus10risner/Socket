@@ -30,7 +30,7 @@ struct RepairsListView: View {
             ForEach(repairsByYear, id: \.year) { section in
                 HistoryListSection(
                     year: section.year,
-                    headerColor: .repairsTheme
+                    headerColor: AppSection.repairs.color
                 ) {
                     ForEach(section.repairs, id: \.id) { repair in
                         NavigationLink {
@@ -48,13 +48,13 @@ struct RepairsListView: View {
                 }
             }
         }
-        .vehicleNavigationTitle("Repairs", vehicleName: vehicle.name)
+        .sectionNavigationTitle(AppSection.repairs.title, vehicleName: vehicle.name)
         .scrollContentBackground(.hidden)
         .background(Color(.systemGroupedBackground))
         .overlay {
             if repairs.isEmpty {
                 ContentUnavailableView {
-                    Label("No Repairs", systemImage: "wrench.adjustable")
+                    Label("No Repairs", systemImage: AppSection.repairs.symbol())
                 } description: {
                     Text("Record unexpected work, such as battery replacement or engine repair.")
                 }
@@ -70,7 +70,7 @@ struct RepairsListView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
-                .tint(Color.repairsTheme)
+                .tint(AppSection.repairs.color)
             }
         }
     }

@@ -38,13 +38,13 @@ struct CustomInfoListView: View {
                 .buttonStyle(.plain)
             }
         }
-        .vehicleNavigationTitle("Custom Info", vehicleName: vehicle.name)
+        .sectionNavigationTitle(AppSection.customInfo.title, vehicleName: vehicle.name)
         .scrollContentBackground(.hidden)
         .background(Color(.systemGroupedBackground))
         .overlay {
             if customInfo.isEmpty {
                 ContentUnavailableView {
-                    Label("No Saved Info", systemImage: "bookmark")
+                    Label("No Saved Info", systemImage: AppSection.customInfo.symbol())
                 } description: {
                     Text("Keep useful details here, such as tire size or insurance documents.")
                 }

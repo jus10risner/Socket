@@ -29,8 +29,8 @@ struct FillupsCard: View {
     
     var body: some View {
         DashboardCard(
-            title: "Fill-ups",
-            color: Color(.fillupsTheme),
+            title: String(localized: AppSection.fillups.title),
+            color: AppSection.fillups.color,
             quickActionTitle: "Log Fill-up",
             accessibilityValue: accessibilityValue,
             accessibilityHint: String(localized: "Opens fill-up history")
@@ -45,7 +45,7 @@ struct FillupsCard: View {
                     previousFuelEconomy: previousFuelEconomy
                 )
             } else {
-                CardSymbolView(symbolName: "fuelpump.fill")
+                CardSymbolView(symbolName: AppSection.fillups.symbol(filled: true))
             }
         } detail: {
             if let fillup = latestValidFillup {

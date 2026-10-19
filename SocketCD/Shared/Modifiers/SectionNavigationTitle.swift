@@ -1,15 +1,15 @@
 
 //
-//  VehicleNavigationTitle.swift
+//  SectionNavigationTitle.swift
 //  SocketCD
 //
 
 import SwiftUI
 
-private struct VehicleNavigationTitleModifier: ViewModifier {
+private struct SectionNavigationTitleModifier: ViewModifier {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
-    let title: LocalizedStringKey
+    let title: LocalizedStringResource
     let vehicleName: String
 
     private var legacyTitleMaxWidth: CGFloat {
@@ -20,16 +20,16 @@ private struct VehicleNavigationTitleModifier: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
             content
-                .navigationTitle(title)
+                .navigationTitle(Text(title))
                 .navigationSubtitle(vehicleName)
                 .navigationBarTitleDisplayMode(.inline)
         } else {
             content
-                .navigationTitle(title)
+                .navigationTitle(Text(title))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
-                        LegacyVehicleNavigationTitle(
+                        LegacySectionNavigationTitle(
                             title: title,
                             vehicleName: vehicleName,
                             maxWidth: legacyTitleMaxWidth
@@ -40,8 +40,8 @@ private struct VehicleNavigationTitleModifier: ViewModifier {
     }
 }
 
-private struct LegacyVehicleNavigationTitle: View {
-    let title: LocalizedStringKey
+private struct LegacySectionNavigationTitle: View {
+    let title: LocalizedStringResource
     let vehicleName: String
     let maxWidth: CGFloat
 
@@ -66,12 +66,12 @@ private struct LegacyVehicleNavigationTitle: View {
 }
 
 extension View {
-    func vehicleNavigationTitle(
-        _ title: LocalizedStringKey,
+    func sectionNavigationTitle(
+        _ title: LocalizedStringResource,
         vehicleName: String
     ) -> some View {
         modifier(
-            VehicleNavigationTitleModifier(
+            SectionNavigationTitleModifier(
                 title: title,
                 vehicleName: vehicleName
             )

@@ -23,12 +23,25 @@ enum AppSection: String, CaseIterable, Codable, Identifiable {
         }
     }
 
-    var symbol: String {
+    func symbol(filled: Bool = false) -> String {
+        switch (self, filled) {
+        case (.maintenance, false): "book.and.wrench"
+        case (.maintenance, true): "book.and.wrench.fill"
+        case (.fillups, false): "fuelpump"
+        case (.fillups, true): "fuelpump.fill"
+        case (.repairs, false): "wrench.adjustable"
+        case (.repairs, true): "wrench.adjustable.fill"
+        case (.customInfo, false): "folder"
+        case (.customInfo, true): "folder.fill"
+        }
+    }
+
+    var color: Color {
         switch self {
-        case .maintenance: "book.and.wrench.fill"
-        case .fillups: "fuelpump.fill"
-        case .repairs: "wrench.adjustable.fill"
-        case .customInfo: "bookmark.fill"
+        case .maintenance: .green
+        case .fillups: .teal
+        case .repairs: .orange
+        case .customInfo: AppSettingsStore.shared.selectedAccent()
         }
     }
 }

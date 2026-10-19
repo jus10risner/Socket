@@ -96,14 +96,14 @@ private struct FuelEconomyProgressView: View {
 
             Image(systemName: "arrow.right")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(Color.fillupsTheme)
+                .foregroundStyle(AppSection.fillups.color)
 
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.title3.weight(.semibold))
-                .foregroundStyle(Color.fillupsTheme)
+                .foregroundStyle(AppSection.fillups.color)
                 .frame(width: 52, height: 52)
                 .background(
-                    Color.fillupsTheme.opacity(0.12),
+                    AppSection.fillups.color.opacity(0.12),
                     in: Circle()
                 )
         }
@@ -121,7 +121,7 @@ private struct FuelEconomyActionSymbol: View {
     let status: Status
 
     var body: some View {
-        Image(systemName: "fuelpump.fill")
+        Image(systemName: AppSection.fillups.symbol(filled: true))
             .font(.title3.weight(.semibold))
             .foregroundStyle(symbolColor)
             .frame(width: 52, height: 52)
@@ -130,7 +130,7 @@ private struct FuelEconomyActionSymbol: View {
                 if status == .current {
                     Circle()
                         .stroke(
-                            Color.fillupsTheme.opacity(0.55),
+                            AppSection.fillups.color.opacity(0.55),
                             lineWidth: 1.5
                         )
                 }
@@ -140,7 +140,7 @@ private struct FuelEconomyActionSymbol: View {
     private var symbolColor: Color {
         switch status {
         case .current:
-            .fillupsTheme
+            AppSection.fillups.color
         case .upcoming:
             .secondary.opacity(0.55)
         }
@@ -149,7 +149,7 @@ private struct FuelEconomyActionSymbol: View {
     private var backgroundColor: Color {
         switch status {
         case .current:
-            .fillupsTheme.opacity(0.12)
+            AppSection.fillups.color.opacity(0.12)
         case .upcoming:
             .secondary.opacity(0.08)
         }

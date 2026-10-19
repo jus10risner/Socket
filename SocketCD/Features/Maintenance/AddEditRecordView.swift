@@ -42,7 +42,7 @@ struct AddEditRecordView: View {
     var body: some View {
         NavigationStack {
             Form {
-                FormHeaderView(symbolName: "book.and.wrench.fill", primaryText: record != nil ? "Edit Service Log" : "New Service Log", accentColor: Color.maintenanceTheme)
+                FormHeaderView(symbolName: AppSection.maintenance.symbol(filled: true), primaryText: record != nil ? "Edit Service Log" : "New Service Log", accentColor: AppSection.maintenance.color)
                 
                 Section {
                     DatePicker("Service Date", selection: $draftServiceLog.date, displayedComponents: .date)
@@ -116,7 +116,7 @@ struct AddEditRecordView: View {
                         .adaptiveTint()
                 }
             }
-            .tint(Color.maintenanceTheme)
+            .tint(AppSection.maintenance.color)
             .alert("Delete Record", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let record {

@@ -94,7 +94,7 @@ struct DashboardCard<Visual: View, Detail: View>: View {
             action: {},
             quickAction: {}
         ) {
-            CardSymbolView(symbolName: "book.and.wrench.fill")
+            CardSymbolView(symbolName: AppSection.maintenance.symbol(filled: true))
         } detail: {
             CardTextView(
                 headline: "Oil Change",

@@ -42,7 +42,7 @@ struct AddEditFillupView: View {
     var body: some View {
         NavigationStack {
             Form {
-                FormHeaderView(symbolName: "fuelpump.fill", primaryText: fillup != nil ? "Edit Fill-up" : "New Fill-up", accentColor: Color.fillupsTheme)
+                FormHeaderView(symbolName: AppSection.fillups.symbol(filled: true), primaryText: fillup != nil ? "Edit Fill-up" : "New Fill-up", accentColor: AppSection.fillups.color)
                 
                 Section {
                     DatePicker("Fill-up Date", selection: $draftFillup.date, displayedComponents: .date)
@@ -136,7 +136,7 @@ struct AddEditFillupView: View {
                         .adaptiveTint()
                 }
             }
-            .tint(Color.fillupsTheme)
+            .tint(AppSection.fillups.color)
             .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let fillup {

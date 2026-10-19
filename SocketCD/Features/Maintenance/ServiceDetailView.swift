@@ -17,11 +17,11 @@ struct ServiceDetailView: View {
     
     var body: some View {
         List {
-            FormHeaderView(symbolName: "book.and.wrench", primaryText: service.name, secondaryText: "Due every \(service.intervalDescription)", accentColor: Color.maintenanceTheme) {
+            FormHeaderView(symbolName: AppSection.maintenance.symbol(), primaryText: service.name, secondaryText: "Due every \(service.intervalDescription)", accentColor: AppSection.maintenance.color) {
                 Button("Edit") {
                     showingEditService = true
                 }
-                .tint(Color.maintenanceTheme)
+                .tint(AppSection.maintenance.color)
             }
             
             Section {

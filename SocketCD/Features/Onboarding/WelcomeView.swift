@@ -38,11 +38,11 @@ struct WelcomeView: View {
                         }
                         
                         VStack(alignment: .leading, spacing: 15) {
-                            InformationItemView(title: "Track Maintenance", description: "Log services and get notified when each one is due.", imageName: "book.and.wrench.fill", accentColor: Color.maintenanceTheme)
+                            InformationItemView(title: "Track Maintenance", description: "Log services and get notified when each one is due.", imageName: AppSection.maintenance.symbol(filled: true), accentColor: AppSection.maintenance.color)
                             
-                            InformationItemView(title: "Document Repairs", description: "Maintain a clear repair history and share it whenever you want.", imageName: "wrench.adjustable.fill", accentColor: Color.repairsTheme)
+                            InformationItemView(title: "Document Repairs", description: "Maintain a clear repair history and share it whenever you want.", imageName: AppSection.repairs.symbol(filled: true), accentColor: AppSection.repairs.color)
                             
-                            InformationItemView(title: "Log Fill-ups", description: "Track fuel economy and visualize trends over time.", imageName: "fuelpump.fill", accentColor: Color.fillupsTheme)
+                            InformationItemView(title: "Log Fill-ups", description: "Track fuel economy and visualize trends over time.", imageName: AppSection.fillups.symbol(filled: true), accentColor: AppSection.fillups.color)
                         }
                     }
                     .padding(.horizontal, 40)

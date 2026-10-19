@@ -17,9 +17,9 @@ struct TrendArrowView: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color(.fillupsTheme).gradient)
+                .fill(AppSection.fillups.color.gradient)
 
-            Image(systemName: "fuelpump.fill")
+            Image(systemName: AppSection.fillups.symbol(filled: true))
                 .imageScale(.large)
                 .offset(
                     x: animatingTrendArrow ? fuelPumpOffset.width : 0,

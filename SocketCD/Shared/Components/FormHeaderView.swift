@@ -54,5 +54,5 @@ struct FormHeaderView<Content: View>: View {
 }
 
 #Preview {
-    FormHeaderView(symbolName: "wrench.adjustable.fill", primaryText: "New Repair", accentColor: Color.repairsTheme, content: {})
+    FormHeaderView(symbolName: AppSection.repairs.symbol(filled: true), primaryText: "New Repair", accentColor: AppSection.repairs.color, content: {})
 }

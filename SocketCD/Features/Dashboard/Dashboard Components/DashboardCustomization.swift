@@ -64,6 +64,7 @@ struct DashboardLayoutStore {
 
 struct DashboardCustomizationView: View {
     @Binding var preferences: [DashboardSectionPreference]
+    @EnvironmentObject private var settings: AppSettingsStore
 
     let vehicleID: UUID?
     private let store = DashboardLayoutStore()
@@ -80,7 +81,7 @@ struct DashboardCustomizationView: View {
                         } icon: {
                             if preference.isVisible {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(Color.white, Color.accent)
+                                    .foregroundStyle(Color.white, settings.selectedAccent())
                             } else {
                                 Image(systemName: "circle")
                                     .foregroundStyle(Color.secondary)

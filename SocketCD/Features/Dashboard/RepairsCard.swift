@@ -29,8 +29,8 @@ struct RepairsCard: View {
     
     var body: some View {
         DashboardCard(
-            title: "Repairs",
-            color: Color(.repairsTheme),
+            title: String(localized: AppSection.repairs.title),
+            color: AppSection.repairs.color,
             quickActionTitle: "Add Repair",
             accessibilityValue: accessibilityValue,
             accessibilityHint: String(localized: "Opens repair history")
@@ -39,7 +39,7 @@ struct RepairsCard: View {
         } quickAction: {
             activeSheet = .addRepair
         } visual: {
-            CardSymbolView(symbolName: "wrench.adjustable.fill")
+            CardSymbolView(symbolName: AppSection.repairs.symbol(filled: true))
         } detail: {
             if let repair = repairs.first {
                 CardTextView(

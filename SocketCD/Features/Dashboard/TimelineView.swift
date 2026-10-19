@@ -27,11 +27,11 @@ struct TimelineView: View {
                                         Group {
                                             switch item.type {
                                             case .repair:
-                                                Image(systemName: "wrench.adjustable.fill")
-                                                    .foregroundStyle(Color(.repairsTheme))
+                                                Image(systemName: AppSection.repairs.symbol(filled: true))
+                                                    .foregroundStyle(AppSection.repairs.color)
                                             default:
-                                                Image(systemName: "book.and.wrench.fill")
-                                                    .foregroundStyle(Color(.maintenanceTheme))
+                                                Image(systemName: AppSection.maintenance.symbol(filled: true))
+                                                    .foregroundStyle(AppSection.maintenance.color)
                                             }
                                         }
                                         .imageScale(.small)

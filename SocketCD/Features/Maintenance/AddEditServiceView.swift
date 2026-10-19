@@ -41,7 +41,7 @@ struct AddEditServiceView: View {
     var body: some View {
         NavigationStack {
             Form {
-                FormHeaderView(symbolName: "book.and.wrench", primaryText: service != nil ? "Edit Service" : "New Service", accentColor: Color.maintenanceTheme)
+                FormHeaderView(symbolName: AppSection.maintenance.symbol(), primaryText: service != nil ? "Edit Service" : "New Service", accentColor: AppSection.maintenance.color)
                 
                 Section {
                     TextField("Service Name (e.g. Oil Change)", text: $draftService.name)
@@ -193,7 +193,7 @@ struct AddEditServiceView: View {
                         .adaptiveTint()
                 }
             }
-            .tint(Color.maintenanceTheme)
+            .tint(AppSection.maintenance.color)
             .alert("Delete Service", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let service {
@@ -285,7 +285,7 @@ struct AddEditServiceView: View {
                             showingMoreInfo = true
                         }
                         .labelStyle(.iconOnly)
-                        .foregroundStyle(Color.maintenanceTheme)
+                        .foregroundStyle(AppSection.maintenance.color)
                         .buttonStyle(.plain)
                         .popover(isPresented: $showingMoreInfo) {
                             PopoverContent(text: """

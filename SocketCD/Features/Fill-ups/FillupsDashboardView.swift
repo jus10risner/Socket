@@ -43,7 +43,7 @@ struct FillupsDashboardView: View {
                             showingLatestExplanation = true
                         }
                         .buttonStyle(.plain)
-                        .foregroundStyle(Color.fillupsTheme)
+                        .foregroundStyle(AppSection.fillups.color)
                         .textCase(nil)
                         .popover(
                             isPresented: $showingLatestExplanation
@@ -68,14 +68,14 @@ struct FillupsDashboardView: View {
                 }
             }
         }
-        .vehicleNavigationTitle("Fill-ups", vehicleName: vehicle.name)
+        .sectionNavigationTitle(AppSection.fillups.title, vehicleName: vehicle.name)
         .scrollIndicators(.hidden)
         .scrollContentBackground(.hidden)
         .background(Color(.systemGroupedBackground))
         .overlay {
             if fillups.isEmpty {
                 ContentUnavailableView {
-                    Label("No Fill-ups", systemImage: "fuelpump")
+                    Label("No Fill-ups", systemImage: AppSection.fillups.symbol())
                 } description: {
                     Text("Log each time you refuel to see fuel economy trends over time.")
                 }
@@ -97,7 +97,7 @@ struct FillupsDashboardView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.circle)
-                .tint(Color.fillupsTheme)
+                .tint(AppSection.fillups.color)
             }
         }
     }

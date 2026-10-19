@@ -257,7 +257,7 @@ struct FuelEconomyChartView: View {
                     y: .value("Fuel Economy", revealedValue(for: point))
                 )
                 .interpolationMethod(.catmullRom)
-                .foregroundStyle(Color.fillupsTheme.gradient)
+                .foregroundStyle(AppSection.fillups.color.gradient)
                 .lineStyle(
                     StrokeStyle(
                         lineWidth: 3,
@@ -280,8 +280,8 @@ struct FuelEconomyChartView: View {
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
-                            Color.fillupsTheme.opacity(0.3),
-                            Color.fillupsTheme.opacity(0.1)
+                            AppSection.fillups.color.opacity(0.3),
+                            AppSection.fillups.color.opacity(0.1)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
@@ -297,7 +297,7 @@ struct FuelEconomyChartView: View {
                     y: .value("Fuel Economy", revealedValue(for: point))
                 )
                 .symbolSize(45)
-                .foregroundStyle(Color.fillupsTheme)
+                .foregroundStyle(AppSection.fillups.color)
                 .opacity(plotOpacity)
                 .accessibilityHidden(true)
             }
@@ -323,7 +323,7 @@ struct FuelEconomyChartView: View {
                 let frame = geometry[plotFrame]
 
                 Circle()
-                    .fill(Color.fillupsTheme)
+                    .fill(AppSection.fillups.color)
                     .frame(width: 14, height: 14)
                     .position(
                         x: frame.origin.x + xPosition,

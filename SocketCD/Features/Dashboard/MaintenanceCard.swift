@@ -36,8 +36,8 @@ struct MaintenanceCard: View {
     
     var body: some View {
         DashboardCard(
-            title: "Maintenance",
-            color: Color(.maintenanceTheme),
+            title: String(localized: AppSection.maintenance.title),
+            color: AppSection.maintenance.color,
             quickActionTitle: quickActionTitle,
             accessibilityValue: accessibilityValue,
             accessibilityHint: accessibilityHint,
@@ -51,7 +51,7 @@ struct MaintenanceCard: View {
             if let service = nextDueService {
                 DashboardServiceIndicator(vehicle: vehicle, service: service)
             } else {
-                CardSymbolView(symbolName: "book.and.wrench.fill")
+                CardSymbolView(symbolName: AppSection.maintenance.symbol(filled: true))
             }
         } detail: {
             if let service = nextDueService {
@@ -230,12 +230,12 @@ private struct DashboardServiceIndicator: View {
 
     private var displayedSymbol: String {
         guard showsStatus else {
-            return "book.and.wrench.fill"
+            return AppSection.maintenance.symbol(filled: true)
         }
 
         switch service.serviceStatus {
         case .notDue:
-            return "book.and.wrench.fill"
+            return AppSection.maintenance.symbol(filled: true)
         case .due:
             return "clock.fill"
         case .overDue:
@@ -246,7 +246,7 @@ private struct DashboardServiceIndicator: View {
     private var statusColor: Color {
         switch service.serviceStatus {
         case .notDue:
-            return Color(.maintenanceTheme)
+            return AppSection.maintenance.color
         case .due:
             return .yellow
         case .overDue:
