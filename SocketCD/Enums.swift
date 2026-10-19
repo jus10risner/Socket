@@ -9,8 +9,28 @@ import SwiftUI
 
 // MARK: - VehicleDashboardView
 
-enum AppSection: String, CaseIterable {
-    case maintenance, repairs, fillups, customInfo
+enum AppSection: String, CaseIterable, Codable, Identifiable {
+    case maintenance, fillups, repairs, customInfo
+
+    var id: String { rawValue }
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .maintenance: "Maintenance"
+        case .fillups: "Fill-ups"
+        case .repairs: "Repairs"
+        case .customInfo: "Custom Info"
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .maintenance: "book.and.wrench.fill"
+        case .fillups: "fuelpump.fill"
+        case .repairs: "wrench.adjustable.fill"
+        case .customInfo: "bookmark.fill"
+        }
+    }
 }
 
 // MARK: - Fill-ups

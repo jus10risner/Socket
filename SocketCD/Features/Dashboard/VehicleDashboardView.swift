@@ -31,6 +31,8 @@ struct VehicleDashboardView: View {
     @State private var odometerWarning: OdometerWarning?
     @State private var vehicleNameVisibility: CGFloat = 1
     @State private var scrollPosition = ScrollPosition()
+    @State private var dashboardSections: [DashboardSectionPreference] = .dashboardDefaults
+    @State private var showingDashboardCustomization = false
 
     @State private var shareItem: ShareItem?
     @State private var showingExportOptions = false
@@ -93,20 +95,23 @@ struct VehicleDashboardView: View {
                         Spacer()
                     }
 
-                    LazyVGrid(columns: columns, spacing: gridSpacing) {
-                        MaintenanceCard(
-                            vehicle: vehicle,
-                            activeSheet: $activeSheet,
-                            selectedSection: $selectedSection,
-                            servicesForNewLog: $servicesForNewLog
-                        )
-                        
-                        FillupsCard(vehicle: vehicle, activesheet: $activeSheet, selectedSection: $selectedSection)
-                        
-                        RepairsCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
-                        
-                        CustomInfoCard(vehicle: vehicle, activeSheet: $activeSheet, selectedSection: $selectedSection)
+                    DashboardCardGrid(
+                        sections: dashboardSections,
+                        columns: columns,
+                        spacing: gridSpacing,
+                        vehicle: vehicle,
+                        activeSheet: $activeSheet,
+                        selectedSection: $selectedSection,
+                        servicesForNewLog: $servicesForNewLog
+                    )
+                    
+                    Button("Edit Dashboard") {
+                        showingDashboardCustomization = true
                     }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                    .padding(.vertical)
+                    .frame(maxWidth: .infinity)
                 }
                 .frame(maxWidth: maximumGridWidth)
                 .frame(maxWidth: .infinity)
@@ -129,6 +134,12 @@ struct VehicleDashboardView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(item: $selectedSection) { section in
                 destinationView(for: section, vehicle: vehicle)
+            }
+            .navigationDestination(isPresented: $showingDashboardCustomization) {
+                DashboardCustomizationView(
+                    preferences: $dashboardSections,
+                    vehicleID: vehicle.id
+                )
             }
             .sheet(item: $activeSheet, onDismiss: refreshDashboard) { sheet in
                 switch sheet {
@@ -201,10 +212,14 @@ struct VehicleDashboardView: View {
             }
             .onChange(of: vehicle.objectID) {
                 vehicleNameVisibility = 1
+                dashboardSections = DashboardLayoutStore().load(for: vehicle.id)
             }
         }
         .tint(nil)
-        .onAppear(perform: refreshDashboard)
+        .onAppear {
+            dashboardSections = DashboardLayoutStore().load(for: vehicle.id)
+            refreshDashboard()
+        }
     }
 
     private var enteredOdometer: Int? {
@@ -334,6 +349,54 @@ struct VehicleDashboardView: View {
             FillupsDashboardView(vehicle: vehicle)
         case .customInfo:
             CustomInfoListView(vehicle: vehicle)
+        }
+    }
+}
+
+private struct DashboardCardGrid: View {
+    let sections: [DashboardSectionPreference]
+    let columns: [GridItem]
+    let spacing: CGFloat
+    @ObservedObject var vehicle: Vehicle
+    @Binding var activeSheet: ActiveSheet?
+    @Binding var selectedSection: AppSection?
+    @Binding var servicesForNewLog: [Service]
+
+    private var visibleSections: [DashboardSectionPreference] {
+        sections.filter(\.isVisible)
+    }
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: spacing) {
+            ForEach(visibleSections) { preference in
+                switch preference.section {
+                case .maintenance:
+                    MaintenanceCard(
+                        vehicle: vehicle,
+                        activeSheet: $activeSheet,
+                        selectedSection: $selectedSection,
+                        servicesForNewLog: $servicesForNewLog
+                    )
+                case .repairs:
+                    RepairsCard(
+                        vehicle: vehicle,
+                        activeSheet: $activeSheet,
+                        selectedSection: $selectedSection
+                    )
+                case .fillups:
+                    FillupsCard(
+                        vehicle: vehicle,
+                        activesheet: $activeSheet,
+                        selectedSection: $selectedSection
+                    )
+                case .customInfo:
+                    CustomInfoCard(
+                        vehicle: vehicle,
+                        activeSheet: $activeSheet,
+                        selectedSection: $selectedSection
+                    )
+                }
+            }
         }
     }
 }

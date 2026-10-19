@@ -45,6 +45,7 @@
 		9E52CCB42E6F54E600B3CB45 /* ServiceLog+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */; };
 		9E52CCB62E6F569E00B3CB45 /* DraftServiceLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB52E6F569E00B3CB45 /* DraftServiceLog.swift */; };
 		9E52CCBA2E72FC0C00B3CB45 /* SelectedServicesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E52CCB92E72FC0C00B3CB45 /* SelectedServicesListView.swift */; };
+		9E54AFD23082BCB8005882E6 /* DashboardCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E54AFD13082BCB8005882E6 /* DashboardCustomization.swift */; };
 		9E620BF02BBDBEAE005E16DD /* DraftRepair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */; };
 		9E620BF62BC04531005E16DD /* DraftFillup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF52BC04531005E16DD /* DraftFillup.swift */; };
 		9E620BFA2BC05754005E16DD /* DraftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620BF92BC05754005E16DD /* DraftService.swift */; };
@@ -186,6 +187,7 @@
 		9E52CCB32E6F54E600B3CB45 /* ServiceLog+helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceLog+helper.swift"; sourceTree = "<group>"; };
 		9E52CCB52E6F569E00B3CB45 /* DraftServiceLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftServiceLog.swift; sourceTree = "<group>"; };
 		9E52CCB92E72FC0C00B3CB45 /* SelectedServicesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedServicesListView.swift; sourceTree = "<group>"; };
+		9E54AFD13082BCB8005882E6 /* DashboardCustomization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCustomization.swift; sourceTree = "<group>"; };
 		9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftRepair.swift; sourceTree = "<group>"; };
 		9E620BF52BC04531005E16DD /* DraftFillup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftFillup.swift; sourceTree = "<group>"; };
 		9E620BF92BC05754005E16DD /* DraftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftService.swift; sourceTree = "<group>"; };
@@ -409,6 +411,7 @@
 				9EE97E843054617400F2AA5F /* DashboardCard.swift */,
 				9ED4DB77305882F400C2A373 /* CardTextView.swift */,
 				9E30BD12306EACCA00B8A3A3 /* CardSymbolView.swift */,
+				9E54AFD13082BCB8005882E6 /* DashboardCustomization.swift */,
 			);
 			path = "Dashboard Components";
 			sourceTree = "<group>";
@@ -892,6 +895,7 @@
 				9E63DD373062DA72005B596B /* FuelEconomySetupView.swift in Sources */,
 				9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */,
 				9EEAC49C2BA1EE440053C65E /* AppSettingsView.swift in Sources */,
+				9E54AFD23082BCB8005882E6 /* DashboardCustomization.swift in Sources */,
 				9EEAC4B32BA1F08F0053C65E /* CameraCapture.swift in Sources */,
 				9EEAC4982BA1E99F0053C65E /* Enums.swift in Sources */,
 				9E5067CB3047395400744533 /* ChartPoint.swift in Sources */,
