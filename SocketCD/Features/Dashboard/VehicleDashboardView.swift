@@ -29,8 +29,7 @@ struct VehicleDashboardView: View {
     @State private var newOdometerValue = ""
     @State private var pendingOdometer: Int?
     @State private var odometerWarning: OdometerWarning?
-    @State private var vehicleNameVisibility: CGFloat = 1
-    @State private var scrollPosition = ScrollPosition()
+    @State private var isVehicleNameInToolbar = false
     @State private var dashboardSections: [DashboardSectionPreference] = .dashboardDefaults
     @State private var showingDashboardCustomization = false
 
@@ -66,12 +65,12 @@ struct VehicleDashboardView: View {
                         VStack(alignment: .leading, spacing: 0) {
                             Text(vehicle.name)
                                 .font(.title3.bold())
-                                .opacity(vehicleNameVisibility)
-                                .onGeometryChange(for: CGFloat.self) { proxy in
-                                    let frame = proxy.frame(in: .scrollView(axis: .vertical))
-                                    return min(max(frame.maxY / frame.height, 0), 1)
-                                } action: { visibility in
-                                    vehicleNameVisibility = visibility
+                                .opacity(isVehicleNameInToolbar ? 0 : 1)
+                                .accessibilityHidden(isVehicleNameInToolbar)
+                                .onGeometryChange(for: Bool.self) { proxy in
+                                    proxy.frame(in: .scrollView(axis: .vertical)).maxY <= 0
+                                } action: { isBehindToolbar in
+                                    isVehicleNameInToolbar = isBehindToolbar
                                 }
 
                             HStack(spacing: 10) {
@@ -115,16 +114,6 @@ struct VehicleDashboardView: View {
                 }
                 .frame(maxWidth: maximumGridWidth)
                 .frame(maxWidth: .infinity)
-            }
-            .scrollPosition($scrollPosition)
-            .onScrollPhaseChange { _, newPhase in
-                if newPhase == .idle,
-                   vehicleNameVisibility > 0.5,
-                   vehicleNameVisibility < 0.99 {
-                    withAnimation(.smooth(duration: 0.35)) {
-                        scrollPosition.scrollTo(edge: .top)
-                    }
-                }
             }
             .scrollIndicators(.hidden)
             .padding(.horizontal)
@@ -211,7 +200,7 @@ struct VehicleDashboardView: View {
                 vehicleToolbar
             }
             .onChange(of: vehicle.objectID) {
-                vehicleNameVisibility = 1
+                isVehicleNameInToolbar = false
                 dashboardSections = DashboardLayoutStore().load(for: vehicle.id)
             }
         }
@@ -297,8 +286,9 @@ struct VehicleDashboardView: View {
                 .minimumScaleFactor(0.75)
                 .truncationMode(.tail)
                 .multilineTextAlignment(.center)
-                .opacity(1 - vehicleNameVisibility)
-                .accessibilityHidden(vehicleNameVisibility > 0)
+                .opacity(isVehicleNameInToolbar ? 1 : 0)
+                .accessibilityHidden(!isVehicleNameInToolbar)
+                .animation(.easeInOut(duration: 0.2), value: isVehicleNameInToolbar)
         }
     }
     
