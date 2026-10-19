@@ -156,7 +156,7 @@ extension Vehicle {
         // Collect all ServiceLogs from the service records
         let logsSet: Set<ServiceLog> = Set(
             servicesSet
-                .flatMap { $0.sortedServiceRecordsArray.filter { $0.serviceLog?.isBaseline != true } }
+                .flatMap(\.serviceHistoryRecordsArray)
                 .compactMap { $0.serviceLog }
         )
 
@@ -172,7 +172,7 @@ extension Vehicle {
 
         // Add legacy ServiceRecords (not in a ServiceLog)
         let legacyRecords = servicesSet
-            .flatMap { $0.sortedServiceRecordsArray }
+            .flatMap(\.serviceHistoryRecordsArray)
             .filter { $0.serviceLog == nil }
 
         for record in legacyRecords {

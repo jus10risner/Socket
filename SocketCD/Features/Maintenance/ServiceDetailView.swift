@@ -41,9 +41,9 @@ struct ServiceDetailView: View {
                 }
             }
             
-            if !service.sortedServiceRecordsArray.isEmpty && !service.sortedServiceRecordsArray.contains(where: { $0.serviceLog?.isBaseline == true }) {
+            if !service.serviceHistoryRecordsArray.isEmpty {
                 Section("Service History") {
-                    ForEach(service.sortedServiceRecordsArray, id: \.id) { record in
+                    ForEach(service.serviceHistoryRecordsArray, id: \.id) { record in
                         NavigationLink {
                             RecordDetailView(record: record, vehicle: vehicle, service: service)
                         } label: {

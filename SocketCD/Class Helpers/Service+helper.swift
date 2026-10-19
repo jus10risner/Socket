@@ -76,6 +76,11 @@ extension Service {
             $0.date > $1.date
         }
     }
+
+    /// Records that represent actual service history rather than a synthetic starting point.
+    var serviceHistoryRecordsArray: [ServiceRecord] {
+        sortedServiceRecordsArray.filter { $0.serviceLog?.isBaseline != true }
+    }
     
     // Uses a milesPerDay value to estimate how long until a service is due; this helps normalize miles until due and days until due
     func estimatedDaysUntilDue(currentOdometer: Int, milesPerDay: Int = 30) -> Int? {
@@ -329,16 +334,19 @@ extension Service {
     
     func addNewServiceRecord(draftServiceLog: DraftServiceLog, allServices: [Service]) {
         let context = DataController.shared.container.viewContext
-        
-        // Delete baseline service log, if one exists, before adding a user-created service log
-        if let baselineServiceLog = sortedServiceRecordsArray.first(where: { $0.serviceLog?.isBaseline == true }) {
-            context.delete(baselineServiceLog)
-        }
-        
+
         // Resolve selected services from IDs
         let selectedServices = draftServiceLog.selectedServiceIDs.compactMap { id in
             allServices.first(where: { $0.id == id })
         }
+
+        // Remove synthetic starting points from every service included in the first real log.
+        let baselineRecords = selectedServices.flatMap { service in
+            service.sortedServiceRecordsArray.filter { $0.serviceLog?.isBaseline == true }
+        }
+        let baselineLogs = Set(baselineRecords.compactMap(\.serviceLog))
+        baselineRecords.forEach(context.delete)
+        baselineLogs.forEach(context.delete)
 
         // Create a new ServiceLog
         let log = ServiceLog(context: context)

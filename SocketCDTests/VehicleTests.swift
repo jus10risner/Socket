@@ -62,4 +62,47 @@ struct VehicleTests {
         )
         #expect(savedVehicle.lastOdometerLogAt == logTime)
     }
+
+    @Test func `Baseline is excluded without hiding later service records or exports`() {
+        let controller = TestDataController()
+        let context = controller.container.viewContext
+        let vehicle = Vehicle(context: context)
+        let service = Service(context: context)
+        service.vehicle = vehicle
+
+        let baselineLog = ServiceLog(context: context)
+        baselineLog.id = UUID()
+        baselineLog.date = Date(timeIntervalSinceReferenceDate: 100)
+        baselineLog.isBaseline = true
+
+        let baselineRecord = ServiceRecord(context: context)
+        baselineRecord.id = UUID()
+        baselineRecord.date = baselineLog.date
+        baselineRecord.service = service
+        baselineRecord.serviceLog = baselineLog
+
+        let firstVisibleLog = ServiceLog(context: context)
+        firstVisibleLog.id = UUID()
+        firstVisibleLog.date = Date(timeIntervalSinceReferenceDate: 200)
+
+        let firstVisibleRecord = ServiceRecord(context: context)
+        firstVisibleRecord.id = UUID()
+        firstVisibleRecord.date = firstVisibleLog.date
+        firstVisibleRecord.service = service
+        firstVisibleRecord.serviceLog = firstVisibleLog
+
+        let secondVisibleLog = ServiceLog(context: context)
+        secondVisibleLog.id = UUID()
+        secondVisibleLog.date = Date(timeIntervalSinceReferenceDate: 300)
+
+        let secondVisibleRecord = ServiceRecord(context: context)
+        secondVisibleRecord.id = UUID()
+        secondVisibleRecord.date = secondVisibleLog.date
+        secondVisibleRecord.service = service
+        secondVisibleRecord.serviceLog = secondVisibleLog
+
+        #expect(service.serviceHistoryRecordsArray == [secondVisibleRecord, firstVisibleRecord])
+        #expect(vehicle.serviceAndRepairTimeline.count == 2)
+        #expect(vehicle.groupedServiceAndRepairTimeline.flatMap(\.entries).count == 2)
+    }
 }
