@@ -22,7 +22,7 @@ extension Repair {
         get { name_ ?? "" }
         set { name_ = newValue }
     }
-    
+
     var odometer: Int {
         get { vehicle?.displayedDistance(fromStored: odometer_) ?? Int(odometer_) }
         set { odometer_ = vehicle?.storedDistance(fromDisplayed: newValue) ?? Int64(newValue) }
@@ -58,6 +58,7 @@ extension Repair {
         
         self.date = draftRepair.date
         self.name = draftRepair.name
+        self.category = draftRepair.category
         self.odometer = draftRepair.odometer ?? 0
         self.cost = draftRepair.cost
         self.note = draftRepair.note
@@ -72,5 +73,12 @@ extension Repair {
         }
         
         try? context.save()
+    }
+}
+
+extension RepairCategory {
+    var name: String {
+        get { name_ ?? "" }
+        set { name_ = newValue.trimmingCharacters(in: .whitespacesAndNewlines) }
     }
 }

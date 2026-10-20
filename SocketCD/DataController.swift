@@ -57,6 +57,7 @@ final class DataController: ObservableObject {
                 print("✅ Loaded persistent store: \(storeDescription.url?.absoluteString ?? "")")
                 DispatchQueue.main.async {
                     self.captureLegacyMeasurementUnitsIfNeeded()
+                    self.seedDefaultRepairCategoriesIfNeeded()
                 }
             }
         }
@@ -99,6 +100,30 @@ final class DataController: ObservableObject {
                 volumeUnit: legacyVolumeUnit,
                 fuelEconomyUnit: settings.fuelEconomyUnit
             )
+        }
+
+        save()
+    }
+
+    private func seedDefaultRepairCategoriesIfNeeded() {
+        let context = container.viewContext
+        let request = RepairCategory.fetchRequest()
+
+        guard (try? context.count(for: request)) == 0 else { return }
+
+        let names = [
+            String(localized: "Engine"),
+            String(localized: "Suspension"),
+            String(localized: "Brakes"),
+            String(localized: "Electrical"),
+            String(localized: "Tires & Wheels"),
+            String(localized: "Body")
+        ]
+
+        for name in names {
+            let category = RepairCategory(context: context)
+            category.id = UUID()
+            category.name = name
         }
 
         save()

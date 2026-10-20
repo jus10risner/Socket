@@ -5,6 +5,7 @@
 //  Created by Justin Risner on 3/14/24.
 //
 
+import CoreData
 import SwiftUI
 
 struct AddEditRepairView: View {
@@ -55,6 +56,15 @@ struct AddEditRepairView: View {
                     LabeledInput(label: "Cost") {
                         TextField("Optional", value: $draftRepair.cost, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.decimalPad)
+                    }
+                    
+                    NavigationLink {
+                        RepairCategorySelectionView(selection: $draftRepair.category)
+                    } label: {
+                        LabeledInput(label: "Category") {
+                            Text(draftRepair.category?.name ?? "Optional")
+                                .foregroundStyle(draftRepair.category == nil ? .tertiary : .primary)
+                        }
                     }
                 }
                 
@@ -142,6 +152,202 @@ struct AddEditRepairView: View {
         }
 
         dismiss()
+    }
+}
+
+private struct RepairCategorySelectionView: View {
+    @Environment(\.managedObjectContext) private var context
+    @Binding private var selection: RepairCategory?
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \RepairCategory.name_, ascending: true)],
+        predicate: NSPredicate(format: "isArchived == NO")
+    ) private var categories: FetchedResults<RepairCategory>
+
+    @State private var showingNewCategoryAlert = false
+    @State private var newCategoryName = ""
+    @State private var showingRenameAlert = false
+    @State private var categoryToRename: RepairCategory?
+    @State private var renamedCategory = ""
+    @State private var showingDeleteConfirmation = false
+    @State private var categoryToDelete: RepairCategory?
+
+    init(selection: Binding<RepairCategory?>) {
+        self._selection = selection
+    }
+
+    var body: some View {
+        List {
+            Section {
+                ForEach(categories, id: \.objectID) { category in
+                Button {
+                    selection = isSelected(category) ? nil : category
+                } label: {
+                    LabeledContent(category.name) {
+                        if isSelected(category) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(AppSection.repairs.color)
+                        } else {
+                            Image(systemName: "circle")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .imageScale(.large)
+                    .foregroundStyle(Color.primary)
+                }
+                .swipeActions(edge: .trailing) {
+                    Button("Delete", systemImage: "trash") {
+                        categoryToDelete = category
+                        showingDeleteConfirmation = true
+                    }
+                    .tint(.red)
+                }
+                .swipeActions(edge: .leading) {
+                    Button("Rename", systemImage: "pencil") {
+                        categoryToRename = category
+                        renamedCategory = category.name
+                        showingRenameAlert = true
+                    }
+                    .tint(AppSection.repairs.color)
+                }
+                }
+            } footer: {
+                Text("Use categories to organize repairs and group them in the repairs list.")
+            }
+        }
+        .navigationTitle("Category")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button("Add Category", systemImage: "plus") {
+                    newCategoryName = ""
+                    showingNewCategoryAlert = true
+                }
+            }
+        }
+        .alert("New Category", isPresented: $showingNewCategoryAlert) {
+            TextField("Category Name", text: $newCategoryName)
+                .textInputAutocapitalization(.words)
+
+            Button("Add") {
+                addCategory()
+            }
+            .disabled(newCategoryName.isBlank)
+
+            Button("Cancel", role: .cancel) {
+                newCategoryName = ""
+            }
+        }
+        .alert("Rename Category", isPresented: $showingRenameAlert) {
+            TextField("Category Name", text: $renamedCategory)
+                .textInputAutocapitalization(.words)
+
+            Button("Rename") {
+                renameCategory()
+            }
+            .disabled(renamedCategory.isBlank)
+
+            Button("Cancel", role: .cancel) { }
+        }
+        .confirmationDialog(
+            "Delete Category?",
+            isPresented: $showingDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                deleteCategory()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Repairs in this category will become uncategorized.")
+        }
+        .tint(nil)
+    }
+
+    private func addCategory() {
+        let name = normalized(newCategoryName)
+
+        withAnimation {
+            if let existingCategory = category(named: name) {
+                existingCategory.isArchived = false
+                selection = existingCategory
+            } else {
+                let category = RepairCategory(context: context)
+                category.id = UUID()
+                category.name = name
+                selection = category
+            }
+
+            save()
+        }
+        newCategoryName = ""
+    }
+
+    private func renameCategory() {
+        guard let categoryToRename else { return }
+        let replacement = normalized(renamedCategory)
+
+        if let existingCategory = category(named: replacement, excluding: categoryToRename) {
+            for repair in categoryToRename.repairs as? Set<Repair> ?? [] {
+                repair.category = existingCategory
+            }
+            existingCategory.isArchived = false
+            if isSelected(categoryToRename) {
+                selection = existingCategory
+            }
+            categoryToRename.isArchived = true
+        } else {
+            categoryToRename.name = replacement
+        }
+
+        save()
+        self.categoryToRename = nil
+    }
+
+    private func deleteCategory() {
+        guard let categoryToDelete else { return }
+
+        withAnimation {
+            for repair in categoryToDelete.repairs as? Set<Repair> ?? [] {
+                repair.category = nil
+            }
+
+            if isSelected(categoryToDelete) {
+                selection = nil
+            }
+
+            categoryToDelete.isArchived = true
+            save()
+        }
+        self.categoryToDelete = nil
+    }
+
+    private func isSelected(_ category: RepairCategory) -> Bool {
+        selection?.objectID == category.objectID
+    }
+
+    private func category(named name: String, excluding excludedCategory: RepairCategory? = nil) -> RepairCategory? {
+        let request = RepairCategory.fetchRequest()
+        guard let allCategories = try? context.fetch(request) else { return nil }
+
+        return allCategories.first { category in
+            category.objectID != excludedCategory?.objectID
+                && comparisonKey(for: category.name) == comparisonKey(for: name)
+        }
+    }
+
+    private func comparisonKey(for category: String) -> String {
+        normalized(category).folding(
+            options: [.caseInsensitive, .diacriticInsensitive],
+            locale: .current
+        )
+    }
+
+    private func normalized(_ category: String) -> String {
+        category.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func save() {
+        try? context.save()
     }
 }
 

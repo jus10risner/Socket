@@ -17,7 +17,7 @@ struct RepairDetailView: View {
         List {
             Section {
                 LabeledContent("Date", value: repair.date.formatted(date: .numeric, time: .omitted))
-                
+
                 LabeledContent("Name", value: repair.name)
                 
                 LabeledContent("Odometer") {
@@ -25,6 +25,10 @@ struct RepairDetailView: View {
                 }
                 
                 LabeledContent("Cost", value: (repair.cost ?? 0).asCurrency())
+                
+                if let category = repair.category, !category.name.isEmpty {
+                    LabeledContent("Category", value: category.name)
+                }
             }
             
             FormFooterView(

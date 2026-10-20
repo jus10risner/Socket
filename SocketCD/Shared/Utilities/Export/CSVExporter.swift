@@ -18,7 +18,7 @@ struct CSVExporter {
         dateFormatter.dateFormat = "MM/dd/yyyy"
 
         var csvRows: [String] = []
-        csvRows.append("Type,Date,Odometer,Name,Cost,Note")
+        csvRows.append("Type,Date,Odometer,Name,Category,Cost,Note")
 
         for entry in vehicle.serviceAndRepairTimeline {
             let date = dateFormatter.string(from: entry.date)
@@ -28,6 +28,7 @@ struct CSVExporter {
             let note: String
             let cost: String
             let type: String
+            let category: String
 
             switch entry.type {
             case .serviceRecord(let record):
@@ -35,6 +36,7 @@ struct CSVExporter {
                 note = record.note
                 cost = String(format: "%.2f", record.cost ?? 0)
                 type = "Service"
+                category = ""
             case .serviceLog(let log):
                 // ServiceLog: combine all service names into one field
                 let namesArray = log.sortedServicesArray.map { $0.name }
@@ -42,18 +44,21 @@ struct CSVExporter {
                 note = log.note
                 cost = String(format: "%.2f", log.cost ?? 0)
                 type = "Service"
+                category = ""
             case .repair(let repair):
                 name = repair.name
                 note = repair.note
                 cost = String(format: "%.2f", repair.cost ?? 0)
                 type = "Repair"
+                category = repair.category?.name ?? ""
             }
 
             // Escape quotes and commas in the note
             let escapedNote = "\"\(note.replacingOccurrences(of: "\"", with: "\"\""))\""
             let escapedName = "\"\(name.replacingOccurrences(of: "\"", with: "\"\""))\""
+            let escapedCategory = "\"\(category.replacingOccurrences(of: "\"", with: "\"\""))\""
 
-            let row = "\(type),\(date),\(odometer),\(escapedName),\(cost),\(escapedNote)"
+            let row = "\(type),\(date),\(odometer),\(escapedName),\(escapedCategory),\(cost),\(escapedNote)"
             csvRows.append(row)
         }
 

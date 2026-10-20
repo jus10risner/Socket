@@ -51,9 +51,16 @@
         <attribute name="name_" optional="YES" attributeType="String"/>
         <attribute name="note_" optional="YES" attributeType="String"/>
         <attribute name="odometer_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RepairCategory" inverseName="repairs" inverseEntity="RepairCategory"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AttachedDocument" inverseName="repair" inverseEntity="AttachedDocument"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="repair" inverseEntity="Photo"/>
         <relationship name="vehicle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vehicle" inverseName="repairs" inverseEntity="Vehicle"/>
+    </entity>
+    <entity name="RepairCategory" representedClassName="RepairCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isArchived" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="name_" optional="YES" attributeType="String"/>
+        <relationship name="repairs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Repair" inverseName="category" inverseEntity="Repair"/>
     </entity>
     <entity name="Service" representedClassName="Service" syncable="YES" codeGenerationType="class">
         <attribute name="distanceBasedNotificationIdentifier_" optional="YES" attributeType="String"/>

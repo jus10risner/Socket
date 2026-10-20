@@ -171,6 +171,9 @@ struct PDFExporter {
 
                         let titleY = cursorY
                         var metadata: [String] = []
+                        if let category = content.category {
+                            metadata.append(category)
+                        }
                         if commonOdometer == nil {
                             metadata.append(String(
                                 localized: "\(record.odometer.formatted()) \(vehicle.distanceUnit.abbreviated)",
@@ -237,11 +240,12 @@ struct PDFExporter {
         }
     }
 
-    private static func content(for record: VehicleExportRecord) -> (title: String, note: String, cost: Double?, photos: [Photo]) {
+    private static func content(for record: VehicleExportRecord) -> (title: String, category: String?, note: String, cost: Double?, photos: [Photo]) {
         switch record.type {
         case .serviceRecord(let serviceRecord):
             return (
                 serviceRecord.service?.name ?? String(localized: "Service", comment: "Fallback name for a service record"),
+                nil,
                 serviceRecord.note.trimmingCharacters(in: .whitespacesAndNewlines),
                 serviceRecord.cost,
                 serviceRecord.sortedPhotosArray
@@ -249,6 +253,7 @@ struct PDFExporter {
         case .serviceLog(let serviceLog):
             return (
                 serviceLog.sortedServicesArray.map(\.name).formatted(.list(type: .and)),
+                nil,
                 serviceLog.note.trimmingCharacters(in: .whitespacesAndNewlines),
                 serviceLog.cost,
                 serviceLog.sortedPhotosArray
@@ -256,6 +261,7 @@ struct PDFExporter {
         case .repair(let repair):
             return (
                 repair.name,
+                repair.category?.name,
                 repair.note.trimmingCharacters(in: .whitespacesAndNewlines),
                 repair.cost,
                 repair.sortedPhotosArray

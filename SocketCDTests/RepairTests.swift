@@ -137,6 +137,10 @@ struct RepairTests {
         let draft = DraftRepair()
         draft.date = Date(timeIntervalSince1970: 2222)
         draft.name = "Engine Mounts"
+        let category = RepairCategory(context: context)
+        category.id = UUID()
+        category.name = "  Engine  "
+        draft.category = category
         draft.odometer = 6000
         draft.cost = 200
         draft.note = "Both mounts replaced"
@@ -152,6 +156,8 @@ struct RepairTests {
         // Then
         #expect(repair.date == draft.date)
         #expect(repair.name == draft.name)
+        #expect(repair.category == category)
+        #expect(repair.category?.name == "Engine")
         #expect(repair.odometer == 6000)
         #expect(repair.cost == 200)
         #expect(repair.note == draft.note)

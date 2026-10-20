@@ -12,6 +12,7 @@ class DraftRepair: ObservableObject {
     
     @Published var date: Date = Date.now
     @Published var name: String = ""
+    @Published var category: RepairCategory?
     @Published var odometer: Int? = nil
     @Published var cost: Double? = nil
     @Published var note: String = ""
@@ -24,6 +25,7 @@ class DraftRepair: ObservableObject {
             id = repair.id
             date = repair.date
             name = repair.name
+            category = repair.category
             odometer = repair.odometer
             cost = repair.cost
             note = repair.note

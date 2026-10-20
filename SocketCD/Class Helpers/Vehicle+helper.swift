@@ -355,6 +355,7 @@ extension Vehicle {
         newRepair.id = UUID()
         newRepair.date = draftRepair.date
         newRepair.name = draftRepair.name
+        newRepair.category = draftRepair.category
         newRepair.odometer = draftRepair.odometer ?? 0
         newRepair.cost = draftRepair.cost
         newRepair.note = draftRepair.note
