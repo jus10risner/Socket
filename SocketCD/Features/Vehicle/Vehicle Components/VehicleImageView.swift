@@ -27,7 +27,8 @@ struct VehicleImageView: View {
             if let backgroundColor {
                 let isLightColor = backgroundColor.isLightColor
                 
-                backgroundColor
+                Rectangle()
+                    .fill(backgroundColor.gradient)
                     .overlay {
                         Image(systemName: "car.fill")
                             .font(.system(size: symbolSize))
