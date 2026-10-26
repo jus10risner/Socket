@@ -33,7 +33,7 @@ struct RecordDetailView: View {
                 documents: record.effectiveDocuments
             )
         }
-        .navigationTitle("Log Details")
+        .navigationTitle("Service Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem {

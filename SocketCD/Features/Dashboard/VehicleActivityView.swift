@@ -40,8 +40,7 @@ struct VehicleActivityView: View {
         .onChange(of: selectedTypes) {
             years = VehicleHistoryData.years(for: vehicle, selectedTypes: selectedTypes)
         }
-        .navigationTitle("Vehicle Activity")
-        .navigationBarTitleDisplayMode(.inline)
+        .sectionNavigationTitle("Vehicle Activity", vehicleName: vehicle.name)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 filterMenu
