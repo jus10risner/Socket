@@ -40,11 +40,10 @@ struct DashboardCard<Visual: View, Detail: View>: View {
                     .labelStyle(.iconOnly)
                     .imageScale(.large)
             }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
-            .tint(color)
-            .frame(width: quickActionSize, height: quickActionSize, alignment: .topTrailing)
-            .contentShape(Rectangle())
+            .buttonStyle(DashboardQuickActionButtonStyle(
+                color: color,
+                tapTargetSize: quickActionSize
+            ))
             .dynamicTypeSize(.medium)
             .disabled(disableButton ?? false)
             .padding()
@@ -80,6 +79,29 @@ struct DashboardCard<Visual: View, Detail: View>: View {
         }
         .frame(minHeight: minimumContentHeight, alignment: .top)
         .contentShape(Rectangle())
+    }
+}
+
+private struct DashboardQuickActionButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+
+    let color: Color
+    let tapTargetSize: CGFloat
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundStyle(isEnabled ? color : .secondary)
+            .frame(width: 36, height: 36)
+            .background(
+                (isEnabled ? color : .secondary)
+                    .opacity(configuration.isPressed ? 0.25 : 0.12),
+                in: Circle()
+            )
+            .opacity(isEnabled ? 1 : 0.5)
+            // Keep the visible circle flush with the top/trailing content edges,
+            // while extending the tap target inward to 44 points.
+            .frame(width: tapTargetSize, height: tapTargetSize, alignment: .topTrailing)
+            .contentShape(Rectangle())
     }
 }
 
