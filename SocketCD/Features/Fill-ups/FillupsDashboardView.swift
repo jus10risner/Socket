@@ -59,11 +59,12 @@ struct FillupsDashboardView: View {
                     NavigationLink {
                         AllFillupsListView(vehicle: vehicle)
                     } label: {
-                        Label(
-                            "Fill-up History",
-                            systemImage: "clock.arrow.circlepath"
-                        )
-                        .foregroundStyle(Color.primary)
+                        Label {
+                            Text("Fill-up History")
+                        } icon: {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .foregroundStyle(AppSection.fillups.color)
+                        }
                     }
                 }
             }

@@ -25,20 +25,32 @@ struct AllFillupsListView: View {
     
     var body: some View {
         List {
-            ForEach(fillups) { fillup in
-                NavigationLink {
-                    FillupDetailView(fillup: fillup)
-                } label: {
-                    FillupHistoryRow(
-                        fillup: fillup,
-                        isFirstFullTank: fillup == firstFullTank
-                    )
+            ForEach(fillupsByYear, id: \.year) { section in
+                HistoryListSection(year: section.year, headerColor: AppSection.fillups.color) {
+                    ForEach(section.fillups) { fillup in
+                        NavigationLink {
+                            FillupDetailView(fillup: fillup)
+                        } label: {
+                            FillupHistoryRow(
+                                fillup: fillup,
+                                isFirstFullTank: fillup == firstFullTank
+                            )
+                        }
+                    }
                 }
             }
         }
         .navigationTitle("Fill-up History")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { if fillups.isEmpty { dismiss() }  }
+    }
+
+    private var fillupsByYear: [(year: Int, fillups: [Fillup])] {
+        let groups = Dictionary(grouping: fillups) {
+            Calendar.current.component(.year, from: $0.date)
+        }
+        return groups.map { (year: $0.key, fillups: $0.value) }
+            .sorted { $0.year > $1.year }
     }
 
     private var firstFullTank: Fillup? {

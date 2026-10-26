@@ -15,7 +15,6 @@
 		9E1528852EB917DB005170AB /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1528842EB917DB005170AB /* FormHeaderView.swift */; };
 		9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */; };
 		9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */; };
-		9E187C172EA158CC00FBDAC9 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C162EA158CC00FBDAC9 /* TimelineView.swift */; };
 		9E189E372BD1ABE900095EC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E189E362BD1ABE900095EC2 /* Assets.xcassets */; };
 		9E18D94E2EBE3A910097CBAC /* AdaptiveToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E18D94D2EBE3A910097CBAC /* AdaptiveToolbarButton.swift */; };
 		9E1AD9042E8DAB6000E60184 /* MaintenanceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */; };
@@ -57,6 +56,7 @@
 		9E63DD33305DA77A005B596B /* PhotoImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD32305DA77A005B596B /* PhotoImageLoader.swift */; };
 		9E63DD3530617683005B596B /* AttachmentDeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */; };
 		9E63DD373062DA72005B596B /* FuelEconomySetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD363062DA72005B596B /* FuelEconomySetupView.swift */; };
+		9E63DFC530894878001732EB /* VehicleActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DFC430894878001732EB /* VehicleActivityView.swift */; };
 		9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */; };
 		9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53452BADD68A00F75D49 /* AppInfo.swift */; };
 		9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */; };
@@ -154,7 +154,6 @@
 		9E1528842EB917DB005170AB /* FormHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHeaderView.swift; sourceTree = "<group>"; };
 		9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveTint.swift; sourceTree = "<group>"; };
-		9E187C162EA158CC00FBDAC9 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		9E189E362BD1ABE900095EC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9E18D94D2EBE3A910097CBAC /* AdaptiveToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveToolbarButton.swift; sourceTree = "<group>"; };
 		9E1AD9032E8DAB6000E60184 /* MaintenanceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaintenanceCard.swift; sourceTree = "<group>"; };
@@ -199,6 +198,7 @@
 		9E63DD32305DA77A005B596B /* PhotoImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoImageLoader.swift; sourceTree = "<group>"; };
 		9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentDeleteButton.swift; sourceTree = "<group>"; };
 		9E63DD363062DA72005B596B /* FuelEconomySetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomySetupView.swift; sourceTree = "<group>"; };
+		9E63DFC430894878001732EB /* VehicleActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleActivityView.swift; sourceTree = "<group>"; };
 		9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLabelStyle.swift; sourceTree = "<group>"; };
 		9E6A53452BADD68A00F75D49 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectorView.swift; sourceTree = "<group>"; };
@@ -672,7 +672,7 @@
 			isa = PBXGroup;
 			children = (
 				9E35034B2E1FE3300032F845 /* VehicleDashboardView.swift */,
-				9E187C162EA158CC00FBDAC9 /* TimelineView.swift */,
+				9E63DFC430894878001732EB /* VehicleActivityView.swift */,
 				9E07C1AB3053492500160E0A /* CustomInfoCard.swift */,
 				9E1AD9072E8DAF7300E60184 /* RepairsCard.swift */,
 				9E1AD9052E8DAE5600E60184 /* FillupsCard.swift */,
@@ -863,7 +863,6 @@
 				9E7EF3FB2EC3899000E1E5D1 /* NotificationManager.swift in Sources */,
 				9EEAC4F52BA37A270053C65E /* RepairsListView.swift in Sources */,
 				9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */,
-				9E187C172EA158CC00FBDAC9 /* TimelineView.swift in Sources */,
 				9E30BD2330791DF800B8A3A3 /* NotificationsStep.swift in Sources */,
 				9EEAC4B92BA1F1180053C65E /* ImageDetailView.swift in Sources */,
 				9EEAC4FD2BA380BA0053C65E /* AddEditRepairView.swift in Sources */,
@@ -871,6 +870,7 @@
 				9EEAC5032BA389140053C65E /* ServiceRecord+helper.swift in Sources */,
 				9EEAC4B52BA1F0A50053C65E /* CameraManager.swift in Sources */,
 				9E620C072BC07B6F005E16DD /* DraftVehicle.swift in Sources */,
+				9E63DFC530894878001732EB /* VehicleActivityView.swift in Sources */,
 				9E5270E02E8AF82300EFDCB8 /* FuelCostSettingsView.swift in Sources */,
 				9E36533B303C86BF00BD9ADD /* ReadOnlyDocumentPreview.swift in Sources */,
 				9EE5620D2BD9706600F5BE7E /* VehicleListRowView.swift in Sources */,

@@ -122,11 +122,16 @@ struct RepairsListView: View {
         } label: {
             HistoryListRow(
                 date: repair.date,
-                odometer: repair.odometer,
-                distanceUnit: vehicle.distanceUnit,
                 includesYear: includesYear
             ) {
-                Text(repair.name)
+                VStack(alignment: .leading) {
+                    Text(repair.name)
+                        .font(.headline)
+                    
+                    Text("\(repair.odometer.formatted()) \(vehicle.distanceUnit.abbreviated)")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }

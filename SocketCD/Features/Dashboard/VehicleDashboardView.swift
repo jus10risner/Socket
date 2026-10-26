@@ -88,6 +88,7 @@ struct VehicleDashboardView: View {
                                 .labelStyle(.iconOnly)
                                 .buttonStyle(.borderedProminent)
                                 .buttonBorderShape(.circle)
+                                .dynamicTypeSize(.medium)
                             }
                         }
                         
@@ -104,8 +105,14 @@ struct VehicleDashboardView: View {
                         servicesForNewLog: $servicesForNewLog
                     )
                     
-                    Button("Edit Dashboard") {
-                        showingDashboardCustomization = true
+                    HStack {
+                        Button("Edit Dashboard") {
+                            showingDashboardCustomization = true
+                        }
+                        
+                        NavigationLink("View All Activity") {
+                            VehicleActivityView(vehicle: vehicle)
+                        }
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
@@ -142,15 +149,13 @@ struct VehicleDashboardView: View {
                     AddEditCustomInfoView(vehicle: vehicle)
                 case .editVehicle:
                     AddEditVehicleView(vehicle: vehicle, onDelete: { selectedVehicle = nil })
-                case .showTimeline:
-                    TimelineView(vehicle: vehicle)
                 }
             }
             .sensoryFeedback(trigger: activeSheet) { _, newSheet in
                 switch newSheet {
                 case .logService, .addRepair, .addFillup, .addCustomInfo:
                     return .impact(weight: .light)
-                case .editVehicle, .showTimeline, nil:
+                case .editVehicle, nil:
                     return nil
                 }
             }
@@ -261,15 +266,6 @@ struct VehicleDashboardView: View {
     private var vehicleToolbar: some ToolbarContent {
         ToolbarItem {
             Menu("Vehicle Options", systemImage: "ellipsis") {
-                if !vehicle.groupedServiceAndRepairTimeline.isEmpty {
-                    Button {
-                        activeSheet = .showTimeline
-                    } label: {
-                        Label("Full Timeline", systemImage: "list.bullet")
-                        Text("Maintenance and Repairs")
-                    }
-                }
-                
                 exportMenu
                 
                 Divider()
@@ -460,7 +456,7 @@ struct ShareItem: Identifiable {
 
 // Sheet options for VehicleDashboardView
 enum ActiveSheet: String, Identifiable {
-    case logService, addRepair, addFillup, addCustomInfo, editVehicle, showTimeline
+    case logService, addRepair, addFillup, addCustomInfo, editVehicle
     
     var id: String { rawValue }
 }

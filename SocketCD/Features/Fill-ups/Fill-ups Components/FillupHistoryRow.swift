@@ -30,14 +30,8 @@ struct FillupHistoryRow: View {
     }
 
     private var fillupDetails: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text(fillup.date, format: .dateTime.month(.abbreviated).day().year())
-                .font(.headline)
-
-            Text("\(fillup.odometer.formatted()) \(fillup.distanceUnit.abbreviated)")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-        }
+        Text(fillup.date, format: .dateTime.month(.abbreviated).day().year())
+            .font(.body)
     }
 
     @ViewBuilder
@@ -76,11 +70,10 @@ struct FillupHistoryRow: View {
 
     private var accessibilityDescription: String {
         let date = fillup.date.formatted(date: .long, time: .omitted)
-        let odometer = "\(fillup.odometer.formatted()) \(fillup.distanceUnit.rawValue)"
         let result = fuelEconomy > 0
             ? "\(fuelEconomy.formatted(.number.precision(.fractionLength(1)))) \(fillup.fuelEconomyUnit.fullName)"
             : status
 
-        return "\(date), \(result), odometer \(odometer)"
+        return "\(date), \(result)"
     }
 }

@@ -32,51 +32,103 @@ struct HistoryListSection<Content: View>: View {
 }
 
 struct HistoryListRow<Content: View>: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     let date: Date
-    let odometer: Int?
-    let distanceUnit: DistanceUnits
     let includesYear: Bool
     @ViewBuilder let content: Content
 
     init(
         date: Date,
-        odometer: Int?,
-        distanceUnit: DistanceUnits,
         includesYear: Bool = false,
         @ViewBuilder content: () -> Content
     ) {
         self.date = date
-        self.odometer = odometer
-        self.distanceUnit = distanceUnit
         self.includesYear = includesYear
         self.content = content()
     }
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 0) {
-                if includesYear {
-                    Text(date.formatted(.dateTime.year()))
-                        .font(.footnote.bold())
-                        .foregroundStyle(.secondary)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 10) {
+                    HistoryListMetadata(date: date, includesYear: includesYear, isInline: true)
+                    content
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                
-                Text(date.formatted(.dateTime.month(.abbreviated).day()))
-                    .font(.callout.bold())
-
-                if let odometer {
-                    Text("\(odometer.formatted()) \(distanceUnit.abbreviated)")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+            } else {
+                HStack(spacing: 12) {
+                    HistoryListMetadata(date: date, includesYear: includesYear)
+                    Divider()
+                        .accessibilityHidden(true)
+                    content
+                        .fixedSize(horizontal: false, vertical: true)
                 }
+                .fixedSize(horizontal: false, vertical: true)
             }
-            .frame(minWidth: 65, alignment: .leading)
-
-            Divider()
-
-            content
         }
         .padding(.vertical, 5)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+private struct HistoryListMetadata: View {
+    @Environment(\.locale) private var locale
+    @Environment(\.calendar) private var calendar
+    @Environment(\.timeZone) private var timeZone
+
+    let date: Date
+    let includesYear: Bool
+
+    var isInline = false
+
+    private var dateStyle: Date.FormatStyle {
+        Date.FormatStyle(locale: locale, calendar: calendar, timeZone: timeZone)
     }
 
+    private var dayComesFirst: Bool {
+        // Inspect semantic fields instead of parsing punctuation or assuming a country’s order.
+        let formatted = date.formatted(dateStyle.month(.abbreviated).day(.twoDigits).attributedStyle)
+        return formatted.runs.first { $0.dateField == .month || $0.dateField == .day }?.dateField == .day
+    }
+
+    var body: some View {
+        Group {
+            if isInline {
+                Text(date, format: includesYear
+                     ? dateStyle.year().month(.abbreviated).day(.twoDigits)
+                     : dateStyle.month(.abbreviated).day(.twoDigits))
+                    .lineLimit(1)
+            } else {
+                VStack(alignment: .center, spacing: 2) {
+                    if dayComesFirst {
+                        day
+                        month
+                    } else {
+                        month
+                        day
+                    }
+
+                    if includesYear {
+                        Text(date, format: dateStyle.year())
+                            .font(.caption)
+                    }
+                }
+            }
+        }
+        .font(.subheadline.weight(.semibold).monospacedDigit())
+        .foregroundStyle(.secondary)
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: true, vertical: true)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(date, format: dateStyle.year().month(.wide).day()))
+    }
+
+    private var month: some View {
+        Text(date.formatted(dateStyle.month(.abbreviated)).uppercased(with: locale))
+    }
+
+    private var day: some View {
+        Text(date, format: dateStyle.day(.twoDigits))
+    }
 }
