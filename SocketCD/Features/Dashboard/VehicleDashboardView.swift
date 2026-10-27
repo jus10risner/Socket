@@ -20,6 +20,7 @@ struct VehicleDashboardView: View {
         _draftVehicle = StateObject(wrappedValue: DraftVehicle(vehicle: vehicle))
         self.vehicle = vehicle
         self._selectedVehicle = selectedVehicle
+        _dashboardSections = State(initialValue: DashboardLayoutStore().load(for: vehicle.id))
     }
     
     @State private var selectedSection: AppSection?
@@ -212,7 +213,6 @@ struct VehicleDashboardView: View {
         .tint(nil)
         .onAppear {
             dashboardSections = DashboardLayoutStore().load(for: vehicle.id)
-            refreshDashboard()
         }
     }
 

@@ -175,10 +175,14 @@ private struct RepairCategorySelectionView: View {
         self._selection = selection
     }
 
+    private var visibleCategories: [RepairCategory] {
+        RepairCategoryMaintenance.visibleCategories(from: Array(categories))
+    }
+
     var body: some View {
         List {
             Section {
-                ForEach(categories, id: \.objectID) { category in
+                ForEach(visibleCategories, id: \.objectID) { category in
                 Button {
                     selection = isSelected(category) ? nil : category
                 } label: {
@@ -286,60 +290,58 @@ private struct RepairCategorySelectionView: View {
         guard let categoryToRename else { return }
         let replacement = normalized(renamedCategory)
 
-        if let existingCategory = category(named: replacement, excluding: categoryToRename) {
-            for repair in categoryToRename.repairs as? Set<Repair> ?? [] {
-                repair.category = existingCategory
-            }
-            existingCategory.isArchived = false
-            if isSelected(categoryToRename) {
-                selection = existingCategory
-            }
-            categoryToRename.isArchived = true
-        } else {
-            categoryToRename.name = replacement
+        let wasSelected = isSelected(categoryToRename)
+        do {
+            let category = try RepairCategoryMaintenance.rename(
+                categoryToRename, to: replacement, in: context
+            )
+            if wasSelected { selection = category }
+            save()
+        } catch {
+            print("Failed to rename category: \(error.localizedDescription)")
         }
-
-        save()
         self.categoryToRename = nil
     }
 
     private func deleteCategory() {
         guard let categoryToDelete else { return }
 
-        withAnimation {
-            for repair in categoryToDelete.repairs as? Set<Repair> ?? [] {
-                repair.category = nil
+        let wasSelected = isSelected(categoryToDelete)
+        do {
+            try withAnimation {
+                try RepairCategoryMaintenance.archive(categoryToDelete, in: context)
+                if wasSelected { selection = nil }
+                save()
             }
-
-            if isSelected(categoryToDelete) {
-                selection = nil
-            }
-
-            categoryToDelete.isArchived = true
-            save()
+        } catch {
+            print("Failed to delete category: \(error.localizedDescription)")
         }
         self.categoryToDelete = nil
     }
 
     private func isSelected(_ category: RepairCategory) -> Bool {
-        selection?.objectID == category.objectID
+        guard let selection else { return false }
+        return comparisonKey(for: selection.name) == comparisonKey(for: category.name)
     }
 
     private func category(named name: String, excluding excludedCategory: RepairCategory? = nil) -> RepairCategory? {
         let request = RepairCategory.fetchRequest()
         guard let allCategories = try? context.fetch(request) else { return nil }
 
-        return allCategories.first { category in
-            category.objectID != excludedCategory?.objectID
-                && comparisonKey(for: category.name) == comparisonKey(for: name)
-        }
+        return allCategories
+            .filter { category in
+                category.objectID != excludedCategory?.objectID
+                    && comparisonKey(for: category.name) == comparisonKey(for: name)
+            }
+            .sorted {
+                if $0.isArchived != $1.isArchived { return !$0.isArchived }
+                return ($0.id?.uuidString ?? "") < ($1.id?.uuidString ?? "")
+            }
+            .first
     }
 
     private func comparisonKey(for category: String) -> String {
-        normalized(category).folding(
-            options: [.caseInsensitive, .diacriticInsensitive],
-            locale: .current
-        )
+        RepairCategoryMaintenance.comparisonKey(for: category)
     }
 
     private func normalized(_ category: String) -> String {

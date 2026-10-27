@@ -36,7 +36,7 @@ struct FillupsDashboardView: View {
                 Section {
                     fuelEconomyChart
                     
-                    allTimeAverageFooter
+                    lifetimeAverageFooter
                 } footer: {
                     if let latestUnavailableMessage {
                         Button("Where’s my latest fill-up?") {
@@ -107,41 +107,26 @@ struct FillupsDashboardView: View {
 
     private var fuelEconomyChart: some View {
         VStack(spacing: 15) {
-            if let chartPoints {
-                Group {
-                    if chartPoints.isEmpty {
-                        FuelEconomySetupView(
-                            state: fuelEconomySetupState
-                        )
-                    } else {
-                        FuelEconomyChartView(
-                            data: chartPoints,
-                            fuelEconomyUnit: vehicle.fuelEconomyUnit,
-                            selectedDateRange: $selectedDateRange
-                        )
-
-                        Picker("Date Range", selection: $selectedDateRange) {
-                            ForEach(DateRange.allCases, id: \.self) { range in
-                                Text(range.rawValue)
-                                    .tag(range)
-                                    .accessibilityLabel(
-                                        range.accessibilityLabel
-                                    )
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .accessibilityHint(
-                            "Selects the range for fuel economy data."
-                        )
+            if let chartPoints, chartPoints.isEmpty {
+                FuelEconomySetupView(state: fuelEconomySetupState)
+            } else {
+                Picker("Date Range", selection: $selectedDateRange) {
+                    ForEach(DateRange.allCases, id: \.self) { range in
+                        Text(range.rawValue)
+                            .tag(range)
+                            .accessibilityLabel(range.accessibilityLabel)
                     }
                 }
-            } else {
-                Color(.systemGroupedBackground).opacity(0.3)
-                    .frame(
-                        minHeight: horizontalSizeClass == .regular
-                            ? 470
-                            : 320
-                    )
+                .pickerStyle(.segmented)
+                .disabled(chartPoints == nil)
+                .accessibilityHint("Selects the range for fuel economy data.")
+                
+                FuelEconomyChartView(
+                    data: chartPoints ?? [],
+                    fuelEconomyUnit: vehicle.fuelEconomyUnit,
+                    selectedDateRange: $selectedDateRange,
+                    initialLatestDate: fillups.first?.date ?? .now
+                )
             }
         }
         .padding(15)
@@ -149,29 +134,19 @@ struct FillupsDashboardView: View {
     }
 
     @ViewBuilder
-    private var allTimeAverageFooter: some View {
+    private var lifetimeAverageFooter: some View {
         if let chartPoints,
             let average = ChartPoint.aggregateFuelEconomy(
                 from: chartPoints,
                 unit: vehicle.fuelEconomyUnit
-            ),
-            let firstFillupDate = fillups.last?.date
+            )
         {
-            LabeledContent {
-                Text(
-                    "\(average.formatted(.number.precision(.fractionLength(1)))) \(vehicle.fuelEconomyUnit.displayName)"
-                )
-                .monospacedDigit()
-            } label: {
-                Text("All-time average")
-                Text(
-                    "\(firstFillupDate.formatted(.dateTime.month(.abbreviated).year())) – Present"
-                )
-                .font(.caption)
+            LabeledContent("Lifetime Average") {
+                Text("\(average.formatted(.number.precision(.fractionLength(1)))) \(vehicle.fuelEconomyUnit.displayName)")
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(
-                "All-time average fuel economy, \(average.formatted(.number.precision(.fractionLength(1)))) \(vehicle.fuelEconomyUnit.fullName), from \(firstFillupDate.formatted(date: .long, time: .omitted)) to present"
+                "Lifetime average fuel economy, \(average.formatted(.number.precision(.fractionLength(1)))) \(vehicle.fuelEconomyUnit.fullName)"
             )
         }
     }
@@ -242,7 +217,7 @@ struct FillupsDashboardView: View {
                 else {
                     return [ChartPoint]()
                 }
-
+    
                 let request = Fillup.fetchRequest()
                 request.predicate = NSPredicate(
                     format: "vehicle == %@",
@@ -256,11 +231,10 @@ struct FillupsDashboardView: View {
                 ]
                 request.fetchBatchSize = 256
                 request.returnsObjectsAsFaults = false
-
+    
                 let fillups = try context.fetch(request)
                 return ChartPoint.make(from: fillups, unit: unit)
             }
-
             try Task.checkCancellation()
             chartPoints = points
         } catch is CancellationError {

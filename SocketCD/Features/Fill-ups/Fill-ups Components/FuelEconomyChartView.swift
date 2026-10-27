@@ -26,6 +26,8 @@ struct FuelEconomyChartView: View {
 
     let data: [ChartPoint]
     let fuelEconomyUnit: FuelEconomyUnits
+    private let initialLatestDate: Date
+    private let yAxisDomain: ClosedRange<Double>
 
     @Binding var selectedDateRange: DateRange
     @State private var selectedDate: Date?
@@ -38,9 +40,42 @@ struct FuelEconomyChartView: View {
     @State private var resizeScrollPosition: Date?
     @State private var rangeTransitionTask: Task<Void, Never>?
     @State private var resizeTransitionTask: Task<Void, Never>?
-    @State private var initialRevealProgress = 0.0
+    @State private var isReturningToLatest = false
 
     private let selectionTolerance: TimeInterval = 60 * 60 * 24
+
+    init(
+        data: [ChartPoint],
+        fuelEconomyUnit: FuelEconomyUnits,
+        selectedDateRange: Binding<DateRange>,
+        initialLatestDate: Date = .now
+    ) {
+        self.data = data
+        if let first = data.first {
+            let bounds = data.dropFirst().reduce(
+                into: (minimum: first.value, maximum: first.value)
+            ) { bounds, point in
+                bounds.minimum = min(bounds.minimum, point.value)
+                bounds.maximum = max(bounds.maximum, point.value)
+            }
+            self.yAxisDomain = (floor(bounds.minimum) - 1)...(ceil(bounds.maximum) + 1)
+        } else {
+            self.yAxisDomain = 0...10
+        }
+        self.fuelEconomyUnit = fuelEconomyUnit
+        self.initialLatestDate = initialLatestDate
+        self._selectedDateRange = selectedDateRange
+
+        let range = selectedDateRange.wrappedValue
+        let duration = range.chartDuration
+        let initialViewport = Viewport(
+            position: (data.last?.date ?? initialLatestDate).addingTimeInterval(-duration),
+            domainLength: duration
+        )
+        _viewport = State(initialValue: initialViewport)
+        _settledViewport = State(initialValue: initialViewport)
+        _displayedDateRange = State(initialValue: range)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -50,7 +85,7 @@ struct FuelEconomyChartView: View {
                 .id(chartLayoutID)
                 .frame(maxWidth: .infinity)
                 .frame(height: horizontalSizeClass == .regular ? 350 : 200)
-                .allowsHitTesting(resizePlotOpacity == 1)
+                .allowsHitTesting(resizePlotOpacity == 1 && !isReturningToLatest)
                 .onGeometryChange(for: CGFloat.self) { proxy in
                     proxy.size.width.rounded()
                 } action: { oldWidth, newWidth in
@@ -63,7 +98,6 @@ struct FuelEconomyChartView: View {
         }
         .onAppear {
             resetChartPosition()
-            revealChart()
         }
         .onChange(of: selectedDateRange) {
             transitionRange()
@@ -85,11 +119,41 @@ struct FuelEconomyChartView: View {
         }
         .onDisappear {
             rangeTransitionTask?.cancel()
+            isReturningToLatest = false
             resizeTransitionTask?.cancel()
         }
     }
 
     private var header: some View {
+        HStack {
+            headerSummary
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Spacer()
+            
+            Button("Show Latest Fill-up", systemImage: "chevron.forward") {
+                scrollToLatest()
+            }
+            .labelStyle(.iconOnly)
+            .buttonStyle(.bordered)
+            .buttonBorderShape(.circle)
+            .controlSize(.large)
+            .tint(AppSection.fillups.color)
+//            .accessibilityLabel("Show latest fuel economy")
+            .opacity(isViewingHistory ? 1 : 0)
+            .animation(reduceMotion ? nil : .easeOut(duration: Timing.fadeIn), value: isViewingHistory)
+            .disabled(!isViewingHistory || isReturningToLatest || contentOpacity < 1 || resizePlotOpacity < 1)
+            .accessibilityHidden(!isViewingHistory)
+        }
+    }
+
+    private var isViewingHistory: Bool {
+        // Ignore subsecond rounding at the chart's trailing scroll boundary.
+        let latestStart = latestDate.addingTimeInterval(-viewport.domainLength)
+        return !data.isEmpty && viewport.position < latestStart.addingTimeInterval(-1)
+    }
+
+    private var headerSummary: some View {
         VStack(alignment: .leading, spacing: 3) {
             if let selectedPoint {
                 Text("Selected Fuel Economy")
@@ -254,7 +318,7 @@ struct FuelEconomyChartView: View {
             ForEach(data) { point in
                 LineMark(
                     x: .value("Date", point.date),
-                    y: .value("Fuel Economy", revealedValue(for: point))
+                    y: .value("Fuel Economy", point.value)
                 )
                 .interpolationMethod(.catmullRom)
                 .foregroundStyle(AppSection.fillups.color.gradient)
@@ -274,7 +338,7 @@ struct FuelEconomyChartView: View {
                 AreaMark(
                     x: .value("Date", point.date),
                     yStart: .value("Minimum", yAxisDomain.lowerBound),
-                    yEnd: .value("Fuel Economy", revealedValue(for: point))
+                    yEnd: .value("Fuel Economy", point.value)
                 )
                 .interpolationMethod(.catmullRom)
                 .foregroundStyle(
@@ -294,7 +358,7 @@ struct FuelEconomyChartView: View {
             ForEach(data) { point in
                 PointMark(
                     x: .value("Date", point.date),
-                    y: .value("Fuel Economy", revealedValue(for: point))
+                    y: .value("Fuel Economy", point.value)
                 )
                 .symbolSize(45)
                 .foregroundStyle(AppSection.fillups.color)
@@ -335,33 +399,8 @@ struct FuelEconomyChartView: View {
         }
     }
 
-    private func revealedValue(for point: ChartPoint) -> Double {
-        yAxisDomain.lowerBound
-            + ((point.value - yAxisDomain.lowerBound) * initialRevealProgress)
-    }
-
-    private func revealChart() {
-        guard initialRevealProgress == 0 else { return }
-
-        if reduceMotion {
-            initialRevealProgress = 1
-        } else {
-            withAnimation(.easeInOut.delay(Timing.fadeIn)) {
-                initialRevealProgress = 1
-            }
-        }
-    }
-
     private var latestDate: Date {
-        data.last?.date ?? .now
-    }
-
-    private var yAxisDomain: ClosedRange<Double> {
-        guard let minimum = data.min(by: { $0.value < $1.value })?.value,
-              let maximum = data.max(by: { $0.value < $1.value })?.value
-        else { return 0...10 }
-
-        return (floor(minimum) - 1)...(ceil(maximum) + 1)
+        data.last?.date ?? initialLatestDate
     }
 
     private var xAxisDomain: ClosedRange<Date> {
@@ -411,8 +450,56 @@ struct FuelEconomyChartView: View {
         return point
     }
 
+    private func scrollToLatest() {
+        guard !reduceMotion else {
+            resetChartPosition()
+            return
+        }
+
+        rangeTransitionTask?.cancel()
+        resizeTransitionTask?.cancel()
+        resizeScrollPosition = nil
+        resizePlotOpacity = 1
+        contentOpacity = 1
+        selectedDate = nil
+
+        let start = viewport.position
+        let destination = targetViewport
+        let distance = destination.position.timeIntervalSince(start)
+        isReturningToLatest = true
+
+        // Advance the scroll binding explicitly so the chart moves continuously.
+        // Use elapsed time so a delayed frame doesn't extend the animation.
+        rangeTransitionTask = Task { @MainActor in
+            let clock = ContinuousClock()
+            let began = clock.now
+            let duration = Duration.milliseconds(450)
+
+            while !Task.isCancelled {
+                let progress = min(began.duration(to: clock.now) / duration, 1)
+                let easedProgress = progress * progress * (3 - 2 * progress)
+                viewport.position = start.addingTimeInterval(distance * easedProgress)
+
+                if progress >= 1 { break }
+                do {
+                    try await Task.sleep(for: .milliseconds(16))
+                } catch {
+                    return
+                }
+            }
+
+            guard !Task.isCancelled else { return }
+            viewport = destination
+            withAnimation(.easeOut(duration: Timing.fadeIn)) {
+                settledViewport = destination
+            }
+            isReturningToLatest = false
+        }
+    }
+
     private func resetChartPosition() {
         rangeTransitionTask?.cancel()
+        isReturningToLatest = false
         resizeTransitionTask?.cancel()
         resizeScrollPosition = nil
         resizePlotOpacity = 1
@@ -426,6 +513,7 @@ struct FuelEconomyChartView: View {
 
     private func handleChartWidthChange() {
         rangeTransitionTask?.cancel()
+        isReturningToLatest = false
         
         if resizeScrollPosition == nil {
             resizeScrollPosition = settledViewport.position
@@ -468,6 +556,7 @@ struct FuelEconomyChartView: View {
     
     private func transitionRange() {
         rangeTransitionTask?.cancel()
+        isReturningToLatest = false
         resizeTransitionTask?.cancel()
         resizeScrollPosition = nil
         selectedDate = nil

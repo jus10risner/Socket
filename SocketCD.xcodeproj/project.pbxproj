@@ -64,6 +64,8 @@
 		9E7507592BF68C84000E25BD /* EmptyVehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7507582BF68C84000E25BD /* EmptyVehicleListView.swift */; };
 		9E7EF3FB2EC3899000E1E5D1 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */; };
 		9E7EF3FD2EC38E6000E1E5D1 /* NotificationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */; };
+		9E7FBD3930910BFF00ACD4CD /* RepairCategoryMaintenance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7FBD3830910BFF00ACD4CD /* RepairCategoryMaintenance.swift */; };
+		9E7FBD3B30910C2500ACD4CD /* RepairCategoryMaintenanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7FBD3A30910C2500ACD4CD /* RepairCategoryMaintenanceTests.swift */; };
 		9E87C5B62E4235CF001BE562 /* FormFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E87C5B52E4235CF001BE562 /* FormFooterView.swift */; };
 		9E916A442E464B7800E10B42 /* CSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E916A432E464B7800E10B42 /* CSVExporter.swift */; };
 		9E96EC462ECB985100667A47 /* OnboardingTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E96EC452ECB985100667A47 /* OnboardingTips.swift */; };
@@ -207,6 +209,8 @@
 		9E7A4A5B2F4E0A260021AA4E /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		9E7EF3FA2EC3899000E1E5D1 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		9E7EF3FC2EC38E6000E1E5D1 /* NotificationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationObserver.swift; sourceTree = "<group>"; };
+		9E7FBD3830910BFF00ACD4CD /* RepairCategoryMaintenance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairCategoryMaintenance.swift; sourceTree = "<group>"; };
+		9E7FBD3A30910C2500ACD4CD /* RepairCategoryMaintenanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairCategoryMaintenanceTests.swift; sourceTree = "<group>"; };
 		9E87C5B52E4235CF001BE562 /* FormFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFooterView.swift; sourceTree = "<group>"; };
 		9E916A432E464B7800E10B42 /* CSVExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporter.swift; sourceTree = "<group>"; };
 		9E96EC452ECB985100667A47 /* OnboardingTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTips.swift; sourceTree = "<group>"; };
@@ -349,6 +353,7 @@
 			isa = PBXGroup;
 			children = (
 				9E620BEF2BBDBEAE005E16DD /* DraftRepair.swift */,
+				9E7FBD3830910BFF00ACD4CD /* RepairCategoryMaintenance.swift */,
 			);
 			path = "Repairs Components";
 			sourceTree = "<group>";
@@ -469,6 +474,7 @@
 				9E73890D306312F600F63EB5 /* PDFExporterTests.swift */,
 				9EBB2237306AD12E00A37D48 /* OdometerValidatorTests.swift */,
 				9EE704F03082744500EFF266 /* NotificationManagerTests.swift */,
+				9E7FBD3A30910C2500ACD4CD /* RepairCategoryMaintenanceTests.swift */,
 			);
 			path = SocketCDTests;
 			sourceTree = "<group>";
@@ -791,6 +797,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E7FBD3B30910C2500ACD4CD /* RepairCategoryMaintenanceTests.swift in Sources */,
 				9EAEDF982F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift in Sources */,
 				9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */,
 				9EE704F13082744500EFF266 /* NotificationManagerTests.swift in Sources */,
@@ -890,6 +897,7 @@
 				9E620C032BC06FE9005E16DD /* DraftCustomInfo.swift in Sources */,
 				9EEAC4C12BA24EEC0053C65E /* AppSettingsStore.swift in Sources */,
 				9EEAC4CB2BA256570053C65E /* AddEditVehicleView.swift in Sources */,
+				9E7FBD3930910BFF00ACD4CD /* RepairCategoryMaintenance.swift in Sources */,
 				9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */,
 				9E63DD33305DA77A005B596B /* PhotoImageLoader.swift in Sources */,
 				9E63DD373062DA72005B596B /* FuelEconomySetupView.swift in Sources */,

@@ -18,6 +18,8 @@ final class DataController: ObservableObject {
 
     // MARK: - Persistent container
     let container: NSPersistentCloudKitContainer
+    private var categoryMaintenanceContext: NSManagedObjectContext?
+    private var categoryChangeObserver: NSObjectProtocol?
 
     // MARK: - Preview instance
     static let preview: DataController = DataController(inMemory: true)
@@ -46,6 +48,17 @@ final class DataController: ObservableObject {
             )
         }
 
+        let maintenanceContext = container.newBackgroundContext()
+        maintenanceContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+        categoryMaintenanceContext = maintenanceContext
+        categoryChangeObserver = NotificationCenter.default.addObserver(
+            forName: .NSPersistentStoreRemoteChange,
+            object: container.persistentStoreCoordinator,
+            queue: nil
+        ) { [weak self] _ in
+            self?.maintainRepairCategories(seedIfEmpty: false)
+        }
+
         // ✅ Load store synchronously so local data is immediately available
         container.loadPersistentStores { storeDescription, error in
             if let error = error {
@@ -57,7 +70,7 @@ final class DataController: ObservableObject {
                 print("✅ Loaded persistent store: \(storeDescription.url?.absoluteString ?? "")")
                 DispatchQueue.main.async {
                     self.captureLegacyMeasurementUnitsIfNeeded()
-                    self.seedDefaultRepairCategoriesIfNeeded()
+                    self.maintainRepairCategories(seedIfEmpty: true)
                 }
             }
         }
@@ -105,28 +118,27 @@ final class DataController: ObservableObject {
         save()
     }
 
-    private func seedDefaultRepairCategoriesIfNeeded() {
-        let context = container.viewContext
-        let request = RepairCategory.fetchRequest()
-
-        guard (try? context.count(for: request)) == 0 else { return }
-
-        let names = [
-            String(localized: "Engine"),
-            String(localized: "Suspension"),
-            String(localized: "Brakes"),
-            String(localized: "Electrical"),
-            String(localized: "Tires & Wheels"),
-            String(localized: "Body")
-        ]
-
-        for name in names {
-            let category = RepairCategory(context: context)
-            category.id = UUID()
-            category.name = name
+    deinit {
+        if let categoryChangeObserver {
+            NotificationCenter.default.removeObserver(categoryChangeObserver)
         }
+    }
 
-        save()
+    private func maintainRepairCategories(seedIfEmpty: Bool) {
+        guard let context = categoryMaintenanceContext else { return }
+        context.perform {
+            // A dedicated serial context avoids saving or rolling back form drafts.
+            context.reset()
+            do {
+                try RepairCategoryMaintenance.reconcile(in: context, seedIfEmpty: seedIfEmpty)
+                if context.hasChanges {
+                    try context.save()
+                }
+            } catch {
+                context.rollback()
+                print("⚠️ Failed to reconcile repair categories: \(error.localizedDescription)")
+            }
+        }
     }
 
     // MARK: - Save / Delete
