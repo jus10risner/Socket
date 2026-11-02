@@ -87,6 +87,10 @@ struct MaintenanceCard: View {
     }
 
     private func cardSubheadline(for service: Service) -> String {
+        guard service.hasStartingRecord else {
+            return String(localized: "Awaiting first service log",
+                          comment: "Status for maintenance with no starting record. A service log records that the maintenance was performed.")
+        }
         guard servicesNeedingAttention.count > 1 else {
             return service.nextDueDescription(currentOdometer: vehicle.odometer)
         }

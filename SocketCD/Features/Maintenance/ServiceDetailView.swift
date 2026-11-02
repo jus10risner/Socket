@@ -29,7 +29,7 @@ struct ServiceDetailView: View {
                     if !service.sortedServiceRecordsArray.isEmpty {
                         Text(serviceNextDueInfo)
                     } else {
-                        Text("Not set")
+                        Text("Awaiting service log")
                     }
                 }
                 

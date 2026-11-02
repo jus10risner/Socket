@@ -16,7 +16,7 @@ struct ServiceIndicatorView: View {
     @State private var remainingValue = 1.0
     
     var body: some View {
-        Gauge(value: remainingValue, in: 0...1) {
+        Gauge(value: service.hasStartingRecord ? remainingValue : 0, in: 0...1) {
             Text("Service interval remaining")
         } currentValueLabel: {
             if isOverdue {
@@ -27,7 +27,7 @@ struct ServiceIndicatorView: View {
         }
         .gaugeStyle(
             ServiceCapacityGaugeStyle(
-                tint: service.indicatorColor,
+                tint: service.hasStartingRecord ? service.indicatorColor : .clear,
                 trackTint: isOverdue ? .red : .secondary.opacity(0.25)
             )
         )
@@ -49,6 +49,11 @@ struct ServiceIndicatorView: View {
     }
 
     private func loadRemainingValue() {
+        guard service.hasStartingRecord else {
+            remainingValue = 0
+            return
+        }
+
         withAnimation(.default.delay(0.5)) {
             remainingValue = max(0, min(1, service.progress(currentOdometer: vehicle.odometer)))
         }

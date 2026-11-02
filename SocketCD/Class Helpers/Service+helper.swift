@@ -77,6 +77,11 @@ extension Service {
         }
     }
 
+    /// Includes custom starting points, which establish due information without visible service history.
+    var hasStartingRecord: Bool {
+        (serviceRecords?.count ?? 0) > 0
+    }
+
     /// Records that represent actual service history rather than a synthetic starting point.
     var serviceHistoryRecordsArray: [ServiceRecord] {
         sortedServiceRecordsArray.filter { $0.serviceLog?.isBaseline != true }

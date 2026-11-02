@@ -31,6 +31,7 @@ struct MaintenanceListView: View {
         List {
             ForEach(vehicle.sortedServicesArray) { service in
                 ServiceListRowView(service: service, vehicle: vehicle)
+                    .padding(.vertical, UIDevice.current.systemVersion.hasPrefix("18.") ? 5 : 0)
             }
         }
         .sectionNavigationTitle(AppSection.maintenance.title, vehicleName: vehicle.name)
@@ -137,10 +138,11 @@ private struct ServiceListRowView: View {
             Text(service.name)
                 .font(.headline)
             
-            if service.sortedServiceRecordsArray.isEmpty {
-                Text("Tap the plus button to add a service log")
+            if !service.hasStartingRecord {
+                Text("Awaiting first service log",
+                     comment: "Status for maintenance with no starting record. A service log records that the maintenance was performed.")
                     .font(.caption)
-                    .foregroundStyle(Color.secondary)
+                    .foregroundStyle(.secondary)
             } else {
                 Text(service.nextDueDescription(currentOdometer: vehicle.odometer))
                     .font(.caption)

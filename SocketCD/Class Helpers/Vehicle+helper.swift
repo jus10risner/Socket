@@ -311,7 +311,7 @@ extension Vehicle {
         Int(MeasurementConverter.kilometers(from: Double(value), unit: unit).rounded())
     }
     
-    func addNewService(draftService: DraftService, initialRecord draftServiceLog: DraftServiceLog, isBaseLine: Bool) {
+    func addNewService(draftService: DraftService, initialRecord draftServiceLog: DraftServiceLog?, isBaseLine: Bool) {
         let context = DataController.shared.container.viewContext
         
         // Create Service
@@ -326,6 +326,11 @@ extension Vehicle {
         newService.distanceBasedNotificationIdentifier = UUID().uuidString
         newService.timeBasedNotificationIdentifier = UUID().uuidString
         
+        guard let draftServiceLog else {
+            try? context.save()
+            return
+        }
+
         // Add Service Record to Service
         let serviceRecord = ServiceRecord(context: context)
         serviceRecord.service = newService
