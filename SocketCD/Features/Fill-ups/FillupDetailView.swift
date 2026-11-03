@@ -28,7 +28,9 @@ struct FillupDetailView: View {
                     value: fillup.volume.formatted(.number.precision(.fractionLength(0...3)))
                 )
                 
-                LabeledContent("Cost per \(fillup.volumeUnit.singularName)", value: (fillup.pricePerUnit ?? 0).asCurrency())
+                if let cost = fillup.pricePerUnit, cost != 0 {
+                    LabeledContent("Cost per \(fillup.volumeUnit.singularName)", value: cost.asCurrency(preservePrecision: true))
+                }
             }
             
             Section {
@@ -60,7 +62,9 @@ struct FillupDetailView: View {
                 }
                 .accessibilityElement(children: .combine)
                 
-                LabeledContent("Total Cost", value: (fillup.totalCost ?? 0).asCurrency())
+                if let cost = fillup.totalCost, cost != 0 {
+                    LabeledContent("Total Cost", value: cost.asCurrency())
+                }
             }
             
             FormFooterView(

@@ -78,7 +78,7 @@ struct AddEditRecordView: View {
                     }
                     
                     LabeledInput(label: "Cost") {
-                        TextField("Optional", value: $draftServiceLog.cost, format: .number.decimalSeparator(strategy: .automatic))
+                        TextField("Optional", value: $draftServiceLog.cost.zeroAsNil, format: .number.precision(.fractionLength(0...)))
                             .keyboardType(.decimalPad)
                             .selectAllOnFocus()
                     }

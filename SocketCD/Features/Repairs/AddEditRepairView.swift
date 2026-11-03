@@ -56,7 +56,7 @@ struct AddEditRepairView: View {
                     }
                     
                     LabeledInput(label: "Cost") {
-                        TextField("Optional", value: $draftRepair.cost, format: .number.decimalSeparator(strategy: .automatic))
+                        TextField("Optional", value: $draftRepair.cost.zeroAsNil, format: .number.precision(.fractionLength(0...)))
                             .keyboardType(.decimalPad)
                             .selectAllOnFocus()
                     }

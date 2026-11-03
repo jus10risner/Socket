@@ -20,11 +20,20 @@ struct RecordDetailView: View {
             Section {
                 LabeledContent("Date", value: record.effectiveDate.formatted(date: .numeric, time: .omitted))
                 
+                LabeledContent("Services Performed") {
+                    Text((record.serviceLog?.sortedServicesArray ?? [record.service ?? service])
+                        .map(\.name)
+                        .joined(separator: ", "))
+                        .multilineTextAlignment(.trailing)
+                }
+                
                 LabeledContent("Odometer") {
                     Text("\(record.effectiveOdometer.formatted()) \(vehicle.distanceUnit.abbreviated)")
                 }
                 
-                LabeledContent("Cost", value: (record.effectiveCost ?? 0).asCurrency())
+                if let cost = record.effectiveCost, cost != 0 {
+                    LabeledContent("Cost", value: cost.asCurrency())
+                }
             }
             
             FormFooterView(

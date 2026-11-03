@@ -24,7 +24,9 @@ struct RepairDetailView: View {
                     Text("\(repair.odometer.formatted()) \(repair.distanceUnit.abbreviated)")
                 }
                 
-                LabeledContent("Cost", value: (repair.cost ?? 0).asCurrency())
+                if let cost = repair.cost, cost != 0 {
+                    LabeledContent("Cost", value: cost.asCurrency())
+                }
                 
                 if let category = repair.category, !category.name.isEmpty {
                     LabeledContent("Category", value: category.name)

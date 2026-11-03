@@ -68,7 +68,7 @@ struct AddEditFillupView: View {
                     }
                     
                     LabeledContent {
-                        TextField("Optional", value: $draftFillup.cost, format: .number.decimalSeparator(strategy: .automatic))
+                        TextField("Optional", value: $draftFillup.cost.zeroAsNil, format: .number.precision(.fractionLength(0...)))
                             .keyboardType(.decimalPad)
                             .selectAllOnFocus()
                             .foregroundStyle(Color.primary)
@@ -175,12 +175,12 @@ struct AddEditFillupView: View {
     
     // Returns the total or per-unit cost, based on which the user has selected in settings (used to show both costs at once)
     private var calculatedCost: String {
-        guard let cost = draftFillup.cost else { return 0.0.asCurrency() }
+        guard let cost = draftFillup.cost else { return 0.0.asCurrency(trimTrailingZeros: true) }
         
         if settings.fillupCostType == .perUnit {
-            return (cost * (draftFillup.volume ?? 0)).asCurrency()
+            return (cost * (draftFillup.volume ?? 0)).asCurrency(trimTrailingZeros: true)
         } else {
-            return (cost / (draftFillup.volume ?? 0)).asCurrency()
+            return (cost / (draftFillup.volume ?? 0)).asCurrency(trimTrailingZeros: true)
         }
     }
 

@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+extension Binding where Value == Double? {
+    /// Displays zero as an empty optional numeric field.
+    var zeroAsNil: Binding<Double?> {
+        Binding<Double?>(
+            get: { wrappedValue == 0 ? nil : wrappedValue },
+            set: { wrappedValue = $0 == 0 ? nil : $0 }
+        )
+    }
+}
+
 extension Color {
     // Determines whether a color is a light shade, using luminosity
     var isLightColor: Bool {
