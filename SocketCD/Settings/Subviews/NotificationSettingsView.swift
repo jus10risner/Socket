@@ -69,6 +69,7 @@ private struct MaintenanceDueAlertsSection: View {
                 .multilineTextAlignment(.trailing)
                 .fontWeight(.medium)
                 .keyboardType(.numberPad)
+                .selectAllOnFocus()
             }
             
             LabeledContent("Days before due") {
@@ -80,6 +81,7 @@ private struct MaintenanceDueAlertsSection: View {
                 .multilineTextAlignment(.trailing)
                 .fontWeight(.medium)
                 .keyboardType(.numberPad)
+                .selectAllOnFocus()
             }
         } header: {
             Text("Service Reminders")
@@ -124,6 +126,7 @@ private struct OdometerUpdatesSection: View {
                     .fontWeight(.medium)
                     .keyboardType(.numberPad)
                     .focused($intervalIsFocused)
+                    .selectAllOnFocus()
                 }
             }
         } footer: {
@@ -155,8 +158,7 @@ private struct IOSNotificationSettingsSection: View {
                 }
             } label: {
                 LabeledContent {
-                    Image(systemName: "arrow.up.forward.square")
-                        .foregroundStyle(AppSettingsStore.shared.selectedAccent())
+                    Image(systemName: "arrow.up.forward")
                 } label: {
                     Text("Manage Notification Settings")
                 }

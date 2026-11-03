@@ -52,6 +52,7 @@ struct AddEditFillupView: View {
                         TextField("Required", value: $draftFillup.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
                             .focused($isInputActive)
+                            .selectAllOnFocus()
                     }
                     
                     LabeledInput(label: "\(volumeUnit.singularName)s of Fuel") {
@@ -62,12 +63,14 @@ struct AddEditFillupView: View {
                                 .precision(.fractionLength(0...3))
                                 .decimalSeparator(strategy: .automatic)
                         )
-                            .keyboardType(.decimalPad)
+                        .keyboardType(.decimalPad)
+                        .selectAllOnFocus()
                     }
                     
                     LabeledContent {
                         TextField("Optional", value: $draftFillup.cost, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.decimalPad)
+                            .selectAllOnFocus()
                             .foregroundStyle(Color.primary)
                             .multilineTextAlignment(.trailing)
                     } label: {

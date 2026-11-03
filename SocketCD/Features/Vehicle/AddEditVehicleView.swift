@@ -42,11 +42,13 @@ struct AddEditVehicleView: View {
                     LabeledInput(label: "Vehicle Name") {
                         TextField("Required", text: $draftVehicle.name)
                             .textInputAutocapitalization(.words)
+                            .selectAllOnFocus()
                     }
                     
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftVehicle.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
+                            .selectAllOnFocus()
                     }
                 }
                 

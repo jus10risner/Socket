@@ -46,16 +46,19 @@ struct AddEditRepairView: View {
                         TextField("Required", text: $draftRepair.name)
                             .textInputAutocapitalization(.words)
                             .focused($isInputActive)
+                            .selectAllOnFocus()
                     }
                     
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftRepair.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
+                            .selectAllOnFocus()
                     }
                     
                     LabeledInput(label: "Cost") {
                         TextField("Optional", value: $draftRepair.cost, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.decimalPad)
+                            .selectAllOnFocus()
                     }
                     
                     NavigationLink {
@@ -183,36 +186,36 @@ private struct RepairCategorySelectionView: View {
         List {
             Section {
                 ForEach(visibleCategories, id: \.objectID) { category in
-                Button {
-                    selection = isSelected(category) ? nil : category
-                } label: {
-                    LabeledContent(category.name) {
-                        if isSelected(category) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(AppSection.repairs.color)
-                        } else {
-                            Image(systemName: "circle")
-                                .foregroundStyle(.secondary)
+                    Button {
+                        selection = isSelected(category) ? nil : category
+                    } label: {
+                        LabeledContent(category.name) {
+                            if isSelected(category) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(AppSection.repairs.color)
+                            } else {
+                                Image(systemName: "circle")
+                                    .foregroundStyle(.secondary)
+                            }
                         }
+                        .imageScale(.large)
+                        .foregroundStyle(Color.primary)
                     }
-                    .imageScale(.large)
-                    .foregroundStyle(Color.primary)
-                }
-                .swipeActions(edge: .trailing) {
-                    Button("Delete", systemImage: "trash") {
-                        categoryToDelete = category
-                        showingDeleteConfirmation = true
+                    .swipeActions(edge: .trailing) {
+                        Button("Delete", systemImage: "trash") {
+                            categoryToDelete = category
+                            showingDeleteConfirmation = true
+                        }
+                        .tint(.red)
                     }
-                    .tint(.red)
-                }
-                .swipeActions(edge: .leading) {
-                    Button("Rename", systemImage: "pencil") {
-                        categoryToRename = category
-                        renamedCategory = category.name
-                        showingRenameAlert = true
+                    .swipeActions(edge: .leading) {
+                        Button("Rename", systemImage: "pencil") {
+                            categoryToRename = category
+                            renamedCategory = category.name
+                            showingRenameAlert = true
+                        }
+                        .tint(AppSection.repairs.color)
                     }
-                    .tint(AppSection.repairs.color)
-                }
                 }
             } footer: {
                 Text("Use categories to organize repairs and group them in the repairs list.")

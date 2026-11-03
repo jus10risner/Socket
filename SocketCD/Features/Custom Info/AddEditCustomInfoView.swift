@@ -42,10 +42,12 @@ struct AddEditCustomInfoView: View {
                     LabeledInput(label: "Name") {
                         TextField("e.g. Tire Size", text: $draftCustomInfo.label)
                             .focused($isInputActive)
+                            .selectAllOnFocus()
                     }
                     
                     LabeledInput(label: "Information") {
                         TextField("e.g. 225/45R17", text: $draftCustomInfo.detail)
+                            .selectAllOnFocus()
                     }
                 }
                 

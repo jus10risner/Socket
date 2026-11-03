@@ -73,12 +73,14 @@ struct AddEditRecordView: View {
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftServiceLog.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
+                            .selectAllOnFocus()
                             .focused($isInputActive)
                     }
                     
                     LabeledInput(label: "Cost") {
                         TextField("Optional", value: $draftServiceLog.cost, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.decimalPad)
+                            .selectAllOnFocus()
                     }
                 }
                 

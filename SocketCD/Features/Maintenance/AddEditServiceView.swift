@@ -56,6 +56,7 @@ struct AddEditServiceView: View {
                     TextField("Service Name (e.g. Oil Change)", text: $draftService.name)
                         .textInputAutocapitalization(.words)
                         .focused($isInputActive)
+                        .selectAllOnFocus()
                 }
                 
                 Section {
@@ -189,7 +190,8 @@ struct AddEditServiceView: View {
     
     private var distanceField: some View {
         HStack {
-            TextField("5,000", text: optionalIntFieldBinding($draftService.distanceInterval))
+            TextField("5,000", value: optionalNumberBinding($draftService.distanceInterval), format: .number)
+                .selectAllOnFocus()
                 .fixedSize()
                 .accessibilityLabel("Distance interval")
                 .accessibilityHint("Enter the number of " + distanceUnit.rawValue)
@@ -201,7 +203,8 @@ struct AddEditServiceView: View {
     
     private var timeField: some View {
         HStack {
-            TextField("6", text: optionalIntFieldBinding($draftService.timeInterval))
+            TextField("6", value: optionalNumberBinding($draftService.timeInterval), format: .number)
+                .selectAllOnFocus()
                 .fixedSize()
                 .accessibilityLabel("Time interval")
                 .accessibilityHint("Enter the number of months or years")
@@ -251,6 +254,7 @@ struct AddEditServiceView: View {
             LabeledInput(label: "Odometer") {
                 TextField("Required", value: draft.odometer, format: .number.decimalSeparator(strategy: .automatic))
                     .keyboardType(.numberPad)
+                    .selectAllOnFocus()
                     .accessibilityLabel("Odometer")
             }
             .padding(.leading, selectionIconWidth + 12)
@@ -315,19 +319,14 @@ struct AddEditServiceView: View {
         dismiss()
     }
     
-    // Allows optional Int values to be displayed as blank fields if the value is either nil or 0 (for better UX)
-    private func optionalIntFieldBinding(_ value: Binding<Int?>) -> Binding<String> {
+    // Treats zero as an empty value while allowing TextField to format numbers.
+    private func optionalNumberBinding(_ value: Binding<Int?>) -> Binding<Int?> {
         Binding(
             get: {
-                guard let v = value.wrappedValue, v != 0 else { return "" }
-                return String(v)
+                value.wrappedValue == 0 ? nil : value.wrappedValue
             },
             set: { newValue in
-                if let intValue = Int(newValue), intValue != 0 {
-                    value.wrappedValue = intValue
-                } else {
-                    value.wrappedValue = nil
-                }
+                value.wrappedValue = newValue == 0 ? nil : newValue
             }
         )
     }
