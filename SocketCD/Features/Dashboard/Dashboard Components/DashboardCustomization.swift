@@ -87,6 +87,7 @@ struct DashboardCustomizationView: View {
                                     .foregroundStyle(Color.secondary)
                             }
                         }
+                        .imageScale(.large)
                     }
                     .buttonStyle(.plain)
                     .accessibilityValue(preference.isVisible ? "Shown" : "Hidden")
