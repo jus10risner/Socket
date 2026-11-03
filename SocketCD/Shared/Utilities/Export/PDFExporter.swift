@@ -31,9 +31,9 @@ enum PDFPaperSize: String, CaseIterable, Identifiable {
 
 struct PDFExportOptions {
     var paperSize: PDFPaperSize = .usLetter
-    var includePhotos = true
+    var includePhotos = false
     var includeCosts = true
-    var includeNotes = false
+    var includeNotes = true
 }
 
 struct PDFExporter {

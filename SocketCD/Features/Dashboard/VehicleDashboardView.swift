@@ -167,6 +167,7 @@ struct VehicleDashboardView: View {
                 PDFExportOptionsView { options in
                     exportPDF(options: options)
                 }
+                .presentationBackground(Color(.systemBackground))
             }
             .tint(settings.selectedAccent())
             .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
@@ -397,20 +398,16 @@ private struct PDFExportOptionsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Paper Size") {
-                    Picker("Paper Size", selection: paperSizeSelection) {
-                        ForEach(PDFPaperSize.allCases) { paperSize in
-                            Text(paperSize.title).tag(paperSize)
-                        }
+                Picker("Paper Size", selection: paperSizeSelection) {
+                    ForEach(PDFPaperSize.allCases) { paperSize in
+                        Text(paperSize.title).tag(paperSize)
                     }
-                    .pickerStyle(.inline)
-                    .labelsHidden()
                 }
 
-                Section {
-                    Toggle("Include Photos", isOn: $options.includePhotos)
-                    Toggle("Include Costs", isOn: $options.includeCosts)
-                    Toggle("Include Notes", isOn: $options.includeNotes)
+                Section("Include in PDF") {
+                    Toggle("Costs", isOn: $options.includeCosts)
+                    Toggle("Notes", isOn: $options.includeNotes)
+                    Toggle("Photos", isOn: $options.includePhotos)
                 }
             }
             .navigationTitle("Export PDF")
