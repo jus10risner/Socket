@@ -40,7 +40,6 @@ struct AddEditRepairView: View {
                 
                 Section {
                     DatePicker("Date", selection: $draftRepair.date, displayedComponents: .date)
-                        .foregroundStyle(Color.secondary)
                     
                     LabeledInput(label: "Name") {
                         TextField("Required", text: $draftRepair.name)

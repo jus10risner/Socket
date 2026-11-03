@@ -46,7 +46,6 @@ struct AddEditFillupView: View {
                 
                 Section {
                     DatePicker("Fill-up Date", selection: $draftFillup.date, displayedComponents: .date)
-                        .foregroundStyle(Color.secondary)
                     
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftFillup.odometer, format: .number.decimalSeparator(strategy: .automatic))
@@ -84,7 +83,6 @@ struct AddEditFillupView: View {
                         }
                         .accessibilityHidden(true)
                     }
-                    .foregroundStyle(Color.secondary)
                     .accessibilityLabel(settings.fillupCostType == .perUnit ? "Cost per \(volumeUnit.singularName)" : "Total Cost")
                     .accessibilityHint(
                         settings.showCalculatedCost && draftFillup.cost != nil
