@@ -7,6 +7,7 @@ import CoreData
 import PDFKit
 import Testing
 import UIKit
+import UniformTypeIdentifiers
 @testable import SocketCD
 
 @Suite("PDF Exporter Tests", .serialized)
@@ -38,7 +39,7 @@ struct PDFExporterTests {
                 context.fill(CGRect(x: 0, y: 0, width: 300, height: 600))
             }
 
-        repair.photos = NSSet(array: (0..<12).map { index in
+        repair.photos = NSSet(array: (0..<24).map { index in
             let photo = Photo(context: controller.context)
             photo.id = UUID()
             photo.timeStamp = Date(timeIntervalSince1970: TimeInterval(index))
@@ -80,7 +81,7 @@ struct PDFExporterTests {
         #expect(PDFDocument(url: url)?.pageCount == 1)
     }
 
-    @Test func `Records on the same date share one date heading`() throws {
+    @Test func `Records with matching date and odometer retain their own metadata`() throws {
         let controller = TestDataController()
         let vehicle = makeVehicle(in: controller.context)
         let date = Date(timeIntervalSince1970: 1_700_000_000)
@@ -97,11 +98,11 @@ struct PDFExporterTests {
         let text = try #require(PDFDocument(url: url)?.string)
         let dateHeading = date.formatted(date: .long, time: .omitted)
 
-        #expect(text.components(separatedBy: dateHeading).count - 1 == 1)
+        #expect(text.components(separatedBy: dateHeading).count - 1 == 2)
         #expect(text.contains("Brake repair"))
         #expect(text.contains("Tire rotation"))
-        #expect(text.components(separatedBy: "41,500").count - 1 == 1)
-        #expect(text.components(separatedBy: 325.0.asCurrency()).count - 1 == 1)
+        #expect(text.components(separatedBy: "41,500").count - 1 == 2)
+        #expect(text.components(separatedBy: 325.0.asCurrency()).count - 1 == 2)
     }
 
     @Test func `Different odometers and costs stay with their entries`() throws {
@@ -124,6 +125,7 @@ struct PDFExporterTests {
 
         #expect(text.contains("41,500"))
         #expect(text.contains("41,750"))
+        #expect(PDFExporter.timelineEntries(for: vehicle).count == 2)
         #expect(text.contains(325.0.asCurrency()))
         #expect(text.contains(90.0.asCurrency()))
     }
@@ -150,14 +152,14 @@ struct PDFExporterTests {
         #expect(!withoutCostsText.contains(325.0.asCurrency()))
     }
 
-    @Test func `Notes are excluded by default and can be included`() throws {
+    @Test func `Notes can be excluded or included`() throws {
         let controller = TestDataController()
         let vehicle = makeVehicle(in: controller.context)
         let repair = makeRepair(for: vehicle, in: controller.context)
 
         let withoutNotesURL = try #require(PDFExporter.export(
             vehicle: vehicle,
-            options: PDFExportOptions(paperSize: .usLetter, includePhotos: false)
+            options: PDFExportOptions(paperSize: .usLetter, includePhotos: false, includeNotes: false)
         ))
         let withoutNotesData = try Data(contentsOf: withoutNotesURL)
         let withNotesURL = try #require(PDFExporter.export(
@@ -175,6 +177,109 @@ struct PDFExporterTests {
 
         #expect(!withoutNotesText.contains(repair.note))
         #expect(withNotesText.contains(repair.note))
+    }
+
+    @Test func attachedPDFsFollowReportAndGroupMaintenanceServices() throws {
+        let controller = TestDataController()
+        let vehicle = makeVehicle(in: controller.context)
+        let log = ServiceLog(context: controller.context)
+        log.id = UUID()
+        log.date = Date(timeIntervalSince1970: 1_700_000_000)
+        for name in ["Oil change", "Tire rotation"] {
+            let service = Service(context: controller.context)
+            service.name = name
+            service.vehicle = vehicle
+            let record = ServiceRecord(context: controller.context)
+            record.id = UUID()
+            record.service = service
+            record.serviceLog = log
+        }
+        let attachment = AttachedDocument(context: controller.context)
+        attachment.fileName = "Invoice.pdf"
+        attachment.contentType = .pdf
+        let bounds = CGRect(x: 0, y: 0, width: 400, height: 300)
+        attachment.documentData = UIGraphicsPDFRenderer(bounds: bounds).pdfData { context in
+            for text in ["Invoice first page", "Invoice second page"] {
+                context.beginPage()
+                (text as NSString).draw(at: CGPoint(x: 20, y: 20), withAttributes: [
+                    .font: UIFont.systemFont(ofSize: 12)
+                ])
+            }
+        }
+        log.documents = NSSet(object: attachment)
+        let repair = makeRepair(for: vehicle, in: controller.context)
+        repair.date = log.date.addingTimeInterval(-86_400)
+        let repairAttachment = AttachedDocument(context: controller.context)
+        repairAttachment.fileName = "Repair.pdf"
+        repairAttachment.contentType = .pdf
+        repairAttachment.documentData = attachment.documentData
+        repair.documents = NSSet(object: repairAttachment)
+
+        let plainURL = try #require(PDFExporter.export(vehicle: vehicle, options: PDFExportOptions()))
+        let plain = try #require(PDFDocument(data: Data(contentsOf: plainURL)))
+        let url = try #require(PDFExporter.export(
+            vehicle: vehicle, options: PDFExportOptions(includePDFDocuments: true)
+        ))
+        let result = try #require(PDFDocument(url: url))
+        #expect(result.pageCount == plain.pageCount + 4)
+        let timeline = try #require(result.page(at: 0)?.string)
+        #expect(timeline.contains("See Appendix A"))
+        #expect(timeline.contains("See Appendix B"))
+        #expect(!(plain.string ?? "").contains("See Appendix"))
+        for index in 0..<4 {
+            let page = try #require(result.page(at: plain.pageCount + index))
+            let text = try #require(page.string)
+            #expect(text.contains(index < 2 ? "Appendix A:" : "Appendix B:"))
+            #expect(text.contains(index % 2 == 0 ? "Invoice first page" : "Invoice second page"))
+            #expect(page.bounds(for: .mediaBox).width == bounds.width)
+            #expect(page.bounds(for: .mediaBox).height > bounds.height)
+            if index < 2 {
+                #expect(text.contains("Oil change"))
+                #expect(text.contains("Tire rotation"))
+            } else {
+                #expect(text.contains("Brake repair"))
+            }
+        }
+    }
+
+    @Test func invalidPDFDoesNotSilentlyProduceIncompleteExport() {
+        let controller = TestDataController()
+        let vehicle = makeVehicle(in: controller.context)
+        let repair = makeRepair(for: vehicle, in: controller.context)
+        let attachment = AttachedDocument(context: controller.context)
+        attachment.contentType = .pdf
+        attachment.documentData = Data("invalid PDF".utf8)
+        repair.documents = NSSet(object: attachment)
+        #expect(PDFExporter.export(vehicle: vehicle, options: PDFExportOptions()) != nil)
+        #expect(PDFExporter.export(
+            vehicle: vehicle, options: PDFExportOptions(includePDFDocuments: true)
+        ) == nil)
+    }
+
+    @Test func appendixLettersContinueAfterZ() {
+        #expect(PDFExporter.appendixKey(for: 0) == "A")
+        #expect(PDFExporter.appendixKey(for: 25) == "Z")
+        #expect(PDFExporter.appendixKey(for: 26) == "AA")
+        #expect(PDFExporter.appendixKey(for: 51) == "AZ")
+        #expect(PDFExporter.appendixKey(for: 52) == "BA")
+    }
+
+    @Test func longNotesFlowAcrossPagesWithoutLosingText() throws {
+        let controller = TestDataController()
+        let vehicle = makeVehicle(in: controller.context)
+        let repair = makeRepair(for: vehicle, in: controller.context)
+        repair.note = (0..<300).map { "Inspection item \($0): Checked components and verified operation." }.joined(separator: "\n")
+        let url = try #require(PDFExporter.export(vehicle: vehicle, options: PDFExportOptions()))
+        let document = try #require(PDFDocument(url: url))
+        let text = try #require(document.string)
+        #expect(document.pageCount > 1)
+        #expect(text.contains("Inspection item 0:"))
+        #expect(text.contains("Inspection item 299:"))
+        for index in 0..<document.pageCount {
+            let page = try #require(document.page(at: index))
+            let selection = try #require(page.selection(for: page.bounds(for: .mediaBox)))
+            #expect(selection.bounds(for: page).minY >= 20)
+        }
     }
 
     private func makeVehicle(in context: NSManagedObjectContext) -> Vehicle {

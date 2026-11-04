@@ -37,6 +37,8 @@ struct VehicleDashboardView: View {
     @State private var shareItem: ShareItem?
     @State private var showingExportOptions = false
     @State private var showingExportError = false
+    @State private var showingCSVExportOptions = false
+    @State private var pendingCSVOptions: CSVExportOptions?
 
     private let minimumColumnWidth: CGFloat = 325
     private let maximumGridWidth: CGFloat = 800
@@ -169,6 +171,12 @@ struct VehicleDashboardView: View {
                 }
                 .presentationBackground(Color(.systemBackground))
             }
+            .sheet(isPresented: $showingCSVExportOptions, onDismiss: exportPendingCSV) {
+                CSVExportOptionsView { options in
+                    pendingCSVOptions = options
+                }
+                .presentationBackground(Color(.systemBackground))
+            }
             .tint(settings.selectedAccent())
             .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
                 TextField("\(draftVehicle.odometer ?? 0)", text: $newOdometerValue)
@@ -198,7 +206,7 @@ struct VehicleDashboardView: View {
                 onConfirm: commitPendingOdometer,
                 onCancel: { pendingOdometer = nil }
             )
-            .alert("Couldn’t Export PDF", isPresented: $showingExportError) {
+            .alert("Couldn’t Export Records", isPresented: $showingExportError) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("The document couldn’t be created. Please try again.")
@@ -299,32 +307,37 @@ struct VehicleDashboardView: View {
         }
     }
     
-    private func csvExportButton(title: String, _ action: @escaping () async -> URL?) -> some View {
-        Button(title) {
-            Task {
-                if let exportURL = await action() {
-                    shareItem = ShareItem(url: exportURL)
-                }
-            }
+    private func exportPendingCSV() {
+        guard let options = pendingCSVOptions else { return }
+        pendingCSVOptions = nil
+        do {
+            let url = try CSVExporter.export(vehicle: vehicle, options: options)
+            shareItem = ShareItem(url: url)
+        } catch {
+            showingExportError = true
         }
     }
-    
+
     // Menu, including buttons for exporting/sharing vehicle records.
     private var exportMenu: some View {
-        Menu("Export Records", systemImage: "square.and.arrow.up") {
-            Section("Printable Document (PDF)") {
-                Button("Maintenance and Repairs") { showingExportOptions = true }
+        Menu("Export", systemImage: "square.and.arrow.up") {
+            Button {
+                showingExportOptions = true
+            } label: {
+                Label("Vehicle History", systemImage: "document")
+                Text("PDF Report")
             }
             
-            Section("Spreadsheet (CSV)") {
-                csvExportButton(title: "All Vehicle Records") { CSVExporter.exportAllRecords(for: vehicle) }
-                csvExportButton(title: "Fill-ups") { CSVExporter.exportFillups(for: vehicle) }
-                csvExportButton(title: "Maintenance and Repairs") { CSVExporter.exportMaintenanceAndRepairs(for: vehicle) }
+            Button {
+                showingCSVExportOptions = true
+            } label: {
+                Label("Raw Data", systemImage: "tablecells")
+                Text("CSV Spreadsheets")
             }
         }
         .accessibilityHint("Save or share records for this vehicle")
     }
-    
+
     @ViewBuilder
     private func destinationView(for section: AppSection, vehicle: Vehicle) -> some View {
         switch section {
@@ -386,69 +399,6 @@ private struct DashboardCardGrid: View {
             }
         }
     }
-}
-
-private struct PDFExportOptionsView: View {
-    @Environment(\.dismiss) private var dismiss
-    @AppStorage("pdfExportPaperSize") private var paperSizeRawValue = PDFPaperSize.usLetter.rawValue
-    @State private var options = PDFExportOptions()
-
-    let export: (PDFExportOptions) -> Void
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                Picker("Paper Size", selection: paperSizeSelection) {
-                    ForEach(PDFPaperSize.allCases) { paperSize in
-                        Text(paperSize.title).tag(paperSize)
-                    }
-                }
-
-                Section("Include in PDF") {
-                    Toggle("Costs", isOn: $options.includeCosts)
-                    Toggle("Notes", isOn: $options.includeNotes)
-                    Toggle("Photos", isOn: $options.includePhotos)
-                }
-            }
-            .navigationTitle("Export PDF")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark") { dismiss() }
-                        .labelStyle(.adaptive)
-                        .adaptiveTint()
-                }
-
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Export", systemImage: "checkmark") {
-                        var selectedOptions = options
-                        selectedOptions.paperSize = selectedPaperSize
-                        dismiss()
-                        export(selectedOptions)
-                    }
-                    .labelStyle(.adaptive)
-                }
-            }
-        }
-        .presentationDetents([.medium])
-    }
-
-    private var selectedPaperSize: PDFPaperSize {
-        PDFPaperSize(rawValue: paperSizeRawValue) ?? .usLetter
-    }
-
-    private var paperSizeSelection: Binding<PDFPaperSize> {
-        Binding(
-            get: { selectedPaperSize },
-            set: { paperSizeRawValue = $0.rawValue }
-        )
-    }
-}
-
-// Allows ActivityView to work with the .sheet(item:) modifier (requires a URL with Identifiable conformance)
-struct ShareItem: Identifiable {
-    let id = UUID()
-    let url: URL
 }
 
 // Sheet options for VehicleDashboardView

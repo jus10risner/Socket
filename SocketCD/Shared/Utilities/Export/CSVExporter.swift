@@ -1,283 +1,188 @@
-//
-//  CSVExporter.swift
-//  SocketCD
-//
-//  Created by Justin Risner on 8/8/25.
-//
+import Foundation
 
-import SwiftUI
+struct CSVExportOptions {
+    var includeMaintenance = true
+    var includeRepairs = true
+    var includeFillups = true
 
+    var selectedKinds: [CSVRecordKind] {
+        var kinds: [CSVRecordKind] = []
+        if includeMaintenance { kinds.append(.maintenance) }
+        if includeRepairs { kinds.append(.repairs) }
+        if includeFillups { kinds.append(.fillups) }
+        return kinds
+    }
+
+    var hasSelection: Bool {
+        !selectedKinds.isEmpty
+    }
+}
+
+enum CSVExportError: Error {
+    case noRecordsSelected
+    case archiveCreationFailed
+}
+
+enum CSVRecordKind: String, CaseIterable {
+    case maintenance = "Maintenance"
+    case repairs = "Repairs"
+    case fillups = "Fill-ups"
+
+    var filename: String { "\(rawValue).csv" }
+}
+
+struct CSVExportDocument {
+    let filename: String
+    let contents: String
+}
+
+/// Each selected record type gets an ordinary CSV. Multiple files are bundled in a ZIP.
 struct CSVExporter {
-    // MARK: - Export only service and repair records
-    static func exportMaintenanceAndRepairs(for vehicle: Vehicle) -> URL? {
-        let fileName = "\(vehicle.name) Maintenance & Repairs.csv"
-        let tempDirectory = NSTemporaryDirectory()
-        let fileURL = URL(fileURLWithPath: tempDirectory, isDirectory: true).appendingPathComponent(fileName)
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yyyy"
-
-        var csvRows: [String] = []
-        csvRows.append("Type,Date,Odometer,Name,Category,Cost,Note")
-
-        for entry in vehicle.serviceAndRepairTimeline {
-            let date = dateFormatter.string(from: entry.date)
-            let odometer = entry.odometer
-            
-            let name: String
-            let note: String
-            let cost: String
-            let type: String
-            let category: String
-
-            switch entry.type {
-            case .serviceRecord(let record):
-                name = record.service?.name ?? "Service"
-                note = record.note
-                cost = String(format: "%.2f", record.cost ?? 0)
-                type = "Service"
-                category = ""
-            case .serviceLog(let log):
-                // ServiceLog: combine all service names into one field
-                let namesArray = log.sortedServicesArray.map { $0.name }
-                name = namesArray.joined(separator: ", ")
-                note = log.note
-                cost = String(format: "%.2f", log.cost ?? 0)
-                type = "Service"
-                category = ""
-            case .repair(let repair):
-                name = repair.name
-                note = repair.note
-                cost = String(format: "%.2f", repair.cost ?? 0)
-                type = "Repair"
-                category = repair.category?.name ?? ""
-            }
-
-            // Escape quotes and commas in the note
-            let escapedNote = "\"\(note.replacingOccurrences(of: "\"", with: "\"\""))\""
-            let escapedName = "\"\(name.replacingOccurrences(of: "\"", with: "\"\""))\""
-            let escapedCategory = "\"\(category.replacingOccurrences(of: "\"", with: "\"\""))\""
-
-            let row = "\(type),\(date),\(odometer),\(escapedName),\(escapedCategory),\(cost),\(escapedNote)"
-            csvRows.append(row)
-        }
-
-        let csvString = csvRows.joined(separator: "\n")
-
-        do {
-            try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
-            return fileURL
-        } catch {
-            print("Failed to write CSV: \(error)")
-            return nil
-        }
-    }
-    
-    // MARK: - Export only fill-up records
-    static func exportFillups(for vehicle: Vehicle) -> URL? {
-        let filename = "\(vehicle.name) Fill-ups.csv"
-        let tempDirectory = NSTemporaryDirectory()
-        let fileURL = URL(fileURLWithPath: tempDirectory, isDirectory: true).appendingPathComponent(filename)
-
-        var allFillups: [String] = []
-
-        let header = """
-        Date,Odometer,Fuel (\(vehicle.volumeUnit.exportAbbreviation)),Cost per \(vehicle.volumeUnit.exportAbbreviation),Trip (\(vehicle.distanceUnit.abbreviated)),Fuel Economy (\(vehicle.fuelEconomyUnit.displayName)),Total Cost,Full Tank?,Note
-        """
-        allFillups.append(header)
-
-        // Helper to escape quotes
-        func escape(_ string: String) -> String {
-            "\"\(string.replacingOccurrences(of: "\"", with: "\"\""))\""
-        }
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-
-        for fillup in vehicle.sortedFillupsArray {
-            let dateString = dateFormatter.string(from: fillup.date)
-            let odometerString = String(fillup.odometer)
-            let volumeString = String(format: "%.2f", fillup.volume) // 2 decimals for volume
-            let priceString = String(format: "%.2f", fillup.pricePerUnit ?? 0) // 2 decimals for price
-            let tripString = String(fillup.tripDistance)
-            let fuelEconomyString = String(format: "%.1f", fillup.fuelEconomy())
-            let totalCostString = String(format: "%.2f", fillup.totalCost ?? 0)
-            let fullTankString = fillup.fillType == .partialFill ? "No" : "Yes"
-            let noteString = escape(fillup.note)
-
-            let csvRow = [
-                dateString,
-                odometerString,
-                volumeString,
-                priceString,
-                tripString,
-                fuelEconomyString,
-                totalCostString,
-                fullTankString,
-                noteString
-            ].joined(separator: ",")
-
-            allFillups.append(csvRow)
-        }
-
-        let csvString = allFillups.joined(separator: "\n")
-
-        do {
-            try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
-            return fileURL
-        } catch {
-            print("Failed to create fill-ups CSV: \(error)")
-            return nil
+    static func documents(vehicle: Vehicle, options: CSVExportOptions) throws -> [CSVExportDocument] {
+        let kinds = options.selectedKinds
+        guard !kinds.isEmpty else { throw CSVExportError.noRecordsSelected }
+        return kinds.map {
+            CSVExportDocument(filename: $0.filename, contents: csv(vehicle: vehicle, kind: $0))
         }
     }
 
-    // MARK: - Export all records in one CSV file
-    static func exportAllRecords(for vehicle: Vehicle) -> URL? {
-        let fileName = "\(vehicle.name) All Records.csv"
-        let tempDirectory = NSTemporaryDirectory()
-        let fileURL = URL(fileURLWithPath: tempDirectory, isDirectory: true).appendingPathComponent(fileName)
-
-        var rows: [String] = []
-
-        let header = [
-            "Type",
-            "Date",
-            "Odometer",
-            "Name",
-            "Cost",
-            "Trip",
-            "Fuel Economy",
-            "Full Tank?",
-            "Note"
-        ].joined(separator: ",")
-
-        rows.append(header)
-
-        func escape(_ string: String) -> String {
-            return "\"\(string.replacingOccurrences(of: "\"", with: "\"\""))\""
+    static func export(vehicle: Vehicle, options: CSVExportOptions) throws -> URL {
+        let documents = try documents(vehicle: vehicle, options: options)
+        let manager = FileManager.default
+        let directory = manager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let name = vehicle.name.components(separatedBy: CharacterSet(charactersIn: "/:\\").union(.controlCharacters))
+            .joined(separator: "-")
+        let exportName = "\(name.isEmpty ? "Vehicle" : name) Records"
+        let source = directory.appendingPathComponent(exportName, isDirectory: true)
+        try manager.createDirectory(at: source, withIntermediateDirectories: true)
+        var completed = false
+        defer {
+            try? manager.removeItem(at: source)
+            if !completed { try? manager.removeItem(at: directory) }
         }
-
-        struct ExportRow {
-            let type: String
-            let date: Date
-            let odometer: Int
-            let name: String?
-            let cost: Double?
-            let trip: Int?
-            let fuelEconomy: Double?
-            let fullTank: Bool?
-            let note: String
+        if documents.count == 1, let document = documents.first {
+            let url = directory.appendingPathComponent(document.filename)
+            try document.contents.write(to: url, atomically: true, encoding: .utf8)
+            completed = true
+            return url
         }
+        for document in documents {
+            try document.contents.write(to: source.appendingPathComponent(document.filename),
+                                        atomically: true, encoding: .utf8)
+        }
+        let url = directory.appendingPathComponent("\(exportName).zip")
+        var coordinationError: NSError?
+        var copyResult: Result<Void, Error> = .failure(CSVExportError.archiveCreationFailed)
+        // Foundation creates a standard ZIP snapshot of a directory. Copy it inside
+        // the accessor because the snapshot is removed when coordination finishes.
+        NSFileCoordinator().coordinate(readingItemAt: source, options: .forUploading,
+                                       error: &coordinationError) { archive in
+            copyResult = Result { try manager.copyItem(at: archive, to: url) }
+        }
+        if let coordinationError { throw coordinationError }
+        try copyResult.get()
+        completed = true
+        return url
+    }
 
-        var combinedRows: [ExportRow] = []
+    static func columns(vehicle: Vehicle, kind: CSVRecordKind) -> [String] {
+        let columns = ["Date", "Odometer (\(vehicle.distanceUnit.abbreviated))"]
+        switch kind {
+        case .maintenance:
+            return ["Date", "Services Performed", "Odometer (\(vehicle.distanceUnit.abbreviated))", "Total Cost", "Note"]
+        case .repairs:
+            return columns + ["Name", "Total Cost", "Category", "Note"]
+        case .fillups:
+            return columns + [
+                "Fuel (\(vehicle.volumeUnit.exportAbbreviation))",
+                "Cost per \(vehicle.volumeUnit.exportAbbreviation)", "Total Cost", "Fill Type",
+                "Trip Distance (\(vehicle.distanceUnit.abbreviated))",
+                "Fuel Economy (\(vehicle.fuelEconomyUnit.displayName))", "Note"
+            ]
+        }
+    }
 
-        for record in vehicle.serviceAndRepairTimeline {
-            switch record.type {
-            case .serviceRecord(let record):
-                combinedRows.append(
-                    ExportRow(
-                        type: "Service",
-                        date: record.date,
-                        odometer: record.odometer,
-                        name: record.service?.name,
-                        cost: record.cost ?? 0,
-                        trip: nil,
-                        fuelEconomy: nil,
-                        fullTank: nil,
-                        note: record.note
-                    )
-                )
-            
-            case .serviceLog(let log):
-            // New ServiceLog: all service names in a single field
-            let names = log.sortedServicesArray.map { $0.name }.joined(separator: ", ")
-            combinedRows.append(
-                ExportRow(
-                    type: "Service",
-                    date: log.date,
-                    odometer: log.odometer,
-                    name: names,
-                    cost: log.cost ?? 0,
-                    trip: nil,
-                    fuelEconomy: nil,
-                    fullTank: nil,
-                    note: log.note
-                )
-            )
-            
-            case .repair(let repair):
-                combinedRows.append(
-                    ExportRow(
-                        type: "Repair",
-                        date: repair.date,
-                        odometer: repair.odometer,
-                        name: repair.name,
-                        cost: repair.cost ?? 0,
-                        trip: nil,
-                        fuelEconomy: nil,
-                        fullTank: nil,
-                        note: repair.note
-                    )
-                )
+    static func csv(vehicle: Vehicle, kind: CSVRecordKind) -> String {
+        var rows: [(date: Date, fields: [String])] = []
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.dateFormat = "yyyy-MM-dd"
+
+        if kind != .fillups {
+            for entry in vehicle.serviceAndRepairTimeline {
+                let date = formatter.string(from: entry.date)
+                let odometer = entry.odometer.formatted()
+                let fields: [String]
+                switch entry.type {
+                case .serviceRecord(let record):
+                    guard kind == .maintenance else { continue }
+                    fields = [date, serviceNames(record.service.map { [$0.name] } ?? []), odometer, record.cost?.asCurrency() ?? "", record.note]
+                case .serviceLog(let log):
+                    guard kind == .maintenance else { continue }
+                    let services = serviceNames(log.sortedServicesArray.map { $0.name })
+                    fields = [date, services, odometer, log.cost?.asCurrency() ?? "", log.note]
+                case .repair(let repair):
+                    guard kind == .repairs else { continue }
+                    fields = [
+                        date, odometer, repair.name, repair.cost?.asCurrency() ?? "",
+                        repair.category?.name ?? "", repair.note
+                    ]
+                }
+                rows.append((entry.date, fields))
+            }
+        } else {
+            for fillup in vehicle.sortedFillupsArray {
+                rows.append((fillup.date, [
+                    formatter.string(from: fillup.date), fillup.odometer.formatted(),
+                    fuelVolume(fillup.volume), unitCost(fillup.pricePerUnit),
+                    fillup.totalCost?.asCurrency() ?? "",
+                    fillup.fillType.rawValue, String(fillup.tripDistance),
+                    String(format: "%.1f", locale: Locale(identifier: "en_US_POSIX"), fillup.fuelEconomy()),
+                    fillup.note
+                ]))
             }
         }
-
-        for fillup in vehicle.sortedFillupsArray {
-            combinedRows.append(
-                ExportRow(
-                    type: "Fill-up",
-                    date: fillup.date,
-                    odometer: fillup.odometer,
-                    name: nil,
-                    cost: fillup.totalCost ?? 0,
-                    trip: fillup.tripDistance,
-                    fuelEconomy: fillup.fuelEconomy(),
-                    fullTank: fillup.fillType == .partialFill ? false : true,
-                    note: fillup.note
-                )
-            )
+        rows.sort {
+            if $0.date != $1.date { return $0.date > $1.date }
+            return $0.fields.lexicographicallyPrecedes($1.fields)
         }
+        return ([columns(vehicle: vehicle, kind: kind)] + rows.map(\.fields))
+            .map { $0.map(escape).joined(separator: ",") }
+            .joined(separator: "\r\n") + "\r\n"
+    }
 
-        combinedRows.sort { $0.date > $1.date }
+    // Quote names containing list delimiters so a future importer can distinguish
+    // a single "Oil, filter" service from two services. The outer CSV is escaped separately.
+    static func serviceNames(_ names: [String]) -> String {
+        names.map { name in
+            name.contains(where: { ",\"\r\n".contains($0) }) ? escape(name) : name
+        }.joined(separator: ", ")
+    }
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
+    static func unitCost(_ value: Double?, locale: Locale = .current) -> String {
+        guard let value else { return "" }
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = locale
+        // Compare the shortest decimal representation, not a tolerance that can
+        // mistake a longer calculated price for an entered three-decimal price.
+        let decimal = Decimal(string: String(value), locale: Locale(identifier: "en_US_POSIX"))
+        let fractionDigits = decimal.map { max(0, -$0.exponent) } ?? 0
+        let digits = fractionDigits == 3 ? 3 : 2
+        formatter.minimumFractionDigits = digits
+        formatter.maximumFractionDigits = digits
+        return formatter.string(from: NSNumber(value: value)) ?? ""
+    }
 
-        for row in combinedRows {
-            let dateString = dateFormatter.string(from: row.date)
-            let odometerString = String(row.odometer)
-            let costString = row.cost != nil ? String(format: "%.2f", row.cost!) : ""
-            let tripString = row.trip != nil ? String(row.trip!) : ""
-            let fuelEconomyString = row.fuelEconomy != nil ? String(format: "%.1f", row.fuelEconomy!) : ""
-            let fullTankString = row.fullTank.map { $0 ? "Yes" : "No" } ?? ""
-            let nameString = row.name.map(escape) ?? ""
-            let noteString = escape(row.note)
+    // Match the fuel-entry form's maximum precision and remove conversion noise.
+    // Original trailing zeros are not retained by the model.
+    static func fuelVolume(_ value: Double) -> String {
+        value.formatted(.number.locale(Locale(identifier: "en_US_POSIX"))
+            .grouping(.never).precision(.fractionLength(0...3)))
+    }
 
-            let csvRow = [
-                row.type,
-                dateString,
-                odometerString,
-                nameString,
-                costString,
-                tripString,
-                fuelEconomyString,
-                fullTankString,
-                noteString
-            ].joined(separator: ",")
-
-            rows.append(csvRow)
-        }
-
-        let csvString = rows.joined(separator: "\n")
-
-        do {
-            try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
-            return fileURL
-        } catch {
-            print("Failed to write combined CSV: \(error)")
-            return nil
-        }
+    static func escape(_ value: String) -> String {
+        "\"" + value.replacingOccurrences(of: "\"", with: "\"\"") + "\""
     }
 }

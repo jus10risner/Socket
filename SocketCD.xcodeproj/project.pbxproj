@@ -83,6 +83,10 @@
 		9EBB223C306AD37600A37D48 /* OdometerWarningAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBB223B306AD37600A37D48 /* OdometerWarningAlertModifier.swift */; };
 		9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */; };
 		9EC4F0B2309A33CB00BF1A21 /* AutoSelectAllModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F0B1309A33CB00BF1A21 /* AutoSelectAllModifier.swift */; };
+		9EC4F0B4309A823200BF1A21 /* CSVExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F0B3309A823200BF1A21 /* CSVExporterTests.swift */; };
+		9EC4F0B6309BD6E100BF1A21 /* CSVExportOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F0B5309BD6E100BF1A21 /* CSVExportOptionsView.swift */; };
+		9EC4F0B8309BD6E100BF1A21 /* PDFExportOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F0B7309BD6E100BF1A21 /* PDFExportOptionsView.swift */; };
+		9EC4F0BA309BD6E200BF1A21 /* ShareItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F0B9309BD6E200BF1A21 /* ShareItem.swift */; };
 		9ED4DB78305882F400C2A373 /* CardTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED4DB77305882F400C2A373 /* CardTextView.swift */; };
 		9EDCA2442ED0E19D005B1C5A /* PopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */; };
 		9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */; };
@@ -230,6 +234,10 @@
 		9EBB223B306AD37600A37D48 /* OdometerWarningAlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerWarningAlertModifier.swift; sourceTree = "<group>"; };
 		9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartTests.swift; sourceTree = "<group>"; };
 		9EC4F0B1309A33CB00BF1A21 /* AutoSelectAllModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoSelectAllModifier.swift; sourceTree = "<group>"; };
+		9EC4F0B3309A823200BF1A21 /* CSVExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporterTests.swift; sourceTree = "<group>"; };
+		9EC4F0B5309BD6E100BF1A21 /* CSVExportOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExportOptionsView.swift; sourceTree = "<group>"; };
+		9EC4F0B7309BD6E100BF1A21 /* PDFExportOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportOptionsView.swift; sourceTree = "<group>"; };
+		9EC4F0B9309BD6E200BF1A21 /* ShareItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareItem.swift; sourceTree = "<group>"; };
 		9ED4DB77305882F400C2A373 /* CardTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextView.swift; sourceTree = "<group>"; };
 		9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContent.swift; sourceTree = "<group>"; };
 		9EE1DAD32E2EC52400798D29 /* FoundationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
@@ -347,6 +355,7 @@
 				9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */,
 				9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */,
 				9E30BD1430700B5400B8A3A3 /* HistoryListComponents.swift */,
+				9EC4F0B9309BD6E200BF1A21 /* ShareItem.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -420,6 +429,8 @@
 				9ED4DB77305882F400C2A373 /* CardTextView.swift */,
 				9E30BD12306EACCA00B8A3A3 /* CardSymbolView.swift */,
 				9E54AFD13082BCB8005882E6 /* DashboardCustomization.swift */,
+				9EC4F0B5309BD6E100BF1A21 /* CSVExportOptionsView.swift */,
+				9EC4F0B7309BD6E100BF1A21 /* PDFExportOptionsView.swift */,
 			);
 			path = "Dashboard Components";
 			sourceTree = "<group>";
@@ -478,6 +489,7 @@
 				9EBB2237306AD12E00A37D48 /* OdometerValidatorTests.swift */,
 				9EE704F03082744500EFF266 /* NotificationManagerTests.swift */,
 				9E7FBD3A30910C2500ACD4CD /* RepairCategoryMaintenanceTests.swift */,
+				9EC4F0B3309A823200BF1A21 /* CSVExporterTests.swift */,
 			);
 			path = SocketCDTests;
 			sourceTree = "<group>";
@@ -800,6 +812,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9EC4F0B4309A823200BF1A21 /* CSVExporterTests.swift in Sources */,
 				9E7FBD3B30910C2500ACD4CD /* RepairCategoryMaintenanceTests.swift in Sources */,
 				9EAEDF982F4DFC5D005D29C6 /* CoreDataDiagnosticTests.swift in Sources */,
 				9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */,
@@ -845,6 +858,7 @@
 				9E9ED3A62E12E7BF00EB89F8 /* FuelEconomyChartView.swift in Sources */,
 				9E328E122E3CF7A600FF25B5 /* LabeledInput.swift in Sources */,
 				9EEAC4C62BA253950053C65E /* WelcomeView.swift in Sources */,
+				9EC4F0B8309BD6E100BF1A21 /* PDFExportOptionsView.swift in Sources */,
 				9EEAC4F72BA37A5C0053C65E /* Repair+helper.swift in Sources */,
 				9EEAC4A72BA1EF720053C65E /* ActivityView.swift in Sources */,
 				9EE1DAD42E2EC52400798D29 /* FoundationExtensions.swift in Sources */,
@@ -870,6 +884,7 @@
 				9E916A442E464B7800E10B42 /* CSVExporter.swift in Sources */,
 				9E6A534A2BAF239B00F75D49 /* AppIconSelectorView.swift in Sources */,
 				9EEAC4CF2BA258290053C65E /* VehicleImageView.swift in Sources */,
+				9EC4F0BA309BD6E200BF1A21 /* ShareItem.swift in Sources */,
 				9E7EF3FB2EC3899000E1E5D1 /* NotificationManager.swift in Sources */,
 				9EEAC4F52BA37A270053C65E /* RepairsListView.swift in Sources */,
 				9EC4F0B2309A33CB00BF1A21 /* AutoSelectAllModifier.swift in Sources */,
@@ -927,6 +942,7 @@
 				9E30BD1B307802CB00B8A3A3 /* WelcomeStep.swift in Sources */,
 				9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */,
 				9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */,
+				9EC4F0B6309BD6E100BF1A21 /* CSVExportOptionsView.swift in Sources */,
 				9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */,
 				9E87C5B62E4235CF001BE562 /* FormFooterView.swift in Sources */,
 				9E07C1AC3053492500160E0A /* CustomInfoCard.swift in Sources */,
