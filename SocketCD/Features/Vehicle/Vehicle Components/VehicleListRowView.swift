@@ -58,6 +58,7 @@ struct VehicleListRowView: View {
                 )
         }
         .containerShape(RoundedRectangle.adaptive)
+        .contentShape(.dragPreview, RoundedRectangle.adaptive)
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
         .accessibilityElement(children: .ignore)
