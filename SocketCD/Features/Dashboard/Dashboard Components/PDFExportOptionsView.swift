@@ -16,15 +16,10 @@ struct PDFExportOptionsView: View {
                     }
                 }
 
-                Section {
+                Section("Include in Report") {
                     Toggle("Costs", isOn: $options.includeCosts)
                     Toggle("Notes", isOn: $options.includeNotes)
-                    Toggle("Photos", isOn: $options.includePhotos)
-                    Toggle("Attached Documents", isOn: $options.includePDFDocuments)
-                } header: {
-                    Text("Details to Include")
-                } footer: {
-                    Text("Fill-ups are not included.")
+                    Toggle("Attachments", isOn: attachmentsSelection)
                 }
             }
             .navigationTitle("PDF Options")
@@ -48,6 +43,16 @@ struct PDFExportOptionsView: View {
             }
         }
         .presentationDetents([.medium])
+    }
+
+    private var attachmentsSelection: Binding<Bool> {
+        Binding(
+            get: { options.includePhotos && options.includePDFDocuments },
+            set: {
+                options.includePhotos = $0
+                options.includePDFDocuments = $0
+            }
+        )
     }
 
     private var selectedPaperSize: PDFPaperSize {

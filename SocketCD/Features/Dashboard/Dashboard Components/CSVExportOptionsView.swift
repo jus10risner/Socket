@@ -14,7 +14,7 @@ struct CSVExportOptionsView: View {
                     Toggle("Repairs", isOn: $options.includeRepairs)
                     Toggle("Fill-ups", isOn: $options.includeFillups)
                 } header: {
-                    Text("Records to Export")
+                    Text("Data to Export")
                 } footer: {
                     Text("Each selection is exported as a separate spreadsheet.")
                 }
