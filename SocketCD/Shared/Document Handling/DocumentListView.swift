@@ -14,17 +14,14 @@ struct DocumentListView: View {
     var body: some View {
         ForEach(documents.sorted { $0.timeStamp < $1.timeStamp }, id: \.objectID) { document in
             if isEditable {
-                HStack {
-                    Text(document.fileName)
-                        .lineLimit(1)
-
-                    Spacer()
-
-                    AttachmentDeleteButton("Remove \(document.fileName)") {
+                LabeledContent {
+                    DiscardButton("Remove \(document.fileName)") {
                         withAnimation {
                             delete(document)
                         }
                     }
+                } label: {
+                    RowLabel(document: document)
                 }
             } else {
                 ReadOnlyDocumentRow(document: document)
@@ -34,6 +31,20 @@ struct DocumentListView: View {
 
     private func delete(_ document: AttachedDocument) {
         documents.removeAll { $0.objectID == document.objectID }
+    }
+}
+
+private struct RowLabel: View {
+    let document: AttachedDocument
+    
+    var body: some View {
+        Label {
+            Text(document.fileName)
+                .lineLimit(1)
+        } icon: {
+            Image(systemName: "document")
+                .foregroundStyle(.secondary)
+        }
     }
 }
 
@@ -47,10 +58,10 @@ private struct ReadOnlyDocumentRow: View {
         Button {
             preview()
         } label: {
-            Label(document.fileName, systemImage: "document")
-                .lineLimit(1)
-                .tint(.primary)
+            RowLabel(document: document)
         }
+        .buttonStyle(.plain)
+        .contentShape(Rectangle())
         .fullScreenCover(item: $previewItem) { item in
             ReadOnlyDocumentPreview(
                 document: item.document,
@@ -65,7 +76,6 @@ private struct ReadOnlyDocumentRow: View {
         } message: {
             Text("There was a problem opening that document.")
         }
-        .tint(nil)
     }
 
     private func preview() {

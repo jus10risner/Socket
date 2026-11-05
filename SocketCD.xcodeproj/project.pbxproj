@@ -54,7 +54,7 @@
 		9E620C0D2BC5D4FC005E16DD /* MailComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */; };
 		9E63DD31305AE069005B596B /* SectionNavigationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD30305AE069005B596B /* SectionNavigationTitle.swift */; };
 		9E63DD33305DA77A005B596B /* PhotoImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD32305DA77A005B596B /* PhotoImageLoader.swift */; };
-		9E63DD3530617683005B596B /* AttachmentDeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */; };
+		9E63DD3530617683005B596B /* DiscardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD3430617683005B596B /* DiscardButton.swift */; };
 		9E63DD373062DA72005B596B /* FuelEconomySetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DD363062DA72005B596B /* FuelEconomySetupView.swift */; };
 		9E63DFC530894878001732EB /* VehicleActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E63DFC430894878001732EB /* VehicleActivityView.swift */; };
 		9E65B2C92E85799600897E5D /* AdaptiveLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */; };
@@ -203,7 +203,7 @@
 		9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailComposeViewController.swift; sourceTree = "<group>"; };
 		9E63DD30305AE069005B596B /* SectionNavigationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionNavigationTitle.swift; sourceTree = "<group>"; };
 		9E63DD32305DA77A005B596B /* PhotoImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoImageLoader.swift; sourceTree = "<group>"; };
-		9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentDeleteButton.swift; sourceTree = "<group>"; };
+		9E63DD3430617683005B596B /* DiscardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscardButton.swift; sourceTree = "<group>"; };
 		9E63DD363062DA72005B596B /* FuelEconomySetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomySetupView.swift; sourceTree = "<group>"; };
 		9E63DFC430894878001732EB /* VehicleActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleActivityView.swift; sourceTree = "<group>"; };
 		9E65B2C82E85799600897E5D /* AdaptiveLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLabelStyle.swift; sourceTree = "<group>"; };
@@ -353,7 +353,7 @@
 				9E328E112E3CF7A600FF25B5 /* LabeledInput.swift */,
 				9E620C0C2BC5D4FC005E16DD /* MailComposeViewController.swift */,
 				9EDCA2432ED0E19D005B1C5A /* PopoverContent.swift */,
-				9E63DD3430617683005B596B /* AttachmentDeleteButton.swift */,
+				9E63DD3430617683005B596B /* DiscardButton.swift */,
 				9E30BD1430700B5400B8A3A3 /* HistoryListComponents.swift */,
 				9EC4F0B9309BD6E200BF1A21 /* ShareItem.swift */,
 			);
@@ -831,7 +831,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9EEAC5012BA389020053C65E /* Service+helper.swift in Sources */,
-				9E63DD3530617683005B596B /* AttachmentDeleteButton.swift in Sources */,
+				9E63DD3530617683005B596B /* DiscardButton.swift in Sources */,
 				9E00C4C62EBE9B8600B3E88F /* TermsOfUseView.swift in Sources */,
 				9EEAC51E2BA4A2280053C65E /* MaintenanceListView.swift in Sources */,
 				9EEAC4BE2BA1F1E60053C65E /* NotificationSettingsView.swift in Sources */,

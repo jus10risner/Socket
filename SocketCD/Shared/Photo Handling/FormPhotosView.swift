@@ -57,7 +57,7 @@ private struct EditablePhotoGallery: View {
                     ZStack(alignment: .topTrailing) {
                         PhotoThumbnail(photo: photo)
 
-                        AttachmentDeleteButton("Delete Image") {
+                        DiscardButton("Delete Photo") {
                             withAnimation(.smooth) {
                                 photos.removeAll { $0.objectID == photo.objectID }
                             }

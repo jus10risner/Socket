@@ -106,13 +106,13 @@ private struct EditableAttachmentsSection: View {
     var body: some View {
         Section {
             AddAttachmentButton(photos: $photos, documents: $documents)
-
-            if !documents.isEmpty {
-                DocumentListView(documents: $documents, isEditable: true)
-            }
             
             if !photos.isEmpty {
                 EditablePhotoSection(photos: $photos)
+            }
+
+            if !documents.isEmpty {
+                DocumentListView(documents: $documents, isEditable: true)
             }
         }
     }
@@ -168,7 +168,6 @@ private struct AttachmentsView: View {
                         .tag(AttachmentCategory.documents)
                 }
                 .pickerStyle(.segmented)
-//                .labelsHidden()
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
             }

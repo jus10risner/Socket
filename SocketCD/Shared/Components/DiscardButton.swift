@@ -1,11 +1,11 @@
 //
-//  AttachmentDeleteButton.swift
+//  DiscardButton.swift
 //  SocketCD
 //
 
 import SwiftUI
 
-struct AttachmentDeleteButton: View {
+struct DiscardButton: View {
     let accessibilityLabel: LocalizedStringKey
     let action: () -> Void
 
@@ -17,14 +17,10 @@ struct AttachmentDeleteButton: View {
     var body: some View {
         Button(role: .destructive, action: action) {
             Image(systemName: "xmark")
-                .font(.caption.bold())
-                .foregroundStyle(.white)
-                .frame(width: 28, height: 28)
-                .background(.black.opacity(0.7), in: Circle())
-                .overlay {
-                    Circle()
-                        .stroke(.white.opacity(0.35), lineWidth: 0.5)
-                }
+                .font(.system(size: 9, weight: .heavy))
+                .foregroundColor(.primary.opacity(0.75))
+                .padding(6)
+                .background(.ultraThickMaterial, in: Circle())
         }
         .buttonStyle(.plain)
         .contentShape(
