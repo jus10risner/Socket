@@ -160,25 +160,24 @@ private struct AttachmentsView: View {
     private var readOnlyAttachments: some View {
         if hasPhotosAndDocuments {
             Section {
+                if selectedCategory == .photos {
+                    FormPhotosView(photos: $photos, isEditable: false)
+                } else {
+                    documentList
+                }
+            } header: {
                 Picker("Attachment Type", selection: $selectedCategory) {
                     Text("Photos")
                         .tag(AttachmentCategory.photos)
-
+                    
                     Text("Documents")
                         .tag(AttachmentCategory.documents)
                 }
                 .pickerStyle(.segmented)
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+                .padding(.top)
             }
-
-            if selectedCategory == .photos {
-                photoSection
-                    .listSectionSpacing(3)
-            } else {
-                documentSection
-                    .listSectionSpacing(3)
-            }
+            .textCase(nil)
         } else {
             singleAttachmentSection
         }
@@ -196,18 +195,6 @@ private struct AttachmentsView: View {
         if !photos.isEmpty {
             FormPhotosView(photos: $photos, isEditable: false)
         } else {
-            documentList
-        }
-    }
-
-    private var photoSection: some View {
-        Section {
-            FormPhotosView(photos: $photos, isEditable: false)
-        }
-    }
-
-    private var documentSection: some View {
-        Section {
             documentList
         }
     }
