@@ -82,6 +82,7 @@
 		9EBB223A306AD12E00A37D48 /* OdometerValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBB2239306AD12E00A37D48 /* OdometerValidator.swift */; };
 		9EBB223C306AD37600A37D48 /* OdometerWarningAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBB223B306AD37600A37D48 /* OdometerWarningAlertModifier.swift */; };
 		9EC442C13045D33E00A428AA /* FuelEconomyChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */; };
+		9EC478BA309D0904008F60B7 /* VehicleColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC478B9309D0904008F60B7 /* VehicleColorPicker.swift */; };
 		9EC4F0B2309A33CB00BF1A21 /* AutoSelectAllModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F0B1309A33CB00BF1A21 /* AutoSelectAllModifier.swift */; };
 		9EC4F0B4309A823200BF1A21 /* CSVExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F0B3309A823200BF1A21 /* CSVExporterTests.swift */; };
 		9EC4F0B6309BD6E100BF1A21 /* CSVExportOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F0B5309BD6E100BF1A21 /* CSVExportOptionsView.swift */; };
@@ -233,6 +234,7 @@
 		9EBB2239306AD12E00A37D48 /* OdometerValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerValidator.swift; sourceTree = "<group>"; };
 		9EBB223B306AD37600A37D48 /* OdometerWarningAlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerWarningAlertModifier.swift; sourceTree = "<group>"; };
 		9EC442C03045D33E00A428AA /* FuelEconomyChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelEconomyChartTests.swift; sourceTree = "<group>"; };
+		9EC478B9309D0904008F60B7 /* VehicleColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleColorPicker.swift; sourceTree = "<group>"; };
 		9EC4F0B1309A33CB00BF1A21 /* AutoSelectAllModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoSelectAllModifier.swift; sourceTree = "<group>"; };
 		9EC4F0B3309A823200BF1A21 /* CSVExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporterTests.swift; sourceTree = "<group>"; };
 		9EC4F0B5309BD6E100BF1A21 /* CSVExportOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExportOptionsView.swift; sourceTree = "<group>"; };
@@ -339,6 +341,7 @@
 				9E620C062BC07B6F005E16DD /* DraftVehicle.swift */,
 				9EEAC4CE2BA258290053C65E /* VehicleImageView.swift */,
 				9E620C082BC08194005E16DD /* AddEditVehicleImageView.swift */,
+				9EC478B9309D0904008F60B7 /* VehicleColorPicker.swift */,
 			);
 			path = "Vehicle Components";
 			sourceTree = "<group>";
@@ -946,6 +949,7 @@
 				9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */,
 				9E87C5B62E4235CF001BE562 /* FormFooterView.swift in Sources */,
 				9E07C1AC3053492500160E0A /* CustomInfoCard.swift in Sources */,
+				9EC478BA309D0904008F60B7 /* VehicleColorPicker.swift in Sources */,
 				9E35034C2E1FE3300032F845 /* VehicleDashboardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

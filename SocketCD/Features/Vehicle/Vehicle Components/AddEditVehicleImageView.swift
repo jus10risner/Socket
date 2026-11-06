@@ -12,6 +12,7 @@ import SwiftUI
 struct AddEditVehicleImageView: View {
     // MARK: - Environment
     @Environment(\.managedObjectContext) var context
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     // MARK: - Observed Objects
     @ObservedObject var draftVehicle: DraftVehicle
@@ -25,22 +26,19 @@ struct AddEditVehicleImageView: View {
     
     // MARK: - Body
     var body: some View {
-        VStack {
+        VStack(spacing: 15) {
             vehicleImage
             
-            photoMenu
+            customizationButtons
         }
+        .frame(maxWidth: .infinity)
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedImage, matching: .images)
-        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: {
-            Task { await verifyAndAdd() }
-        }) {
+        .fullScreenCover(isPresented: $cameraViewModel.showingCamera, onDismiss: saveCapturedPhoto) {
             CameraCapture(image: $capturedImage, isPresented: $cameraViewModel.showingCamera)
                 .ignoresSafeArea()
         }
-        .onChange(of: selectedImage) {
-            Task {
-                await loadSelectedImage()
-            }
+        .task(id: selectedImage) {
+            await loadSelectedImage(selectedImage)
         }
         .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
             Button("OK", role: .cancel) { }
@@ -75,87 +73,100 @@ struct AddEditVehicleImageView: View {
     // MARK: - Views
     
     private var vehicleImage: some View {
-        Group {
+        ZStack {
             if let carPhoto = draftVehicle.photo {
                 VehicleImageView(carPhoto: carPhoto)
+                    .transition(.opacity)
+                    .zIndex(1)
             } else {
-                ZStack(alignment: .bottomTrailing) {
-                    VehicleImageView(backgroundColor: draftVehicle.selectedColor)
-                    
-                    ColorPicker("Select Color", selection: $draftVehicle.selectedColor, supportsOpacity: false)
-                        .labelsHidden()
-                        .padding()
-                }
+                VehicleImageView(backgroundColor: draftVehicle.selectedColor)
+                    .transition(.opacity)
             }
         }
-        .clipped()
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: draftVehicle.photo != nil)
         .clipShape(RoundedRectangle.adaptive)
         .overlay {
-            ZStack(alignment: .topTrailing) {
-                RoundedRectangle.adaptive
-                    .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
-                
-                if draftVehicle.photo != nil {
-                    Button("Delete Photo", systemImage: "xmark.circle.fill") {
-                        draftVehicle.photo = nil
-                    }
-                    .buttonStyle(.plain)
-                    .labelStyle(.iconOnly)
-                    .font(.title)
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.white, .gray)
-                    .padding(10)
-                }
-            }
+            RoundedRectangle.adaptive
+                .stroke(Color.secondary.opacity(0.5), lineWidth: 0.5)
         }
         .aspectRatio(2, contentMode: .fit)
         .frame(maxWidth: 300)
     }
     
-    private var photoMenu: some View {
-        Menu(draftVehicle.photo != nil ? "Change Photo" : "Add Photo") {
-            Button("Choose Photo", systemImage: "photo.on.rectangle") {
-                showingPhotosPicker = true
+    private var customizationButtons: some View {
+        HStack(spacing: 20) {
+            if draftVehicle.photo == nil {
+                VehicleColorPicker(selectedColor: $draftVehicle.selectedColor)
             }
             
-            Button("Take Photo", systemImage: "camera") {
-                Task {
-                    await cameraViewModel.requestCameraAccessAndAvailability()
+            Menu(draftVehicle.photo == nil ? "Add Photo" : "Change Photo", systemImage: "photo") {
+                Button("Choose Photo", systemImage: "photo") {
+                    showingPhotosPicker = true
+                }
+                
+                Button("Take Photo", systemImage: "camera") {
+                    Task {
+                        await cameraViewModel.requestCameraAccessAndAvailability()
+                    }
                 }
             }
+            
+            if draftVehicle.photo != nil {
+                Button("Remove Photo", systemImage: "xmark") {
+                    draftVehicle.photo = nil
+                }
+                .tint(nil)
+            }
         }
-        .buttonStyle(.borderedProminent)
-        .frame(maxWidth: .infinity)
+        .labelStyle(.iconOnly)
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.circle)
+        .controlSize(.large)
+        .animation(reduceMotion ? nil : .spring, value: draftVehicle.photo != nil)
     }
     
     // MARK: - Methods
     
-    // Verifies that a valid image has been captured via the camera, then converts it to binary data
-    private func verifyAndAdd() async {
-        if let capturedImage {
-            let newPhoto = Photo.create(from: capturedImage, in: context)
-            
-            draftVehicle.photo = newPhoto
-        }
+    private func saveCapturedPhoto() {
+        guard let capturedImage else { return }
+        defer { self.capturedImage = nil }
+        setPhoto(from: capturedImage)
     }
-    
-    // Verifies that a valid image has been selected via the PhotosPicker, then converts it to binary data
-    private func loadSelectedImage() async {
-        guard let selectedImage else { return }
 
-        defer { self.selectedImage = nil } // Runs just before exiting the scope of the function
+    private func setPhoto(from image: UIImage) {
+        guard let photo = Photo.create(from: image, in: context) else {
+            showingPhotoError = true
+            return
+        }
+
+        draftVehicle.photo = photo
+    }
+
+    private func loadSelectedImage(_ item: PhotosPickerItem?) async {
+        guard let item, !Task.isCancelled else { return }
+
+        defer {
+            // An older or cancelled load must not clear a newer selection.
+            if !Task.isCancelled, selectedImage == item {
+                selectedImage = nil
+            }
+        }
 
         do {
-            if let data = try await selectedImage.loadTransferable(type: Data.self),
-               let uiImage = UIImage(data: data) {
-                let newPhoto = Photo.create(from: uiImage, in: context)
-                draftVehicle.photo = newPhoto
-            } else {
-                // Could not decode image data
+            let data = try await item.loadTransferable(type: Data.self)
+            try Task.checkCancellation()
+            guard selectedImage == item else { return }
+
+            guard let data, let image = UIImage(data: data) else {
                 showingPhotoError = true
+                return
             }
+
+            setPhoto(from: image)
+        } catch is CancellationError {
+            // Cancelling an import is not an image failure.
         } catch {
-            // Handle errors thrown by loadTransferable
+            guard !Task.isCancelled, selectedImage == item else { return }
             showingPhotoError = true
         }
     }
