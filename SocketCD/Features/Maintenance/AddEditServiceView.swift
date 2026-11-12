@@ -140,19 +140,14 @@ struct AddEditServiceView: View {
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .navigationBarTitleDisplayMode(.inline)
-                .safeAreaInset(
-                    edge: .bottom,
-                    content: {
-                        if focusedField != nil {
-                            KeyboardToolbar(
-                                canMovePrevious: focusedField != .name,
-                                canMoveNext: focusedField != .note,
-                                onPrevious: { focusPreviousField(using: proxy) },
-                                onNext: { focusNextField(using: proxy) },
-                                onDone: { focusedField = nil }
-                            )
-                    }
-                })
+                .keyboardToolbar(
+                    isFocused: focusedField != nil,
+                    canMovePrevious: focusedField != .name,
+                    canMoveNext: focusedField != .note,
+                    onPrevious: { focusPreviousField(using: proxy) },
+                    onNext: { focusNextField(using: proxy) },
+                    onDone: { focusedField = nil }
+                )
                 .task {
                     guard service == nil, !didSetInitialFocus else { return }
                     didSetInitialFocus = true

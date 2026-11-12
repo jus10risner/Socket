@@ -80,6 +80,7 @@
 		9EB025362E4E5CB7008B4AC7 /* Primary.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB025352E4E5CB7008B4AC7 /* Primary.icon */; };
 		9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */; };
 		9EB2177930A64D5E005A13D3 /* FormLinkLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB2177830A64D5E005A13D3 /* FormLinkLabel.swift */; };
+		9EB2177B30A65573005A13D3 /* KeyboardToolbarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB2177A30A65573005A13D3 /* KeyboardToolbarModifier.swift */; };
 		9EBB2238306AD12E00A37D48 /* OdometerValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBB2237306AD12E00A37D48 /* OdometerValidatorTests.swift */; };
 		9EBB223A306AD12E00A37D48 /* OdometerValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBB2239306AD12E00A37D48 /* OdometerValidator.swift */; };
 		9EBB223C306AD37600A37D48 /* OdometerWarningAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBB223B306AD37600A37D48 /* OdometerWarningAlertModifier.swift */; };
@@ -234,6 +235,7 @@
 		9EB025352E4E5CB7008B4AC7 /* Primary.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Primary.icon; sourceTree = "<group>"; };
 		9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Monochrome.icon; sourceTree = "<group>"; };
 		9EB2177830A64D5E005A13D3 /* FormLinkLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormLinkLabel.swift; sourceTree = "<group>"; };
+		9EB2177A30A65573005A13D3 /* KeyboardToolbarModifier.swift */ = {isa = PBXFileReference; path = KeyboardToolbarModifier.swift; sourceTree = "<group>"; };
 		9EBB2237306AD12E00A37D48 /* OdometerValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerValidatorTests.swift; sourceTree = "<group>"; };
 		9EBB2239306AD12E00A37D48 /* OdometerValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerValidator.swift; sourceTree = "<group>"; };
 		9EBB223B306AD37600A37D48 /* OdometerWarningAlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerWarningAlertModifier.swift; sourceTree = "<group>"; };
@@ -396,6 +398,7 @@
 				9E9C05AB2E26984B00E9C0E2 /* CenteredLabelStyle.swift */,
 				9E63DD30305AE069005B596B /* SectionNavigationTitle.swift */,
 				9EBB223B306AD37600A37D48 /* OdometerWarningAlertModifier.swift */,
+				9EB2177A30A65573005A13D3 /* KeyboardToolbarModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -858,6 +861,7 @@
 				9EB2177930A64D5E005A13D3 /* FormLinkLabel.swift in Sources */,
 				9EEAC4AE2BA1F0380053C65E /* SwiftUIExtensions.swift in Sources */,
 				9EEAC4FB2BA37FDB0053C65E /* RepairDetailView.swift in Sources */,
+				9EB2177B30A65573005A13D3 /* KeyboardToolbarModifier.swift in Sources */,
 				9EEAC4812BA0F9C20053C65E /* ContentView.swift in Sources */,
 				9E18D94E2EBE3A910097CBAC /* AdaptiveToolbarButton.swift in Sources */,
 				9E52CCBA2E72FC0C00B3CB45 /* SelectedServicesListView.swift in Sources */,

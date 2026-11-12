@@ -80,19 +80,14 @@ struct AddEditVehicleView: View {
             .navigationDestination(isPresented: $showingUnitsSelection) {
                 VehicleUnitsView(draftVehicle: draftVehicle)
             }
-            .safeAreaInset(
-                edge: .bottom,
-                content: {
-                    if focusedField != nil {
-                        KeyboardToolbar(
-                            canMovePrevious: focusedField != .name,
-                            canMoveNext: focusedField != .odometer,
-                            onPrevious: { focusedField = .name },
-                            onNext: { focusedField = .odometer },
-                            onDone: { focusedField = nil }
-                        )
-                }
-            })
+            .keyboardToolbar(
+                isFocused: focusedField != nil,
+                canMovePrevious: focusedField != .name,
+                canMoveNext: focusedField != .odometer,
+                onPrevious: { focusedField = .name },
+                onNext: { focusedField = .odometer },
+                onDone: { focusedField = nil }
+            )
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) {

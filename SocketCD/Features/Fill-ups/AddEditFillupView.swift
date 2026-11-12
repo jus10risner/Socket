@@ -123,19 +123,14 @@ struct AddEditFillupView: View {
             .scrollDismissesKeyboard(.interactively)
             .sheet(isPresented: $showingFillTypeInfo) { FillTypeInfoView() }
             .navigationBarTitleDisplayMode(.inline)
-            .safeAreaInset(
-                edge: .bottom,
-                content: {
-                    if focusedField != nil {
-                        KeyboardToolbar(
-                            canMovePrevious: focusedField != .odometer,
-                            canMoveNext: focusedField != .note,
-                            onPrevious: focusPreviousField,
-                            onNext: focusNextField,
-                            onDone: { focusedField = nil }
-                        )
-                }
-            })
+            .keyboardToolbar(
+                isFocused: focusedField != nil,
+                canMovePrevious: focusedField != .odometer,
+                canMoveNext: focusedField != .note,
+                onPrevious: focusPreviousField,
+                onNext: focusNextField,
+                onDone: { focusedField = nil }
+            )
             .task {
                 guard fillup == nil, !didSetInitialFocus else { return }
                 didSetInitialFocus = true

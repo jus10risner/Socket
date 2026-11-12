@@ -105,19 +105,14 @@ struct AddEditRecordView: View {
             .navigationDestination(isPresented: $showingSelectedServices, destination: {
                 SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
             })
-            .safeAreaInset(
-                edge: .bottom,
-                content: {
-                    if focusedField != nil {
-                        KeyboardToolbar(
-                            canMovePrevious: focusedField != .odometer,
-                            canMoveNext: focusedField != .note,
-                            onPrevious: focusPreviousField,
-                            onNext: focusNextField,
-                            onDone: { focusedField = nil }
-                        )
-                }
-            })
+            .keyboardToolbar(
+                isFocused: focusedField != nil,
+                canMovePrevious: focusedField != .odometer,
+                canMoveNext: focusedField != .note,
+                onPrevious: focusPreviousField,
+                onNext: focusNextField,
+                onDone: { focusedField = nil }
+            )
             .task {
                 guard record == nil && !draftServiceLog.selectedServiceIDs.isEmpty, !didSetInitialFocus else { return }
                 didSetInitialFocus = true

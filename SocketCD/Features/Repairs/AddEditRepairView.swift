@@ -91,19 +91,14 @@ struct AddEditRepairView: View {
             .navigationDestination(isPresented: $showingCategorySelection, destination: {
                 RepairCategorySelectionView(selection: $draftRepair.category)
             })
-            .safeAreaInset(
-                edge: .bottom,
-                content: {
-                    if focusedField != nil {
-                        KeyboardToolbar(
-                            canMovePrevious: focusedField != .name,
-                            canMoveNext: focusedField != .note,
-                            onPrevious: focusPreviousField,
-                            onNext: focusNextField,
-                            onDone: { focusedField = nil }
-                        )
-                }
-            })
+            .keyboardToolbar(
+                isFocused: focusedField != nil,
+                canMovePrevious: focusedField != .name,
+                canMoveNext: focusedField != .note,
+                onPrevious: focusPreviousField,
+                onNext: focusNextField,
+                onDone: { focusedField = nil }
+            )
             .task {
                 guard repair == nil, !didSetInitialFocus else { return }
                 didSetInitialFocus = true

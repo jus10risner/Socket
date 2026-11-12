@@ -33,18 +33,15 @@ struct NotificationSettingsView: View {
             NotificationTestingSection()
 #endif
         }
-        .safeAreaInset(edge: .bottom) {
-            if focusedField != nil {
-                KeyboardToolbar(
-                    canMovePrevious: focusedField != .distanceAlert,
-                    canMoveNext: focusedField == .distanceAlert ||
-                        (focusedField == .daysAlert && settings.odometerReminderEnabled),
-                    onPrevious: focusPreviousField,
-                    onNext: focusNextField,
-                    onDone: { focusedField = nil }
-                )
-            }
-        }
+        .keyboardToolbar(
+            isFocused: focusedField != nil,
+            canMovePrevious: focusedField != .distanceAlert,
+            canMoveNext: focusedField == .distanceAlert ||
+                (focusedField == .daysAlert && settings.odometerReminderEnabled),
+            onPrevious: focusPreviousField,
+            onNext: focusNextField,
+            onDone: { focusedField = nil }
+        )
         .navigationTitle("Notifications")
         .navigationBarTitleDisplayMode(.inline)
         .scrollDismissesKeyboard(.interactively)
