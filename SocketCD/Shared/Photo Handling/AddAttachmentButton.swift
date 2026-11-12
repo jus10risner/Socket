@@ -17,6 +17,7 @@ struct AddAttachmentButton: View {
 
     @Binding var photos: [Photo]
     @Binding var documents: [AttachedDocument]
+    var onButtonTap: () -> Void = {}
 
     @State private var showingPhotosPicker = false
     @State private var showingDocumentPicker = false
@@ -43,6 +44,7 @@ struct AddAttachmentButton: View {
         .overlay {
             Menu {
                 Button("Choose Photo", systemImage: "photo.on.rectangle") {
+                    onButtonTap()
                     UIApplication.shared
                         .sendAction(
                             #selector(UIResponder.resignFirstResponder),
@@ -56,6 +58,7 @@ struct AddAttachmentButton: View {
                 }
 
                 Button("Take Photo", systemImage: "camera") {
+                    onButtonTap()
                     Task {
                         await cameraViewModel
                             .requestCameraAccessAndAvailability()
@@ -63,6 +66,7 @@ struct AddAttachmentButton: View {
                 }
 
                 Button("Choose PDF", systemImage: "document") {
+                    onButtonTap()
                     UIApplication.shared
                         .sendAction(
                             #selector(UIResponder.resignFirstResponder),
@@ -113,7 +117,7 @@ struct AddAttachmentButton: View {
             "No Camera Found",
             isPresented: $cameraViewModel.showingCameraUnavailableAlert
         ) {
-            Button("OK", role: .cancel) {}
+            Button("OK", role: .cancel) { onButtonTap() }
         } message: {
             Text(
                 "This device does not appear to have a functioning camera."
@@ -124,25 +128,26 @@ struct AddAttachmentButton: View {
             isPresented: $cameraViewModel.showingCameraAccessAlert
         ) {
             Button("Go to Settings") {
+                onButtonTap()
                 Task {
                     await AppSettingsStore.openSocketSettings()
                 }
             }
-            Button("Cancel", role: .cancel) {}
+            Button("Cancel", role: .cancel) { onButtonTap() }
         } message: {
             Text(
                 "To use the camera, you will need to turn on camera access for Socket, in the Settings app."
             )
         }
         .alert("Image Error", isPresented: $showingPhotoError) {
-            Button("OK", role: .cancel) {}
+            Button("OK", role: .cancel) { onButtonTap() }
         } message: {
             Text(
                 "There was a problem saving that image. Please try another image."
             )
         }
         .alert("Document Error", isPresented: $showingDocumentError) {
-            Button("OK", role: .cancel) {}
+            Button("OK", role: .cancel) { onButtonTap() }
         } message: {
             Text(
                 "There was a problem saving that PDF. Please try another document."

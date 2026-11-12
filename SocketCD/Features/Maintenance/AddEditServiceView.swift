@@ -16,7 +16,8 @@ struct AddEditServiceView: View {
     @StateObject private var draftService: DraftService
     @StateObject private var previousServiceLog = DraftServiceLog()
     @StateObject private var customStartLog: DraftServiceLog
-    @FocusState private var isInputActive: Bool
+    @FocusState private var focusedField: Field?
+    @State private var didSetInitialFocus = false
     @State private var showingDuplicateNameError = false
     @State private var odometerWarning: OdometerWarning?
     @State private var trackingStart: TrackingStart?
@@ -49,150 +50,230 @@ struct AddEditServiceView: View {
     // MARK: - Body
     var body: some View {
         NavigationStack {
-            Form {
-                FormHeaderView(symbolName: AppSection.maintenance.symbol(), primaryText: service != nil ? "Edit Service" : "New Service", accentColor: AppSection.maintenance.color)
-                
-                Section {
-                    TextField("Service Name (e.g. Oil Change)", text: $draftService.name)
-                        .textInputAutocapitalization(.words)
-                        .focused($isInputActive)
-                        .selectAllOnFocus()
-                }
-                
-                Section {
-                    ViewThatFits(in: .horizontal) {
-                        HStack {
-                            distanceField
-
-                            timeField
-                        }
-                        
-                        VStack(alignment: .leading) {
-                            distanceField
-
-                            timeField
-                        }
-                    }
-                    .textFieldStyle(.roundedBorder)
-                    .multilineTextAlignment(.center)
-                    .keyboardType(.numberPad)
-                    .padding(.vertical, UIDevice.current.systemVersion.hasPrefix("18.") ? 5 : 0)
-                } header: {
-                    VStack(alignment: .leading) {
-                        Text("Service Interval")
-                            .font(.subheadline.bold())
-                            .foregroundStyle(.primary)
-                        
-                        Text("""
-                            Enter distance, time, or both. 
-                            Service is due when the first is reached.
-                            """)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .headerProminence(.increased)
-                
-                if service == nil {
+            ScrollViewReader { proxy in
+                Form {
+                    FormHeaderView(symbolName: AppSection.maintenance.symbol(), primaryText: service != nil ? "Edit Service" : "New Service", accentColor: AppSection.maintenance.color)
+                    
                     Section {
-                        trackingOption(.previousService, title: "Last completion", subtitle: "Enter when you last completed this service to calculate when it is due next.")
+                        TextField("Service Name (e.g. Oil Change)", text: $draftService.name)
+                            .textInputAutocapitalization(.words)
+                            .focused($focusedField, equals: .name)
+                            .selectAllOnFocus()
+                            .id(Field.name)
+                    }
+                    
+                    Section {
+                        ViewThatFits(in: .horizontal) {
+                            HStack {
+                                distanceField
+
+                                timeField
+                            }
+                            
+                            VStack(alignment: .leading) {
+                                distanceField
+
+                                timeField
+                            }
+                        }
+                        .id(Field.distance)
+                        .textFieldStyle(.roundedBorder)
+                        .multilineTextAlignment(.center)
+                        .keyboardType(.numberPad)
+                        .padding(.vertical, UIDevice.current.systemVersion.hasPrefix("18.") ? 5 : 0)
                     } header: {
                         VStack(alignment: .leading) {
-                            Text("Select a starting point")
+                            Text("Service Interval")
                                 .font(.subheadline.bold())
                                 .foregroundStyle(.primary)
                             
-                            Text("Choose when and how to begin tracking this service.")
+                            Text("""
+                                Enter distance, time, or both. 
+                                Service is due when the first is reached.
+                                """)
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     .headerProminence(.increased)
+                    
+                    if service == nil {
+                        Section {
+                            trackingOption(.previousService, title: "Last completion", subtitle: "Enter when you last completed this service to calculate when it is due next.")
+                        } header: {
+                            VStack(alignment: .leading) {
+                                Text("Select a starting point")
+                                    .font(.subheadline.bold())
+                                    .foregroundStyle(.primary)
+                                
+                                Text("Choose when and how to begin tracking this service.")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .headerProminence(.increased)
 
-                    Section {
-                        trackingOption(.custom, title: "Custom date and odometer", subtitle: "Enter your own values to calculate when this service is due next. Great for new vehicles or unknown history.")
-                    }
-                    .listSectionSpacing(5)
+                        Section {
+                            trackingOption(.custom, title: "Custom date and odometer", subtitle: "Enter your own values to calculate when this service is due next. Great for new vehicles or unknown history.")
+                        }
+                        .listSectionSpacing(5)
 
+                        Section {
+                            trackingOption(.later, title: "First service log", subtitle: "Calculate when this service is due next only after you log it for the first time.")
+                        }
+                    }
+                   
                     Section {
-                        trackingOption(.later, title: "First service log", subtitle: "Calculate when this service is due next only after you log it for the first time.")
-                    }
-                }
-               
-                Section {
-                    TextField("Service Note", text: $draftService.serviceNote, axis: .vertical)
-                }
-                
-                if onDelete != nil {
-                    Button("Delete Service", role: .destructive) {
-                        showingDeleteAlert = true
-                    }
-                }
-                
-            }
-            .scrollDismissesKeyboard(.interactively)
-            .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                if service == nil {
-                    // Show keyboard automatically, when adding a new service
-                    DispatchQueue.main.async {
-                        isInputActive = true
-                    }
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(service != nil ? "Done" : "Add", systemImage: "checkmark") {
-                        saveService()
-                    }
-                    .labelStyle(.adaptive)
-                    .disabled(!canSave)
-                }
-                
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
-                        .labelStyle(.adaptive)
-                        .adaptiveTint()
-                }
-            }
-            .tint(AppSection.maintenance.color)
-            .alert("Delete Service", isPresented: $showingDeleteAlert) {
-                Button("Delete", role: .destructive) {
-                    if let service {
-                        DataController.shared.delete(service)
+                        TextField("Service Note", text: $draftService.serviceNote, axis: .vertical)
+                            .focused($focusedField, equals: .note)
+                            .selectAllOnFocus()
+                            .id(Field.note)
                     }
                     
-                    dismiss()
-                    onDelete?()
+                    if onDelete != nil {
+                        Button("Delete Service", role: .destructive) {
+                            focusedField = nil
+                            showingDeleteAlert = true
+                        }
+                    }
+                    
                 }
-                
-                Button("Cancel", role: .cancel) { }
-            } message: {
-                Text("Permanently delete this service and all of its records? This cannot be undone.")
+                .scrollDismissesKeyboard(.interactively)
+                .navigationBarTitleDisplayMode(.inline)
+                .safeAreaInset(
+                    edge: .bottom,
+                    content: {
+                        if focusedField != nil {
+                            KeyboardToolbar(
+                                canMovePrevious: focusedField != .name,
+                                canMoveNext: focusedField != .note,
+                                onPrevious: { focusPreviousField(using: proxy) },
+                                onNext: { focusNextField(using: proxy) },
+                                onDone: { focusedField = nil }
+                            )
+                    }
+                })
+                .task {
+                    guard service == nil, !didSetInitialFocus else { return }
+                    didSetInitialFocus = true
+
+                    await Task.yield()
+                    guard !Task.isCancelled else { return }
+
+                    focusedField = .name
+                }
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button(service != nil ? "Done" : "Add", systemImage: "checkmark") {
+                            focusedField = nil
+                            saveService()
+                        }
+                        .labelStyle(.adaptive)
+                        .disabled(!canSave)
+                    }
+                    
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel", systemImage: "xmark", role: .cancel) {
+                            focusedField = nil
+                            dismiss()
+                        }
+                            .labelStyle(.adaptive)
+                            .adaptiveTint()
+                    }
+                }
+                .tint(AppSection.maintenance.color)
+                .alert("Delete Service", isPresented: $showingDeleteAlert) {
+                    Button("Delete", role: .destructive) {
+                        focusedField = nil
+                        if let service {
+                            DataController.shared.delete(service)
+                        }
+                        
+                        dismiss()
+                        onDelete?()
+                    }
+                    
+                    Button("Cancel", role: .cancel) { focusedField = nil }
+                } message: {
+                    Text("Permanently delete this service and all of its records? This cannot be undone.")
+                }
+                .alert("This vehicle already has a service with that name", isPresented: $showingDuplicateNameError) {
+                    Button("OK", role: .cancel) { focusedField = nil }
+                } message: {
+                    Text("Please choose a different name.")
+                }
+                .odometerWarningAlert(
+                    warning: $odometerWarning,
+                    entered: draftServiceLog.odometer,
+                    current: vehicle?.odometer,
+                    distanceUnit: distanceUnit.abbreviated,
+                    onConfirm: performServiceSave
+                )
             }
-            .alert("This vehicle already has a service with that name", isPresented: $showingDuplicateNameError) {
-                Button("OK", role: .cancel) { }
-            } message: {
-                Text("Please choose a different name.")
-            }
-            .odometerWarningAlert(
-                warning: $odometerWarning,
-                entered: draftServiceLog.odometer,
-                current: vehicle?.odometer,
-                distanceUnit: distanceUnit.abbreviated,
-                onConfirm: performServiceSave
-            )
         }
         .tint(nil)
     }
     
     // MARK: - Methods
     
+    private enum Field: Hashable {
+        case name, distance, time, odometer, note
+    }
+    
+    private var showsOdometerField: Bool {
+        service == nil && trackingStart != nil && trackingStart != .later
+    }
+
+    private func focusPreviousField(using proxy: ScrollViewProxy) {
+        switch focusedField {
+        case .distance:
+            focus(.name, using: proxy)
+        case .time:
+            focus(.distance, using: proxy)
+        case .odometer:
+            focus(.time, using: proxy)
+        case .note:
+            focus(showsOdometerField ? .odometer : .time, using: proxy)
+        default:
+            break
+        }
+    }
+    
+    private func focusNextField(using proxy: ScrollViewProxy) {
+        switch focusedField {
+        case .name:
+            focus(.distance, using: proxy)
+        case .distance:
+            focus(.time, using: proxy)
+        case .time:
+            focus(showsOdometerField ? .odometer : .note, using: proxy)
+        case .odometer:
+            focus(.note, using: proxy)
+        default:
+            break
+        }
+    }
+    
+    private func focus(_ field: Field, using proxy: ScrollViewProxy) {
+        let currentField = focusedField
+        // Distance and Time share one form row.
+        let row = field == .time ? Field.distance : field
+
+        withAnimation(.default, completionCriteria: .removed) {
+            proxy.scrollTo(row)
+        } completion: {
+            // Don't restore focus if the user dismissed the keyboard or chose another field.
+            guard focusedField == currentField else { return }
+            focusedField = field
+        }
+    }
+
     private var distanceField: some View {
         HStack {
             TextField("5,000", value: optionalNumberBinding($draftService.distanceInterval), format: .number)
-                .selectAllOnFocus()
                 .fixedSize()
+                .focused($focusedField, equals: .distance)
+                .selectAllOnFocus()
                 .accessibilityLabel("Distance interval")
                 .accessibilityHint("Enter the number of " + distanceUnit.rawValue)
             
@@ -204,8 +285,9 @@ struct AddEditServiceView: View {
     private var timeField: some View {
         HStack {
             TextField("6", value: optionalNumberBinding($draftService.timeInterval), format: .number)
-                .selectAllOnFocus()
                 .fixedSize()
+                .focused($focusedField, equals: .time)
+                .selectAllOnFocus()
                 .accessibilityLabel("Time interval")
                 .accessibilityHint("Enter the number of months or years")
             
@@ -219,7 +301,7 @@ struct AddEditServiceView: View {
     @ViewBuilder
     private func trackingOption(_ option: TrackingStart, title: LocalizedStringKey, subtitle: LocalizedStringKey) -> some View {
         Button {
-            isInputActive = false
+            focusedField = nil
             withAnimation {
                 trackingStart = option
             }
@@ -254,10 +336,12 @@ struct AddEditServiceView: View {
             LabeledInput(label: "Odometer") {
                 TextField("Required", value: draft.odometer, format: .number.decimalSeparator(strategy: .automatic))
                     .keyboardType(.numberPad)
+                    .focused($focusedField, equals: .odometer)
                     .selectAllOnFocus()
                     .accessibilityLabel("Odometer")
             }
             .padding(.leading, selectionIconWidth + 12)
+            .id(Field.odometer)
         }
     }
 

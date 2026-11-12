@@ -14,9 +14,11 @@ struct AddEditRepairView: View {
     
     // MARK: - State
     @StateObject var draftRepair = DraftRepair()
-    @FocusState var isInputActive: Bool
+    @FocusState private var focusedField: Field?
+    @State private var didSetInitialFocus = false
     @State private var showingDeleteAlert = false
     @State private var odometerWarning: OdometerWarning?
+    @State private var showingCategorySelection = false
     
     // MARK: - Input
     private let vehicle: Vehicle?
@@ -44,30 +46,34 @@ struct AddEditRepairView: View {
                     LabeledInput(label: "Name") {
                         TextField("Required", text: $draftRepair.name)
                             .textInputAutocapitalization(.words)
-                            .focused($isInputActive)
+                            .focused($focusedField, equals: .name)
                             .selectAllOnFocus()
                     }
                     
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftRepair.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
+                            .focused($focusedField, equals: .odometer)
                             .selectAllOnFocus()
                     }
                     
                     LabeledInput(label: "Cost") {
                         TextField("Optional", value: $draftRepair.cost.zeroAsNil, format: .number.precision(.fractionLength(0...)))
                             .keyboardType(.decimalPad)
+                            .focused($focusedField, equals: .cost)
                             .selectAllOnFocus()
                     }
                     
-                    NavigationLink {
-                        RepairCategorySelectionView(selection: $draftRepair.category)
-                    } label: {
-                        LabeledInput(label: "Category") {
-                            Text(draftRepair.category?.name ?? "Optional")
-                                .foregroundStyle(draftRepair.category == nil ? .tertiary : .primary)
+                    Button(action: showCategorySelection) {
+                        LabeledContent("Category") {
+                            FormLinkLabel {
+                                Text(draftRepair.category?.name ?? "Optional")
+                                    .foregroundStyle(draftRepair.category == nil ? .tertiary : .primary)
+                            }
                         }
                     }
+                    .foregroundStyle(.primary)
+                    .accessibilityHint("Opens category selection")
                 }
                 
                 FormFooterView (
@@ -75,22 +81,42 @@ struct AddEditRepairView: View {
                     photos: $draftRepair.photos,
                     documents: $draftRepair.documents,
                     deleteButtonTitle: "Delete Repair",
+                    focusedField: $focusedField,
+                    noteField: .note,
                     onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
                 )
             }
             .scrollDismissesKeyboard(.interactively)
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                if repair == nil {
-                    // Show keyboard automatically, when adding a new repair
-                    DispatchQueue.main.async {
-                        isInputActive = true
-                    }
+            .navigationDestination(isPresented: $showingCategorySelection, destination: {
+                RepairCategorySelectionView(selection: $draftRepair.category)
+            })
+            .safeAreaInset(
+                edge: .bottom,
+                content: {
+                    if focusedField != nil {
+                        KeyboardToolbar(
+                            canMovePrevious: focusedField != .name,
+                            canMoveNext: focusedField != .note,
+                            onPrevious: focusPreviousField,
+                            onNext: focusNextField,
+                            onDone: { focusedField = nil }
+                        )
                 }
+            })
+            .task {
+                guard repair == nil, !didSetInitialFocus else { return }
+                didSetInitialFocus = true
+
+                await Task.yield()
+                guard !Task.isCancelled else { return }
+
+                focusedField = .name
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(repair != nil ? "Done" : "Add", systemImage: "checkmark") {
+                        focusedField = nil
                         saveRepair()
                     }
                     .labelStyle(.adaptive)
@@ -98,7 +124,10 @@ struct AddEditRepairView: View {
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) {
+                        focusedField = nil
+                        dismiss()
+                    }
                         .labelStyle(.adaptive)
                         .adaptiveTint()
                 }
@@ -107,6 +136,7 @@ struct AddEditRepairView: View {
         .tint(AppSection.repairs.color)
         .alert("Delete Repair", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
+                focusedField = nil
                 if let repair {
                     DataController.shared.delete(repair)
                 }
@@ -114,7 +144,7 @@ struct AddEditRepairView: View {
                 dismiss()
                 onDelete?()
             }
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) { focusedField = nil }
         } message: {
             Text("Permanently delete this repair record? This cannot be undone.")
         }
@@ -127,9 +157,48 @@ struct AddEditRepairView: View {
         )
         .tint(nil)
     }
-
+    
+    private enum Field: Hashable {
+        case name, odometer, cost, note
+    }
+    
+    private func focusPreviousField() {
+        switch focusedField {
+        case .odometer:
+            focusedField = .name
+        case .cost:
+            focusedField = .odometer
+        case .note:
+            focusedField = .cost
+        default:
+            break
+        }
+    }
+    
+    private func focusNextField() {
+        switch focusedField {
+        case .name:
+            focusedField = .odometer
+        case .odometer:
+            focusedField = .cost
+        case .cost:
+            focusedField = .note
+        default:
+            break
+        }
+    }
+    
     private var comparisonVehicle: Vehicle? {
         vehicle ?? repair?.vehicle
+    }
+    
+    private func showCategorySelection() {
+        focusedField = nil
+        
+        // Allow keyboard dismissal to begin before pushing the Categories screen.
+        DispatchQueue.main.async {
+            showingCategorySelection = true
+        }
     }
 
     private func saveRepair() {

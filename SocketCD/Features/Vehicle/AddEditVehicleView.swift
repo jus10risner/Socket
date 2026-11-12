@@ -23,17 +23,20 @@ struct AddEditVehicleView: View {
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Vehicle.displayOrder, ascending: true)]) var vehicles: FetchedResults<Vehicle>
     
+    @FocusState private var focusedField: Field?
+    @State private var didSetInitialFocus = false
     @State private var showingDuplicateNameError = false
     @State private var showingDeleteAlert = false
     @State private var showingMeasurementMigrationAlert = false
     @State private var showingSaveError = false
     @State private var odometerWarning: OdometerWarning?
+    @State private var showingUnitsSelection = false
     
     var body: some View {
         NavigationStack {
             Form {
                 Section {
-                    AddEditVehicleImageView(draftVehicle: draftVehicle)
+                    AddEditVehicleImageView(draftVehicle: draftVehicle, onButtonTap: { focusedField = nil })
                         .listRowInsets(EdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1))
                         .listRowBackground(Color.clear)
                 }
@@ -42,37 +45,67 @@ struct AddEditVehicleView: View {
                     LabeledInput(label: "Vehicle Name") {
                         TextField("Required", text: $draftVehicle.name)
                             .textInputAutocapitalization(.words)
+                            .focused($focusedField, equals: .name)
                             .selectAllOnFocus()
                     }
                     
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftVehicle.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
+                            .focused($focusedField, equals: .odometer)
                             .selectAllOnFocus()
                     }
                 }
                 
-                VehicleMeasurementUnitsSection(
-                    draftVehicle: draftVehicle
-                )
+                Button(action: showUnitsSelection) {
+                    LabeledContent("Units") {
+                        FormLinkLabel {
+                            Text(unitDescription)
+                        }
+                    }
+                }
+                .foregroundStyle(.primary)
+                .accessibilityHint("Opens measurement unit settings")
                 
                 if vehicle != nil {
                     Button("Delete Vehicle", role: .destructive) {
+                        focusedField = nil
                         showingDeleteAlert = true
                     }
                 }
             }
             .navigationTitle(vehicle != nil ? "Edit Vehicle" : "New Vehicle")
             .navigationBarTitleDisplayMode(.inline)
+            .scrollDismissesKeyboard(.interactively)
+            .navigationDestination(isPresented: $showingUnitsSelection) {
+                VehicleUnitsView(draftVehicle: draftVehicle)
+            }
+            .safeAreaInset(
+                edge: .bottom,
+                content: {
+                    if focusedField != nil {
+                        KeyboardToolbar(
+                            canMovePrevious: focusedField != .name,
+                            canMoveNext: focusedField != .odometer,
+                            onPrevious: { focusedField = .name },
+                            onNext: { focusedField = .odometer },
+                            onDone: { focusedField = nil }
+                        )
+                }
+            })
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) {
+                        focusedField = nil
+                        dismiss()
+                    }
                         .labelStyle(.adaptive)
                         .adaptiveTint()
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button(vehicle != nil ? "Done" : "Add", systemImage: "checkmark") {
+                        focusedField = nil
                         saveVehicle()
                     }
                     .labelStyle(.adaptive)
@@ -81,12 +114,13 @@ struct AddEditVehicleView: View {
             }
             .tint(AppSettingsStore.shared.selectedAccent())
             .alert("You already have a vehicle with that name", isPresented: $showingDuplicateNameError) {
-                Button("OK", role: .cancel) { }
+                Button("OK", role: .cancel) { focusedField = nil }
             } message: {
                 Text("Please choose a different name.")
             }
             .alert("Delete Vehicle", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
+                    focusedField = nil
                     if let vehicle = vehicle {
                         DataController.shared.delete(vehicle)
                     }
@@ -98,18 +132,21 @@ struct AddEditVehicleView: View {
                         onDelete?()
                     }
                 }
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) { focusedField = nil }
             } message: {
                 Text("Permanently delete this vehicle and all of its records? This action cannot be undone.")
             }
             .alert("Update Units?", isPresented: $showingMeasurementMigrationAlert) {
-                Button("Update", action: performVehicleSave)
-                Button("Cancel", role: .cancel) { }
+                Button("Update") {
+                    focusedField = nil
+                    performVehicleSave()
+                }
+                Button("Cancel", role: .cancel) { focusedField = nil }
             } message: {
                 Text("Make sure your other devices are running iOS 18.5 or later with the latest version of Socket. Older versions may display this vehicle’s data incorrectly after updating.")
             }
             .alert("Unable to Save Changes", isPresented: $showingSaveError) {
-                Button("OK", role: .cancel) { }
+                Button("OK", role: .cancel) { focusedField = nil }
             } message: {
                 Text("Your changes were not saved. Please try again.")
             }
@@ -126,6 +163,10 @@ struct AddEditVehicleView: View {
     
     
     // MARK: - Computed Properties
+    
+    private enum Field: Hashable {
+        case name, odometer
+    }
     
     // Assigns a display order for the vehicle being created, so it appears below any existing vehicles in the vehicle list
     private var newVehicleDisplayOrder: Int64 {
@@ -159,8 +200,24 @@ struct AddEditVehicleView: View {
         ).rounded())
     }
     
+    private var unitDescription: String {
+        let distance = draftVehicle.distanceUnit.rawValue.capitalized
+        let volume = draftVehicle.volumeUnit == .liters ? "Liters" : "Gallons"
+
+        return "\(distance), \(volume), \(draftVehicle.fuelEconomyUnit.settingsName)"
+    }
+    
     
     // MARK: - Methods
+
+    private func showUnitsSelection() {
+        focusedField = nil
+
+        // Allow keyboard dismissal to begin before pushing the Units screen.
+        DispatchQueue.main.async {
+            showingUnitsSelection = true
+        }
+    }
 
     private func saveVehicle() {
         guard !vehicles.contains(where: { $0.name == draftVehicle.name && $0.id != vehicle?.id }) else {
@@ -232,29 +289,6 @@ struct AddEditVehicleView: View {
             print("⚠️ Failed to add vehicle: \(error.localizedDescription)")
             return false
         }
-    }
-}
-
-private struct VehicleMeasurementUnitsSection: View {
-    @ObservedObject var draftVehicle: DraftVehicle
-
-    var body: some View {
-        Section {
-            NavigationLink {
-                VehicleUnitsView(draftVehicle: draftVehicle)
-            } label: {
-                LabeledInput(label: "Units") {
-                    Text(unitDescription)
-                }
-            }
-        }
-    }
-
-    private var unitDescription: String {
-        let distance = draftVehicle.distanceUnit.rawValue.capitalized
-        let volume = draftVehicle.volumeUnit == .liters ? "Liters" : "Gallons"
-
-        return "\(distance), \(volume), \(draftVehicle.fuelEconomyUnit.settingsName)"
     }
 }
 

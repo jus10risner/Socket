@@ -5,19 +5,26 @@
 
 import SwiftUI
 
+private enum Field: Hashable {
+    case distanceAlert, daysAlert, odometerAlert
+}
+
 struct NotificationSettingsView: View {
     @EnvironmentObject private var settings: AppSettingsStore
+    @FocusState private var focusedField: Field?
 
     var body: some View {
         List {
             MaintenanceDueAlertsSection(
                 distanceBeforeMaintenance: $settings.distanceBeforeMaintenance,
-                daysBeforeMaintenance: $settings.daysBeforeMaintenance
+                daysBeforeMaintenance: $settings.daysBeforeMaintenance,
+                focusedField: $focusedField
             )
 
             OdometerUpdatesSection(
                 isEnabled: $settings.odometerReminderEnabled,
-                intervalDays: $settings.odometerReminderIntervalDays
+                intervalDays: $settings.odometerReminderIntervalDays,
+                focusedField: $focusedField
             )
 
             IOSNotificationSettingsSection()
@@ -26,8 +33,21 @@ struct NotificationSettingsView: View {
             NotificationTestingSection()
 #endif
         }
+        .safeAreaInset(edge: .bottom) {
+            if focusedField != nil {
+                KeyboardToolbar(
+                    canMovePrevious: focusedField != .distanceAlert,
+                    canMoveNext: focusedField == .distanceAlert ||
+                        (focusedField == .daysAlert && settings.odometerReminderEnabled),
+                    onPrevious: focusPreviousField,
+                    onNext: focusNextField,
+                    onDone: { focusedField = nil }
+                )
+            }
+        }
         .navigationTitle("Notifications")
         .navigationBarTitleDisplayMode(.inline)
+        .scrollDismissesKeyboard(.interactively)
         .onChange(of: settings.distanceBeforeMaintenance) {
             refreshNotifications()
         }
@@ -35,6 +55,9 @@ struct NotificationSettingsView: View {
             refreshNotifications()
         }
         .onChange(of: settings.odometerReminderEnabled) { wasEnabled, isEnabled in
+            if !isEnabled && focusedField == .odometerAlert {
+                focusedField = .daysAlert
+            }
             if isEnabled && !wasEnabled {
                 NotificationManager.shared.resetOdometerReminderBaseline()
             }
@@ -44,6 +67,28 @@ struct NotificationSettingsView: View {
             if newValue >= 1 {
                 refreshNotifications()
             }
+        }
+    }
+
+    private func focusPreviousField() {
+        switch focusedField {
+        case .daysAlert:
+            focusedField = .distanceAlert
+        case .odometerAlert:
+            focusedField = .daysAlert
+        default:
+            break
+        }
+    }
+
+    private func focusNextField() {
+        switch focusedField {
+        case .distanceAlert:
+            focusedField = .daysAlert
+        case .daysAlert where settings.odometerReminderEnabled:
+            focusedField = .odometerAlert
+        default:
+            break
         }
     }
 
@@ -57,44 +102,36 @@ struct NotificationSettingsView: View {
 private struct MaintenanceDueAlertsSection: View {
     @Binding var distanceBeforeMaintenance: Int
     @Binding var daysBeforeMaintenance: Int
+    @FocusState.Binding var focusedField: Field?
 
     var body: some View {
         Section {
             LabeledContent("Distance before due") {
-                TextField(
-                    "Distance",
-                    value: $distanceBeforeMaintenance,
-                    format: .number.decimalSeparator(strategy: .automatic)
-                )
-                .multilineTextAlignment(.trailing)
-                .fontWeight(.medium)
-                .keyboardType(.numberPad)
-                .selectAllOnFocus()
+                TextField("Distance", value: $distanceBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
+                    .focused($focusedField, equals: .distanceAlert)
+                    .selectAllOnFocus()
             }
             
             LabeledContent("Days before due") {
-                TextField(
-                    "Days",
-                    value: $daysBeforeMaintenance,
-                    format: .number.decimalSeparator(strategy: .automatic)
-                )
-                .multilineTextAlignment(.trailing)
-                .fontWeight(.medium)
-                .keyboardType(.numberPad)
-                .selectAllOnFocus()
+                TextField("Days", value: $daysBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
+                    .focused($focusedField, equals: .daysAlert)
+                    .selectAllOnFocus()
             }
         } header: {
             Text("Service Reminders")
         } footer: {
             Text("Distance uses each vehicle’s selected units.")
         }
+        .multilineTextAlignment(.trailing)
+        .fontWeight(.medium)
+        .keyboardType(.numberPad)
     }
 }
 
 private struct OdometerUpdatesSection: View {
     @Binding var isEnabled: Bool
     @Binding var intervalDays: Int
-    @FocusState private var intervalIsFocused: Bool
+    @FocusState.Binding var focusedField: Field?
 
     var body: some View {
         Section {
@@ -103,8 +140,8 @@ private struct OdometerUpdatesSection: View {
                 isOn: Binding(
                     get: { isEnabled },
                     set: { newValue in
-                        if !newValue {
-                            intervalIsFocused = false
+                        if !newValue && focusedField == .odometerAlert {
+                            focusedField = .daysAlert
                         }
 
                         withAnimation {
@@ -116,25 +153,19 @@ private struct OdometerUpdatesSection: View {
             
             if isEnabled {
                 LabeledContent("Reminder Interval (Days)") {
-                    TextField(
-                        "Days",
-                        value: $intervalDays,
-                        format: .number
-                    )
-                    .fixedSize(horizontal: true, vertical: false)
-                    .multilineTextAlignment(.trailing)
-                    .fontWeight(.medium)
-                    .keyboardType(.numberPad)
-                    .focused($intervalIsFocused)
-                    .selectAllOnFocus()
+                    TextField("Days", value: $intervalDays, format: .number)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .multilineTextAlignment(.trailing)
+                        .fontWeight(.medium)
+                        .keyboardType(.numberPad)
+                        .focused($focusedField, equals: .odometerAlert)
+                        .selectAllOnFocus()
                 }
             }
         } footer: {
-            Text(
-                "Socket can remind you when your odometer hasn’t been updated recently."
-            )
+            Text("Socket can remind you when your odometer hasn’t been updated recently.")
         }
-        .onChange(of: intervalIsFocused) { _, isFocused in
+        .onChange(of: focusedField == .odometerAlert) { _, isFocused in
             if !isFocused {
                 validateInterval()
             }

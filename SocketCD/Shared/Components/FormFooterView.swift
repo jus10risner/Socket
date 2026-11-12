@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct FormFooterView: View {
+struct FormFooterView<Field: Hashable>: View {
+    private var focusedField: FocusState<Field?>.Binding?
+    private var noteField: Field?
     private let note: Binding<String>
     private let photos: Binding<[Photo]>
     private let documents: Binding<[AttachedDocument]>
@@ -22,7 +24,7 @@ struct FormFooterView: View {
         documents: Binding<[AttachedDocument]>,
         deleteButtonTitle: String,
         onDelete: (() -> Void)? = nil
-    ) {
+    ) where Field == Never {
         self.note = note
         self.photos = photos
         self.documents = documents
@@ -32,13 +34,33 @@ struct FormFooterView: View {
     }
 
     // MARK: - Read-only initializer
-    init(note: String, photos: [Photo], documents: [AttachedDocument]) {
+    init(note: String, photos: [Photo], documents: [AttachedDocument]) where Field == Never {
         self.note = .constant(note)
         self.photos = .constant(photos)
         self.documents = .constant(documents)
         self.isEditable = false
         self.deleteButtonTitle = nil
         self.onDelete = nil
+    }
+
+    /// Connects the Note field to the containing form's focus state.
+    init(
+        note: Binding<String>,
+        photos: Binding<[Photo]>,
+        documents: Binding<[AttachedDocument]>,
+        deleteButtonTitle: String,
+        focusedField: FocusState<Field?>.Binding,
+        noteField: Field,
+        onDelete: (() -> Void)? = nil
+    ) {
+        self.note = note
+        self.photos = photos
+        self.documents = documents
+        self.isEditable = true
+        self.deleteButtonTitle = deleteButtonTitle
+        self.onDelete = onDelete
+        self.focusedField = focusedField
+        self.noteField = noteField
     }
 
     private var hasAttachments: Bool {
@@ -48,11 +70,12 @@ struct FormFooterView: View {
     var body: some View {
         Group {
             if isEditable {
-                EditableNoteSection(note: note)
+                EditableNoteSection(note: note, focusedField: focusedField, noteField: noteField)
                 
                 EditableAttachmentsSection(
                     photos: photos,
-                    documents: documents
+                    documents: documents,
+                    onButtonTap: { focusedField?.wrappedValue = nil }
                 )
             } else if !note.wrappedValue.isEmpty || hasAttachments {
                 if !note.wrappedValue.isEmpty {
@@ -69,19 +92,29 @@ struct FormFooterView: View {
 
             if let deleteButtonTitle, let onDelete {
                 Section {
-                    Button(deleteButtonTitle, role: .destructive, action: onDelete)
+                    Button(deleteButtonTitle, role: .destructive) {
+                        focusedField?.wrappedValue = nil
+                        onDelete()
+                    }
                 }
             }
         }
     }
 }
 
-private struct EditableNoteSection: View {
+private struct EditableNoteSection<Field: Hashable>: View {
     @Binding var note: String
+    let focusedField: FocusState<Field?>.Binding?
+    let noteField: Field?
 
     var body: some View {
         Section {
-            TextField("Note", text: $note, axis: .vertical)
+            if let focusedField, let noteField {
+                TextField("Note", text: $note, axis: .vertical)
+                    .focused(focusedField, equals: noteField)
+            } else {
+                TextField("Note", text: $note, axis: .vertical)
+            }
         }
     }
 }
@@ -102,10 +135,11 @@ private struct ReadOnlyNoteSection: View {
 private struct EditableAttachmentsSection: View {
     @Binding var photos: [Photo]
     @Binding var documents: [AttachedDocument]
+    let onButtonTap: () -> Void
 
     var body: some View {
         Section {
-            AddAttachmentButton(photos: $photos, documents: $documents)
+            AddAttachmentButton(photos: $photos, documents: $documents, onButtonTap: onButtonTap)
             
             if !photos.isEmpty {
                 EditablePhotoSection(photos: $photos)

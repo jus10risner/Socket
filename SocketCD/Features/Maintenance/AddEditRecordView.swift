@@ -17,9 +17,11 @@ struct AddEditRecordView: View {
     
     // MARK: - State
     @StateObject var draftServiceLog = DraftServiceLog()
-    @FocusState var isInputActive: Bool
+    @FocusState private var focusedField: Field?
+    @State private var didSetInitialFocus = false
     @State private var showingDeleteAlert = false
     @State private var odometerWarning: OdometerWarning?
+    @State private var showingSelectedServices = false
     
     // MARK: - Input
     private let vehicle: Vehicle
@@ -53,33 +55,36 @@ struct AddEditRecordView: View {
                             Text(service.name)
                         }
                     } else {
-                        NavigationLink {
-                            SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
-                        } label: {
-                            LabeledInput(label: "Services Performed") {
-                                Group {
-                                    if draftServiceLog.selectedServiceIDs.isEmpty {
-                                        Text("Select")
-                                            .foregroundStyle(.tertiary)
-                                    } else {
-                                        Text(draftServiceLog.selectedServiceNames(from: vehicle))
+                        Button(action: showSelectedServices) {
+                            LabeledContent("Services Performed") {
+                                FormLinkLabel {
+                                    Group {
+                                        if draftServiceLog.selectedServiceIDs.isEmpty {
+                                            Text("Select")
+                                                .foregroundStyle(.tertiary)
+                                        } else {
+                                            Text(draftServiceLog.selectedServiceNames(from: vehicle))
+                                        }
                                     }
+                                    .multilineTextAlignment(.leading)
                                 }
-                                .multilineTextAlignment(.leading)
                             }
                         }
+                        .foregroundStyle(.primary)
+                        .accessibilityHint("Opens selected services list")
                     }
                     
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftServiceLog.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
+                            .focused($focusedField, equals: .odometer)
                             .selectAllOnFocus()
-                            .focused($isInputActive)
                     }
                     
                     LabeledInput(label: "Cost") {
                         TextField("Optional", value: $draftServiceLog.cost.zeroAsNil, format: .number.precision(.fractionLength(0...)))
                             .keyboardType(.decimalPad)
+                            .focused($focusedField, equals: .cost)
                             .selectAllOnFocus()
                     }
                 }
@@ -89,23 +94,43 @@ struct AddEditRecordView: View {
                     photos: $draftServiceLog.photos,
                     documents: $draftServiceLog.documents,
                     deleteButtonTitle: "Delete Service Log",
+                    focusedField: $focusedField,
+                    noteField: .note,
                     onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
                 )
             }
             .scrollDismissesKeyboard(.interactively)
             .listRowSpacing(0) // Added to prevent list row spacing when launched from swipe action on MaintenanceListView
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                if record == nil && !draftServiceLog.selectedServiceIDs.isEmpty {
-                    // Show keyboard automatically, when adding a new service log
-                    DispatchQueue.main.async {
-                        isInputActive = true
-                    }
+            .navigationDestination(isPresented: $showingSelectedServices, destination: {
+                SelectedServicesListView(draftServiceLog: draftServiceLog, vehicle: vehicle)
+            })
+            .safeAreaInset(
+                edge: .bottom,
+                content: {
+                    if focusedField != nil {
+                        KeyboardToolbar(
+                            canMovePrevious: focusedField != .odometer,
+                            canMoveNext: focusedField != .note,
+                            onPrevious: focusPreviousField,
+                            onNext: focusNextField,
+                            onDone: { focusedField = nil }
+                        )
                 }
+            })
+            .task {
+                guard record == nil && !draftServiceLog.selectedServiceIDs.isEmpty, !didSetInitialFocus else { return }
+                didSetInitialFocus = true
+
+                await Task.yield()
+                guard !Task.isCancelled else { return }
+
+                focusedField = .odometer
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(record != nil ? "Done" : "Add", systemImage: "checkmark") {
+                        focusedField = nil
                         saveRecord()
                     }
                     .labelStyle(.adaptive)
@@ -113,7 +138,10 @@ struct AddEditRecordView: View {
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) {
+                        focusedField = nil
+                        dismiss()
+                    }
                         .labelStyle(.adaptive)
                         .adaptiveTint()
                 }
@@ -121,6 +149,7 @@ struct AddEditRecordView: View {
             .tint(AppSection.maintenance.color)
             .alert("Delete Record", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
+                    focusedField = nil
                     if let record {
                         DataController.shared.delete(record)
                     }
@@ -128,7 +157,7 @@ struct AddEditRecordView: View {
                     dismiss()
                     onDelete?()
                 }
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) { focusedField = nil }
             } message: {
                 Text("Permanently delete this service log? This cannot be undone.")
             }
@@ -141,6 +170,41 @@ struct AddEditRecordView: View {
             )
         }
         .tint(nil)
+    }
+    
+    private enum Field: Hashable {
+        case odometer, cost, note
+    }
+    
+    private func focusPreviousField() {
+        switch focusedField {
+        case .cost:
+            focusedField = .odometer
+        case .note:
+            focusedField = .cost
+        default:
+            break
+        }
+    }
+    
+    private func focusNextField() {
+        switch focusedField {
+        case .odometer:
+            focusedField = .cost
+        case .cost:
+            focusedField = .note
+        default:
+            break
+        }
+    }
+    
+    private func showSelectedServices() {
+        focusedField = nil
+        
+        // Allow keyboard dismissal to begin before pushing the Services screen.
+        DispatchQueue.main.async {
+            showingSelectedServices = true
+        }
     }
 
     private func saveRecord() {

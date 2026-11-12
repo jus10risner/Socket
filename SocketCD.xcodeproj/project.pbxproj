@@ -12,6 +12,7 @@
 		9E07C1AC3053492500160E0A /* CustomInfoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07C1AB3053492500160E0A /* CustomInfoCard.swift */; };
 		9E0B19B52EAA7FF800E7A820 /* InformationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */; };
 		9E0B19B72EAA87C500E7A820 /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */; };
+		9E0D18F330A3781E002157E1 /* KeyboardToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0D18F230A3781E002157E1 /* KeyboardToolbar.swift */; };
 		9E1528852EB917DB005170AB /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1528842EB917DB005170AB /* FormHeaderView.swift */; };
 		9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */; };
 		9E187C132E9FDFCE00FBDAC9 /* AdaptiveTint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */; };
@@ -78,6 +79,7 @@
 		9EAEDF9D2F4E057B005D29C6 /* TestDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAEDF9C2F4E057B005D29C6 /* TestDataController.swift */; };
 		9EB025362E4E5CB7008B4AC7 /* Primary.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB025352E4E5CB7008B4AC7 /* Primary.icon */; };
 		9EB0253F2E4E677F008B4AC7 /* Monochrome.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */; };
+		9EB2177930A64D5E005A13D3 /* FormLinkLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB2177830A64D5E005A13D3 /* FormLinkLabel.swift */; };
 		9EBB2238306AD12E00A37D48 /* OdometerValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBB2237306AD12E00A37D48 /* OdometerValidatorTests.swift */; };
 		9EBB223A306AD12E00A37D48 /* OdometerValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBB2239306AD12E00A37D48 /* OdometerValidator.swift */; };
 		9EBB223C306AD37600A37D48 /* OdometerWarningAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBB223B306AD37600A37D48 /* OdometerWarningAlertModifier.swift */; };
@@ -159,6 +161,7 @@
 		9E07C1AB3053492500160E0A /* CustomInfoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInfoCard.swift; sourceTree = "<group>"; };
 		9E0B19B42EAA7FF800E7A820 /* InformationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationItemView.swift; sourceTree = "<group>"; };
 		9E0B19B62EAA87C500E7A820 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
+		9E0D18F230A3781E002157E1 /* KeyboardToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolbar.swift; sourceTree = "<group>"; };
 		9E1528842EB917DB005170AB /* FormHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHeaderView.swift; sourceTree = "<group>"; };
 		9E187C0E2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		9E187C122E9FDFCE00FBDAC9 /* AdaptiveTint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveTint.swift; sourceTree = "<group>"; };
@@ -230,6 +233,7 @@
 		9EAEDF9C2F4E057B005D29C6 /* TestDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataController.swift; sourceTree = "<group>"; };
 		9EB025352E4E5CB7008B4AC7 /* Primary.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Primary.icon; sourceTree = "<group>"; };
 		9EB0253E2E4E677F008B4AC7 /* Monochrome.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Monochrome.icon; sourceTree = "<group>"; };
+		9EB2177830A64D5E005A13D3 /* FormLinkLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormLinkLabel.swift; sourceTree = "<group>"; };
 		9EBB2237306AD12E00A37D48 /* OdometerValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerValidatorTests.swift; sourceTree = "<group>"; };
 		9EBB2239306AD12E00A37D48 /* OdometerValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerValidator.swift; sourceTree = "<group>"; };
 		9EBB223B306AD37600A37D48 /* OdometerWarningAlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerWarningAlertModifier.swift; sourceTree = "<group>"; };
@@ -359,6 +363,8 @@
 				9E63DD3430617683005B596B /* DiscardButton.swift */,
 				9E30BD1430700B5400B8A3A3 /* HistoryListComponents.swift */,
 				9EC4F0B9309BD6E200BF1A21 /* ShareItem.swift */,
+				9E0D18F230A3781E002157E1 /* KeyboardToolbar.swift */,
+				9EB2177830A64D5E005A13D3 /* FormLinkLabel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -849,6 +855,7 @@
 				9E7507592BF68C84000E25BD /* EmptyVehicleListView.swift in Sources */,
 				9E63DD31305AE069005B596B /* SectionNavigationTitle.swift in Sources */,
 				9E30BD13306EACCA00B8A3A3 /* CardSymbolView.swift in Sources */,
+				9EB2177930A64D5E005A13D3 /* FormLinkLabel.swift in Sources */,
 				9EEAC4AE2BA1F0380053C65E /* SwiftUIExtensions.swift in Sources */,
 				9EEAC4FB2BA37FDB0053C65E /* RepairDetailView.swift in Sources */,
 				9EEAC4812BA0F9C20053C65E /* ContentView.swift in Sources */,
@@ -908,6 +915,7 @@
 				9EEAC4EE2BA374D70053C65E /* CustomInfoDetailView.swift in Sources */,
 				9E30BD2530794C0E00B8A3A3 /* OnboardingContainer.swift in Sources */,
 				9EEAC49A2BA1ED8C0053C65E /* AppearanceController.swift in Sources */,
+				9E0D18F330A3781E002157E1 /* KeyboardToolbar.swift in Sources */,
 				9EE704F3308279FE00EFF266 /* MaintenanceNotificationLedger.swift in Sources */,
 				9EEAC47F2BA0F9C20053C65E /* SocketCDApp.swift in Sources */,
 				9EEAC4E82BA367A00053C65E /* AddAttachmentButton.swift in Sources */,

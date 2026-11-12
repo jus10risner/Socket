@@ -13,7 +13,8 @@ struct AddEditCustomInfoView: View {
     
     // MARK: - State
     @StateObject var draftCustomInfo = DraftCustomInfo()
-    @FocusState var isInputActive: Bool
+    @FocusState private var focusedField: Field?
+    @State private var didSetInitialFocus = false
     @State private var showingDuplicateLabelError = false
     @State private var showingDeleteAlert = false
     
@@ -41,12 +42,13 @@ struct AddEditCustomInfoView: View {
                 Section {
                     LabeledInput(label: "Name") {
                         TextField("e.g. Tire Size", text: $draftCustomInfo.label)
-                            .focused($isInputActive)
+                            .focused($focusedField, equals: .name)
                             .selectAllOnFocus()
                     }
                     
                     LabeledInput(label: "Information") {
                         TextField("e.g. 225/45R17", text: $draftCustomInfo.detail)
+                            .focused($focusedField, equals: .information)
                             .selectAllOnFocus()
                     }
                 }
@@ -56,21 +58,38 @@ struct AddEditCustomInfoView: View {
                     photos: $draftCustomInfo.photos,
                     documents: $draftCustomInfo.documents,
                     deleteButtonTitle: "Delete Info",
+                    focusedField: $focusedField,
+                    noteField: .note,
                     onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
                 )
             }
             .scrollDismissesKeyboard(.interactively)
-            .onAppear {
-                if customInfo == nil {
-                    // Show keyboard automatically, when adding new custom info
-                    DispatchQueue.main.async {
-                        isInputActive = true
-                    }
+            .safeAreaInset(
+                edge: .bottom,
+                content: {
+                    if focusedField != nil {
+                        KeyboardToolbar(
+                            canMovePrevious: focusedField != .name,
+                            canMoveNext: focusedField != .note,
+                            onPrevious: focusPreviousField,
+                            onNext: focusNextField,
+                            onDone: { focusedField = nil }
+                        )
                 }
+            })
+            .task {
+                guard customInfo == nil, !didSetInitialFocus else { return }
+                didSetInitialFocus = true
+                
+                await Task.yield()
+                guard !Task.isCancelled else { return }
+                
+                focusedField = .name
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(customInfo != nil ? "Done" : "Add", systemImage: "checkmark") {
+                        focusedField = nil
                         if let customInfo {
                             customInfo.updateAndSave(draftCustomInfo: draftCustomInfo)
                         } else if let vehicle {
@@ -88,7 +107,10 @@ struct AddEditCustomInfoView: View {
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) {
+                        focusedField = nil
+                        dismiss()
+                    }
                         .labelStyle(.adaptive)
                         .adaptiveTint()
                 }
@@ -96,6 +118,7 @@ struct AddEditCustomInfoView: View {
             .tint(AppSection.customInfo.color)
             .alert("Delete Vehicle Info", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
+                    focusedField = nil
                     if let customInfo {
                         DataController.shared.delete(customInfo)
                     }
@@ -103,17 +126,43 @@ struct AddEditCustomInfoView: View {
                     dismiss()
                     onDelete?()
                 }
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) { focusedField = nil }
             } message: {
                 Text("Permanently delete this info? This cannot be undone.")
             }
             .alert("That label has already been used.", isPresented: $showingDuplicateLabelError) {
-                Button("OK", role: .cancel) { }
+                Button("OK", role: .cancel) { focusedField = nil }
             } message: {
                 Text("Please choose a different label.")
             }
         }
         .tint(nil)
+    }
+    
+    private enum Field: Hashable {
+        case name, information, note
+    }
+    
+    private func focusNextField() {
+        switch focusedField {
+        case .name:
+            focusedField = .information
+        case .information:
+            focusedField = .note
+        default:
+            break
+        }
+    }
+    
+    private func focusPreviousField() {
+        switch focusedField {
+        case .information:
+            focusedField = .name
+        case .note:
+            focusedField = .information
+        default:
+            break
+        }
     }
 }
 

@@ -14,7 +14,8 @@ struct AddEditFillupView: View {
     
     // MARK: - State
     @StateObject var draftFillup = DraftFillup()
-    @FocusState var isInputActive: Bool
+    @FocusState private var focusedField: Field?
+    @State private var didSetInitialFocus = false
     @State var showingFillTypeInfo = false
     @State private var showingDeleteAlert = false
     @State private var showingDuplicateOdometerError = false
@@ -50,7 +51,7 @@ struct AddEditFillupView: View {
                     LabeledInput(label: "Odometer") {
                         TextField("Required", value: $draftFillup.odometer, format: .number.decimalSeparator(strategy: .automatic))
                             .keyboardType(.numberPad)
-                            .focused($isInputActive)
+                            .focused($focusedField, equals: .odometer)
                             .selectAllOnFocus()
                     }
                     
@@ -63,15 +64,21 @@ struct AddEditFillupView: View {
                                 .decimalSeparator(strategy: .automatic)
                         )
                         .keyboardType(.decimalPad)
+                        .focused($focusedField, equals: .volume)
                         .selectAllOnFocus()
                     }
                     
                     LabeledContent {
-                        TextField("Optional", value: $draftFillup.cost.zeroAsNil, format: .number.precision(.fractionLength(0...)))
-                            .keyboardType(.decimalPad)
-                            .selectAllOnFocus()
-                            .foregroundStyle(Color.primary)
-                            .multilineTextAlignment(.trailing)
+                        TextField(
+                            "Optional",
+                            value: $draftFillup.cost.zeroAsNil,
+                            format: .number.precision(.fractionLength(0...))
+                        )
+                        .keyboardType(.decimalPad)
+                        .foregroundStyle(Color.primary)
+                        .multilineTextAlignment(.trailing)
+                        .focused($focusedField, equals: .cost)
+                        .selectAllOnFocus()
                     } label: {
                         Group {
                             Text(settings.fillupCostType == .perUnit ? "Cost per \(volumeUnit.singularName)" : "Total Cost")
@@ -96,7 +103,7 @@ struct AddEditFillupView: View {
                     fillTypePicker
                 } footer: {
                     Button("About fill types...") {
-                        isInputActive = false
+                        focusedField = nil
                         showingFillTypeInfo = true
                     }
                     .font(.footnote)
@@ -108,23 +115,40 @@ struct AddEditFillupView: View {
                     photos: $draftFillup.photos,
                     documents: $draftFillup.documents,
                     deleteButtonTitle: "Delete Fill-up",
+                    focusedField: $focusedField,
+                    noteField: .note,
                     onDelete: onDelete != nil ? { showingDeleteAlert = true } : nil
                 )
             }
             .scrollDismissesKeyboard(.interactively)
             .sheet(isPresented: $showingFillTypeInfo) { FillTypeInfoView() }
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                if fillup == nil {
-                    // Show keyboard automatically, when adding a new fill-up
-                    DispatchQueue.main.async {
-                        isInputActive = true
-                    }
+            .safeAreaInset(
+                edge: .bottom,
+                content: {
+                    if focusedField != nil {
+                        KeyboardToolbar(
+                            canMovePrevious: focusedField != .odometer,
+                            canMoveNext: focusedField != .note,
+                            onPrevious: focusPreviousField,
+                            onNext: focusNextField,
+                            onDone: { focusedField = nil }
+                        )
                 }
+            })
+            .task {
+                guard fillup == nil, !didSetInitialFocus else { return }
+                didSetInitialFocus = true
+                
+                await Task.yield()
+                guard !Task.isCancelled else { return }
+                
+                focusedField = .odometer
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(fillup != nil ? "Done" : "Add", systemImage: "checkmark") {
+                        focusedField = nil
                         saveFillup()
                     }
                     .labelStyle(.adaptive)
@@ -132,7 +156,10 @@ struct AddEditFillupView: View {
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                    Button("Cancel", systemImage: "xmark", role: .cancel) {
+                        focusedField = nil
+                        dismiss()
+                    }
                         .labelStyle(.adaptive)
                         .adaptiveTint()
                 }
@@ -140,6 +167,7 @@ struct AddEditFillupView: View {
             .tint(AppSection.fillups.color)
             .alert("Delete Fill-up", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
+                    focusedField = nil
                     if let fillup {
                         DataController.shared.delete(fillup)
                     }
@@ -148,7 +176,7 @@ struct AddEditFillupView: View {
                     onDelete?()
                 }
                 
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) { focusedField = nil }
             } message: {
                 Text("Deleting fill-up records may cause inaccurate fuel economy calculation. Delete this record anyway?")
             }
@@ -156,7 +184,7 @@ struct AddEditFillupView: View {
                 "Odometer reading already used",
                 isPresented: $showingDuplicateOdometerError
             ) {
-                Button("OK", role: .cancel) { }
+                Button("OK", role: .cancel) { focusedField = nil }
             } message: {
                 Text("Each fill-up needs a different odometer reading.")
             }
@@ -169,6 +197,36 @@ struct AddEditFillupView: View {
             )
         }
         .tint(nil)
+    }
+    
+    private enum Field: Hashable {
+        case odometer, volume, cost, note
+    }
+    
+    private func focusPreviousField() {
+        switch focusedField {
+        case .volume:
+            focusedField = .odometer
+        case .cost:
+            focusedField = .volume
+        case .note:
+            focusedField = .cost
+        default:
+            break
+        }
+    }
+    
+    private func focusNextField() {
+        switch focusedField {
+        case .odometer:
+            focusedField = .volume
+        case .volume:
+            focusedField = .cost
+        case .cost:
+            focusedField = .note
+        default:
+            break
+        }
     }
     
     // Returns the total or per-unit cost, based on which the user has selected in settings (used to show both costs at once)

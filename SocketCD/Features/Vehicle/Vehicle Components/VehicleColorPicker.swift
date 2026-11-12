@@ -12,6 +12,7 @@ import UIKit
 struct VehicleColorPicker: View {
     @Environment(\.self) private var environment
     @Binding var selectedColor: Color
+    var onButtonTap: () -> Void = {}
     @State private var showingPalette = false
 
     private let presetRows: [[(name: LocalizedStringKey, color: Color)]] = [
@@ -33,6 +34,7 @@ struct VehicleColorPicker: View {
 
     var body: some View {
         Button {
+            onButtonTap()
             showingPalette = true
         } label: {
             Label("Choose Color", systemImage: "paintpalette")

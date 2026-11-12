@@ -16,6 +16,7 @@ struct AddEditVehicleImageView: View {
     
     // MARK: - Observed Objects
     @ObservedObject var draftVehicle: DraftVehicle
+    var onButtonTap: () -> Void = {}
     
     // MARK: - State
     @StateObject private var cameraViewModel = CameraViewModel()
@@ -41,22 +42,23 @@ struct AddEditVehicleImageView: View {
             await loadSelectedImage(selectedImage)
         }
         .alert("No Camera Found", isPresented: $cameraViewModel.showingCameraUnavailableAlert) {
-            Button("OK", role: .cancel) { }
+            Button("OK", role: .cancel) { onButtonTap() }
         } message: {
             Text("This device does not appear to have a functioning camera.")
         }
         .alert("No Camera Access", isPresented: $cameraViewModel.showingCameraAccessAlert) {
             Button("Go to Settings") {
+                onButtonTap()
                 Task {
                     await AppSettingsStore.openSocketSettings()
                 }
             }
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) { onButtonTap() }
         } message: {
             Text("To use the camera, go to Settings and turn on Camera access for Socket")
         }
         .alert("Image Error", isPresented: $showingPhotoError) {
-            Button("OK", role: .cancel) {}
+            Button("OK", role: .cancel) { onButtonTap() }
         } message: {
             Text("There was a problem saving that image. Please try another image.")
         }
@@ -96,15 +98,17 @@ struct AddEditVehicleImageView: View {
     private var customizationButtons: some View {
         HStack(spacing: 20) {
             if draftVehicle.photo == nil {
-                VehicleColorPicker(selectedColor: $draftVehicle.selectedColor)
+                VehicleColorPicker(selectedColor: $draftVehicle.selectedColor, onButtonTap: onButtonTap)
             }
             
             Menu(draftVehicle.photo == nil ? "Add Photo" : "Change Photo", systemImage: "photo") {
                 Button("Choose Photo", systemImage: "photo") {
+                    onButtonTap()
                     showingPhotosPicker = true
                 }
                 
                 Button("Take Photo", systemImage: "camera") {
+                    onButtonTap()
                     Task {
                         await cameraViewModel.requestCameraAccessAndAvailability()
                     }
