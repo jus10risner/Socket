@@ -105,22 +105,27 @@ private struct MaintenanceDueAlertsSection: View {
         Section {
             LabeledContent("Distance before due") {
                 TextField("Distance", value: $distanceBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
+                    .fontWeight(.medium)
                     .focused($focusedField, equals: .distanceAlert)
                     .selectAllOnFocus()
             }
+            .contentShape(Rectangle())
+            .onTapGesture { focusedField = .distanceAlert }
             
             LabeledContent("Days before due") {
                 TextField("Days", value: $daysBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
+                    .fontWeight(.medium)
                     .focused($focusedField, equals: .daysAlert)
                     .selectAllOnFocus()
             }
+            .contentShape(Rectangle())
+            .onTapGesture { focusedField = .daysAlert }
         } header: {
             Text("Service Reminders")
         } footer: {
             Text("Distance uses each vehicle’s selected units.")
         }
         .multilineTextAlignment(.trailing)
-        .fontWeight(.medium)
         .keyboardType(.numberPad)
     }
 }
@@ -158,6 +163,8 @@ private struct OdometerUpdatesSection: View {
                         .focused($focusedField, equals: .odometerAlert)
                         .selectAllOnFocus()
                 }
+                .contentShape(Rectangle())
+                .onTapGesture { focusedField = .odometerAlert }
             }
         } footer: {
             Text("Socket can remind you when your odometer hasn’t been updated recently.")
