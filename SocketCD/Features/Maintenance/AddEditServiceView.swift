@@ -265,10 +265,8 @@ struct AddEditServiceView: View {
 
     private var distanceField: some View {
         HStack {
-            TextField("5,000", value: optionalNumberBinding($draftService.distanceInterval), format: .number)
+            NumericInput("5000", value: optionalNumberBinding($draftService.distanceInterval), focus: $focusedField, field: .distance)
                 .fixedSize()
-                .focused($focusedField, equals: .distance)
-                .selectAllOnFocus()
                 .accessibilityLabel("Distance interval")
                 .accessibilityHint("Enter the number of " + distanceUnit.rawValue)
             
@@ -279,10 +277,8 @@ struct AddEditServiceView: View {
     
     private var timeField: some View {
         HStack {
-            TextField("6", value: optionalNumberBinding($draftService.timeInterval), format: .number)
+            NumericInput("6", value: optionalNumberBinding($draftService.timeInterval), focus: $focusedField, field: .time)
                 .fixedSize()
-                .focused($focusedField, equals: .time)
-                .selectAllOnFocus()
                 .accessibilityLabel("Time interval")
                 .accessibilityHint("Enter the number of months or years")
             
@@ -329,10 +325,7 @@ struct AddEditServiceView: View {
                 .padding(.leading, selectionIconWidth + 12)
 
             LabeledInput(label: "Odometer") {
-                TextField("Required", value: draft.odometer, format: .number.decimalSeparator(strategy: .automatic))
-                    .keyboardType(.numberPad)
-                    .focused($focusedField, equals: .odometer)
-                    .selectAllOnFocus()
+                NumericInput("Required", value: draft.odometer, focus: $focusedField, field: .odometer)
                     .accessibilityLabel("Odometer")
             }
             .padding(.leading, selectionIconWidth + 12)

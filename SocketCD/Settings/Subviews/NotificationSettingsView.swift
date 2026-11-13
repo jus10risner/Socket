@@ -104,19 +104,15 @@ private struct MaintenanceDueAlertsSection: View {
     var body: some View {
         Section {
             LabeledContent("Distance before due") {
-                TextField("Distance", value: $distanceBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
+                NumericInput("Distance", value: $distanceBeforeMaintenance, focus: $focusedField, field: .distanceAlert)
                     .fontWeight(.medium)
-                    .focused($focusedField, equals: .distanceAlert)
-                    .selectAllOnFocus()
             }
             .contentShape(Rectangle())
             .onTapGesture { focusedField = .distanceAlert }
             
             LabeledContent("Days before due") {
-                TextField("Days", value: $daysBeforeMaintenance, format: .number.decimalSeparator(strategy: .automatic))
+                NumericInput("Days", value: $daysBeforeMaintenance, focus: $focusedField, field: .daysAlert)
                     .fontWeight(.medium)
-                    .focused($focusedField, equals: .daysAlert)
-                    .selectAllOnFocus()
             }
             .contentShape(Rectangle())
             .onTapGesture { focusedField = .daysAlert }
@@ -155,13 +151,10 @@ private struct OdometerUpdatesSection: View {
             
             if isEnabled {
                 LabeledContent("Reminder Interval (Days)") {
-                    TextField("Days", value: $intervalDays, format: .number)
+                    NumericInput("Days", value: $intervalDays, focus: $focusedField, field: .odometerAlert)
                         .fixedSize(horizontal: true, vertical: false)
                         .multilineTextAlignment(.trailing)
                         .fontWeight(.medium)
-                        .keyboardType(.numberPad)
-                        .focused($focusedField, equals: .odometerAlert)
-                        .selectAllOnFocus()
                 }
                 .contentShape(Rectangle())
                 .onTapGesture { focusedField = .odometerAlert }

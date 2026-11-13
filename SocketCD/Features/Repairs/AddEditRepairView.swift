@@ -51,17 +51,11 @@ struct AddEditRepairView: View {
                     }
                     
                     LabeledInput(label: "Odometer") {
-                        TextField("Required", value: $draftRepair.odometer, format: .number.decimalSeparator(strategy: .automatic))
-                            .keyboardType(.numberPad)
-                            .focused($focusedField, equals: .odometer)
-                            .selectAllOnFocus()
+                        NumericInput("Required", value: $draftRepair.odometer, focus: $focusedField, field: .odometer)
                     }
                     
                     LabeledInput(label: "Cost") {
-                        TextField("Optional", value: $draftRepair.cost.zeroAsNil, format: .number.precision(.fractionLength(0...)))
-                            .keyboardType(.decimalPad)
-                            .focused($focusedField, equals: .cost)
-                            .selectAllOnFocus()
+                        NumericInput("Optional", value: $draftRepair.cost.zeroAsNil, focus: $focusedField, field: .cost)
                     }
                     
                     Button(action: showCategorySelection) {

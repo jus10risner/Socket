@@ -26,8 +26,9 @@ struct VehicleDashboardView: View {
     @State private var selectedSection: AppSection?
     @State private var activeSheet: ActiveSheet?
     @State private var servicesForNewLog: [Service] = []
-    @State private var showingUpdateOdometerAlert = false
+    @State private var showingUpdateOdometer = false
     @State private var newOdometerValue = ""
+    @State private var showingInvalidOdometer = false
     @State private var pendingOdometer: Int?
     @State private var odometerWarning: OdometerWarning?
     @State private var isVehicleNameInToolbar = false
@@ -85,7 +86,9 @@ struct VehicleDashboardView: View {
                                 .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(vehicle.distanceUnit.abbreviated)")
                                  
                                 Button("Update Odometer", systemImage: "pencil") {
-                                    showingUpdateOdometerAlert = true
+                                    newOdometerValue = ""
+                                    pendingOdometer = nil
+                                    showingUpdateOdometer = true
                                 }
                                 .imageScale(.large)
                                 .labelStyle(.iconOnly)
@@ -178,24 +181,33 @@ struct VehicleDashboardView: View {
                 .presentationBackground(Color(.systemBackground))
             }
             .tint(settings.selectedAccent())
-            .alert("Update Odometer", isPresented: $showingUpdateOdometerAlert, actions: {
-                TextField("\(draftVehicle.odometer ?? 0)", text: $newOdometerValue)
+            .alert("Update Odometer", isPresented: $showingUpdateOdometer) {
+                TextField("\(vehicle.odometer)", text: $newOdometerValue)
                     .keyboardType(.numberPad)
-                    .onChange(of: newOdometerValue) { _, newValue in
-                        formatOdometerInput(newValue)
-                    }
-                
+
                 Button("Cancel", role: .cancel) {
                     newOdometerValue = ""
                 }
                 .keyboardShortcut(.cancelAction)
-                
+
                 Button("Update") {
                     validateEnteredOdometer()
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(enteredOdometer == nil)
-            })
+                .disabled(newOdometerValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+            .alert("Invalid Odometer", isPresented: $showingInvalidOdometer) {
+                Button("Try Again") {
+                    DispatchQueue.main.async {
+                        showingUpdateOdometer = true
+                    }
+                }
+                Button("Cancel", role: .cancel) {
+                    newOdometerValue = ""
+                }
+            } message: {
+                Text("Enter a whole number, such as 500.")
+            }
             .odometerWarningAlert(
                 warning: $odometerWarning,
                 entered: pendingOdometer,
@@ -225,22 +237,15 @@ struct VehicleDashboardView: View {
         }
     }
 
-    private var enteredOdometer: Int? {
-        Int(newOdometerValue.filter(\.isNumber))
-    }
-
-    private func formatOdometerInput(_ input: String) {
-        let digits = input.filter(\.isNumber)
-        let formattedValue = Int(digits)?.formatted() ?? digits
-
-        if newOdometerValue != formattedValue {
-            newOdometerValue = formattedValue
-        }
-    }
-
     private func validateEnteredOdometer() {
-        guard let enteredOdometer else { return }
-
+        let input = newOdometerValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard input.allSatisfy({ "0123456789".contains($0) }),
+              let enteredOdometer = Int(input) else {
+            DispatchQueue.main.async {
+                showingInvalidOdometer = true
+            }
+            return
+        }
         pendingOdometer = enteredOdometer
         newOdometerValue = ""
 

@@ -50,19 +50,21 @@ struct AddEditVehicleView: View {
                     }
                     
                     LabeledInput(label: "Odometer") {
-                        OdometerInput(value: $draftVehicle.odometer, focus: $focusedField, field: .odometer)
+                        NumericInput("Required", value: $draftVehicle.odometer, focus: $focusedField, field: .odometer)
                     }
                 }
                 
-                Button(action: showUnitsSelection) {
-                    LabeledContent("Units") {
-                        FormLinkLabel {
-                            Text(unitDescription)
+                Section {
+                    Button(action: showUnitsSelection) {
+                        LabeledContent("Units") {
+                            FormLinkLabel {
+                                Text(unitDescription)
+                            }
                         }
                     }
+                    .foregroundStyle(.primary)
+                    .accessibilityHint("Opens measurement unit settings")
                 }
-                .foregroundStyle(.primary)
-                .accessibilityHint("Opens measurement unit settings")
                 
                 if vehicle != nil {
                     Button("Delete Vehicle", role: .destructive) {
@@ -280,70 +282,6 @@ struct AddEditVehicleView: View {
             context.rollback()
             print("⚠️ Failed to add vehicle: \(error.localizedDescription)")
             return false
-        }
-    }
-}
-
-// Keeps invalid text visible while the existing required-value check disables saving.
-private struct OdometerInput<Field: Hashable>: View {
-    @Binding var value: Int?
-    let focus: FocusState<Field?>.Binding
-    let field: Field
-    @State private var text: String
-    @State private var showingError = false
-
-    init(value: Binding<Int?>, focus: FocusState<Field?>.Binding, field: Field) {
-        _value = value
-        self.focus = focus
-        self.field = field
-        _text = State(initialValue: value.wrappedValue.map(String.init) ?? "")
-    }
-
-    private var parsedValue: Int? {
-        let input = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard input.allSatisfy({ "0123456789".contains($0) }) else { return nil }
-        return Int(input)
-    }
-
-    private var isInvalid: Bool {
-        !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && parsedValue == nil
-    }
-
-    var body: some View {
-        HStack {
-            TextField("Required", text: Binding(
-                get: { text },
-                set: {
-                    text = $0
-                    value = parsedValue
-                    if !isInvalid { showingError = false }
-                }
-            ))
-            .keyboardType(.numberPad)
-            .focused(focus, equals: field)
-            .selectAllOnFocus()
-
-            if isInvalid {
-                Button {
-                    showingError = true
-                } label: {
-                    Image(systemName: "exclamationmark.circle.fill")
-                        .foregroundStyle(.red)
-                }
-                .buttonStyle(.borderless)
-                .accessibilityLabel("Invalid odometer. Enter a whole number using digits only.")
-                .popover(isPresented: $showingError) {
-                    Text("Enter a whole number using digits only, such as 12500.")
-                        .padding()
-                        .presentationCompactAdaptation(.popover)
-                }
-            }
-        }
-        .onChange(of: value) { _, newValue in
-            // Reflect external changes, such as switching distance units.
-            if newValue != parsedValue {
-                text = newValue.map(String.init) ?? ""
-            }
         }
     }
 }

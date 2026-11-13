@@ -39,6 +39,7 @@
 		9E365336303C862500BD9ADD /* AttachedDocument+helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E365335303C862500BD9ADD /* AttachedDocument+helper.swift */; };
 		9E36533B303C86BF00BD9ADD /* ReadOnlyDocumentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36533A303C86BF00BD9ADD /* ReadOnlyDocumentPreview.swift */; };
 		9E36533D303C86C000BD9ADD /* DocumentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E36533C303C86C000BD9ADD /* DocumentListView.swift */; };
+		9E43FC7130A7A87C007B624B /* NumericInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E43FC7030A7A87C007B624B /* NumericInput.swift */; };
 		9E4CC2D12F51E60B001F7F51 /* RepairTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */; };
 		9E5067CB3047395400744533 /* ChartPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5067CA3047395400744533 /* ChartPoint.swift */; };
 		9E5270E02E8AF82300EFDCB8 /* FuelCostSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */; };
@@ -191,6 +192,7 @@
 		9E36533A303C86BF00BD9ADD /* ReadOnlyDocumentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadOnlyDocumentPreview.swift; sourceTree = "<group>"; };
 		9E36533C303C86C000BD9ADD /* DocumentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentListView.swift; sourceTree = "<group>"; };
 		9E36533E303C86D300BD9ADD /* SocketDataModel_V3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SocketDataModel_V3.xcdatamodel; sourceTree = "<group>"; };
+		9E43FC7030A7A87C007B624B /* NumericInput.swift */ = {isa = PBXFileReference; path = NumericInput.swift; sourceTree = "<group>"; };
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairTests.swift; sourceTree = "<group>"; };
 		9E5067CA3047395400744533 /* ChartPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartPoint.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 				9EC4F0B9309BD6E200BF1A21 /* ShareItem.swift */,
 				9E0D18F230A3781E002157E1 /* KeyboardToolbar.swift */,
 				9EB2177830A64D5E005A13D3 /* FormLinkLabel.swift */,
+				9E43FC7030A7A87C007B624B /* NumericInput.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -948,6 +951,7 @@
 				9EEAC4D32BA258960053C65E /* Photo+helper.swift in Sources */,
 				9EBB223A306AD12E00A37D48 /* OdometerValidator.swift in Sources */,
 				9E620C0D2BC5D4FC005E16DD /* MailComposeViewController.swift in Sources */,
+				9E43FC7130A7A87C007B624B /* NumericInput.swift in Sources */,
 				9EEAC4F02BA376380053C65E /* AddEditCustomInfoView.swift in Sources */,
 				9E325178307E867100F43F37 /* ServiceIndicatorView.swift in Sources */,
 				9EEAC5242BA4B4700053C65E /* ServiceDetailView.swift in Sources */,

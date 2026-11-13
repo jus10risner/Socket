@@ -49,36 +49,17 @@ struct AddEditFillupView: View {
                     DatePicker("Fill-up Date", selection: $draftFillup.date, displayedComponents: .date)
                     
                     LabeledInput(label: "Odometer") {
-                        TextField("Required", value: $draftFillup.odometer, format: .number.decimalSeparator(strategy: .automatic))
-                            .keyboardType(.numberPad)
-                            .focused($focusedField, equals: .odometer)
-                            .selectAllOnFocus()
+                        NumericInput("Required", value: $draftFillup.odometer, focus: $focusedField, field: .odometer)
                     }
                     
                     LabeledInput(label: "\(volumeUnit.singularName)s of Fuel") {
-                        TextField(
-                            "Required",
-                            value: $draftFillup.volume,
-                            format: .number
-                                .precision(.fractionLength(0...3))
-                                .decimalSeparator(strategy: .automatic)
-                        )
-                        .keyboardType(.decimalPad)
-                        .focused($focusedField, equals: .volume)
-                        .selectAllOnFocus()
+                        NumericInput("Required", value: $draftFillup.volume, focus: $focusedField, field: .volume)
                     }
                     
                     LabeledContent {
-                        TextField(
-                            "Optional",
-                            value: $draftFillup.cost.zeroAsNil,
-                            format: .number.precision(.fractionLength(0...))
-                        )
-                        .keyboardType(.decimalPad)
-                        .foregroundStyle(Color.primary)
-                        .multilineTextAlignment(.trailing)
-                        .focused($focusedField, equals: .cost)
-                        .selectAllOnFocus()
+                        NumericInput("Optional", value: $draftFillup.cost.zeroAsNil, focus: $focusedField, field: .cost)
+                            .foregroundStyle(Color.primary)
+                            .multilineTextAlignment(.trailing)
                     } label: {
                         Group {
                             Text(settings.fillupCostType == .perUnit ? "Cost per \(volumeUnit.singularName)" : "Total Cost")
