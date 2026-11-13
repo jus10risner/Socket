@@ -27,11 +27,24 @@ private struct KeyboardToolbarModifier: ViewModifier {
     let toolbar: KeyboardToolbar
 
     func body(content: Content) -> some View {
-        content
-            .safeAreaInset(edge: .bottom) {
-                if isFocused {
+        if #available(iOS 26.0, *) {
+            content
+                .safeAreaInset(edge: .bottom, spacing: 0) {
                     toolbar
+                        .opacity(isFocused ? 1 : 0)
+                        .offset(y: isFocused ? 0 : 100)
+                        .frame(height: isFocused ? nil : 0, alignment: .top)
+                        .allowsHitTesting(isFocused)
+                        .accessibilityHidden(!isFocused)
+                        .animation(.snappy, value: isFocused)
                 }
-            }
+        } else {
+            content
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        toolbar.controls
+                    }
+                }
+        }
     }
 }

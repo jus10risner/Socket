@@ -15,6 +15,12 @@ struct KeyboardToolbar: View {
     let onDone: () -> Void
     
     var body: some View {
+        controls
+            .padding(.horizontal, 20)
+            .padding(.vertical, 15)
+            .adaptiveKeyboardToolbarStyle()    }
+
+    var controls: some View {
         HStack(spacing: 20) {
             Button("Previous Field", systemImage: "chevron.up", action: onPrevious)
                 .disabled(!canMovePrevious)
@@ -37,15 +43,7 @@ struct KeyboardToolbar: View {
         .fontWeight(.semibold)
         .labelStyle(.iconOnly)
         .imageScale(.large)
-        .padding(.horizontal, 20)
-        .padding(.vertical, 15)
         .dynamicTypeSize(.medium)
-        .adaptiveKeyboardToolbarStyle()
-        .transition(
-            .move(edge: .bottom)
-            .combined(with: .opacity)
-            .animation(.snappy)
-        )
     }
 }
 
