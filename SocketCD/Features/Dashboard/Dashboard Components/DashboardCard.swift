@@ -26,9 +26,10 @@ struct DashboardCard<Visual: View, Detail: View>: View {
         ZStack(alignment: .topTrailing) {
             Button(action: action) {
                 cardContent
+                    .padding()
+                    .contentShape(RoundedRectangle.adaptive)
             }
             .buttonStyle(.plain)
-            .padding()
             .accessibilityLabel(title)
             .accessibilityValue(accessibilityValue)
             .accessibilityHint(accessibilityHint)
