@@ -24,7 +24,6 @@ struct SocketCDApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .tint(settings.selectedAccent())
                 .environment(\.managedObjectContext, dataController.container.viewContext)
                 .environmentObject(settings)
                 .task {
@@ -48,7 +47,6 @@ struct SocketCDApp: App {
                 } message: {
                     Text(dataController.persistentStoreError?.localizedDescription ?? "Unknown error")
                 }
-                .tint(nil)
         }
         .onChange(of: scenePhase) { _, newPhase in
             dataController.save()

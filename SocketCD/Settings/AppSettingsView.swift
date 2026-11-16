@@ -71,14 +71,12 @@ struct AppSettingsView: View {
                         .adaptiveTint()
                 }
             }
-            .tint(settings.selectedAccent())
             .alert("Could not send mail", isPresented: $showingMailError) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Please make sure email has been set up on this device, then try again.")
             }
         }
-        .tint(nil)
     }
 
     // MARK: - Views
@@ -100,7 +98,6 @@ struct AppSettingsView: View {
         }
         .navigationTitle("Appearance")
         .navigationBarTitleDisplayMode(.inline)
-        .pickerStyle(.inline)
     }
     
     private var vehicleListSettings: some View {
@@ -146,9 +143,7 @@ struct AppSettingsView: View {
                 .foregroundStyle(Color.primary)
         } icon: {
             Image(systemName: symbol)
-                .foregroundStyle(settings.selectedAccent())
         }
-
     }
 }
 

@@ -148,6 +148,7 @@ private struct OdometerUpdatesSection: View {
                     }
                 )
             )
+            .tint(.accent)
             
             if isEnabled {
                 LabeledContent("Reminder Interval (Days)") {

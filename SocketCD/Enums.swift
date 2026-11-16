@@ -41,7 +41,7 @@ enum AppSection: String, CaseIterable, Codable, Identifiable {
         case .maintenance: .green
         case .fillups: .teal
         case .repairs: .orange
-        case .customInfo: AppSettingsStore.shared.selectedAccent()
+        case .customInfo: .accent
         }
     }
 }
@@ -101,32 +101,6 @@ enum ServiceStatus: Int {
 
 enum AppearanceOptions: String, CaseIterable {
     case automatic, light, dark
-}
-
-enum AccentColors: String, CaseIterable {
-    case red = "red", orange = "orange", yellow = "yellow", green = "green", blue = "blue", purple = "purple", cyan = "cyan", mint = "mint"
-    
-    // Returns the Color for the user's selected accent color
-    var value: Color {
-        switch self {
-        case .red:
-            Color.red
-        case .orange:
-            Color.orange
-        case .yellow:
-            Color.yellow
-        case .green:
-            Color.green
-        case .blue:
-            Color.blue
-        case .purple:
-            Color.purple
-        case .cyan:
-            Color.cyan
-        case .mint:
-            Color.mint
-        }
-    }
 }
 
 enum DistanceUnits: String, CaseIterable {

@@ -49,10 +49,6 @@ class AppSettingsStore: ObservableObject {
         willSet { objectWillChange.send() }
     }
     
-    @AppStorage("accentColor") var accentColor: AccentColors? {
-        willSet { objectWillChange.send() }
-    }
-    
     @AppStorage("appAppearance") var appAppearance: AppearanceOptions = .automatic {
         willSet { objectWillChange.send() }
     }
@@ -131,15 +127,6 @@ class AppSettingsStore: ObservableObject {
     
     
     // MARK: - Helpers
-    
-    // Returns either the user's selected accent color, or the default accent color
-    func selectedAccent() -> Color {
-        if let accentColor {
-            return accentColor.value
-        } else {
-            return Color.accent
-        }
-    }
     
     // Opens the Settings app and navigates to Socket's system settings (camera access, etc.)
     static func openSocketSettings() async {

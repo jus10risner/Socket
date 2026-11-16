@@ -18,6 +18,7 @@ struct CSVExportOptionsView: View {
                 } footer: {
                     Text("Each selection is exported as a separate spreadsheet.")
                 }
+                .tint(.accent)
             }
             .navigationTitle("CSV Options")
             .navigationBarTitleDisplayMode(.inline)

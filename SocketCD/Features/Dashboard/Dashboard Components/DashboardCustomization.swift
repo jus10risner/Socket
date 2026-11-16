@@ -81,7 +81,7 @@ struct DashboardCustomizationView: View {
                         } icon: {
                             if preference.isVisible {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(Color.white, settings.selectedAccent())
+                                    .foregroundStyle(.accent)
                             } else {
                                 Image(systemName: "circle")
                                     .foregroundStyle(Color.secondary)
@@ -89,7 +89,7 @@ struct DashboardCustomizationView: View {
                         }
                         .imageScale(.large)
                     }
-                    .buttonStyle(.plain)
+                    .foregroundStyle(.primary)
                     .accessibilityValue(preference.isVisible ? "Shown" : "Hidden")
                 }
                 .onMove { source, destination in

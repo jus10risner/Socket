@@ -106,7 +106,6 @@ struct AddEditVehicleView: View {
                     .disabled(draftVehicle.canBeSaved ? false : true)
                 }
             }
-            .tint(AppSettingsStore.shared.selectedAccent())
             .alert("You already have a vehicle with that name", isPresented: $showingDuplicateNameError) {
                 Button("OK", role: .cancel) { focusedField = nil }
             } message: {
@@ -336,8 +335,6 @@ private struct VehicleUnitsView: View {
         .animation(.default, value: draftVehicle.shouldMigrateMeasurements)
         .navigationTitle("Units")
         .navigationBarTitleDisplayMode(.inline)
-        .pickerStyle(.menu)
-        .tint(AppSettingsStore.shared.selectedAccent())
     }
 
     private var displayDistanceUnit: Binding<DistanceUnits> {

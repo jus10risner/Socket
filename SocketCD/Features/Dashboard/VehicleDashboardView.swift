@@ -180,7 +180,6 @@ struct VehicleDashboardView: View {
                 }
                 .presentationBackground(Color(.systemBackground))
             }
-            .tint(settings.selectedAccent())
             .alert("Update Odometer", isPresented: $showingUpdateOdometer) {
                 TextField("\(vehicle.odometer)", text: $newOdometerValue)
                     .keyboardType(.numberPad)

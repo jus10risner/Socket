@@ -115,7 +115,6 @@
 		9EEAC4B52BA1F0A50053C65E /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4B42BA1F0A50053C65E /* CameraManager.swift */; };
 		9EEAC4B72BA1F0CE0053C65E /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4B62BA1F0CE0053C65E /* ImageViewer.swift */; };
 		9EEAC4B92BA1F1180053C65E /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4B82BA1F1180053C65E /* ImageDetailView.swift */; };
-		9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4BB2BA1F1CA0053C65E /* AccentColorSelectorView.swift */; };
 		9EEAC4BE2BA1F1E60053C65E /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4BD2BA1F1E60053C65E /* NotificationSettingsView.swift */; };
 		9EEAC4C12BA24EEC0053C65E /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4C02BA24EEC0053C65E /* AppSettingsStore.swift */; };
 		9EEAC4C62BA253950053C65E /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAC4C52BA253950053C65E /* WelcomeView.swift */; };
@@ -192,7 +191,7 @@
 		9E36533A303C86BF00BD9ADD /* ReadOnlyDocumentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadOnlyDocumentPreview.swift; sourceTree = "<group>"; };
 		9E36533C303C86C000BD9ADD /* DocumentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentListView.swift; sourceTree = "<group>"; };
 		9E36533E303C86D300BD9ADD /* SocketDataModel_V3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SocketDataModel_V3.xcdatamodel; sourceTree = "<group>"; };
-		9E43FC7030A7A87C007B624B /* NumericInput.swift */ = {isa = PBXFileReference; path = NumericInput.swift; sourceTree = "<group>"; };
+		9E43FC7030A7A87C007B624B /* NumericInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericInput.swift; sourceTree = "<group>"; };
 		9E4C0D662BE3E5CE00E3C4CA /* SocketCD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocketCD.entitlements; sourceTree = "<group>"; };
 		9E4CC2D02F51E60B001F7F51 /* RepairTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairTests.swift; sourceTree = "<group>"; };
 		9E5067CA3047395400744533 /* ChartPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartPoint.swift; sourceTree = "<group>"; };
@@ -272,7 +271,6 @@
 		9EEAC4B42BA1F0A50053C65E /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		9EEAC4B62BA1F0CE0053C65E /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		9EEAC4B82BA1F1180053C65E /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
-		9EEAC4BB2BA1F1CA0053C65E /* AccentColorSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentColorSelectorView.swift; sourceTree = "<group>"; };
 		9EEAC4BD2BA1F1E60053C65E /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 		9EEAC4C02BA24EEC0053C65E /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		9EEAC4C52BA253950053C65E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -420,7 +418,6 @@
 			children = (
 				9E5270DF2E8AF82300EFDCB8 /* FuelCostSettingsView.swift */,
 				9E6A53492BAF239B00F75D49 /* AppIconSelectorView.swift */,
-				9EEAC4BB2BA1F1CA0053C65E /* AccentColorSelectorView.swift */,
 				9EEAC4BD2BA1F1E60053C65E /* NotificationSettingsView.swift */,
 			);
 			path = Subviews;
@@ -962,7 +959,6 @@
 				9E6A53462BADD68A00F75D49 /* AppInfo.swift in Sources */,
 				9E187C0F2E9D37CE00FBDAC9 /* CloudKitSyncMonitor.swift in Sources */,
 				9EC4F0B6309BD6E100BF1A21 /* CSVExportOptionsView.swift in Sources */,
-				9EEAC4BC2BA1F1CA0053C65E /* AccentColorSelectorView.swift in Sources */,
 				9E87C5B62E4235CF001BE562 /* FormFooterView.swift in Sources */,
 				9E07C1AC3053492500160E0A /* CustomInfoCard.swift in Sources */,
 				9EC478BA309D0904008F60B7 /* VehicleColorPicker.swift in Sources */,

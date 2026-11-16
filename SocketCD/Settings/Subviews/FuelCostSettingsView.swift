@@ -19,16 +19,15 @@ struct FuelCostSettingsView: View {
                             .tag(type)
                     }
                 }
-                .pickerStyle(.menu)
             }
             
             Section(footer: Text(settings.fillupCostType.verificationDescription)) {
                 Toggle("Verify Cost", isOn: $settings.showCalculatedCost)
+                    .tint(.accent)
             }
         }
         .navigationTitle("Fuel Cost")
         .navigationBarTitleDisplayMode(.inline)
-        .pickerStyle(.inline)
     }
 }
 

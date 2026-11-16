@@ -21,6 +21,7 @@ struct PDFExportOptionsView: View {
                     Toggle("Notes", isOn: $options.includeNotes)
                     Toggle("Attachments", isOn: attachmentsSelection)
                 }
+                .tint(.accent)
             }
             .navigationTitle("PDF Options")
             .navigationBarTitleDisplayMode(.inline)
