@@ -207,13 +207,13 @@ struct AddEditFillupView: View {
     
     // Returns the total or per-unit cost, based on which the user has selected in settings (used to show both costs at once)
     private var calculatedCost: String {
-        guard let cost = draftFillup.cost else { return 0.0.asCurrency(trimTrailingZeros: true) }
-        
-        if settings.fillupCostType == .perUnit {
-            return (cost * (draftFillup.volume ?? 0)).asCurrency(trimTrailingZeros: true)
-        } else {
-            return (cost / (draftFillup.volume ?? 0)).asCurrency(trimTrailingZeros: true)
+        guard let cost = draftFillup.cost, cost.isFinite,
+              let volume = draftFillup.volume, volume.isFinite, volume > 0 else {
+            return 0.0.asCurrency(trimTrailingZeros: true)
         }
+
+        let amount = settings.fillupCostType == .perUnit ? cost * volume : cost / volume
+        return (amount.isFinite ? amount : 0).asCurrency(trimTrailingZeros: true)
     }
 
     private var hasDuplicateOdometer: Bool {
