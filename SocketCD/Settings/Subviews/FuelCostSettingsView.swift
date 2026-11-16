@@ -13,7 +13,7 @@ struct FuelCostSettingsView: View {
     var body: some View {
         List {
             Section(footer: Text("Choose how you prefer to enter fuel costs when logging fill-ups.")) {
-                Picker("Fill-up Cost Type", selection: $settings.fillupCostType) {
+                Picker("Fuel Cost Type", selection: $settings.fillupCostType) {
                     ForEach(FillupCostTypes.allCases, id: \.self) { type in
                         Text(type.title)
                             .tag(type)
