@@ -10,6 +10,7 @@ import SwiftUI
 
 class MailComposeViewController: UIViewController, MFMailComposeViewControllerDelegate {
     static let shared = MailComposeViewController()
+    static let feedbackEmailAddress = "feedback@justinrisner.com"
     
     var canSendEmail: Bool {
         if MFMailComposeViewController.canSendMail() {
@@ -19,26 +20,52 @@ class MailComposeViewController: UIViewController, MFMailComposeViewControllerDe
         }
     }
 
-    func sendEmail() {
+    @discardableResult
+    func sendEmail() -> Bool {
+        guard canSendEmail else { return false }
+
         let appInfo = AppInfo()
-        let appVersion = appInfo.version
-        let buildNumber = appInfo.build
-        let operatingSystem = UIDevice.current.systemVersion
+        let device = UIDevice.current
+        let diagnostics = """
+        Diagnostic Info
+
+        This attachment contains general app and device information to help us understand your feedback. It does not include your personal data.
+
+        Version: \(appInfo.version)
+        Build: \(appInfo.build)
+        Operating System: \(device.systemName) \(device.systemVersion)
+        Device Type: \(device.model)
+        Region: \(Locale.current.region?.identifier ?? "Unknown")
+
+        Region reflects the device's region setting, not its physical location.
+        """
         
         let mail = MFMailComposeViewController()
         mail.mailComposeDelegate = self
-        mail.setToRecipients(["feedback@justinrisner.com"])
-        mail.setMessageBody("\n\n\nSocket Version: \(appVersion) (\(buildNumber))\niOS Version: \(operatingSystem)", isHTML: false)
+        mail.setToRecipients([Self.feedbackEmailAddress])
+        mail.setMessageBody("", isHTML: false)
+        mail.addAttachmentData(
+            Data(diagnostics.utf8),
+            mimeType: "text/plain",
+            fileName: "DiagnosticInfo.txt"
+        )
         
         // Finds the topmost view controller and presents from there, to avoid "...which was already presenting" error
-        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-        guard let window = windowScene?.windows.first else { return }
-        guard var topVC = window.rootViewController else { return }
+        let window = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .filter { $0.activationState == .foregroundActive }
+            .flatMap(\.windows)
+            .first(where: \.isKeyWindow)
+        guard var topVC = window?.rootViewController else { return false }
         while let presentedVC = topVC.presentedViewController {
             topVC = presentedVC
         }
-        
+        guard topVC.viewIfLoaded?.window != nil,
+              !topVC.isBeingDismissed,
+              !topVC.isBeingPresented else { return false }
+
         topVC.present(mail, animated: true)
+        return mail.presentingViewController != nil
     }
 
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {

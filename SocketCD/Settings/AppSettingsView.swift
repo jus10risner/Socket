@@ -10,9 +10,10 @@ import SwiftUI
 struct AppSettingsView: View {
     @EnvironmentObject var settings: AppSettingsStore
     @Environment(\.dismiss) var dismiss
+    @Environment(\.openURL) private var openURL
     let appStoreURL: URL = URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009")!
     
-    @State private var showingMailError = false
+    @State private var showingEmailCopied = false
     
     var body: some View {
         NavigationStack {
@@ -47,11 +48,11 @@ struct AppSettingsView: View {
                 }
                 
                 Section {
-                    contactButton
-                    
                     Link(destination: URL(string: "https://apps.apple.com/us/app/socket-car-care-tracker/id6502462009?action=write-review")!, label: {
                         rowLabel(title: "Rate on the App Store", symbol: "star")
                     })
+                    
+                    sendFeedbackButton
                     
                     ShareLink(item: appStoreURL) {
                         rowLabel(title: "Share Socket", symbol: "square.and.arrow.up")
@@ -71,11 +72,12 @@ struct AppSettingsView: View {
                         .adaptiveTint()
                 }
             }
-            .alert("Could not send mail", isPresented: $showingMailError) {
+            .alert("We’d Love Your Feedback", isPresented: $showingEmailCopied) {
                 Button("OK", role: .cancel) { }
             } message: {
-                Text("Please make sure email has been set up on this device, then try again.")
+                Text("We couldn’t open a new email, so we copied our address to your clipboard. To send us feedback, paste it into the To field of a new message in your usual email app or website.")
             }
+
         }
     }
 
@@ -122,20 +124,44 @@ struct AppSettingsView: View {
     }
     
     // Launches Mail Composer, if email has been set up
-    private var contactButton: some View {
+    private var sendFeedbackButton: some View {
         Button {
             let composeVC = MailComposeViewController.shared
             
-            if composeVC.canSendEmail {
-                composeVC.sendEmail() // Composes an email message and prefills Socket's address
-            } else {
-                showingMailError = true
+            if !composeVC.sendEmail() {
+                openFeedbackEmail()
             }
         } label: {
-            rowLabel(title: "Contact", symbol: "envelope")
+            rowLabel(title: "Send Feedback", symbol: "envelope")
         }
     }
     
+    private func openFeedbackEmail() {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = MailComposeViewController.feedbackEmailAddress
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: "Socket Feedback")
+        ]
+
+        guard let url = components.url else {
+            copyFeedbackEmail()
+            return
+        }
+
+        // This result reports whether the URL opened, not whether an email was sent.
+        openURL(url) { accepted in
+            if !accepted {
+                copyFeedbackEmail()
+            }
+        }
+    }
+
+    private func copyFeedbackEmail() {
+        UIPasteboard.general.string = MailComposeViewController.feedbackEmailAddress
+        showingEmailCopied = true
+    }
+
     // Styling for list row labels
     private func rowLabel(title: String, symbol: String) -> some View {
         Label {
