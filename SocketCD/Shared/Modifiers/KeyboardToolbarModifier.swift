@@ -27,7 +27,16 @@ private struct KeyboardToolbarModifier: ViewModifier {
     let toolbar: KeyboardToolbar
 
     func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad {
+            content
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        toolbar.compactToolbar
+                    }
+                    .sharedBackgroundVisibility(.hidden)
+                }
+        } else if #available(iOS 26.0, *) {
             content
                 .safeAreaInset(edge: .bottom, spacing: 0) {
                     toolbar

@@ -18,9 +18,25 @@ struct KeyboardToolbar: View {
         controls
             .padding(.horizontal, 20)
             .padding(.vertical, 15)
-            .adaptiveKeyboardToolbarStyle()    }
+            .adaptiveKeyboardToolbarStyle()
+    }
+
+    @available(iOS 26.0, *)
+    var compactToolbar: some View {
+        controls(compact: true)
+            .fixedSize()
+            .buttonStyle(.plain)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            .glassEffect(.regular, in: .capsule)
+            .padding(.bottom, 20)
+    }
 
     var controls: some View {
+        controls(compact: false)
+    }
+
+    private func controls(compact: Bool) -> some View {
         HStack(spacing: 20) {
             Button("Previous Field", systemImage: "chevron.up", action: onPrevious)
                 .disabled(!canMovePrevious)
@@ -28,7 +44,12 @@ struct KeyboardToolbar: View {
             Button("Next Field", systemImage: "chevron.down", action: onNext)
                 .disabled(!canMoveNext)
             
-            Spacer()
+            if compact {
+                Divider()
+                    .accessibilityHidden(true)
+            } else {
+                Spacer()
+            }
             
             Button("Done", systemImage: "checkmark", action: onDone)
                 .accessibilityHint("Dismisses the keyboard")
