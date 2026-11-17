@@ -43,7 +43,7 @@ struct PDFExportOptionsView: View {
                 }
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents(UIDevice.current.userInterfaceIdiom == .pad ? [.large] : [.medium])
     }
 
     private var attachmentsSelection: Binding<Bool> {
