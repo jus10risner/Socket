@@ -28,7 +28,7 @@ struct VehicleActivityView: View {
                 ContentUnavailableView(
                     "No Records",
                     systemImage: "clock.arrow.circlepath",
-                    description: Text("No records match the selected types.")
+                    description: Text("View maintenance, repairs, and fill-ups for this vehicle here.")
                 )
             } else {
                 VehicleHistoryTimelineList(years: years, vehicle: vehicle)
