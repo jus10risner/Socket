@@ -59,6 +59,7 @@ struct AddEditVehicleView: View {
                         LabeledContent("Units") {
                             FormLinkLabel {
                                 Text(unitDescription)
+                                    .foregroundStyle(.secondary)
                             }
                         }
                     }
