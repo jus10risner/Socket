@@ -32,10 +32,11 @@ struct ServiceIndicatorView: View {
             )
         )
         .frame(width: diameter, height: diameter)
-        .task(id: [vehicle.odometer, service.serviceRecords?.count]) {
-            loadRemainingValue()
-        }
-        .task(id: service.sortedServiceRecordsArray.first) {
+        .task(id: RemainingValueInputs(
+            odometer: vehicle.odometer,
+            recordCount: service.serviceRecords?.count ?? 0,
+            latestRecord: service.sortedServiceRecordsArray.first
+        )) {
             loadRemainingValue()
         }
     }
@@ -54,9 +55,13 @@ struct ServiceIndicatorView: View {
             return
         }
 
-        withAnimation(.default.delay(0.5)) {
-            remainingValue = max(0, min(1, service.progress(currentOdometer: vehicle.odometer)))
-        }
+        remainingValue = max(0, min(1, service.progress(currentOdometer: vehicle.odometer)))
+    }
+
+    private struct RemainingValueInputs: Equatable {
+        let odometer: Int
+        let recordCount: Int
+        let latestRecord: ServiceRecord?
     }
 }
 
@@ -73,6 +78,8 @@ private struct ServiceCapacityGaugeStyle: GaugeStyle {
                 .trim(from: 0, to: configuration.value)
                 .stroke(tint, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                 .rotationEffect(.degrees(-90))
+                // Animate only the progress ring, not the surrounding list row.
+                .animation(.default.delay(0.5), value: configuration.value)
 
             configuration.currentValueLabel
         }
