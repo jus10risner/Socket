@@ -34,7 +34,7 @@ struct CustomInfoCard: View {
             color: AppSection.customInfo.color,
             quickActionTitle: "Add Info",
             accessibilityValue: accessibilityValue,
-            accessibilityHint: String(localized: "Opens the custom info list")
+            accessibilityHint: String(localized: "Opens the vehicle info list")
         ) {
             selectedSection = .customInfo
         } quickAction: {

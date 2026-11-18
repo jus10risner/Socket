@@ -19,7 +19,7 @@ enum AppSection: String, CaseIterable, Codable, Identifiable {
         case .maintenance: "Maintenance"
         case .fillups: "Fill-ups"
         case .repairs: "Repairs"
-        case .customInfo: "Custom Info"
+        case .customInfo: "Vehicle Info"
         }
     }
 

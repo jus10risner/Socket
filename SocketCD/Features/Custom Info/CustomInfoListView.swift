@@ -44,9 +44,9 @@ struct CustomInfoListView: View {
         .overlay {
             if customInfo.isEmpty {
                 ContentUnavailableView {
-                    Label("No Saved Info", systemImage: AppSection.customInfo.symbol())
+                    Label("No Vehicle Info", systemImage: AppSection.customInfo.symbol())
                 } description: {
-                    Text("Keep useful details here, such as tire size or insurance documents.")
+                    Text("Keep vehicle details here, such as VIN, tire size, or insurance documents.")
                 }
             }
         }

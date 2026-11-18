@@ -37,7 +37,7 @@ struct AddEditCustomInfoView: View {
     var body: some View {
         NavigationStack {
             Form {
-                FormHeaderView(symbolName: AppSection.customInfo.symbol(filled: true), primaryText: customInfo != nil ? "Edit Custom Info" : "New Custom Info", accentColor: AppSection.customInfo.color)
+                FormHeaderView(symbolName: AppSection.customInfo.symbol(filled: true), primaryText: customInfo != nil ? "Edit Vehicle Info" : "New Vehicle Info", accentColor: AppSection.customInfo.color)
                 
                 Section {
                     LabeledInput(label: "Name") {
