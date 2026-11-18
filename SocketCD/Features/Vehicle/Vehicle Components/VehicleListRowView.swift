@@ -10,6 +10,7 @@ import SwiftUI
 
 struct VehicleListRowView: View {
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ObservedObject var vehicle: Vehicle
 
     let settings = AppSettingsStore.shared
@@ -35,7 +36,7 @@ struct VehicleListRowView: View {
 
     var body: some View {
         ZStack {
-            if settings.vehicleListShouldBeCompact {
+            if !dynamicTypeSize.isAccessibilitySize && (usesExpandedNavigation || settings.vehicleListShouldBeCompact) {
                 CompactVehicleListRow(
                     vehicle: vehicle,
                     distanceUnit: vehicle.distanceUnit.abbreviated,
@@ -53,7 +54,9 @@ struct VehicleListRowView: View {
             RoundedRectangle.adaptive
                 .fill(Color(.tertiarySystemBackground))
                 .strokeBorder(
-                    Color.secondary.opacity(0.5),
+                    usesExpandedNavigation && isSelected
+                        ? Color.secondary.opacity(0.5)
+                        : Color.primary.opacity(0.18),
                     lineWidth: borderWidth
                 )
         }
@@ -81,7 +84,7 @@ struct VehicleListRowView: View {
     }
 
     private var borderWidth: CGFloat {
-        usesExpandedNavigation && isSelected ? 2 : colorScheme == .dark ? 0 : 0.5
+        usesExpandedNavigation && isSelected ? 2 : (colorScheme == .light ? 1 : 0)
     }
 
     private var accessibilityLabel: String {
@@ -103,6 +106,8 @@ struct VehicleListRowView: View {
 }
 
 private struct RegularVehicleListRow: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     private let horizontalLayoutMinimumWidth: CGFloat = 560
     private let horizontalImageWidth: CGFloat = 400
 
@@ -112,12 +117,14 @@ private struct RegularVehicleListRow: View {
 
     var body: some View {
         ViewThatFits(in: .horizontal) {
-            MinimumWidthLayout(minimumWidth: horizontalLayoutMinimumWidth) {
-                HStack(spacing: 12) {
-                    vehicleImage(maxWidth: horizontalImageWidth)
+            if !dynamicTypeSize.isAccessibilitySize {
+                MinimumWidthLayout(minimumWidth: horizontalLayoutMinimumWidth) {
+                    HStack(alignment: .top, spacing: 12) {
+                        vehicleImage(maxWidth: horizontalImageWidth)
 
-                    vehicleDetails
-                        .padding(.horizontal, 8)
+                        vehicleDetails
+                            .padding(.horizontal, 8)
+                    }
                 }
             }
 
@@ -239,6 +246,8 @@ private struct VehicleListRowImage: View {
 }
 
 private struct VehicleListRowDetails: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     let vehicleName: String
     let odometer: Int
     let distanceUnit: String
@@ -266,7 +275,10 @@ private struct VehicleListRowDetails: View {
         VStack(alignment: .leading, spacing: 1) {
             Text(vehicleName)
                 .font(nameFont)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+                .truncationMode(.tail)
                 .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
 
             Text("\(odometer) \(distanceUnit)")
                 .font(.caption)
