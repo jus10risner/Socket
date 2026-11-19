@@ -99,7 +99,7 @@ struct DashboardView: View {
                 .frame(maxWidth: .infinity)
             }
             .scrollIndicators(.hidden)
-            .padding(.horizontal)
+            .contentMargins(.horizontal, 16, for: .scrollContent)
             .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Overview")

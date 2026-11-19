@@ -49,13 +49,7 @@ struct DashboardView: View {
         if dynamicTypeSize.isAccessibilitySize {
             [GridItem(.flexible(), alignment: .top)]
         } else {
-            [
-                GridItem(
-                    .adaptive(minimum: minimumColumnWidth),
-                    spacing: gridSpacing,
-                    alignment: .top
-                )
-            ]
+            [GridItem(.adaptive(minimum: minimumColumnWidth), spacing: gridSpacing, alignment: .top)]
         }
     }
     
@@ -99,7 +93,7 @@ struct DashboardView: View {
                 .frame(maxWidth: .infinity)
             }
             .scrollIndicators(.hidden)
-            .padding(.horizontal)
+            .contentMargins(.horizontal, 16, for: .scrollContent)
             .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Overview")
