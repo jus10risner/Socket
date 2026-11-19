@@ -70,11 +70,9 @@ struct ImageDetailView: View {
                         .tint(.white)
                 }
             }
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .modifier(PhotoToolbarBackground())
             .toolbarColorScheme(.dark, for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
-            .statusBarHidden()
             .onChange(of: currentPhotoID) {
                 isZoomed = false
             }
@@ -121,6 +119,18 @@ struct ImageDetailView: View {
 
         selectedImageData = data
         selectedImage = image
+    }
+}
+
+private struct PhotoToolbarBackground: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content
+        } else {
+            content
+                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+        }
     }
 }
 
