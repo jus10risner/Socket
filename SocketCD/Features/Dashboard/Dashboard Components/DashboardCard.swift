@@ -20,7 +20,7 @@ struct DashboardCard<Visual: View, Detail: View>: View {
     @ViewBuilder let detail: Detail
 
     private let quickActionSize: CGFloat = 44
-    private let minimumContentHeight: CGFloat = 125
+    private let minimumContentHeight: CGFloat = 120
 
     var body: some View {
         ZStack(alignment: .topTrailing) {

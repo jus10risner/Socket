@@ -15,7 +15,7 @@ struct CardTextView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(headline)
                 .lineLimit(2)
-                .font(.title3.bold())
+                .font(.headline)
             
             Text(subheadline)
                 .font(.subheadline)

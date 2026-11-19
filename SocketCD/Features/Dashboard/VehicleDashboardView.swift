@@ -1,5 +1,5 @@
 //
-//  VehicleDashboardView.swift
+//  DashboardView.swift
 //  SocketCD
 //
 //  Created by Justin Risner on 7/10/25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import TipKit
 
-struct VehicleDashboardView: View {
+struct DashboardView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @StateObject var draftVehicle = DraftVehicle()
@@ -65,40 +65,10 @@ struct VehicleDashboardView: View {
                 TipView(DashboardTip())
                     .tipBackground(Color(.tertiarySystemBackground))
                 VStack(alignment: .leading) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(vehicle.name)
-                                .font(.title3.bold())
-                                .opacity(isVehicleNameInToolbar ? 0 : 1)
-                                .accessibilityHidden(isVehicleNameInToolbar)
-                                .onGeometryChange(for: Bool.self) { proxy in
-                                    proxy.frame(in: .scrollView(axis: .vertical)).maxY <= 0
-                                } action: { isBehindToolbar in
-                                    isVehicleNameInToolbar = isBehindToolbar
-                                }
-
-                            HStack(spacing: 10) {
-                                Text(
-                                    "\(Text(vehicle.odometer.formatted()).font(.title.bold()).monospacedDigit()) \(Text(vehicle.distanceUnit.abbreviated).font(.title3.bold()).foregroundColor(.secondary))"
-                                )
-                                .contentTransition(.numericText(value: Double(vehicle.odometer)))
-                                .animation(.default, value: vehicle.odometer)
-                                .accessibilityLabel("Odometer: \(vehicle.odometer.formatted()) \(vehicle.distanceUnit.abbreviated)")
-                                 
-                                Button("Update Odometer", systemImage: "pencil") {
-                                    newOdometerValue = ""
-                                    pendingOdometer = nil
-                                    showingUpdateOdometer = true
-                                }
-                                .imageScale(.large)
-                                .labelStyle(.iconOnly)
-                                .buttonStyle(.borderedProminent)
-                                .buttonBorderShape(.circle)
-                                .dynamicTypeSize(.medium)
-                            }
-                        }
-                        
-                        Spacer()
+                    DashboardHeader(vehicle: vehicle) {
+                        newOdometerValue = ""
+                        pendingOdometer = nil
+                        showingUpdateOdometer = true
                     }
 
                     DashboardCardGrid(
@@ -132,7 +102,7 @@ struct VehicleDashboardView: View {
             .padding(.horizontal)
             .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))
-            .navigationTitle(vehicle.name)
+            .navigationTitle("Overview")
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(item: $selectedSection) { section in
                 destinationView(for: section, vehicle: vehicle)
@@ -287,18 +257,6 @@ struct VehicleDashboardView: View {
             }
             .adaptiveTint()
         }
-
-        ToolbarItem(placement: .principal) {
-            Text(vehicle.name)
-                .font(.headline)
-                .lineLimit(1)
-                .minimumScaleFactor(0.75)
-                .truncationMode(.tail)
-                .multilineTextAlignment(.center)
-                .opacity(isVehicleNameInToolbar ? 1 : 0)
-                .accessibilityHidden(!isVehicleNameInToolbar)
-                .animation(.easeInOut(duration: 0.2), value: isVehicleNameInToolbar)
-        }
     }
     
     private func exportPDF(options: PDFExportOptions) {
@@ -405,7 +363,7 @@ private struct DashboardCardGrid: View {
     }
 }
 
-// Sheet options for VehicleDashboardView
+// Sheet options for DashboardView
 enum ActiveSheet: String, Identifiable {
     case logService, addRepair, addFillup, addCustomInfo, editVehicle
     
@@ -418,5 +376,5 @@ enum ActiveSheet: String, Identifiable {
     vehicle.name = "My Car"
     vehicle.odometer = 12345
     
-    return VehicleDashboardView(vehicle: vehicle, selectedVehicle: .constant(vehicle))
+    return DashboardView(vehicle: vehicle, selectedVehicle: .constant(vehicle))
 }

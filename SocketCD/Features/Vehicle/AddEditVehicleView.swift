@@ -121,7 +121,7 @@ struct AddEditVehicleView: View {
                     
                     dismiss()
                     
-                    // Dismisses VehicleDashboardView, after a short delay, to avoid jumping immediately back to VehicleListView
+                    // Dismisses DashboardView, after a short delay, to avoid jumping immediately back to VehicleListView
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         onDelete?()
                     }

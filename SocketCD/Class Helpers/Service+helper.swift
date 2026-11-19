@@ -254,7 +254,7 @@ extension Service {
         return min(1, selectedProgress)
     }
     
-    // Returns a string that describes when service is next due (or by how much service is overdue). Used on VehicleDashboardView and MaintenanceListView
+    // Returns a string that describes when service is next due (or by how much service is overdue). Used on DashboardView and MaintenanceListView
     func nextDueDescription(currentOdometer: Int) -> String {
         let distanceUnit = vehicle?.distanceUnit ?? AppSettingsStore.shared.distanceUnit
 

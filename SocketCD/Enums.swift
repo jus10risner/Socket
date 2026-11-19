@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// MARK: - VehicleDashboardView
+// MARK: - DashboardView
 
 enum AppSection: String, CaseIterable, Codable, Identifiable {
     case maintenance, fillups, repairs, customInfo
