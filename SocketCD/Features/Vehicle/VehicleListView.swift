@@ -43,7 +43,6 @@ struct VehicleListView: View {
             }
         }
         .navigationTitle("Vehicles")
-        .toolbarTitleDisplayMode(.inlineLarge)
         .listRowSpacing(5)
         .scrollIndicators(.hidden)
         .sheet(isPresented: $showingSettings) {
