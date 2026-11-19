@@ -128,7 +128,7 @@ private struct RegularVehicleListRow: View {
                 }
             }
 
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 5) {
                 vehicleImage(maxWidth: .infinity)
 
                 vehicleDetails
@@ -255,17 +255,23 @@ private struct VehicleListRowDetails: View {
     let nameFont: Font
 
     var body: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(alignment: .center, spacing: 10) {
-                identity
+        Group {
+            if serviceCounts.hasRequiredService {
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .center, spacing: 10) {
+                        identity
 
-                VehicleServiceStatusIndicators(serviceCounts: serviceCounts)
-                    .fixedSize(horizontal: true, vertical: false)
-            }
+                        VehicleServiceStatusIndicators(serviceCounts: serviceCounts)
+                            .fixedSize(horizontal: true, vertical: false)
+                    }
 
-            VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        identity
+                        VehicleServiceStatusIndicators(serviceCounts: serviceCounts)
+                    }
+                }
+            } else {
                 identity
-                VehicleServiceStatusIndicators(serviceCounts: serviceCounts)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
