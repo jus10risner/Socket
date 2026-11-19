@@ -53,7 +53,7 @@ class AppSettingsStore: ObservableObject {
         willSet { objectWillChange.send() }
     }
     
-    @AppStorage("vehicleListIsCompact") var vehicleListIsCompact: Bool? {
+    @AppStorage("vehicleListIsCompact") var vehicleListIsCompact: Bool = false {
         willSet { objectWillChange.send() }
     }
 
@@ -106,11 +106,6 @@ class AppSettingsStore: ObservableObject {
             volumeUnit = .liters
             fuelEconomyUnit = .L100km
         }
-    }
-
-    // Used to set the default vehicleCardIsCompact value to true for iPad and false for iPhone (for different default styles)
-    var vehicleListShouldBeCompact: Bool {
-        vehicleListIsCompact ?? (UIDevice.current.userInterfaceIdiom == .pad)
     }
     
     

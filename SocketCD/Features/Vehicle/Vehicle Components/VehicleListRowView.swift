@@ -36,7 +36,7 @@ struct VehicleListRowView: View {
 
     var body: some View {
         ZStack {
-            if !dynamicTypeSize.isAccessibilitySize && (usesExpandedNavigation || settings.vehicleListShouldBeCompact) {
+            if !dynamicTypeSize.isAccessibilitySize && (usesExpandedNavigation || settings.vehicleListIsCompact) {
                 CompactVehicleListRow(
                     vehicle: vehicle,
                     distanceUnit: vehicle.distanceUnit.abbreviated,
