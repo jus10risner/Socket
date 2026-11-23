@@ -131,6 +131,10 @@ struct AddEditFillupView: View {
                     .disabled(draftFillup.canBeSaved ? false : true)
                 }
                 
+                ToolbarItem(placement: .principal) {
+                    Text(fillup != nil ? "Edit Fill-up" : "New Fill-up").opacity(0)
+                }
+                
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) {
                         focusedField = nil

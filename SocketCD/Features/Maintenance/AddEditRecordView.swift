@@ -126,6 +126,10 @@ struct AddEditRecordView: View {
                     .disabled(draftServiceLog.canBeSaved ? false : true)
                 }
                 
+                ToolbarItem(placement: .principal) {
+                    Text(record != nil ? "Edit Service Log" : "New Service Log").opacity(0)
+                }
+                
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) {
                         focusedField = nil

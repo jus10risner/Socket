@@ -101,6 +101,10 @@ struct AddEditCustomInfoView: View {
                     .disabled(draftCustomInfo.canBeSaved ? false : true)
                 }
                 
+                ToolbarItem(placement: .principal) {
+                    Text(customInfo != nil ? "Edit Vehicle Info" : "New Vehicle Info").opacity(0)
+                }
+                
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) {
                         focusedField = nil

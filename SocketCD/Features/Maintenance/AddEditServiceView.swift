@@ -167,6 +167,10 @@ struct AddEditServiceView: View {
                         .disabled(!canSave)
                     }
                     
+                    ToolbarItem(placement: .principal) {
+                        Text(service != nil ? "Edit Service" : "New Service").opacity(0)
+                    }
+                    
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel", systemImage: "xmark", role: .cancel) {
                             focusedField = nil

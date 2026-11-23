@@ -112,6 +112,10 @@ struct AddEditRepairView: View {
                     .disabled(draftRepair.canBeSaved ? false : true)
                 }
                 
+                ToolbarItem(placement: .principal) {
+                    Text(repair != nil ? "Edit Repair" : "New Repair").opacity(0)
+                }
+                
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark", role: .cancel) {
                         focusedField = nil
