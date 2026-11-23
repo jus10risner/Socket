@@ -1,5 +1,5 @@
 //
-//  VehicleActivityView.swift
+//  VehicleHistoryView.swift
 //  SocketCD
 //
 //  Created by Justin Risner on 10/21/26.
@@ -8,7 +8,7 @@
 import CoreData
 import SwiftUI
 
-struct VehicleActivityView: View {
+struct VehicleHistoryView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var years: [VehicleHistoryYear] = []
     @State private var hasShownHistory = false
@@ -28,7 +28,7 @@ struct VehicleActivityView: View {
                 ContentUnavailableView(
                     "No Records",
                     systemImage: "clock.arrow.circlepath",
-                    description: Text("View maintenance, repairs, and fill-ups for this vehicle here.")
+                    description: Text("Maintenance, repairs, and fill-ups you log for this vehicle will appear here.")
                 )
             } else {
                 VehicleHistoryTimelineList(years: years, vehicle: vehicle)
@@ -40,7 +40,7 @@ struct VehicleActivityView: View {
         .onChange(of: selectedTypes) {
             years = VehicleHistoryData.years(for: vehicle, selectedTypes: selectedTypes)
         }
-        .sectionNavigationTitle("Vehicle Activity", vehicleName: vehicle.name)
+        .sectionNavigationTitle("Vehicle History", vehicleName: vehicle.name)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 filterMenu
@@ -351,6 +351,6 @@ private struct VehicleHistoryEventDestination: View {
     vehicle.odometer = 12345
 
     return NavigationStack {
-        VehicleActivityView(vehicle: vehicle)
+        VehicleHistoryView(vehicle: vehicle)
     }
 }

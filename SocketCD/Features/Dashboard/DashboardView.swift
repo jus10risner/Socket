@@ -34,7 +34,7 @@ struct DashboardView: View {
     @State private var isVehicleNameInToolbar = false
     @State private var dashboardSections: [DashboardSectionPreference] = .dashboardDefaults
     @State private var showingDashboardCustomization = false
-    @State private var showingVehicleActivity = false
+    @State private var showingVehicleHistory = false
 
     @State private var shareItem: ShareItem?
     @State private var showingExportOptions = false
@@ -100,8 +100,8 @@ struct DashboardView: View {
                     vehicleID: vehicle.id
                 )
             }
-            .navigationDestination(isPresented: $showingVehicleActivity, destination: {
-                VehicleActivityView(vehicle: vehicle)
+            .navigationDestination(isPresented: $showingVehicleHistory, destination: {
+                VehicleHistoryView(vehicle: vehicle)
             })
             .sheet(item: $activeSheet, onDismiss: refreshDashboard) { sheet in
                 switch sheet {
@@ -212,8 +212,8 @@ struct DashboardView: View {
     
     private var bottomButtons: some View {
         LazyVGrid(columns: columns, spacing: gridSpacing) {
-            Button("View All Records") {
-                showingVehicleActivity = true
+            Button("View Vehicle History") {
+                showingVehicleHistory = true
             }
             
             Button("Edit Dashboard") {
