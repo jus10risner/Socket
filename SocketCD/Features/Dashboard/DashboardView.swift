@@ -34,6 +34,7 @@ struct DashboardView: View {
     @State private var isVehicleNameInToolbar = false
     @State private var dashboardSections: [DashboardSectionPreference] = .dashboardDefaults
     @State private var showingDashboardCustomization = false
+    @State private var showingVehicleActivity = false
 
     @State private var shareItem: ShareItem?
     @State private var showingExportOptions = false
@@ -58,6 +59,7 @@ struct DashboardView: View {
             ScrollView {
                 TipView(DashboardTip())
                     .tipBackground(Color(.tertiarySystemBackground))
+                
                 VStack(alignment: .leading) {
                     DashboardHeader(vehicle: vehicle) {
                         newOdometerValue = ""
@@ -75,19 +77,10 @@ struct DashboardView: View {
                         servicesForNewLog: $servicesForNewLog
                     )
                     
-                    HStack {
-                        Button("Edit Dashboard") {
-                            showingDashboardCustomization = true
-                        }
-                        
-                        NavigationLink("View All Activity") {
-                            VehicleActivityView(vehicle: vehicle)
-                        }
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.large)
-                    .padding(.vertical)
-                    .frame(maxWidth: .infinity)
+                    Divider()
+                        .padding(.vertical, 5)
+                    
+                    bottomButtons
                 }
                 .frame(maxWidth: maximumGridWidth)
                 .frame(maxWidth: .infinity)
@@ -107,6 +100,9 @@ struct DashboardView: View {
                     vehicleID: vehicle.id
                 )
             }
+            .navigationDestination(isPresented: $showingVehicleActivity, destination: {
+                VehicleActivityView(vehicle: vehicle)
+            })
             .sheet(item: $activeSheet, onDismiss: refreshDashboard) { sheet in
                 switch sheet {
                 case .logService:
@@ -187,7 +183,21 @@ struct DashboardView: View {
                 Text("The document couldn’t be created. Please try again.")
             }
             .toolbar {
-                vehicleToolbar
+                ToolbarItem(placement: .principal) {
+                    Text("Overview")
+                        .opacity(0) // Hides the "Overview" header, but keeps it available for back buttons on child views
+                }
+                
+                ToolbarItem {
+                    Menu("Vehicle Options", systemImage: "ellipsis") {
+                        exportMenu
+                        
+                        Divider()
+                        
+                        Button("Edit Vehicle", systemImage: "pencil") { activeSheet = .editVehicle }
+                    }
+                    .adaptiveTint()
+                }
             }
             .onChange(of: vehicle.objectID) {
                 isVehicleNameInToolbar = false
@@ -198,6 +208,21 @@ struct DashboardView: View {
         .onAppear {
             dashboardSections = DashboardLayoutStore().load(for: vehicle.id)
         }
+    }
+    
+    private var bottomButtons: some View {
+        LazyVGrid(columns: columns, spacing: gridSpacing) {
+            Button("View All Records") {
+                showingVehicleActivity = true
+            }
+            
+            Button("Edit Dashboard") {
+                showingDashboardCustomization = true
+            }
+        }
+        .buttonStyle(DashboardFooterButtonStyle())
+        .fontWeight(.medium)
+        .controlSize(.large)
     }
 
     private func validateEnteredOdometer() {
@@ -236,20 +261,6 @@ struct DashboardView: View {
     private func refreshDashboard() {
         withAnimation {
             vehicle.objectWillChange.send()
-        }
-    }
-    
-    @ToolbarContentBuilder
-    private var vehicleToolbar: some ToolbarContent {
-        ToolbarItem {
-            Menu("Vehicle Options", systemImage: "ellipsis") {
-                exportMenu
-                
-                Divider()
-                
-                Button("Edit Vehicle", systemImage: "pencil") { activeSheet = .editVehicle }
-            }
-            .adaptiveTint()
         }
     }
     
@@ -306,6 +317,16 @@ struct DashboardView: View {
         case .customInfo:
             CustomInfoListView(vehicle: vehicle)
         }
+    }
+}
+
+private struct DashboardFooterButtonStyle: PrimitiveButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button(role: configuration.role, action: configuration.trigger) {
+            configuration.label
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.bordered)
     }
 }
 
