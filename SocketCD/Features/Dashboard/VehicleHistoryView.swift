@@ -86,11 +86,12 @@ struct VehicleHistoryView: View {
         } label: {
             Image(systemName: "line.3.horizontal.decrease")
                 .foregroundStyle(isFiltering ? Color(.secondarySystemBackground) : .primary)
+                .frame(width: 36, height: 36)
                 .background {
                   Circle()
                     .fill(isFiltering ? Color.accentColor : Color.clear)
-                    .frame(width: 36, height: 36)
                 }
+                .contentShape(Rectangle())
                 .dynamicTypeSize(.medium)
         }
         .buttonStyle(.plain)
