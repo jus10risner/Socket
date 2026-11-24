@@ -95,16 +95,16 @@ struct RepairsListView: View {
         .toolbar {
             ToolbarItem {
                 Menu {
-                    Picker("Group Repairs", selection: $grouping) {
+                    Picker("Sort Repairs", selection: $grouping) {
                         ForEach(RepairGrouping.allCases) { option in
                             Label(option.title, systemImage: option.symbol)
                                 .tag(option)
                         }
                     }
                 } label: {
-                    Label("Group Repairs", systemImage: "line.3.horizontal.decrease")
+                    Label("Sort Repairs", systemImage: "arrow.up.arrow.down")
                 }
-                .adaptiveTint()
+                .tint(.primary)
                 .accessibilityValue(grouping.title)
             }
 
