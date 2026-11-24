@@ -11,29 +11,26 @@ import SwiftUI
 struct VehicleHistoryView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var years: [VehicleHistoryYear] = []
+    @State private var searchText = ""
     @State private var hasShownHistory = false
     @State private var selectedTypes = Set(VehicleHistoryRecordType.allCases)
 
     let vehicle: Vehicle
 
     var body: some View {
-        Group {
-            if selectedTypes.isEmpty {
-                ContentUnavailableView(
-                    "No Record Types Selected",
-                    systemImage: "line.3.horizontal.decrease",
-                    description: Text("Choose record types from the filter menu to view vehicle history.")
-                )
-            } else if years.isEmpty {
-                ContentUnavailableView(
-                    "No Records",
-                    systemImage: "clock.arrow.circlepath",
-                    description: Text("Maintenance, repairs, and fill-ups you log for this vehicle will appear here.")
-                )
-            } else {
-                VehicleHistoryTimelineList(years: years, vehicle: vehicle)
+        VehicleHistoryTimelineList(years: searchResults, vehicle: vehicle)
+            .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Search History")
+            .overlay {
+                if years.isEmpty {
+                    ContentUnavailableView(
+                        "No Records",
+                        systemImage: "clock.arrow.circlepath",
+                        description: Text("Maintenance, repairs, and fill-ups you log for this vehicle will appear here.")
+                    )
+                } else if searchResults.isEmpty {
+                    ContentUnavailableView.search(text: searchText)
+                }
             }
-        }
         .onAppear {
             refreshHistory()
         }
@@ -46,6 +43,16 @@ struct VehicleHistoryView: View {
                 filterMenu
                     .buttonStyle(HistoryFilterStyle(isFiltering: isFiltering))
             }
+        }
+    }
+
+    private var searchResults: [VehicleHistoryYear] {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else { return years }
+
+        return years.compactMap { year in
+            let events = year.events.filter { $0.matches(query) }
+            return events.isEmpty ? nil : VehicleHistoryYear(year: year.year, events: events)
         }
     }
 
@@ -254,6 +261,14 @@ private enum VehicleHistoryEvent: Identifiable {
         }
     }
 
+    func matches(_ query: String) -> Bool {
+        let displayedDate = date.formatted(.dateTime.month(.abbreviated).day().year())
+        let numericDate = date.formatted(date: .numeric, time: .omitted)
+        let fullDate = date.formatted(.dateTime.month(.wide).day().year())
+        return [title, displayedDate, numericDate, fullDate, odometer.formatted(), String(odometer)]
+            .contains { $0.localizedStandardContains(query) }
+    }
+
     var section: AppSection {
         switch self {
         case .record(let record):
@@ -339,7 +354,7 @@ private struct VehicleHistoryEventDestination: View {
         ContentUnavailableView(
             "Record Unavailable",
             systemImage: "exclamationmark.triangle",
-            description: Text("This history item is no longer associated with a maintenance record.")
+            description: Text("This item is no longer associated with a maintenance record.")
         )
     }
 }

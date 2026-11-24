@@ -45,6 +45,7 @@ struct RepairsListView: View {
     }
 
     @State private var showingAddRepair = false
+    @State private var searchText = ""
     @AppStorage("repairGrouping") private var grouping: RepairGrouping = .date
 
     var body: some View {
@@ -73,6 +74,7 @@ struct RepairsListView: View {
                 }
             }
         }
+        .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Search Repairs")
         .sectionNavigationTitle(AppSection.repairs.title, vehicleName: vehicle.name)
         .scrollContentBackground(.hidden)
         .background(Color(.systemGroupedBackground))
@@ -83,6 +85,8 @@ struct RepairsListView: View {
                 } description: {
                     Text("Record unexpected work, such as battery replacement or engine repair.")
                 }
+            } else if filteredRepairs.isEmpty {
+                ContentUnavailableView.search(text: searchText)
             }
         }
         .sheet(isPresented: $showingAddRepair) {
@@ -147,9 +151,22 @@ struct RepairsListView: View {
         }
     }
 
+    private var filteredRepairs: [Repair] {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else { return Array(repairs) }
+
+        return repairs.filter { repair in
+            let displayedDate = repair.date.formatted(.dateTime.month(.abbreviated).day().year())
+            let numericDate = repair.date.formatted(date: .numeric, time: .omitted)
+            let fullDate = repair.date.formatted(.dateTime.month(.wide).day().year())
+            return [repair.name, displayedDate, numericDate, fullDate, repair.odometer.formatted(), String(repair.odometer)]
+                .contains { $0.localizedStandardContains(query) }
+        }
+    }
+
     var repairsByYear: [(year: Int, repairs: [Repair])] {
         let calendar = Calendar.current
-        let grouped = Dictionary(grouping: repairs) { repair in
+        let grouped = Dictionary(grouping: filteredRepairs) { repair in
             calendar.component(.year, from: repair.date)
         }
         return grouped.sorted { $0.key > $1.key }
@@ -157,7 +174,7 @@ struct RepairsListView: View {
     }
 
     private var repairsByCategory: [RepairCategorySection] {
-        let grouped = Dictionary(grouping: repairs) { repair in
+        let grouped = Dictionary(grouping: filteredRepairs) { repair in
             repair.category?.objectID.uriRepresentation().absoluteString ?? ""
         }
 
