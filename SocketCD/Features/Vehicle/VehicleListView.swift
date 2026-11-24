@@ -59,13 +59,10 @@ struct VehicleListView: View {
                 .adaptiveTint()
             }
             
-            ToolbarItemGroup(placement: .bottomBar) {
-                Spacer()
-                
+            AdaptiveToolbarButton {
                 Button("Add a Vehicle", systemImage: "plus") {
                     showingAddVehicle = true
                 }
-                .adaptiveTint()
             }
         }
     }
