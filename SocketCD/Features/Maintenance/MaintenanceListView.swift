@@ -65,10 +65,8 @@ struct MaintenanceListView: View {
             }
             
             AdaptiveToolbarButton {
-                Button {
+                Button("Log Service", systemImage: "plus") {
                     showingLogService = true
-                } label: {
-                    Label("Log Service", systemImage: "plus")
                 }
                 .tint(AppSection.maintenance.color)
                 .buttonStyle(.borderedProminent)
