@@ -41,7 +41,6 @@ struct VehicleHistoryView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 filterMenu
-                    .buttonStyle(HistoryFilterStyle(isFiltering: isFiltering))
             }
         }
     }
@@ -58,35 +57,46 @@ struct VehicleHistoryView: View {
 
     private var filterMenu: some View {
         Menu {
+            Toggle("All", isOn: Binding(
+                get: { !isFiltering },
+                set: { _ in selectedTypes = Set(VehicleHistoryRecordType.allCases) }
+            ))
+
+            Divider()
+
             ForEach(VehicleHistoryRecordType.allCases) { type in
                 Toggle(isOn: Binding(
-                    get: { selectedTypes.contains(type) },
+                    get: { isFiltering && selectedTypes.contains(type) },
                     set: { isSelected in
-                        if isSelected {
+                        if !isFiltering {
+                            selectedTypes = [type]
+                        } else if isSelected {
                             selectedTypes.insert(type)
-                        } else if selectedTypes.count > 1 {
+                        } else {
                             selectedTypes.remove(type)
+                            if selectedTypes.isEmpty {
+                                selectedTypes = Set(VehicleHistoryRecordType.allCases)
+                            }
                         }
                     }
                 )) {
-                    Label(type.title, systemImage: type.symbol)
-                }
-                .disabled(selectedTypes.count == 1 && selectedTypes.contains(type))
-            }
-
-            if VehicleHistoryRecordType.allCases.count - selectedTypes.count >= 2 {
-                Divider()
-
-                Button("Select All") {
-                    selectedTypes = Set(VehicleHistoryRecordType.allCases)
+                    Text(type.title)
                 }
             }
         } label: {
-            Label("Filter", systemImage: "line.3.horizontal.decrease")
+            Image(systemName: "line.3.horizontal.decrease")
+                .foregroundStyle(isFiltering ? Color(.secondarySystemBackground) : .primary)
+                .background {
+                  Circle()
+                    .fill(isFiltering ? Color.accentColor : Color.clear)
+                    .frame(width: 36, height: 36)
+                }
+                .dynamicTypeSize(.medium)
         }
+        .buttonStyle(.plain)
         .menuActionDismissBehavior(.disabled)
+        .accessibilityLabel("Filter vehicle history")
         .accessibilityValue(filterDescription)
-        .adaptiveTint()
     }
 
     private var isFiltering: Bool {
@@ -94,9 +104,7 @@ struct VehicleHistoryView: View {
     }
 
     private var filterDescription: Text {
-        if selectedTypes.isEmpty {
-            Text("No record types selected")
-        } else if !isFiltering {
+        if !isFiltering {
             Text("All record types")
         } else {
             Text(VehicleHistoryRecordType.allCases
@@ -114,18 +122,6 @@ struct VehicleHistoryView: View {
             dismiss()
         }
         hasShownHistory = hasShownHistory || hasEvents
-    }
-}
-
-private struct HistoryFilterStyle: PrimitiveButtonStyle {
-    let isFiltering: Bool
-
-    func makeBody(configuration: Configuration) -> some View {
-        if isFiltering {
-            Button(configuration).buttonStyle(.borderedProminent)
-        } else {
-            Button(configuration).buttonStyle(.plain)
-        }
     }
 }
 
@@ -161,28 +157,19 @@ private enum VehicleHistoryData {
 }
 
 private enum VehicleHistoryRecordType: String, CaseIterable, Identifiable {
+    case fillups
     case maintenance
     case repairs
-    case fillups
 
     var id: Self { self }
 
     var title: LocalizedStringResource {
         switch self {
+        case .fillups: AppSection.fillups.title
         case .maintenance: AppSection.maintenance.title
         case .repairs: AppSection.repairs.title
-        case .fillups: AppSection.fillups.title
         }
     }
-
-    var symbol: String {
-        switch self {
-        case .maintenance: AppSection.maintenance.symbol()
-        case .repairs: AppSection.repairs.symbol()
-        case .fillups: AppSection.fillups.symbol()
-        }
-    }
-
 }
 
 private struct VehicleHistoryYear: Identifiable {
