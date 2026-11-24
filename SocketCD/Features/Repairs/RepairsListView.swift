@@ -94,16 +94,17 @@ struct RepairsListView: View {
         }
         .toolbar {
             ToolbarItem {
-                Menu {
-                    Picker("Sort Repairs", selection: $grouping) {
-                        ForEach(RepairGrouping.allCases) { option in
-                            Label(option.title, systemImage: option.symbol)
-                                .tag(option)
-                        }
+                Picker(selection: $grouping) {
+                    ForEach(RepairGrouping.allCases) { option in
+                        Label(option.title, systemImage: option.symbol)
+                            .tag(option)
                     }
                 } label: {
                     Label("Sort Repairs", systemImage: "arrow.up.arrow.down")
+                } currentValueLabel: {
+                    Image(systemName: "arrow.up.arrow.down")
                 }
+                .pickerStyle(.menu)
                 .tint(.primary)
                 .accessibilityValue(grouping.title)
             }
